@@ -1,0 +1,54 @@
+{
+    "test":"po angielsku",
+
+    "ErrorMessage_title": "Error occured",
+    "ErrorMessage_inproper_password": "No active account found with the given credentials",
+    "ErrorMessage_request_500": "No access to internet",
+
+    "No_data": "No data available",
+
+    "btn-return": "Return",
+    "btn-add" : "Add",
+    "btn_delete": "DELETE",
+    "btn_edit" : "EDIT",
+    "btn_info" : "INFO",
+    "btn-login": "Login",
+
+    "Table_head_name" : "Name",
+    "Table_head_ID" : "ID",
+
+    "Form_field_required": "Field is required",
+    "Form_only_letters": "Only letters",
+    "Form_minLength_6" : "Minimum 6 chracters",
+    "Form_minLength_8": "Minimum 8 chracters",
+
+    "FormAddressScreen_title" : "Enter your address",
+    "FormAddressScreen_subtitle" : "in order to estimate the cost of delivery",
+    "FormAddressScreen__city_placeholder" : "City...",
+    "FormAddressScreen__number_placeholder" : "No",
+    "FormAddressScreen__street_placeholder" : "Street...",
+    "FormAddressScreen__district_placeholder" : "District...",
+    "FormAddressScreen__pickup_location_placeholder": "Pickup location...",
+    "FormAddressScreen__info" : "After choosing the location, the closest shopping area will be selected for you!",
+    "FormAddressScreen__btn" : "Search shopping area",
+
+    "AdminScreen_district_btn" : "District",
+
+    "AdminScreenDistrict_title" : "List of districts",
+
+    "AddDiscrict_title": "Add district",
+
+    "AddDistrict_label_name": "District name",
+    "AddDistrict_name_placeholder" : "Enter district name ...",
+
+    "LoginScreen_title": "Login",
+    "LoginScreen_label_username": "Username",
+    "LoginScreen_username_placeholder" : "Enter unsername ...",
+    "LoginScreen_label_password" : "Password",
+    "LoginScreen_password_placeholder": "Enter password ...",
+
+    "LogoutScreen_title": "You have been logged out"
+
+    
+    
+}

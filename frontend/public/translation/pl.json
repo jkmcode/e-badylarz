@@ -1,0 +1,51 @@
+{
+    "test":"po polsku",   
+
+    "ErrorMessage_title": "Wystąpił błąd",
+    "ErrorMessage_inproper_password": "Nieprawidłowy login lub hasło",   
+    "ErrorMessage_request_500": "Brak dostępu do internetu", 
+
+    "No_data": "Brak dostępnych danych",
+
+    "btn-return": "Powrót",
+    "btn-add" : "Dodaj",
+    "btn_delete": "Usuń",
+    "btn_edit" : "Edycja",
+    "btn_info" : "Info",
+    "btn-login": "Zaloguj się",
+
+    "Table_head_name" : "Nazwa",
+    "Table_head_ID" : "Lp.",
+
+    "Form_field_required": "Pole wymagane",
+    "Form_only_letters": "Możesz wpisać tylko litery",
+    "Form_minLength_6" : "Minimum 6 znaków",
+    "Form_minLength_8": "Minimum 8 znaków",
+
+    "FormAddressScreen_title" : "Podaj swój adres",
+    "FormAddressScreen_subtitle" : "w celu oszacowania kosztu dostawy",
+    "FormAddressScreen__city_placeholder" : "Miejscowość...",
+    "FormAddressScreen__number_placeholder" : "Nr",
+    "FormAddressScreen__street_placeholder" : "Ulica...",
+    "FormAddressScreen__district_placeholder" : "Powiat...",
+    "FormAddressScreen__pickup_location_placeholder": "Miejsce odbioru...",
+    "FormAddressScreen__info" : "Po wyborze lokalizacji nastąpi dobranie dla Ciebie najbiższego obszaru zakupów!",
+    "FormAddressScreen__btn" : "Szukaj obszaru zakupów",
+
+    "AdminScreen_district_btn" : "Powiat",
+
+    "AdminScreenDistrict_title" : "Lista powiatów",
+
+    "AddDiscrict_title": "Dodaj powiat",
+
+    "AddDistrict_label_name": "Nazwa powiatu",
+    "AddDistrict_name_placeholder" : "Podaj nazwe powiatu ...",
+
+    "LoginScreen_title": "Logowanie",
+    "LoginScreen_label_username": "Nazwa użytkownika",
+    "LoginScreen_username_placeholder" : "Podaj nazwę użytkownika ...",
+    "LoginScreen_label_password" : "Hasło",
+    "LoginScreen_password_placeholder": "Podaj hasło ...",
+
+    "LogoutScreen_title": "Zostałes wylogowany"
+}
