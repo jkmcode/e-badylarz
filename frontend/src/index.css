@@ -199,6 +199,9 @@ a {
 
 .bg-container {
   background-color: whitesmoke;
+}
+
+.max-sizing {
   max-width: 800px !important;
 }
 
@@ -314,11 +317,14 @@ input:focus {
   outline: none;
 }
 .searchIcon svg {
-  font-size: 35px;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
 }
 
 .dataResult {
-  margin-top: 5px;
+  margin-top: 1px;
+  border-radius: 10px;
   width: 300px;
   height: 200px;
   background-color: white;
@@ -348,10 +354,6 @@ input:focus {
   background-color: lightgrey;
 }
 
-#clearBtn {
-  cursor: pointer;
-}
-
 /* AdminScreen */
 .link-btn {
   color: white !important;
@@ -366,4 +368,12 @@ input:focus {
   font-size: 0.75rem;
   margin-bottom: 0rem !important;
   margin-top: 0.01rem !important;
+}
+
+.card-shadow {
+  box-shadow: -12px -9px 21px -16px rgba(66, 68, 90, 1);
+}
+
+.bg-height {
+  min-height: calc(100vh - 60px) !important;
 }

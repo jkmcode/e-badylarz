@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import ClickAwayListener from "react-click-away-listener";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "react-router-dom";
@@ -42,7 +43,7 @@ function NavbarTop() {
           <LanguageSwitcher />
           <NavItem icon={<Home />} refe="/" />
           <NavItem icon={<Favorite />} refe="form" />
-          <NavItem icon={<Profil />} refe="admin" />
+          <NavItem icon={<Profil />} refe="login-admin" />
           <NavItem icon={<Cart />} refe="/cartScreen" />
         </>
       )}
@@ -64,20 +65,20 @@ function Navbar(props) {
 
 function NavItem(props) {
   const [open, setOpen] = useState(false);
+
   return (
-    <li className="navTop-item">
-      {/* <a href="#" className="icon-button" onClick={() => setOpen(!open)}>
-        {props.icon}
-      </a> */}
-      <Link
-        to={props.refe}
-        className="icon-button"
-        onClick={() => setOpen(!open)}
-      >
-        {props.icon}
-      </Link>
-      {open && props.children}
-    </li>
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <li className="navTop-item">
+        <Link
+          to={props.refe}
+          className="icon-button"
+          onClick={() => setOpen(!open)}
+        >
+          {props.icon}
+        </Link>
+        {open && props.children}
+      </li>
+    </ClickAwayListener>
   );
 }
 
@@ -190,7 +191,9 @@ function DropdownMenu() {
           <DropdownItem leftIcon={<BoltIcon />} refer="carousel">
             Carousel
           </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>Awesome!</DropdownItem>
+          <DropdownItem leftIcon={<BoltIcon />} refer="dashboard">
+            Dashboard
+          </DropdownItem>
           <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
           <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
           <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
