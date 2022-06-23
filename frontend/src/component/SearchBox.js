@@ -1,6 +1,8 @@
 import React, { useState, Fragment } from "react";
 import { ReactComponent as Home } from "../icons/Home.svg";
 import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
+import { ReactComponent as Clear } from "../icons/clear.svg";
+import { ReactComponent as Search } from "../icons/search.svg";
 
 function SearchBox(props) {
   const [filteredData, setFilteredData] = useState([]);
@@ -44,9 +46,9 @@ function SearchBox(props) {
           />
           <div className="searchIcon">
             {!wordEntered ? (
-              <Home />
+              <Search tabindex="0" />
             ) : (
-              <ArrowIcon id="clearBtn" onClick={clearInput} />
+              <Clear onClick={clearInput} tabindex="0" />
             )}
           </div>
         </div>
@@ -55,9 +57,11 @@ function SearchBox(props) {
             {filteredData.slice(0, 5).map((value, key) => {
               return (
                 <div
+                  tabindex="0"
                   className="dataItem"
                   key={value.title}
                   onClick={() => choosenItem(value.title)}
+                  onKeyPress={() => choosenItem(value.title)}
                 >
                   {value.title}
                 </div>

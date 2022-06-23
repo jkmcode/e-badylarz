@@ -10,15 +10,19 @@ CSSTransition
 
 # Packages
 
-asgiref 3.5.1
-Django 4.0.4
-django-cors-headers 3.12.0
-djangorestframework 3.13.1
-djangorestframework-simplejwt 5.2.0
-pip 22.0.4
-PyJWT 2.4.0
-pytz 2022.1
-setuptools 62.0.0
-sqlparse 0.4.2
-tzdata 2022.1
-wheel 0.37.1
+- asgiref 3.5.1
+- Django 4.0.4
+- django-cors-headers 3.12.0
+- djangorestframework 3.13.1
+- djangorestframework-simplejwt 5.2.0
+- pip 22.0.4
+- PyJWT 2.4.0
+- pytz 2022.1
+- setuptools 62.0.0
+- sqlparse 0.4.2
+- tzdata 2022.1
+- wheel 0.37.1
+
+To Do:
+
+1. button toggle na panelu

@@ -29,14 +29,10 @@ function AdminScreenDistrict() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div className="bg-container mt-4 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           <Row className="align-items-center">
-            <Col>
-              <Link to="/admin" className="text-secondary">
-                {t("btn-return")}
-              </Link>
-            </Col>
+            <Col></Col>
             {!error && (
               <Col>
                 <Link

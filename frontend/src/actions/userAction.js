@@ -25,8 +25,6 @@ export const login = (credentials) => async (dispatch) => {
       payload: data,
     });
 
-    console.log(data);
-
     localStorage.setItem("userInfo", JSON.stringify(data));
 
     // const today = new Date();

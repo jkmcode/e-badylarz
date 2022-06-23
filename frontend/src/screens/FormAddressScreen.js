@@ -78,7 +78,7 @@ function FormAddressScreen() {
       ) : error ? (
         <p>error</p>
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div className="container bg-container max-sizing mt-5 p-4 rounded">
           <Row>
             <Col>
               <h5 className="text-center">{t("FormAddressScreen_title")}</h5>
