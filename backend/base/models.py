@@ -6,6 +6,8 @@ class Districts(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -18,6 +20,8 @@ class Districts_description(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
 
 
 class Citis(models.Model):
@@ -26,6 +30,8 @@ class Citis(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -38,6 +44,8 @@ class Citis_description(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
     
 
 class Place_of_pickups(models.Model):
@@ -52,6 +60,8 @@ class Place_of_pickups(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -64,6 +74,8 @@ class Place_of_pickups_description(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
 
 
 

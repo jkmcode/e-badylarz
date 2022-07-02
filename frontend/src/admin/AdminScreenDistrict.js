@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getDiscrict } from "../actions/discrictsActions";
 import Loader from "../component/Loader";
@@ -10,12 +11,17 @@ import ErrorMessage from "../component/ErrorMessage";
 function AdminScreenDistrict() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
 
   const deleteHandler = (id) => {
     console.log("działa deleteHandler", id);
+  };
+
+  const editHandler = (i) => {
+    navigate(`${i.id}/edit`);
   };
 
   useEffect(() => {
@@ -81,7 +87,7 @@ function AdminScreenDistrict() {
                       <Button
                         variant="warning"
                         className="btn-sm d-flex"
-                        onClick={() => deleteHandler(i.id)}
+                        onClick={() => editHandler(i)}
                       >
                         {t("btn_edit")}
                       </Button>

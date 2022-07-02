@@ -19,6 +19,7 @@ import AddDiscrict from "./admin/AddDiscrict";
 import AdminShops from "./admin/AdminShops";
 
 import DashboardScreen from "./screens/DashboardScreen";
+import EditDistrict from "./admin/EditDistrict";
 
 //SerachBoxComponent
 import SearchBox from "./component/SearchBox";
@@ -47,7 +48,10 @@ function App() {
           {/* <Route path="form" element={<FormAddressScreen2 />} /> */}
 
           <Route path="admin/district" element={<AdminScreenDistrict />} />
-          <Route path="admin/district/add" element={<AddDiscrict />} />
+          <Route
+            path="dashboard/district/district/add"
+            element={<AddDiscrict />}
+          />
 
           <Route path="login" element={<LoginScreen />} />
           <Route path="logout" element={<LogoutScreen />} />
@@ -71,6 +75,11 @@ function App() {
               element={<AdminScreenDistrict />}
             />
           </Route>
+
+          <Route
+            path="dashboard/district/district/:id/edit"
+            element={<EditDistrict />}
+          />
 
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>

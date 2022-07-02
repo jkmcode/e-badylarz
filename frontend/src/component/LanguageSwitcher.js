@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Nav, NavDropdown, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Nav, NavDropdown } from "react-bootstrap";
 import i18next from "i18next";
 import Flags from "country-flag-icons/react/3x2";
 import cookies from "js-cookie";
 import GlobeIcon from "../icons/globeIcon";
+import language from "../language";
 
 function LanguageSwitcher_supp(props) {
   const Flag = Flags[props.country_flag];
@@ -15,20 +16,6 @@ function LanguageSwitcher() {
   const [currentLanguageCode, setCurrentLanguageCode] = useState(
     cookies.get("i18next") || "en"
   );
-
-  const language = [
-    {
-      code: "en",
-      name: "English",
-      country: "GB",
-    },
-
-    {
-      code: "pl",
-      name: "Polski",
-      country: "PL",
-    },
-  ];
 
   const currentLanguage = language.find((l) => l.code === currentLanguageCode);
 

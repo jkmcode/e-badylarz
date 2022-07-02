@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { login } from "../actions/userAction";
+
+import { NO_PERMISSION } from "../constants/errorsConstants";
 
 function LoginAdmin() {
   const { t } = useTranslation();
@@ -21,7 +23,9 @@ function LoginAdmin() {
   } = useForm();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, success } = userLogin;
+  const { loading, error, success, userInfo } = userLogin;
+
+  const [permission, setPermission] = useState("");
 
   const onSubmit = (data) => {
     const credentials = {
@@ -34,7 +38,11 @@ function LoginAdmin() {
 
   useEffect(() => {
     if (success) {
-      navigate("/dashboard");
+      if (userInfo.IsAdmin) {
+        navigate("/dashboard");
+      } else {
+        setPermission(NO_PERMISSION);
+      }
     }
   }, [success]);
 
@@ -66,6 +74,9 @@ function LoginAdmin() {
                     <div className="mt-3">
                       {error ? (
                         <ErrorMessage msg={error} timeOut={5000} />
+                      ) : null}
+                      {permission ? (
+                        <ErrorMessage msg={permission} timeOut={5000} />
                       ) : null}
                     </div>
 

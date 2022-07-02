@@ -94,6 +94,20 @@ function DropdownMenu() {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight);
   }, []);
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const detectSize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", detectSize);
+
+    return () => {
+      window.removeEventListener("resize", detectSize);
+    };
+  }, [windowWidth]);
+
   function calcHeight(el) {
     const height = el.offsetHeight;
     setMenuHeight(height);
@@ -150,6 +164,15 @@ function DropdownMenu() {
           >
             UI
           </DropdownItem>
+          {windowWidth < 1200 && (
+            <DropdownItem
+              leftIcon={<CogIcon />}
+              rightIcon={<ChevronIcon />}
+              goToMenu="adminPanel"
+            >
+              Admin Panel
+            </DropdownItem>
+          )}
           {userInfo ? (
             userInfo.IsSuperUser ? (
               <DropdownItem leftIcon={<Profil />} refer="admin">
@@ -194,9 +217,34 @@ function DropdownMenu() {
           <DropdownItem leftIcon={<BoltIcon />} refer="dashboard">
             Dashboard
           </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
+        </div>
+      </CSSTransition>
+
+      <CSSTransition
+        in={activeMenu === "adminPanel"}
+        timeout={500}
+        classNames="menu-secondary"
+        unmountOnExit
+        onEnter={calcHeight}
+      >
+        <div className="navTopMenu">
+          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}></DropdownItem>
+          {userInfo && (
+            <>
+              <DropdownItem
+                leftIcon={<BoltIcon />}
+                refer="/dashboard/district/district"
+              >
+                District
+              </DropdownItem>
+              <DropdownItem
+                leftIcon={<BoltIcon />}
+                refer="/dashboard/shops/shops"
+              >
+                Shops
+              </DropdownItem>
+            </>
+          )}
         </div>
       </CSSTransition>
     </div>

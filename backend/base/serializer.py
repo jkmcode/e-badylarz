@@ -49,3 +49,8 @@ class DistrictsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Districts
         fields = '__all__'
+
+class DistrictsDescSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Districts_description
+        fields = '__all__'

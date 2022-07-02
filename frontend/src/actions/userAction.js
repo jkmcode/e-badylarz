@@ -26,10 +26,6 @@ export const login = (credentials) => async (dispatch) => {
     });
 
     localStorage.setItem("userInfo", JSON.stringify(data));
-
-    // const today = new Date();
-
-    // localStorage.setItem("dateLogin", JSON.stringify(today));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,

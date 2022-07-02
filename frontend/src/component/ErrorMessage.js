@@ -5,6 +5,9 @@ import { Alert } from "react-bootstrap";
 import {
   WRONG_PASSWORD,
   REQUEST_ERROR_500,
+  CREDENTIALS_WERE_NOT_PROVIDED,
+  INVALID_TOKEN,
+  NO_PERMISSION,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -21,6 +24,12 @@ function ErrorMessage(props) {
         return setErrorMessage("ErrorMessage_inproper_password");
       case REQUEST_ERROR_500:
         return setErrorMessage("ErrorMessage_request_500");
+      case CREDENTIALS_WERE_NOT_PROVIDED:
+        return setErrorMessage("ErrorMessage_credentials_were_not_provided");
+      case INVALID_TOKEN:
+        return setErrorMessage("ErrorMessage_invalid_token");
+      case NO_PERMISSION:
+        return setErrorMessage("ErrorMessage_no_permission");
       default:
         return setErrorMessage(props.msg);
     }

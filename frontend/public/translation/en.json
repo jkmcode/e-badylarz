@@ -4,6 +4,9 @@
     "ErrorMessage_title": "Error occured",
     "ErrorMessage_inproper_password": "No active account found with the given credentials",
     "ErrorMessage_request_500": "No access to internet",
+    "ErrorMessage_credentials_were_not_provided": "Authentication credentials were not provided.",
+    "ErrorMessage_invalid_token": "Given token not valid for any token type",
+    "ErrorMessage_no_permission": "You do not have permission to perform this action.",
 
     "No_data": "No data available",
 
@@ -13,6 +16,8 @@
     "btn_edit" : "EDIT",
     "btn_info" : "INFO",
     "btn-login": "Login",
+    "btn_add_description": "Add description",
+    "btn_submit":"Submit",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
@@ -21,6 +26,7 @@
     "Form_only_letters": "Only letters",
     "Form_minLength_6" : "Minimum 6 chracters",
     "Form_minLength_8": "Minimum 8 chracters",
+    "Form_maxLength_255" : "Maximum 255 characters",
 
     "FormAddressScreen_title" : "Enter your address",
     "FormAddressScreen_subtitle" : "in order to estimate the cost of delivery",
@@ -47,8 +53,18 @@
     "LoginScreen_label_password" : "Password",
     "LoginScreen_password_placeholder": "Enter password ...",
 
-    "LogoutScreen_title": "You have been logged out"
+    "LogoutScreen_title": "You have been logged out",
 
-    
+    "DashboardScreen_sidebar_title" : "Admin Panel",
+    "DashboardScreen_sidebar_subtitle_1" :  "District",
+    "DashboardScreen_sidebar_subtitle_2" :  "Shops",
+    "DashboardScreen_sidebar_subtitle_3" :  "Products",
+    "DashboardScreen_sidebar_subtitle_4" :  "Others",
+
+    "EditDistrict_title": "Edit district",
+
+    "DistrictAddDescription_choice_lng" : "Choice language",
+    "DistrictAddDescription_label_desc": "Description",
+    "DistrictAddDescription_placeholder_desc" : "Enter description ..."
     
 }

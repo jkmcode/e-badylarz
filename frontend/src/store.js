@@ -3,7 +3,10 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { testListReducer } from "./reducers/testReducer";
 import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
-import { addDistrictReducer } from "./reducers/adminReducers";
+import {
+  addDistrictReducer,
+  addDistrictDescReducer,
+} from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
 const reducer = combineReducers({
@@ -11,6 +14,7 @@ const reducer = combineReducers({
   districts: districtReducer,
   addDistrict: addDistrictReducer,
   userLogin: userLoginReducers,
+  addDistrictDesc: addDistrictDescReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

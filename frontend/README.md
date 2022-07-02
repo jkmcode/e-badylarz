@@ -26,3 +26,6 @@ CSSTransition
 To Do:
 
 1. button toggle na panelu
+2. zrobić komponent z windowWidth
+3. Autentykacja dla actions AdminActions (wszystkie)
+4. backend: Permissions for SuperUsera and IsStaff
