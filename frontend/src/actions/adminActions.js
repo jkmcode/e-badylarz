@@ -24,8 +24,46 @@ export const addDiscrictDesc = (insertData) => async (dispatch, getState) => {
       },
     };
 
+    const { data } = await axios.post(
+      `/api/add-desc/`,
+      insertData,
+      config
+    );
+
+    console.log("dane-->", data)
+
+    dispatch({
+      type: DISTRICT_ADD_DESC_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DISTRICT_ADD_DESC_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getDiscrictDesc = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: DISTRICT_ADD_DESC_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
     const { data } = await axios.get(
-      `/api/get-district-desc/${insertData.Id}/${insertData.lng}`,
+      `/api/get-district-desc/${insertData.Id}/${insertData.lng}/${insertData.type}`,
       config,
       insertData
     );

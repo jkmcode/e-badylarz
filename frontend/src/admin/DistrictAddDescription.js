@@ -7,7 +7,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
-import { addDiscrictDesc } from "../actions/adminActions";
+import { addDiscrictDesc, getDiscrictDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
 import { DISTRICT_ADD_DESC_DELETE } from "../constants/adminConstans";
 import { USER_LOGOUT } from "../constants/userConstans";
@@ -40,11 +40,27 @@ function DistrictAddDescription(props) {
   const { userInfo } = userLogin;
 
   const [activeDesc, setActiveDesc] = useState(false);
+  const [isAddDesc, setIsAddDesc] = useState(false);
   const [lngDesc, setLngDesc] = useState("");
   const [lngName, setLngName] = useState("");
+  const [lngCode, setLngCode] = useState("");
 
   const onSubmit = (data) => {
-    console.log("działa submit formularza", data);
+    console.log("działa submit formularza", data.desc);
+    console.log("kod-->",lngCode)
+    console.log("id-->",userInfo.id)
+    console.log("type", props.descType)
+    dispatch(
+      addDiscrictDesc({
+      id: userInfo.id,
+      addDesc: isAddDesc,
+      objType: props.descType,
+      objId : props.objId,
+      lng: lngCode,
+      desc: data.desc
+    }))
+
+
   };
 
   const selectHandler = (e) => {
@@ -53,22 +69,32 @@ function DistrictAddDescription(props) {
     language.map((i) => {
       if (i.code == e.target.value) {
         setLngName(i.name);
+        setLngCode(i.code);
       }
     });
   };
+  // recognition adding or modification of description
+  useEffect(() => {
+    if (success) {
+      if (desc.language===null){
+        setIsAddDesc(true)
+      }
+    }
+
+  }, [desc]);
 
   // fetch description from DB
   useEffect(() => {
     if (lngDesc) {
       dispatch(
-        addDiscrictDesc({
+        getDiscrictDesc({
           id: userInfo.id,
           lng: lngDesc,
-          Id: props.districtId,
+          Id: props.objId,
+          type: props.descType
         })
       );
     }
-    console.log(lngDesc);
   }, [lngDesc]);
 
   // back to login based on Error --- Authentication credentials were not provided
@@ -99,10 +125,10 @@ function DistrictAddDescription(props) {
                     <>
                       {t("DistrictAddDescription_choice_lng")}
                       <Form.Select
-                        name="district"
-                        {...register("district")}
+                        name="lng"
+                        {...register("lng")}
                         onChange={selectHandler}
-                        defaultValue={{ value: "pl" }}
+                        //defaultValue={{ value: "pl" }}
                       >
                         <option key="blankChoice" hidden value="0" />
 
@@ -114,7 +140,7 @@ function DistrictAddDescription(props) {
                       </Form.Select>
                     </>
                   ) : (
-                    <p>{`wybrałeś język ${lngName}`}</p>
+                    <p>{`${t("DistrictAddDescription_selected_lng")} ${lngName}`}</p>
                   )}
                 </Col>
               </Row>

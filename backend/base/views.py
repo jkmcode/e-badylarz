@@ -30,13 +30,25 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addDesc(request):
+    data=request.data
+    if data["addDesc"]:
+        desc = Descriptions.objects.create(
+        description=data['desc'],
+        language=data['lng'],
+        obj_type=data['objType'],
+        obj_id=data['objId'],
+        creator=data['id']
+        )
 
+    return Response("OK")
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getDiscrictDesc(request, Id, lng):
-    print('request.user', request.user, request.user.is_staff)
-    descrition = Districts_description.objects.filter(id_district = Id, language=lng) 
+def getDiscrictDesc(request, Id, lng, type):
+    descrition = Descriptions.objects.filter(obj_id = Id, language=lng, obj_type=type) 
     seriaziler = DistrictsDescSerializer(descrition, many=False)
     return Response(seriaziler.data)
 

@@ -65,5 +65,6 @@
 
     "DistrictAddDescription_choice_lng" : "Wybierz język",
     "DistrictAddDescription_label_desc": "Opis",
-    "DistrictAddDescription_placeholder_desc" : "Wpisz opis ..."
+    "DistrictAddDescription_placeholder_desc" : "Wpisz opis ...",
+    "DistrictAddDescription_selected_lng": "Wybrany język"
 }

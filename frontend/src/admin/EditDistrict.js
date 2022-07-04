@@ -10,6 +10,8 @@ import { getDiscrict } from "../actions/discrictsActions";
 
 import DistrictAddDescription from "./DistrictAddDescription";
 
+import { DISCTRICT_DESCRIPTION } from "../constants/adminConstans"
+
 function EditDistrict() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -55,7 +57,7 @@ function EditDistrict() {
           >
             {t("btn_add_description")}
           </Button>
-          {addDescr ? <DistrictAddDescription districtId={districtId} /> : null}
+          {addDescr ? <DistrictAddDescription objId={districtId} descType={DISCTRICT_DESCRIPTION}/> : null}
         </div>
       )}
     </>

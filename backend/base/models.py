@@ -12,6 +12,15 @@ class Districts(models.Model):
     def __str__(self):
          return self.name
 
+class Descriptions(models.Model):
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    obj_type = models.CharField(max_length=50, null=True, blank=True)
+    obj_id = models.CharField(max_length=10, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
 
 class Districts_description(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
