@@ -7,11 +7,14 @@ import {
   DISTRICT_ADD_DESC_REQUEST,
   DISTRICT_ADD_DESC_SUCCESS,
   DISTRICT_ADD_DESC_FAIL,
+  ADD_DESC_REQUEST,
+  ADD_DESC_SUCCESS,
+  ADD_DESC_FAIL,
 } from "../constants/adminConstans";
 
-export const addDiscrictDesc = (insertData) => async (dispatch, getState) => {
+export const addDesc = (insertData) => async (dispatch, getState) => {
   try {
-    dispatch({ type: DISTRICT_ADD_DESC_REQUEST });
+    dispatch({ type: ADD_DESC_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -24,21 +27,23 @@ export const addDiscrictDesc = (insertData) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(
-      `/api/add-desc/`,
-      insertData,
-      config
-    );
+    if (insertData.addDesc) {
+      console.log("dane--> metoda post");
+      var { data } = await axios.post(`/api/add-desc/`, insertData, config);
+    } else {
+      console.log("dane--> metoda put");
+      var { data } = await axios.put(`/api/add-desc/`, insertData, config);
+    }
 
-    console.log("dane-->", data)
+    console.log("dane-->", data);
 
     dispatch({
-      type: DISTRICT_ADD_DESC_SUCCESS,
+      type: ADD_DESC_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: DISTRICT_ADD_DESC_FAIL,
+      type: ADD_DESC_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail
@@ -47,7 +52,7 @@ export const addDiscrictDesc = (insertData) => async (dispatch, getState) => {
   }
 };
 
-export const getDiscrictDesc = (insertData) => async (dispatch, getState) => {
+export const getDesc = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: DISTRICT_ADD_DESC_REQUEST });
 
@@ -67,6 +72,8 @@ export const getDiscrictDesc = (insertData) => async (dispatch, getState) => {
       config,
       insertData
     );
+    
+    console.log("dane get-->", data);
 
     dispatch({
       type: DISTRICT_ADD_DESC_SUCCESS,

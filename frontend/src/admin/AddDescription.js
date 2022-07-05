@@ -7,9 +7,9 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
-import { addDiscrictDesc, getDiscrictDesc } from "../actions/adminActions";
+import { addDesc, getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
-import { DISTRICT_ADD_DESC_DELETE } from "../constants/adminConstans";
+import { DISTRICT_ADD_DESC_DELETE, ADD_DESC_DELETE } from "../constants/adminConstans";
 import { USER_LOGOUT } from "../constants/userConstans";
 
 import {
@@ -18,7 +18,7 @@ import {
   NO_PERMISSION,
 } from "../constants/errorsConstants";
 
-function DistrictAddDescription(props) {
+function AddDescription(props) {
   const {
     register,
     formState: { errors },
@@ -36,6 +36,9 @@ function DistrictAddDescription(props) {
   const districtDesc = useSelector((state) => state.addDistrictDesc);
   const { loading, success, desc, error } = districtDesc;
 
+  const addDescription = useSelector((state) => state.addDesc);
+  const { loading : addloading, success : addsuccess,  error:adderror } = addDescription;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -44,23 +47,21 @@ function DistrictAddDescription(props) {
   const [lngDesc, setLngDesc] = useState("");
   const [lngName, setLngName] = useState("");
   const [lngCode, setLngCode] = useState("");
+  const [descText, setDescText] = useState("");
 
   const onSubmit = (data) => {
     console.log("działa submit formularza", data.desc);
-    console.log("kod-->",lngCode)
-    console.log("id-->",userInfo.id)
-    console.log("type", props.descType)
+    console.log("id opisu -->", desc[0].id);
     dispatch(
-      addDiscrictDesc({
-      id: userInfo.id,
-      addDesc: isAddDesc,
-      objType: props.descType,
-      objId : props.objId,
-      lng: lngCode,
-      desc: data.desc
-    }))
-
-
+      addDesc({
+        id: userInfo.id,
+        addDesc: isAddDesc,
+        objType: props.descType,
+        objId: props.objId,
+        lng: lngCode,
+        desc: data.desc,
+        descId: desc[0].id
+      }))
   };
 
   const selectHandler = (e) => {
@@ -73,34 +74,58 @@ function DistrictAddDescription(props) {
       }
     });
   };
+      // delete old state
+  useEffect(() => {
+    console.log('kontrola kasowanie stanów przed --->',desc)
+ 
+    dispatch({ type: DISTRICT_ADD_DESC_DELETE });
+    dispatch({ type: ADD_DESC_DELETE });
+
+    console.log('kontrola kasowanie stanów po --->',desc)
+   
+  }, []);
+
+    // add or modify OK, go to call page
+  useEffect(() => {
+    if (addsuccess) {
+      dispatch({ type: DISTRICT_ADD_DESC_DELETE });
+      dispatch({ type: ADD_DESC_DELETE });
+      console.log('Sukces')
+      navigate(`/dashboard/district/district/${props.objId}/edit`); 
+    }
+  }, [addsuccess]);
+
   // recognition adding or modification of description
   useEffect(() => {
+    //if (success & activeDesc) {
     if (success) {
-      if (desc.language===null){
-        setIsAddDesc(true)
+      if (desc.length < 1) {
+        setIsAddDesc(true);
+      }else{
+        console.log('test opisu-->',desc[0].description)
+        setDescText(desc[0].description)
       }
     }
-
-  }, [desc]);
+  }, [desc,activeDesc]);
 
   // fetch description from DB
   useEffect(() => {
-    if (lngDesc) {
+    if (activeDesc) {
+      console.log('kontrola-->',activeDesc,'-->',descText)
       dispatch(
-        getDiscrictDesc({
+        getDesc({
           id: userInfo.id,
           lng: lngDesc,
           Id: props.objId,
-          type: props.descType
+          type: props.descType,
         })
       );
     }
-  }, [lngDesc]);
+  }, [activeDesc]);
 
   // back to login based on Error --- Authentication credentials were not provided
   useEffect(() => {
     if (error === CREDENTIALS_WERE_NOT_PROVIDED || error === NO_PERMISSION) {
-      console.log("error", error);
       dispatch({ type: DISTRICT_ADD_DESC_DELETE });
       dispatch({ type: USER_LOGOUT });
       navigate("/login-admin");
@@ -112,16 +137,17 @@ function DistrictAddDescription(props) {
   return (
     <>
       <BackToLogin />
-      {loading ? (
+      {loading || addloading ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          {adderror ? <ErrorMessage msg={adderror} timeOut={4000} /> : null}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group>
               <Row>
                 <Col>
-                  {!lngDesc ? (
+                  {!activeDesc ? (
                     <>
                       {t("DistrictAddDescription_choice_lng")}
                       <Form.Select
@@ -140,7 +166,9 @@ function DistrictAddDescription(props) {
                       </Form.Select>
                     </>
                   ) : (
-                    <p>{`${t("DistrictAddDescription_selected_lng")} ${lngName}`}</p>
+                    <p>{`${t(
+                      "DistrictAddDescription_selected_lng"
+                    )} ${lngName}`}</p>
                   )}
                 </Col>
               </Row>
@@ -154,6 +182,9 @@ function DistrictAddDescription(props) {
                   <Form.Control
                     as="textarea"
                     placeholder={t("DistrictAddDescription_placeholder_desc")}
+                    //defaultValue={desc.length < 1 ? null : desc[0].description}
+                    //defaultValue= {'taki test'}
+                    defaultValue= { descText ? descText : null}
                     {...register("desc", {
                       maxLength: {
                         value: 255,
@@ -187,4 +218,4 @@ function DistrictAddDescription(props) {
   );
 }
 
-export default DistrictAddDescription;
+export default AddDescription;

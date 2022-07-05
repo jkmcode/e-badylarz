@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
 
+from datetime import datetime
+
 import imp
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -30,26 +32,34 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-@api_view(['POST'])
+@api_view(['POST', 'PUT'])
 @permission_classes([IsAdminUser])
 def addDesc(request):
     data=request.data
+
     if data["addDesc"]:
         desc = Descriptions.objects.create(
         description=data['desc'],
         language=data['lng'],
         obj_type=data['objType'],
         obj_id=data['objId'],
-        creator=data['id']
-        )
+        creator=data['id'])
+    else:
+        descrip = Descriptions.objects.get(id=data['descId'])
+        descrip.description=data['desc']
+        descrip.date_of_change=datetime.now()
+        descrip.modifier=data['id']
+        descrip.save()
 
     return Response("OK")
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getDiscrictDesc(request, Id, lng, type):
-    descrition = Descriptions.objects.filter(obj_id = Id, language=lng, obj_type=type) 
-    seriaziler = DistrictsDescSerializer(descrition, many=False)
+def getDiscrictDesc(request, Id, lng, obj_type):
+    #print('Id', Id, type(Id), 'lng', lng, type(lng))
+    descrition = Descriptions.objects.filter(obj_id = Id, language=lng, obj_type=obj_type) 
+    print('descrition', descrition)
+    seriaziler = DistrictsDescSerializer(descrition, many=True)
     return Response(seriaziler.data)
 
 
@@ -73,3 +83,29 @@ def addDiscrict(request):
     return Response("Wszystko okey")
 
 
+
+
+########################### BRUDNOPIS ###############################
+
+# @api_view(["PUT"])
+# @permission_classes([IsAuthenticated])
+# def updateLocation(request, pk):
+#     location = Locations.objects.get(id=pk)
+
+#     data = request.data
+#     location.name = data["name"]
+#     location.short_name = data["shortName"]
+#     location.is_active = data["isActive"]
+
+#     location.save()
+
+#     serializer = LocationsSerializer(location, many=False)
+
+#     return Response(serializer.data)
+
+
+
+# class LocationsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Locations
+#         fields = "__all__"

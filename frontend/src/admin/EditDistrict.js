@@ -8,9 +8,9 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 
 import { getDiscrict } from "../actions/discrictsActions";
 
-import DistrictAddDescription from "./DistrictAddDescription";
+import AddDescription from "./AddDescription";
 
-import { DISCTRICT_DESCRIPTION } from "../constants/adminConstans"
+import { DISCTRICT_DESCRIPTION } from "../constants/adminConstans";
 
 function EditDistrict() {
   const { t } = useTranslation();
@@ -57,7 +57,12 @@ function EditDistrict() {
           >
             {t("btn_add_description")}
           </Button>
-          {addDescr ? <DistrictAddDescription objId={districtId} descType={DISCTRICT_DESCRIPTION}/> : null}
+          {addDescr ? (
+            <AddDescription
+              objId={districtId}
+              descType={DISCTRICT_DESCRIPTION}
+            />
+          ) : null}
         </div>
       )}
     </>

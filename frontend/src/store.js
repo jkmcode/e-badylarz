@@ -6,6 +6,7 @@ import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
 import {
   addDistrictReducer,
   addDistrictDescReducer,
+  addDescReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   addDistrict: addDistrictReducer,
   userLogin: userLoginReducers,
   addDistrictDesc: addDistrictDescReducer,
+  addDesc: addDescReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")
