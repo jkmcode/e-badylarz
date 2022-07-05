@@ -19,3 +19,5 @@ export const ADD_DESC_REQUEST = "ADD_DESC_REQUEST";
 export const ADD_DESC_SUCCESS = "ADD_DESC_SUCCESS";
 export const ADD_DESC_FAIL = "ADD_DESC_FAIL";
 export const ADD_DESC_DELETE = "ADD_DESC_DELETE";
+
+export const SET_FLAG = "SET_FLAG";

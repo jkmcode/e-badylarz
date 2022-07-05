@@ -9,7 +9,10 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
 import { addDesc, getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
-import { DISTRICT_ADD_DESC_DELETE, ADD_DESC_DELETE } from "../constants/adminConstans";
+import {
+  DISTRICT_ADD_DESC_DELETE,
+  ADD_DESC_DELETE,
+} from "../constants/adminConstans";
 import { USER_LOGOUT } from "../constants/userConstans";
 
 import {
@@ -17,6 +20,8 @@ import {
   INVALID_TOKEN,
   NO_PERMISSION,
 } from "../constants/errorsConstants";
+
+import Description from "./Description";
 
 function AddDescription(props) {
   const {
@@ -37,7 +42,11 @@ function AddDescription(props) {
   const { loading, success, desc, error } = districtDesc;
 
   const addDescription = useSelector((state) => state.addDesc);
-  const { loading : addloading, success : addsuccess,  error:adderror } = addDescription;
+  const {
+    loading: addloading,
+    success: addsuccess,
+    error: adderror,
+  } = addDescription;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -50,7 +59,7 @@ function AddDescription(props) {
   const [descText, setDescText] = useState("");
 
   const onSubmit = (data) => {
-    console.log("działa submit formularza", data.desc);
+    console.log("działa submit formularza", data);
     console.log("id opisu -->", desc[0].id);
     dispatch(
       addDesc({
@@ -60,8 +69,9 @@ function AddDescription(props) {
         objId: props.objId,
         lng: lngCode,
         desc: data.desc,
-        descId: desc[0].id
-      }))
+        descId: desc[0].id,
+      })
+    );
   };
 
   const selectHandler = (e) => {
@@ -74,24 +84,21 @@ function AddDescription(props) {
       }
     });
   };
-      // delete old state
+  // delete old state
   useEffect(() => {
-    console.log('kontrola kasowanie stanów przed --->',desc)
- 
     dispatch({ type: DISTRICT_ADD_DESC_DELETE });
     dispatch({ type: ADD_DESC_DELETE });
 
-    console.log('kontrola kasowanie stanów po --->',desc)
-   
+    console.log("kontrola kasowanie stanów po --->", desc);
   }, []);
 
-    // add or modify OK, go to call page
+  // add or modify OK, go to call page
   useEffect(() => {
     if (addsuccess) {
       dispatch({ type: DISTRICT_ADD_DESC_DELETE });
       dispatch({ type: ADD_DESC_DELETE });
-      console.log('Sukces')
-      navigate(`/dashboard/district/district/${props.objId}/edit`); 
+      console.log("Sukces");
+      navigate(`/dashboard/district/district/${props.objId}/edit`);
     }
   }, [addsuccess]);
 
@@ -101,17 +108,17 @@ function AddDescription(props) {
     if (success) {
       if (desc.length < 1) {
         setIsAddDesc(true);
-      }else{
-        console.log('test opisu-->',desc[0].description)
-        setDescText(desc[0].description)
+      } else {
+        console.log("test opisu-->", desc[0].description);
+        setDescText(desc[0].description);
       }
     }
-  }, [desc,activeDesc]);
+  }, [desc, activeDesc]);
 
   // fetch description from DB
   useEffect(() => {
     if (activeDesc) {
-      console.log('kontrola-->',activeDesc,'-->',descText)
+      console.log("kontrola-->", activeDesc, "-->", descText);
       dispatch(
         getDesc({
           id: userInfo.id,
@@ -143,7 +150,8 @@ function AddDescription(props) {
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           {adderror ? <ErrorMessage msg={adderror} timeOut={4000} /> : null}
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <p>{descText}</p>
+          <Form>
             <Form.Group>
               <Row>
                 <Col>
@@ -173,45 +181,13 @@ function AddDescription(props) {
                 </Col>
               </Row>
             </Form.Group>
-            {activeDesc && (
-              <>
-                <Form.Group controlId="desc">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("DistrictAddDescription_label_desc")}
-                  </Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    placeholder={t("DistrictAddDescription_placeholder_desc")}
-                    //defaultValue={desc.length < 1 ? null : desc[0].description}
-                    //defaultValue= {'taki test'}
-                    defaultValue= { descText ? descText : null}
-                    {...register("desc", {
-                      maxLength: {
-                        value: 255,
-                        message: t("Form_maxLength_255"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("desc");
-                    }}
-                    name="desc"
-                  ></Form.Control>
-                  {errors.desc && (
-                    <div className="text-danger form-msg-style">
-                      {errors.desc.message}
-                    </div>
-                  )}
-                </Form.Group>
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3 w-50"
-                >
-                  {t("btn_submit")}
-                </Button>
-              </>
-            )}
           </Form>
+
+          {activeDesc && (
+            <>
+              <Description descText={descText} />
+            </>
+          )}
         </div>
       )}
     </>

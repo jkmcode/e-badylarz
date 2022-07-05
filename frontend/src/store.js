@@ -7,6 +7,7 @@ import {
   addDistrictReducer,
   addDistrictDescReducer,
   addDescReducer,
+  descFlagReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   userLogin: userLoginReducers,
   addDistrictDesc: addDistrictDescReducer,
   addDesc: addDescReducer,
+  descFlag: descFlagReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")
