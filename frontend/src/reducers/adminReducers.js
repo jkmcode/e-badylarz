@@ -11,13 +11,16 @@ import {
   ADD_DESC_SUCCESS,
   ADD_DESC_FAIL,
   ADD_DESC_DELETE,
-  SET_FLAG,
+  SET_FLAG_DESC_FALSE,
+  SET_FLAG_DESC_TRUE
 } from "../constants/adminConstans";
 
 export const descFlagReducer = (state = {}, action) => {
   switch (action.type) {
-    case SET_FLAG:
-      return { flag: false };
+    case SET_FLAG_DESC_FALSE:
+      return { descFlag: false };
+    case SET_FLAG_DESC_TRUE:
+        return { descFlag: true };
     default:
       return state;
   }

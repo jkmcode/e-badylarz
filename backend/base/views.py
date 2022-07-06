@@ -76,6 +76,8 @@ def addDiscrict(request):
     data = request.data
     district = Districts.objects.create(
         name=data['name'],
+        creator = data['creator'],
+        is_active=True,
     )
 
     return Response("Wszystko okey")

@@ -18,7 +18,7 @@ const reducer = combineReducers({
   userLogin: userLoginReducers,
   addDistrictDesc: addDistrictDescReducer,
   addDesc: addDescReducer,
-  descFlag: descFlagReducer,
+  flag: descFlagReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

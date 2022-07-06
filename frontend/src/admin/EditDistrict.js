@@ -10,7 +10,7 @@ import { getDiscrict } from "../actions/discrictsActions";
 
 import AddDescription from "./AddDescription";
 
-import { DISCTRICT_DESCRIPTION } from "../constants/adminConstans";
+import { DISCTRICT_DESCRIPTION, SET_FLAG_DESC_TRUE, SET_FLAG_DESC_FALSE } from "../constants/adminConstans";
 
 function EditDistrict() {
   const { t } = useTranslation();
@@ -26,8 +26,12 @@ function EditDistrict() {
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
 
+  const dflag = useSelector((state) => state.flag);
+  const { descFlag } = dflag;
+
   const descrHandler = () => {
     setAddDescr(true);
+    dispatch({ type: SET_FLAG_DESC_TRUE });
   };
 
   useEffect(() => {
@@ -35,6 +39,10 @@ function EditDistrict() {
       dispatch(getDiscrict());
     }
   }, [dispatch, districtList.length]);
+
+  useEffect(() => {
+    dispatch({ type: SET_FLAG_DESC_FALSE });
+  }, []);
 
   return (
     <>
@@ -57,7 +65,7 @@ function EditDistrict() {
           >
             {t("btn_add_description")}
           </Button>
-          {addDescr ? (
+          {addDescr & descFlag ? (
             <AddDescription
               objId={districtId}
               descType={DISCTRICT_DESCRIPTION}

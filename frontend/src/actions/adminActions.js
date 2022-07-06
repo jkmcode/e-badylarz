@@ -35,8 +35,6 @@ export const addDesc = (insertData) => async (dispatch, getState) => {
       var { data } = await axios.put(`/api/add-desc/`, insertData, config);
     }
 
-    console.log("dane-->", data);
-
     dispatch({
       type: ADD_DESC_SUCCESS,
       payload: data,
@@ -55,11 +53,9 @@ export const addDesc = (insertData) => async (dispatch, getState) => {
 export const getDesc = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: DISTRICT_ADD_DESC_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
-
     const config = {
       headers: {
         "Content-type": "application/json",
@@ -73,8 +69,6 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
       insertData
     );
     
-    console.log("dane get-->", data);
-
     dispatch({
       type: DISTRICT_ADD_DESC_SUCCESS,
       payload: data,
@@ -90,13 +84,18 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
   }
 };
 
-export const addDiscrict = (insertData) => async (dispatch) => {
+export const addDiscrict = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: DISTRICT_ADD_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 

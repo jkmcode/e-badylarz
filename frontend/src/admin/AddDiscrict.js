@@ -20,7 +20,6 @@ function AddDiscrict() {
   const navigate = useNavigate();
   const newDistrict = useSelector((state) => state.addDistrict);
   const { loading, error, success } = newDistrict;
-
   const {
     register,
     formState: { errors },
@@ -29,10 +28,16 @@ function AddDiscrict() {
     trigger,
   } = useForm();
 
+  // data from redux
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const onSubmit = (data) => {
     console.log("działa onSubmit", data);
     const insertData = {
       name: data.name,
+      creator: userInfo.id
+
     };
     dispatch(addDiscrict(insertData));
   };

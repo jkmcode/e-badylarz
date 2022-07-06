@@ -7,7 +7,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
-import { addDesc, getDesc } from "../actions/adminActions";
+import {  getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
 import {
   DISTRICT_ADD_DESC_DELETE,
@@ -58,22 +58,6 @@ function AddDescription(props) {
   const [lngCode, setLngCode] = useState("");
   const [descText, setDescText] = useState("");
 
-  const onSubmit = (data) => {
-    console.log("działa submit formularza", data);
-    console.log("id opisu -->", desc[0].id);
-    dispatch(
-      addDesc({
-        id: userInfo.id,
-        addDesc: isAddDesc,
-        objType: props.descType,
-        objId: props.objId,
-        lng: lngCode,
-        desc: data.desc,
-        descId: desc[0].id,
-      })
-    );
-  };
-
   const selectHandler = (e) => {
     setLngDesc(e.target.value);
     setActiveDesc(true);
@@ -84,28 +68,10 @@ function AddDescription(props) {
       }
     });
   };
-  // delete old state
-  useEffect(() => {
-    dispatch({ type: DISTRICT_ADD_DESC_DELETE });
-    dispatch({ type: ADD_DESC_DELETE });
-
-    console.log("kontrola kasowanie stanów po --->", desc);
-  }, []);
-
-  // add or modify OK, go to call page
-  useEffect(() => {
-    if (addsuccess) {
-      dispatch({ type: DISTRICT_ADD_DESC_DELETE });
-      dispatch({ type: ADD_DESC_DELETE });
-      console.log("Sukces");
-      navigate(`/dashboard/district/district/${props.objId}/edit`);
-    }
-  }, [addsuccess]);
 
   // recognition adding or modification of description
   useEffect(() => {
-    //if (success & activeDesc) {
-    if (success) {
+    if (success & activeDesc) {
       if (desc.length < 1) {
         setIsAddDesc(true);
       } else {
@@ -118,7 +84,6 @@ function AddDescription(props) {
   // fetch description from DB
   useEffect(() => {
     if (activeDesc) {
-      console.log("kontrola-->", activeDesc, "-->", descText);
       dispatch(
         getDesc({
           id: userInfo.id,
@@ -139,8 +104,6 @@ function AddDescription(props) {
     }
   }, [error]);
 
-  //districtList.filter((i) => i.id === districtId)[0].name;
-
   return (
     <>
       <BackToLogin />
@@ -150,7 +113,6 @@ function AddDescription(props) {
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           {adderror ? <ErrorMessage msg={adderror} timeOut={4000} /> : null}
-          <p>{descText}</p>
           <Form>
             <Form.Group>
               <Row>
@@ -162,7 +124,6 @@ function AddDescription(props) {
                         name="lng"
                         {...register("lng")}
                         onChange={selectHandler}
-                        //defaultValue={{ value: "pl" }}
                       >
                         <option key="blankChoice" hidden value="0" />
 
@@ -185,7 +146,7 @@ function AddDescription(props) {
 
           {activeDesc && (
             <>
-              <Description descText={descText} />
+              <Description descText={descText} parentProps={props} getDesc={desc} lngDesc={lngCode}/>
             </>
           )}
         </div>
