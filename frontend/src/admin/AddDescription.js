@@ -7,7 +7,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
-import {  getDesc } from "../actions/adminActions";
+import { getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
 import {
   DISTRICT_ADD_DESC_DELETE,
@@ -59,6 +59,7 @@ function AddDescription(props) {
   const [descText, setDescText] = useState("");
 
   const selectHandler = (e) => {
+    dispatch({ type: DISTRICT_ADD_DESC_DELETE });
     setLngDesc(e.target.value);
     setActiveDesc(true);
     language.map((i) => {
@@ -75,7 +76,6 @@ function AddDescription(props) {
       if (desc.length < 1) {
         setIsAddDesc(true);
       } else {
-        console.log("test opisu-->", desc[0].description);
         setDescText(desc[0].description);
       }
     }
@@ -146,7 +146,12 @@ function AddDescription(props) {
 
           {activeDesc && (
             <>
-              <Description descText={descText} parentProps={props} getDesc={desc} lngDesc={lngCode}/>
+              <Description
+                descText={descText}
+                parentProps={props}
+                getDesc={desc}
+                lngDesc={lngCode}
+              />
             </>
           )}
         </div>
