@@ -2,6 +2,7 @@
     "test":"po angielsku",
 
     "ErrorMessage_title": "Error occured",
+    "ErrorMessage_title_success":"Success",
     "ErrorMessage_inproper_password": "No active account found with the given credentials",
     "ErrorMessage_request_500": "No access to internet",
     "ErrorMessage_credentials_were_not_provided": "Authentication credentials were not provided.",
@@ -43,6 +44,7 @@
     "AdminScreenDistrict_title" : "List of districts",
 
     "AddDiscrict_title": "Add district",
+    "AddDiscrict_success":"District correctly added",
 
     "AddDistrict_label_name": "District name",
     "AddDistrict_name_placeholder" : "Enter district name ...",
@@ -66,6 +68,7 @@
     "DistrictAddDescription_choice_lng" : "Choice language",
     "DistrictAddDescription_label_desc": "Description",
     "DistrictAddDescription_placeholder_desc" : "Enter description ...",
-    "DistrictAddDescription_selected_lng": "You have chosen a language"
+    "DistrictAddDescription_selected_lng": "You have chosen a language",
+    "DistrictAddDescription_success": "Description correctly changed"
     
 }

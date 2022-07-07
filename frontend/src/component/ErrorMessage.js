@@ -51,7 +51,10 @@ function ErrorMessage(props) {
           onClose={() => setOpen(false)}
           dismissible
         >
-          <Alert.Heading>{t("ErrorMessage_title")}</Alert.Heading>
+          <Alert.Heading>
+             {props.success ? t("ErrorMessage_title_success"):t("ErrorMessage_title")}
+
+          </Alert.Heading>
           <p>{t(errorMessage)}</p>
         </Alert>
       )}

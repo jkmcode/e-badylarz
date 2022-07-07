@@ -24,7 +24,7 @@ function Description(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    dispatch({ type: SET_FLAG_DESC_FALSE });
+    // dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: DISTRICT_ADD_DESC_DELETE });
 
     if (props.getDesc.length < 1) {

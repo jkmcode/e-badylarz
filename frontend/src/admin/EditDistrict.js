@@ -52,8 +52,13 @@ function EditDistrict() {
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           <div className=" d-flex justify-content-center display-6">
+              <Link
+                  to="/dashboard/district/district"
+                  className="text-secondary"
+                >
+                {t("btn-return")}
+              </Link>
             <div className="px-3">{t("EditDistrict_title")}</div>
-
             {districtList.length === 0
               ? null
               : districtList.filter((i) => i.id === districtId)[0].name}

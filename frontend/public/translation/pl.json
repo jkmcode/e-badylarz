@@ -2,6 +2,7 @@
     "test":"po polsku",   
 
     "ErrorMessage_title": "Wystąpił błąd",
+    "ErrorMessage_title_success":"Sukces",
     "ErrorMessage_inproper_password": "Nieprawidłowy login lub hasło",   
     "ErrorMessage_request_500": "Brak dostępu do internetu", 
     "ErrorMessage_credentials_were_not_provided": "Nie podano danych uwierzytelniających.",
@@ -43,6 +44,7 @@
     "AdminScreenDistrict_title" : "Lista powiatów",
 
     "AddDiscrict_title": "Dodaj powiat",
+    "AddDiscrict_success":"Powiat prawidłowo dodany",
 
     "AddDistrict_label_name": "Nazwa powiatu",
     "AddDistrict_name_placeholder" : "Podaj nazwe powiatu ...",
@@ -66,5 +68,6 @@
     "DistrictAddDescription_choice_lng" : "Wybierz język",
     "DistrictAddDescription_label_desc": "Opis",
     "DistrictAddDescription_placeholder_desc" : "Wpisz opis ...",
-    "DistrictAddDescription_selected_lng": "Wybrany język"
+    "DistrictAddDescription_selected_lng": "Wybrany język",
+    "DistrictAddDescription_success": "Opis został prawidłowo zmieniony"
 }

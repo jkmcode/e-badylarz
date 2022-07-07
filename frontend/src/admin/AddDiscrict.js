@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,17 +9,24 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 
 import { addDiscrict } from "../actions/adminActions";
+import AddDescription from "./AddDescription";
 import {
   DISTRICT_ADD_DELETE,
   DISTRICT_DELETE,
+  DISCTRICT_DESCRIPTION,
 } from "../constants/adminConstans";
+
+import {
+  TIME_SET_TIMEOUT,
+} from "../constants/errorsConstants";
 
 function AddDiscrict() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const newDistrict = useSelector((state) => state.addDistrict);
-  const { loading, error, success } = newDistrict;
+
+  const [nextDesc, setNextDesc] = useState(false);
+
   const {
     register,
     formState: { errors },
@@ -32,21 +39,30 @@ function AddDiscrict() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const onSubmit = (data) => {
-    console.log("działa onSubmit", data);
-    const insertData = {
-      name: data.name,
-      creator: userInfo.id
+  const newDistrict = useSelector((state) => state.addDistrict);
+  const { loading, error, success, district } = newDistrict;
 
-    };
-    dispatch(addDiscrict(insertData));
+  const onSubmit = (data) => {  
+      const insertData = {
+        name: data.name,
+        creator: userInfo.id 
+      };
+      dispatch(addDiscrict(insertData));         
   };
 
   useEffect(() => {
     if (success) {
-      dispatch({ type: DISTRICT_ADD_DELETE });
-      dispatch({ type: DISTRICT_DELETE });
-      navigate("/admin/district");
+      setTimeout(() => {
+        if (window.confirm("Dodać opis ?")){
+          console.log("Nacisłem OK")
+          setNextDesc(true)
+        }else{
+          dispatch({ type: DISTRICT_ADD_DELETE });
+          dispatch({ type: DISTRICT_DELETE });
+          navigate("/dashboard/district/district");
+        }
+
+      }, TIME_SET_TIMEOUT);
     }
   }, [navigate, success]);
 
@@ -59,6 +75,7 @@ function AddDiscrict() {
           {error ? (
             <ErrorMessage msg={error} timeOut={1000} variant="danger" />
           ) : null}
+          {success ? <ErrorMessage msg={t("AddDiscrict_success")} timeOut={4000} variant='success'  success={true}/> : null}
           <Row className="align-items-center">
             <Col>
               <Link
@@ -103,9 +120,17 @@ function AddDiscrict() {
               )}
             </Form.Group>
             <div className="d-flex justify-content-end">
-              <Button type="submit" variant="success" className="rounded my-3 ">
-                {t("btn-add")}
-              </Button>
+              {nextDesc ? (
+              <AddDescription
+                objId={district.id}
+                descType={DISCTRICT_DESCRIPTION}
+              />)
+              :
+                  <Button type="submit" variant="success" className="rounded my-3 ">
+                    {t("btn-add")}
+                  </Button>
+              }
+
             </div>
           </Form>
         </div>

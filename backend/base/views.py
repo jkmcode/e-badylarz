@@ -74,10 +74,15 @@ def getDiscrict(request):
 @permission_classes([IsAdminUser])
 def addDiscrict(request):
     data = request.data
-    district = Districts.objects.create(
-        name=data['name'],
-        creator = data['creator'],
-        is_active=True,
-    )
+    try:
+        district = Districts.objects.create(
+            name=data['name'],
+            creator = data['creator'],
+            is_active=True,
+        )
+        newdistrict=Districts.objects.filter(name=data['name'])
+        seriaziler = DistrictsSerializer(newdistrict, many=True)
+    except:
+        return Response("went wrong")
 
-    return Response("Wszystko okey")
+    return Response(seriaziler.data)

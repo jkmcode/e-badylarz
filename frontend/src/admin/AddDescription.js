@@ -12,6 +12,7 @@ import BackToLogin from "./BackToLogin";
 import {
   DISTRICT_ADD_DESC_DELETE,
   ADD_DESC_DELETE,
+  SET_FLAG_DESC_FALSE,
 } from "../constants/adminConstans";
 import { USER_LOGOUT } from "../constants/userConstans";
 
@@ -19,6 +20,7 @@ import {
   CREDENTIALS_WERE_NOT_PROVIDED,
   INVALID_TOKEN,
   NO_PERMISSION,
+  TIME_SET_TIMEOUT,
 } from "../constants/errorsConstants";
 
 import Description from "./Description";
@@ -95,6 +97,15 @@ function AddDescription(props) {
     }
   }, [activeDesc]);
 
+  useEffect(() => {
+    if (addsuccess) {
+      setTimeout(() => {
+        dispatch({ type: SET_FLAG_DESC_FALSE });
+        dispatch({ type: ADD_DESC_DELETE });
+      }, TIME_SET_TIMEOUT);
+    }
+  }, [addsuccess]);
+
   // back to login based on Error --- Authentication credentials were not provided
   useEffect(() => {
     if (error === CREDENTIALS_WERE_NOT_PROVIDED || error === NO_PERMISSION) {
@@ -113,6 +124,7 @@ function AddDescription(props) {
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           {adderror ? <ErrorMessage msg={adderror} timeOut={4000} /> : null}
+          {addsuccess ? <ErrorMessage msg={t("DistrictAddDescription_success")} timeOut={4000} variant='success'  success={true}/> : null}
           <Form>
             <Form.Group>
               <Row>

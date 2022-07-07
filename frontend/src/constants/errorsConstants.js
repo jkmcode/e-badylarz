@@ -6,3 +6,5 @@ export const CREDENTIALS_WERE_NOT_PROVIDED =
 export const INVALID_TOKEN = "Given token not valid for any token type";
 export const NO_PERMISSION =
   "You do not have permission to perform this action.";
+
+export const TIME_SET_TIMEOUT = 4000

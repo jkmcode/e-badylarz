@@ -61,7 +61,7 @@ export const addDistrictReducer = (state = {}, action) => {
     case DISTRICT_ADD_REQUEST:
       return { loading: true, success: false };
     case DISTRICT_ADD_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, district: action.payload};
     case DISTRICT_ADD_FAIL:
       return { loading: false, error: action.payload, success: false };
     case DISTRICT_ADD_DELETE:

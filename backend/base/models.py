@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Districts(models.Model):
-    name = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
@@ -22,16 +23,6 @@ class Descriptions(models.Model):
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
-class Districts_description(models.Model):
-    id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
-    language = models.CharField(max_length=5, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
-
 
 class Citis(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
@@ -44,18 +35,7 @@ class Citis(models.Model):
 
     def __str__(self):
          return self.name
-
-
-class Citis_description(models.Model):
-    id_citi = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
-    language = models.CharField(max_length=5, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
-    
+   
 
 class Place_of_pickups(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
@@ -75,16 +55,6 @@ class Place_of_pickups(models.Model):
     def __str__(self):
          return self.name
 
-
-class Place_of_pickups_description(models.Model):
-    id_place_of_pickup = models.ForeignKey(Place_of_pickups, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
-    language = models.CharField(max_length=5, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
 
 
 
