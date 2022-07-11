@@ -13,7 +13,9 @@ import {
   DISTRICT_ADD_DESC_DELETE,
   ADD_DESC_DELETE,
   SET_FLAG_DESC_FALSE,
+  SET_FLAG_ADD_DESC_TRUE,
 } from "../constants/adminConstans";
+
 import { USER_LOGOUT } from "../constants/userConstans";
 
 import {
@@ -29,9 +31,9 @@ function AddDescription(props) {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
+    // handleSubmit,
+    // reset,
+    // trigger,
   } = useForm();
 
   const { t } = useTranslation();
@@ -102,6 +104,7 @@ function AddDescription(props) {
       setTimeout(() => {
         dispatch({ type: SET_FLAG_DESC_FALSE });
         dispatch({ type: ADD_DESC_DELETE });
+        dispatch({ type: SET_FLAG_ADD_DESC_TRUE });     
       }, TIME_SET_TIMEOUT);
     }
   }, [addsuccess]);

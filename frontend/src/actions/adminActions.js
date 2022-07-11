@@ -10,7 +10,80 @@ import {
   ADD_DESC_REQUEST,
   ADD_DESC_SUCCESS,
   ADD_DESC_FAIL,
+  GET_FULL_DESCRIPTION_REQUEST,
+  GET_FULL_DESCRIPTION_SUCCESS,
+  GET_FULL_DESCRIPTION_FAIL,
+  ACTIVE_DESCRIPTION_REQUEST,
+  ACTIVE_DESCRIPTION_SUCCESS,
+  ACTIVE_DESCRIPTION_FAIL,
 } from "../constants/adminConstans";
+
+export const unOrActiveDescription = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ACTIVE_DESCRIPTION_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+      const { data } = await axios.put(`/api/desc-active/`, insertData, config);
+
+    dispatch({
+      type: ACTIVE_DESCRIPTION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ACTIVE_DESCRIPTION_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+
+export const getFullDescriptions = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_FULL_DESCRIPTION_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/get-desc/full/${insertData.Id}/${insertData.type}`,
+      config,
+      insertData
+    );
+    
+    dispatch({
+      type: GET_FULL_DESCRIPTION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type:   GET_FULL_DESCRIPTION_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
 export const addDesc = (insertData) => async (dispatch, getState) => {
   try {
@@ -28,10 +101,8 @@ export const addDesc = (insertData) => async (dispatch, getState) => {
     };
 
     if (insertData.addDesc) {
-      console.log("dane--> metoda post");
       var { data } = await axios.post(`/api/add-desc/`, insertData, config);
     } else {
-      console.log("dane--> metoda put");
       var { data } = await axios.put(`/api/add-desc/`, insertData, config);
     }
 

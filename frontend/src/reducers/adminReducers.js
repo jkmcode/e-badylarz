@@ -3,24 +3,83 @@ import {
   DISTRICT_ADD_SUCCESS,
   DISTRICT_ADD_FAIL,
   DISTRICT_ADD_DELETE,
+
   DISTRICT_ADD_DESC_REQUEST,
   DISTRICT_ADD_DESC_SUCCESS,
   DISTRICT_ADD_DESC_FAIL,
   DISTRICT_ADD_DESC_DELETE,
+
   ADD_DESC_REQUEST,
   ADD_DESC_SUCCESS,
   ADD_DESC_FAIL,
   ADD_DESC_DELETE,
+
   SET_FLAG_DESC_FALSE,
-  SET_FLAG_DESC_TRUE
+  SET_FLAG_DESC_TRUE,
+
+  SET_FLAG_ADD_DESC_FALSE,
+  SET_FLAG_ADD_DESC_TRUE,
+
+  GET_FULL_DESCRIPTION_REQUEST,
+  GET_FULL_DESCRIPTION_SUCCESS,
+  GET_FULL_DESCRIPTION_FAIL,
+  GET_FULL_DESCRIPTION_DELETE,
+
+  ACTIVE_DESCRIPTION_REQUEST,
+  ACTIVE_DESCRIPTION_SUCCESS,
+  ACTIVE_DESCRIPTION_FAIL,
+  ACTIVE_DESCRIPTION_DELETE,
+
+  SET_FLAG_INFO_FALSE,
+  SET_FLAG_INFO_TRUE,
+
 } from "../constants/adminConstans";
 
-export const descFlagReducer = (state = {}, action) => {
+export const flagReducer = (state = {}, action) => {
   switch (action.type) {
+    case SET_FLAG_INFO_FALSE:
+      return { infoFlag: false };
+    case SET_FLAG_INFO_TRUE:
+        return { infoFlag: true };
     case SET_FLAG_DESC_FALSE:
       return { descFlag: false };
     case SET_FLAG_DESC_TRUE:
         return { descFlag: true };
+    case SET_FLAG_ADD_DESC_FALSE:
+      return { addDescFlag: false };
+    case SET_FLAG_ADD_DESC_TRUE:
+        return { addDescFlag: true };
+    default:
+      return state;
+  }
+};
+
+export const unOrActiveDescriptionReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ACTIVE_DESCRIPTION_REQUEST:
+      return { loading: true, success: false };
+    case ACTIVE_DESCRIPTION_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case ACTIVE_DESCRIPTION_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case ACTIVE_DESCRIPTION_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+
+export const getFullDescriptionsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_FULL_DESCRIPTION_REQUEST:
+      return { loading: true, success: false };
+    case GET_FULL_DESCRIPTION_SUCCESS:
+      return { loading: false, success: true, desc: action.payload };
+    case GET_FULL_DESCRIPTION_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case GET_FULL_DESCRIPTION_DELETE:
+      return {};
     default:
       return state;
   }

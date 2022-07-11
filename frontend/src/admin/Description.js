@@ -12,7 +12,7 @@ import { addDesc } from "../actions/adminActions";
 function Description(props) {
   const {
     register,
-    handleSubmit,
+    handleSubmit: descHandleSubmit,
     formState: { errors },
     trigger,
   } = useForm();
@@ -24,7 +24,6 @@ function Description(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    // dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: DISTRICT_ADD_DESC_DELETE });
 
     if (props.getDesc.length < 1) {
@@ -55,7 +54,7 @@ function Description(props) {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={descHandleSubmit(onSubmit)}>
         <Form.Group controlId="desc">
           <Form.Label className="form-msg-style ms-2">
             {t("DistrictAddDescription_label_desc")}

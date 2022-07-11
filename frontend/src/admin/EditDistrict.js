@@ -34,6 +34,12 @@ function EditDistrict() {
     dispatch({ type: SET_FLAG_DESC_TRUE });
   };
 
+  const citisHandler = () => {
+    console.log('działa--->')
+    // setAddDescr(true);
+    // dispatch({ type: SET_FLAG_DESC_TRUE });
+  };
+
   useEffect(() => {
     if (districtList.length === 0) {
       dispatch(getDiscrict());
@@ -50,26 +56,41 @@ function EditDistrict() {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
+          <Link
+            to="/dashboard/district/district"
+            className="text-secondary"
+            >
+             {t("btn-return")}
+          </Link>
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           <div className=" d-flex justify-content-center display-6">
-              <Link
-                  to="/dashboard/district/district"
-                  className="text-secondary"
-                >
-                {t("btn-return")}
-              </Link>
             <div className="px-3">{t("EditDistrict_title")}</div>
             {districtList.length === 0
               ? null
               : districtList.filter((i) => i.id === districtId)[0].name}
           </div>
-          <Button
-            variant="success"
-            className="btn-sm d-flex"
-            onClick={() => descrHandler()}
-          >
-            {t("btn_add_description")}
-          </Button>
+          <Row>
+          <Col>
+            <Button 
+              variant="success"
+              className="btn-sm d-flex"
+              onClick={() => descrHandler()}
+              >
+              {t("btn_add_description")}
+            </Button>
+          
+          </Col>
+          <Col>
+            <Button 
+              variant="info"
+              className="btn-sm d-flex"
+              onClick={() => citisHandler()}
+              >
+              {t("btn_citis")}
+            </Button>
+          
+          </Col>
+          </Row>
           {addDescr & descFlag ? (
             <AddDescription
               objId={districtId}

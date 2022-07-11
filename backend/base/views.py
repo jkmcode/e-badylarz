@@ -15,6 +15,8 @@ from .models import Districts
 from .books import books
 from base.serializer import *
 
+from rest_framework import status
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -31,6 +33,31 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def activeDiscr(request):
+    data=request.data
+
+    descrip = Districts.objects.get(id=data['Id'])
+    if data['active']:
+        descrip.is_active=True
+    else:
+        descrip.is_active=False
+
+    descrip.date_of_change=datetime.now()
+    descrip.modifier=data['userId']
+    descrip.save()
+
+    return Response("OK")
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getFullDescriptionsDesc(request, Id, obj_type):
+    descrition = Descriptions.objects.filter(obj_id = Id, obj_type=obj_type) 
+    seriaziler = DistrictsDescSerializer(descrition, many=True)
+    return Response(seriaziler.data)
 
 @api_view(['POST', 'PUT'])
 @permission_classes([IsAdminUser])
@@ -74,7 +101,13 @@ def getDiscrict(request):
 @permission_classes([IsAdminUser])
 def addDiscrict(request):
     data = request.data
-    try:
+
+    alreadyExists = Districts.objects.filter(name=data['name']).exists()
+
+    if alreadyExists:
+        content = {"detail": "Disctrict already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
         district = Districts.objects.create(
             name=data['name'],
             creator = data['creator'],
@@ -82,7 +115,4 @@ def addDiscrict(request):
         )
         newdistrict=Districts.objects.filter(name=data['name'])
         seriaziler = DistrictsSerializer(newdistrict, many=True)
-    except:
-        return Response("went wrong")
-
-    return Response(seriaziler.data)
+        return Response(seriaziler.data)

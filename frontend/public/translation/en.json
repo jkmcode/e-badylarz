@@ -8,6 +8,7 @@
     "ErrorMessage_credentials_were_not_provided": "Authentication credentials were not provided.",
     "ErrorMessage_invalid_token": "Given token not valid for any token type",
     "ErrorMessage_no_permission": "You do not have permission to perform this action.",
+    "ErrorMessage_disctrict_already_exist": "Disctrict already exist",
 
     "No_data": "No data available",
 
@@ -19,15 +20,21 @@
     "btn-login": "Login",
     "btn_add_description": "Add description",
     "btn_submit":"Submit",
+    "btn_active" : "ACTIVE",
+    "btn_unactive" : "UNACTIVE",
+    "btn_citis":"CITIS",
+    "btn_ok":"OK",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
 
     "Form_field_required": "Field is required",
     "Form_only_letters": "Only letters",
+    "Form_letters_pl_and_digits":"Only letters, polishletters and digits",
     "Form_minLength_6" : "Minimum 6 chracters",
     "Form_minLength_8": "Minimum 8 chracters",
     "Form_maxLength_255" : "Maximum 255 characters",
+    "Form_maxLength_30" : "Maximum 30 characters",
 
     "FormAddressScreen_title" : "Enter your address",
     "FormAddressScreen_subtitle" : "in order to estimate the cost of delivery",
@@ -41,10 +48,14 @@
 
     "AdminScreen_district_btn" : "District",
 
-    "AdminScreenDistrict_title" : "List of districts",
+    "AdminScreenDistrict_title_active" : "List of active districts",
+    "AdminScreenDistrict_title_unactive" : "List of unactive districts",
+    "AdminScreenDistrict_radio_true" : "Active",
+    "AdminScreenDistrict_radio_false" : "Unactive",
 
     "AddDiscrict_title": "Add district",
     "AddDiscrict_success":"District correctly added",
+    "AddDiscrict_window_confirm":"Add a description ?",
 
     "AddDistrict_label_name": "District name",
     "AddDistrict_name_placeholder" : "Enter district name ...",

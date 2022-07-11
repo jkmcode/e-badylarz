@@ -8,6 +8,7 @@ import {
   CREDENTIALS_WERE_NOT_PROVIDED,
   INVALID_TOKEN,
   NO_PERMISSION,
+  DISCTRICT_ALREADY_EXIST,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -30,6 +31,8 @@ function ErrorMessage(props) {
         return setErrorMessage("ErrorMessage_invalid_token");
       case NO_PERMISSION:
         return setErrorMessage("ErrorMessage_no_permission");
+      case DISCTRICT_ALREADY_EXIST:
+          return setErrorMessage("ErrorMessage_disctrict_already_exist");
       default:
         return setErrorMessage(props.msg);
     }

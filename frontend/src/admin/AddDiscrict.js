@@ -14,6 +14,10 @@ import {
   DISTRICT_ADD_DELETE,
   DISTRICT_DELETE,
   DISCTRICT_DESCRIPTION,
+  SET_FLAG_DESC_FALSE,
+  SET_FLAG_DESC_TRUE,
+  SET_FLAG_ADD_DESC_FALSE,
+  SET_FLAG_ADD_DESC_TRUE
 } from "../constants/adminConstans";
 
 import {
@@ -26,11 +30,12 @@ function AddDiscrict() {
   const navigate = useNavigate();
 
   const [nextDesc, setNextDesc] = useState(false);
+  const [idNewDistrict, setIdNewDistrict] = useState("");
 
   const {
     register,
     formState: { errors },
-    handleSubmit,
+    handleSubmit: addhandleSubmit,
     reset,
     trigger,
   } = useForm();
@@ -38,6 +43,9 @@ function AddDiscrict() {
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const dflag = useSelector((state) => state.flag);
+  const { descFlag, addDescFlag } = dflag;
 
   const newDistrict = useSelector((state) => state.addDistrict);
   const { loading, error, success, district } = newDistrict;
@@ -53,18 +61,33 @@ function AddDiscrict() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        if (window.confirm("Dodać opis ?")){
-          console.log("Nacisłem OK")
+        if (window.confirm(t("AddDiscrict_window_confirm"))){
           setNextDesc(true)
+          setIdNewDistrict(district[0].id)
+          dispatch({ type: SET_FLAG_DESC_TRUE });
+          dispatch({ type: DISTRICT_ADD_DELETE });
+          dispatch({ type: DISTRICT_DELETE });
         }else{
           dispatch({ type: DISTRICT_ADD_DELETE });
           dispatch({ type: DISTRICT_DELETE });
-          navigate("/dashboard/district/district");
+          dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
+
         }
 
       }, TIME_SET_TIMEOUT);
     }
   }, [navigate, success]);
+  
+  useEffect(() => {
+    dispatch({ type: SET_FLAG_DESC_FALSE });
+    dispatch({ type: DISTRICT_ADD_DELETE });
+  }, []);
+
+  useEffect(() => {
+    if(addDescFlag){
+      navigate("/dashboard/district/district");
+    }
+  }, [addDescFlag]);
 
   return (
     <>
@@ -89,7 +112,7 @@ function AddDiscrict() {
           <div className="d-flex justify-content-center display-6">
             {t("AddDiscrict_title")}
           </div>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={addhandleSubmit(onSubmit)}>
             <Form.Group controlId="name">
               <Form.Label className="form-msg-style ms-2">
                 {t("AddDistrict_label_name")}
@@ -100,12 +123,16 @@ function AddDiscrict() {
                 {...register("name", {
                   required: t("Form_field_required"),
                   pattern: {
-                    value: /^[A-Za-z]+$/,
-                    message: t("Form_only_letters"),
+                    value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
+                    message: t("Form_letters_pl_and_digits"),
                   },
                   minLength: {
-                    value: 2,
+                    value: 6,
                     message: t("Form_minLength_6"),
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: t("Form_maxLength_30"),
                   },
                 })}
                 onKeyUp={() => {
@@ -120,11 +147,7 @@ function AddDiscrict() {
               )}
             </Form.Group>
             <div className="d-flex justify-content-end">
-              {nextDesc ? (
-              <AddDescription
-                objId={district.id}
-                descType={DISCTRICT_DESCRIPTION}
-              />)
+            {nextDesc ? null
               :
                   <Button type="submit" variant="success" className="rounded my-3 ">
                     {t("btn-add")}
@@ -133,6 +156,11 @@ function AddDiscrict() {
 
             </div>
           </Form>
+          {nextDesc & descFlag ?(
+              <AddDescription
+                objId={idNewDistrict}
+                descType={DISCTRICT_DESCRIPTION}
+              />):null}
         </div>
       )}
     </>

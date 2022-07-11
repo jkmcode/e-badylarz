@@ -9,9 +9,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),
+    
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),
+
     path('api/get-district-desc/<str:Id>/<str:lng>/<str:obj_type>', getDiscrictDesc, name="getDiscrictDesc"),
     path('api/add-desc/', addDesc, name="addDesc"),
+    path('api/get-desc/full/<str:Id>/<str:obj_type>', getFullDescriptionsDesc, name="get-full-descriptions"),
+    path('api/desc-active/', activeDiscr, name="activeDiscr"),
+    
 ]
 
