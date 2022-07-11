@@ -104,6 +104,26 @@ function DashboardScreen() {
                 </Link>
               </li>
               <li class="nav-item">
+                <Link
+                  to="/dashboard/cities"
+                  className={
+                    shopsParam === "shops"
+                      ? "nav-link text-white active bg-gradient-primary"
+                      : "nav-link text-white"
+                  }
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">Cities</span>
+                  </div>
+                </Link>
+              </li>
+
+              <li class="nav-item">
                 <a class="nav-link text-white " href="../pages/billing.html">
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <img
@@ -113,6 +133,193 @@ function DashboardScreen() {
                     ></img>
                     <span class="nav-link-text ms-1">
                       {t("DashboardScreen_sidebar_subtitle_3")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
+                    </span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white "
+                  href="../pages/virtual-reality.html"
+                >
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      class="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span class="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_4")}
                     </span>
                   </div>
                 </a>

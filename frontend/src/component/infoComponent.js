@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form, Modal } from "react-bootstrap";
+import infoTest from "./InfoTest";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
@@ -13,8 +14,6 @@ import {
 } from "../constants/adminConstans";
 
 function InfoComponent(props) {
-
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -22,27 +21,29 @@ function InfoComponent(props) {
   const descriptions = useSelector((state) => state.fullDescriptions);
   const { loading, desc, error, success } = descriptions;
 
-  const [ isDescription, setIsDescription ] = useState(false)
+  const [isDescription, setIsDescription] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   const okHandler = (id) => {
-    setIsDescription(false)
-    dispatch({ type: SET_FLAG_INFO_FALSE })
-    dispatch({ type: GET_FULL_DESCRIPTION_DELETE })
+    setIsDescription(false);
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+    dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
   };
-
 
   useEffect(() => {
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
-    dispatch(getFullDescriptions({
-      Id:props.idObj.id,
-      type:props.typeObj
-    }))
+    dispatch(
+      getFullDescriptions({
+        Id: props.idObj.id,
+        type: props.typeObj,
+      })
+    );
   }, []);
 
   useEffect(() => {
-    if (success){
-      if(desc.length > 0){
-        setIsDescription(true)
+    if (success) {
+      if (desc.length > 0) {
+        setIsDescription(true);
       }
     }
   }, [desc]);
@@ -54,24 +55,28 @@ function InfoComponent(props) {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-            <p> {props.title}{props.idObj.name}</p>
-            {success ? 
-            (isDescription ?
-            desc.map((i)=>(
-              <p key={i.id}> {i.description}</p>
-            )): <p>{t("No_data")}</p> )
-            : null}
-            
-            <Button
-                        variant="success"
-                        className="btn-sm d-flex"
-                        onClick={() => okHandler()}
-                      >
-                        {t("btn_ok")}
-                      </Button>
+          {/* <infoTest show={modalShow} onHide={() => setModalShow(true)} /> */}
+          {/* <p>
+            {" "}
+            {props.title}
+            {props.idObj.name}
+          </p>
+          {success ? (
+            isDescription ? (
+              desc.map((i) => <p key={i.id}> {i.description}</p>)
+            ) : (
+              <p>{t("No_data")}</p>
+            )
+          ) : null}
 
+          <Button
+            variant="success"
+            className="btn-sm d-flex"
+            onClick={() => okHandler()}
+          >
+            {t("btn_ok")}
+          </Button> */}
         </div>
-      
       )}
     </>
   );

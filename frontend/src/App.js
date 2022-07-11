@@ -20,6 +20,7 @@ import AdminShops from "./admin/AdminShops";
 
 import DashboardScreen from "./screens/DashboardScreen";
 import EditDistrict from "./admin/EditDistrict";
+import AdminCities from "./admin/AdminCities";
 
 //SerachBoxComponent
 import SearchBox from "./component/SearchBox";
@@ -74,6 +75,7 @@ function App() {
               path=":districtParam/district"
               element={<AdminScreenDistrict />}
             />
+            <Route path="cities" element={<AdminCities />} />
           </Route>
 
           <Route
