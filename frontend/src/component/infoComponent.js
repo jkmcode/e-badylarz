@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form, Modal } from "react-bootstrap";
-import infoTest from "./InfoTest";
+import { Button, Modal } from "react-bootstrap";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
@@ -24,8 +23,8 @@ function InfoComponent(props) {
   const [isDescription, setIsDescription] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
-  const okHandler = (id) => {
-    setIsDescription(false);
+  const handleClose = () => {
+    setModalShow(false);
     dispatch({ type: SET_FLAG_INFO_FALSE });
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
   };
@@ -34,7 +33,7 @@ function InfoComponent(props) {
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
     dispatch(
       getFullDescriptions({
-        Id: props.idObj.id,
+        Id: props.obj.id,
         type: props.typeObj,
       })
     );
@@ -42,6 +41,7 @@ function InfoComponent(props) {
 
   useEffect(() => {
     if (success) {
+      setModalShow(true);
       if (desc.length > 0) {
         setIsDescription(true);
       }
@@ -55,27 +55,32 @@ function InfoComponent(props) {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          {/* <infoTest show={modalShow} onHide={() => setModalShow(true)} /> */}
-          {/* <p>
-            {" "}
-            {props.title}
-            {props.idObj.name}
-          </p>
-          {success ? (
-            isDescription ? (
-              desc.map((i) => <p key={i.id}> {i.description}</p>)
-            ) : (
-              <p>{t("No_data")}</p>
-            )
-          ) : null}
-
-          <Button
-            variant="success"
-            className="btn-sm d-flex"
-            onClick={() => okHandler()}
+          <Modal
+            show={modalShow}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
           >
-            {t("btn_ok")}
-          </Button> */}
+            <Modal.Header closeButton>
+              <Modal.Title>
+                {props.title} {props.obj.name}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {success ? (
+                isDescription ? (
+                  desc.map((i) => <p key={i.id}> {i.description}</p>)
+                ) : (
+                  <p>{t("No_data")}</p>
+                )
+              ) : null}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       )}
     </>

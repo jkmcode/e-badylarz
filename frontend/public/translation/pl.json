@@ -15,6 +15,7 @@
     "btn-return": "Powrót",
     "btn-add" : "Dodaj",
     "btn_delete": "Usuń",
+    "btn_close": "Zakończ",
     "btn_edit" : "Edycja",
     "btn_info" : "Info",
     "btn-login": "Zaloguj się",
@@ -88,5 +89,7 @@
     "AddCiti_label_name":"Nazwa miejscowości",
     "AddCiti_name_placeholder":"Podaj nazwę miejscowosci ...",
     "AddCiti_label_post_code":"Kod pocztowy",
-    "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ..."
+    "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
+
+    "InfoComponent_title" : "Opis dla powatu:"
 }

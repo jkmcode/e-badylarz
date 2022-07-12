@@ -17,14 +17,12 @@ import {
   SET_FLAG_DESC_FALSE,
   SET_FLAG_DESC_TRUE,
   SET_FLAG_ADD_DESC_FALSE,
-  SET_FLAG_ADD_DESC_TRUE
+  SET_FLAG_ADD_DESC_TRUE,
 } from "../constants/adminConstans";
 
-import {
-  TIME_SET_TIMEOUT,
-} from "../constants/errorsConstants";
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
-function AddCiti() {
+function AddCity() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,52 +52,53 @@ function AddCiti() {
   const { loading, error, success, district } = newDistrict;
 
   const discrictListRedux = useSelector((state) => state.districts);
-  const { districtList, loading: descLoading, error: descError  } = discrictListRedux;
+  const {
+    districtList,
+    loading: descLoading,
+    error: descError,
+  } = discrictListRedux;
 
-  const onSubmit = (data) => {  
-      const insertData = {
-        name: data.name,
-        creator: userInfo.id,
-        post: data.post,
-        desc_id: dscrictId,
-      };
-      dispatch(addCiti(insertData));         
+  const onSubmit = (data) => {
+    const insertData = {
+      name: data.name,
+      creator: userInfo.id,
+      post: data.post,
+      desc_id: dscrictId,
+    };
+    dispatch(addCiti(insertData));
   };
 
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        if (window.confirm(t("AddDiscrict_window_confirm"))){
-          setNextDesc(true)
-          setIdNewDistrict(district[0].id)
+        if (window.confirm(t("AddDiscrict_window_confirm"))) {
+          setNextDesc(true);
+          setIdNewDistrict(district[0].id);
           dispatch({ type: SET_FLAG_DESC_TRUE });
           dispatch({ type: DISTRICT_ADD_DELETE });
           dispatch({ type: DISTRICT_DELETE });
-        }else{
+        } else {
           dispatch({ type: DISTRICT_ADD_DELETE });
           dispatch({ type: DISTRICT_DELETE });
           dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-
         }
-
       }, TIME_SET_TIMEOUT);
     }
   }, [navigate, success]);
-  
+
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: DISTRICT_ADD_DELETE });
   }, []);
 
   useEffect(() => {
-    if(districtList.length === 0){
+    if (districtList.length === 0) {
       dispatch(getDiscrict());
     }
-
   }, [dispatch, districtList.length]);
 
   useEffect(() => {
-    if(addDescFlag){
+    if (addDescFlag) {
       navigate("/dashboard/district/district");
     }
   }, [addDescFlag]);
@@ -116,11 +115,18 @@ function AddCiti() {
           {descError ? (
             <ErrorMessage msg={descError} timeOut={1000} variant="danger" />
           ) : null}
-          {success ? <ErrorMessage msg={t("AddDiscrict_success")} timeOut={4000} variant='success'  success={true}/> : null}
+          {success ? (
+            <ErrorMessage
+              msg={t("AddDiscrict_success")}
+              timeOut={4000}
+              variant="success"
+              success={true}
+            />
+          ) : null}
           <Row className="align-items-center">
             <Col>
               <Link
-                to="/dashboard/district/district"
+                to={`/dashboard/district/district/${dscrictId}/edit`}
                 className="text-secondary"
               >
                 {t("btn-return")}
@@ -158,17 +164,17 @@ function AddCiti() {
                         message: t("Form_maxLength_30"),
                       },
                     })}
-                      onKeyUp={() => {
-                        trigger("name");
-                      }}
-                      name="name"
+                    onKeyUp={() => {
+                      trigger("name");
+                    }}
+                    name="name"
                   ></Form.Control>
                   {errors.name && (
                     <div className="text-danger form-msg-style">
                       {errors.name.message}
                     </div>
                   )}
-                </Form.Group>              
+                </Form.Group>
               </Col>
               <Col>
                 <Form.Group controlId="post">
@@ -176,27 +182,27 @@ function AddCiti() {
                     {t("AddCiti_label_post_code")}
                   </Form.Label>
                   <Form.Control
-                      type="text"
-                      placeholder={t("AddCiti_post_code_placeholder")}
-                      {...register("post", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
-                          message: t("Form_letters_pl_and_digits"),
-                        },
-                        minLength: {
-                          value: 6,
-                          message: t("Form_minLength_6"),
-                        },
-                        maxLength: {
-                          value: 30,
-                          message: t("Form_maxLength_30"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("post");
-                      }}
-                      name="post"
+                    type="text"
+                    placeholder={t("AddCiti_post_code_placeholder")}
+                    {...register("post", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        message: t("Form_letters_pl_and_digits"),
+                      },
+                      minLength: {
+                        value: 6,
+                        message: t("Form_minLength_6"),
+                      },
+                      maxLength: {
+                        value: 30,
+                        message: t("Form_maxLength_30"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("post");
+                    }}
+                    name="post"
                   ></Form.Control>
                   {errors.post && (
                     <div className="text-danger form-msg-style">
@@ -205,29 +211,30 @@ function AddCiti() {
                   )}
                 </Form.Group>
               </Col>
-
-
             </Row>
-            
-            <div className="d-flex justify-content-end">
-            {nextDesc ? null
-              :
-                  <Button type="submit" variant="success" className="rounded my-3 ">
-                    {t("btn-add")}
-                  </Button>
-              }
 
+            <div className="d-flex justify-content-end">
+              {nextDesc ? null : (
+                <Button
+                  type="submit"
+                  variant="success"
+                  className="rounded my-3 "
+                >
+                  {t("btn-add")}
+                </Button>
+              )}
             </div>
           </Form>
-          {nextDesc & descFlag ?(
-              <AddDescription
-                objId={idNewDistrict}
-                descType={DISCTRICT_DESCRIPTION}
-              />):null}
+          {nextDesc & descFlag ? (
+            <AddDescription
+              objId={idNewDistrict}
+              descType={DISCTRICT_DESCRIPTION}
+            />
+          ) : null}
         </div>
       )}
     </>
   );
 }
 
-export default AddCiti;
+export default AddCity;

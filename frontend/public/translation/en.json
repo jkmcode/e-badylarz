@@ -15,6 +15,7 @@
     "btn-return": "Return",
     "btn-add" : "Add",
     "btn_delete": "DELETE",
+    "btn_close": "Close",
     "btn_edit" : "EDIT",
     "btn_info" : "INFO",
     "btn-login": "Login",
@@ -83,10 +84,12 @@
     "DistrictAddDescription_selected_lng": "You have chosen a language",
     "DistrictAddDescription_success": "Description correctly changed",
 
-    "AddCiti_title":"Add citi for districts :",
-    "AddCiti_label_name":"Citi name",
-    "AddCiti_name_placeholder":"Enter citi name ...",
+    "AddCiti_title":"Add city for districts :",
+    "AddCiti_label_name":"City name",
+    "AddCiti_name_placeholder":"Enter city name ...",
     "AddCiti_label_post_code":"Post code",
-    "AddCiti_post_code_placeholder": "Enter main post code ..."
+    "AddCiti_post_code_placeholder": "Enter main post code ...",
+
+    "InfoComponent_title" : "Description of district:"
     
 }

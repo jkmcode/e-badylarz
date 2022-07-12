@@ -12,6 +12,7 @@ function DashboardScreen() {
 
   const shopsParam = params.shopsParam;
   const districtParam = params.districtParam;
+  const citiesParam = params.citiesParam;
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const detectSize = () => {
@@ -105,9 +106,9 @@ function DashboardScreen() {
               </li>
               <li class="nav-item">
                 <Link
-                  to="/dashboard/cities"
+                  to="/dashboard/cities/cities"
                   className={
-                    shopsParam === "shops"
+                    citiesParam === "cities"
                       ? "nav-link text-white active bg-gradient-primary"
                       : "nav-link text-white"
                   }

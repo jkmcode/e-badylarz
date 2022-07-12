@@ -31,7 +31,7 @@ import LogoutScreen from "./screens/LogoutScreen";
 
 import LoginAdmin from "./admin/LoginAdmin";
 
-import AddCiti from "./admin/AddCiti"
+import AddCity from "./admin/AddCity";
 
 function App() {
   return (
@@ -77,17 +77,14 @@ function App() {
               path=":districtParam/district"
               element={<AdminScreenDistrict />}
             />
-            <Route path="cities" element={<AdminCities />} />
+            <Route path=":citiesParam/cities" element={<AdminCities />} />
           </Route>
 
           <Route
             path="dashboard/district/district/:id/edit"
             element={<EditDistrict />}
           />
-            <Route
-              path="add-citi/:id/add"
-              element={<AddCiti />}
-            />
+          <Route path="add-city/:id/add" element={<AddCity />} />
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

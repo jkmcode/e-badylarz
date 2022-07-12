@@ -16,7 +16,6 @@ import Loader from "../component/Loader";
 import InfoComponent from "../component/infoComponent";
 import ErrorMessage from "../component/ErrorMessage";
 import { unOrActiveDescription } from "../actions/adminActions";
-import InfoTest from "../component/InfoTest";
 
 import {
   DISCTRICT_DESCRIPTION,
@@ -43,7 +42,7 @@ function AdminScreenDistrict() {
   // const descriptions = useSelector((state) => state.fullDescriptions);
   // const { loading: descloading, desc, error:descError } = descriptions;
 
-  const [modalShow, setModalShow] = useState(false);
+  // const [modalShow, setModalShow] = useState(false);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -52,7 +51,7 @@ function AdminScreenDistrict() {
   const { infoFlag } = infoFlagRedux;
 
   const [info, setInfo] = useState(false);
-  const [infoId, setInfoId] = useState(false);
+  const [objInfo, setObjInfo] = useState({});
 
   //const newdistrictList=[]
 
@@ -79,14 +78,9 @@ function AdminScreenDistrict() {
   };
 
   const infoHandler = (i) => {
-    // dispatch(getFullDescriptions({
-    //   Id:id,
-    //   type:DISCTRICT_DESCRIPTION
-    // }))
-    setModalShow(true);
     dispatch({ type: SET_FLAG_INFO_TRUE });
-    setInfoId(i);
-    //setInfo(true);
+    setObjInfo(i);
+    setInfo(true);
   };
 
   const editHandler = (i) => {
@@ -131,7 +125,7 @@ function AdminScreenDistrict() {
         <Loader />
       ) : (
         <div className="bg-container mt-4 p-4 rounded">
-          <infoTest show={true} onHide={() => setModalShow(false)} />
+          {/* <infoTest show={true} onHide={() => setModalShow(false)} /> */}
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           {/* {descError ? <ErrorMessage msg={descError} timeOut={1000} /> : null} */}
           <Row className="align-items-center">
@@ -173,8 +167,8 @@ function AdminScreenDistrict() {
 
           {info & infoFlag ? (
             <InfoComponent
-              title="Opis dla powiatu:"
-              idObj={infoId}
+              title={t("InfoComponent_title")}
+              obj={objInfo}
               typeObj={DISCTRICT_DESCRIPTION}
             />
           ) : null}
