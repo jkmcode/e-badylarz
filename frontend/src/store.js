@@ -10,6 +10,7 @@ import {
   flagReducer,
   getFullDescriptionsReducer,
   unOrActiveDescriptionReducer,
+  addCitiReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   flag: flagReducer,
   fullDescriptions: getFullDescriptionsReducer,
   unOrActiveDescription: unOrActiveDescriptionReducer,
+  addCiti:addCitiReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

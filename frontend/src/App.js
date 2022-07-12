@@ -31,6 +31,8 @@ import LogoutScreen from "./screens/LogoutScreen";
 
 import LoginAdmin from "./admin/LoginAdmin";
 
+import AddCiti from "./admin/AddCiti"
+
 function App() {
   return (
     <>
@@ -82,7 +84,10 @@ function App() {
             path="dashboard/district/district/:id/edit"
             element={<EditDistrict />}
           />
-
+            <Route
+              path="add-citi/:id/add"
+              element={<AddCiti />}
+            />
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

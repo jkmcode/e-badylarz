@@ -16,7 +16,43 @@ import {
   ACTIVE_DESCRIPTION_REQUEST,
   ACTIVE_DESCRIPTION_SUCCESS,
   ACTIVE_DESCRIPTION_FAIL,
+  CITI_ADD_REQUEST,
+  CITI_ADD_SUCCESS,
+  CITI_ADD_FAIL,
 } from "../constants/adminConstans";
+
+export const addCiti = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: CITI_ADD_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/add-citi/`, insertData, config);
+
+    dispatch({
+      type: CITI_ADD_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CITI_ADD_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
 
 export const unOrActiveDescription = (insertData) => async (dispatch, getState) => {
   try {

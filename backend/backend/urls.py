@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),
+    path('api/add-citi/', addCiti),
     
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),

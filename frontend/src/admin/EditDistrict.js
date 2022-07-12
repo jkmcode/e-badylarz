@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Table, Button, Row, Col } from "react-bootstrap";
@@ -10,7 +10,11 @@ import { getDiscrict } from "../actions/discrictsActions";
 
 import AddDescription from "./AddDescription";
 
-import { DISCTRICT_DESCRIPTION, SET_FLAG_DESC_TRUE, SET_FLAG_DESC_FALSE } from "../constants/adminConstans";
+import { 
+  DISCTRICT_DESCRIPTION, 
+  SET_FLAG_DESC_TRUE, 
+  SET_FLAG_DESC_FALSE 
+} from "../constants/adminConstans";
 
 function EditDistrict() {
   const { t } = useTranslation();
@@ -32,6 +36,11 @@ function EditDistrict() {
   const descrHandler = () => {
     setAddDescr(true);
     dispatch({ type: SET_FLAG_DESC_TRUE });
+  };
+
+  const addCitiHandler = () =>{
+    console.log('działa nowy--->')
+    navigate(`/add-citi/${districtId}/add`);
   };
 
   const citisHandler = () => {
@@ -70,26 +79,33 @@ function EditDistrict() {
               : districtList.filter((i) => i.id === districtId)[0].name}
           </div>
           <Row>
-          <Col>
-            <Button 
-              variant="success"
-              className="btn-sm d-flex"
-              onClick={() => descrHandler()}
-              >
-              {t("btn_add_description")}
-            </Button>
-          
-          </Col>
-          <Col>
-            <Button 
-              variant="info"
-              className="btn-sm d-flex"
-              onClick={() => citisHandler()}
-              >
-              {t("btn_citis")}
-            </Button>
-          
-          </Col>
+            <Col>
+              <Button 
+                variant="success"
+                className="btn-sm d-flex"
+                onClick={() => descrHandler()}
+                >
+                {t("btn_add_description")}
+              </Button>         
+            </Col>
+            <Col>
+              <Button 
+                variant="info"
+                className="btn-sm d-flex"
+                onClick={() => citisHandler()}
+                >
+                {t("btn_citis")}
+              </Button> 
+            </Col>
+            <Col>
+              <Button 
+                variant="info"
+                className="btn-sm d-flex"
+                onClick={() => addCitiHandler()}
+                >
+                {t("btn_add_citi")}
+              </Button> 
+            </Col>
           </Row>
           {addDescr & descFlag ? (
             <AddDescription

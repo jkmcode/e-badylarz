@@ -33,6 +33,11 @@ import {
   SET_FLAG_INFO_FALSE,
   SET_FLAG_INFO_TRUE,
 
+  CITI_ADD_REQUEST,
+  CITI_ADD_SUCCESS,
+  CITI_ADD_FAIL,
+  CITI_ADD_DELETE,
+
 } from "../constants/adminConstans";
 
 export const flagReducer = (state = {}, action) => {
@@ -49,6 +54,21 @@ export const flagReducer = (state = {}, action) => {
       return { addDescFlag: false };
     case SET_FLAG_ADD_DESC_TRUE:
         return { addDescFlag: true };
+    default:
+      return state;
+  }
+};
+
+export const addCitiReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CITI_ADD_REQUEST:
+      return { loading: true, success: false };
+    case CITI_ADD_SUCCESS:
+      return { loading: false, success: true, result: action.payload};
+    case CITI_ADD_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case CITI_ADD_DELETE:
+      return {};
     default:
       return state;
   }

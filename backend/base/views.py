@@ -35,6 +35,23 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addCiti(request):
+    data = request.data
+
+    discrict = Districts.objects.get(id=data['desc_id'])
+
+    citi = Citis.objects.create(
+        name=data['name'],
+        creator = data['creator'],
+        post_code = data['post'],
+        is_active=True
+    )
+    newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
+    seriaziler = CitisSerializer(newdciti, many=True)
+    return Response(seriaziler.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def activeDiscr(request):

@@ -23,6 +23,7 @@
     "btn_active" : "AKTYWUJ",
     "btn_unactive" : "DEZAKTYWUJ",
     "btn_citis":"MIEJSCOWOŚCI",
+    "btn_add_citi":"DODAJ MIEJSCOWOŚĆ",
     "btn_ok":"OK",
 
 
@@ -81,5 +82,11 @@
     "DistrictAddDescription_label_desc": "Opis",
     "DistrictAddDescription_placeholder_desc" : "Wpisz opis ...",
     "DistrictAddDescription_selected_lng": "Wybrany język",
-    "DistrictAddDescription_success": "Opis został prawidłowo zmieniony"
+    "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
+
+    "AddCiti_title":"Dodaj miejscowość dla powiatu :",
+    "AddCiti_label_name":"Nazwa miejscowości",
+    "AddCiti_name_placeholder":"Podaj nazwę miejscowosci ...",
+    "AddCiti_label_post_code":"Kod pocztowy",
+    "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ..."
 }

@@ -23,6 +23,7 @@
     "btn_active" : "ACTIVE",
     "btn_unactive" : "UNACTIVE",
     "btn_citis":"CITIS",
+    "btn_add_citi":"ADD CITI",
     "btn_ok":"OK",
 
     "Table_head_name" : "Name",
@@ -80,6 +81,12 @@
     "DistrictAddDescription_label_desc": "Description",
     "DistrictAddDescription_placeholder_desc" : "Enter description ...",
     "DistrictAddDescription_selected_lng": "You have chosen a language",
-    "DistrictAddDescription_success": "Description correctly changed"
+    "DistrictAddDescription_success": "Description correctly changed",
+
+    "AddCiti_title":"Add citi for districts :",
+    "AddCiti_label_name":"Citi name",
+    "AddCiti_name_placeholder":"Enter citi name ...",
+    "AddCiti_label_post_code":"Post code",
+    "AddCiti_post_code_placeholder": "Enter main post code ..."
     
 }

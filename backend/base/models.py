@@ -27,6 +27,7 @@ class Descriptions(models.Model):
 class Citis(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True, blank=True)
+    post_code = models.CharField(max_length=10, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
