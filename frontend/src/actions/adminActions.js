@@ -4,22 +4,66 @@ import {
   DISTRICT_ADD_REQUEST,
   DISTRICT_ADD_SUCCESS,
   DISTRICT_ADD_FAIL,
+
   DISTRICT_ADD_DESC_REQUEST,
   DISTRICT_ADD_DESC_SUCCESS,
   DISTRICT_ADD_DESC_FAIL,
+
   ADD_DESC_REQUEST,
   ADD_DESC_SUCCESS,
   ADD_DESC_FAIL,
+
   GET_FULL_DESCRIPTION_REQUEST,
   GET_FULL_DESCRIPTION_SUCCESS,
   GET_FULL_DESCRIPTION_FAIL,
+
   ACTIVE_DESCRIPTION_REQUEST,
   ACTIVE_DESCRIPTION_SUCCESS,
   ACTIVE_DESCRIPTION_FAIL,
+
   CITI_ADD_REQUEST,
   CITI_ADD_SUCCESS,
   CITI_ADD_FAIL,
+
+  GET_CITES_LIST_REQUEST,
+  GET_CITES_LIST_SUCCESS,
+  GET_CITES_LIST_FAIL,
 } from "../constants/adminConstans";
+
+export const getCitiesList = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_CITES_LIST_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/get-cites/${insertData.Id}/list`,
+      config,
+      insertData
+    );
+    
+    dispatch({
+      type: GET_CITES_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type:   GET_CITES_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
 
 export const addCiti = (insertData) => async (dispatch, getState) => {
   try {

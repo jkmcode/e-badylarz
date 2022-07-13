@@ -12,8 +12,9 @@ import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
 import {
   DISTRICT_ADD_DELETE,
+  CITI_ADD_DELETE,
   DISTRICT_DELETE,
-  DISCTRICT_DESCRIPTION,
+  CITY_DESCRIPTION,
   SET_FLAG_DESC_FALSE,
   SET_FLAG_DESC_TRUE,
   SET_FLAG_ADD_DESC_FALSE,
@@ -48,8 +49,8 @@ function AddCity() {
   const dflag = useSelector((state) => state.flag);
   const { descFlag, addDescFlag } = dflag;
 
-  const newDistrict = useSelector((state) => state.addDistrict);
-  const { loading, error, success, district } = newDistrict;
+  const newCity = useSelector((state) => state.addCity);
+  const { loading, error, success, result } = newCity;
 
   const discrictListRedux = useSelector((state) => state.districts);
   const {
@@ -71,24 +72,24 @@ function AddCity() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        if (window.confirm(t("AddDiscrict_window_confirm"))) {
+        if (window.confirm(t("AddDescription_window_confirm"))) {
           setNextDesc(true);
-          setIdNewDistrict(district[0].id);
+          setIdNewDistrict(result[0].id);
           dispatch({ type: SET_FLAG_DESC_TRUE });
-          dispatch({ type: DISTRICT_ADD_DELETE });
-          dispatch({ type: DISTRICT_DELETE });
+          dispatch({ type: CITI_ADD_DELETE });
+          // dispatch({ type: DISTRICT_DELETE });
         } else {
-          dispatch({ type: DISTRICT_ADD_DELETE });
-          dispatch({ type: DISTRICT_DELETE });
+          dispatch({ type: CITI_ADD_DELETE });
+          //dispatch({ type: DISTRICT_DELETE });
           dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
         }
       }, TIME_SET_TIMEOUT);
     }
-  }, [navigate, success]);
+  }, [ success]);
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
-    dispatch({ type: DISTRICT_ADD_DELETE });
+    dispatch({ type: CITI_ADD_DELETE });
   }, []);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ function AddCity() {
 
   useEffect(() => {
     if (addDescFlag) {
-      navigate("/dashboard/district/district");
+      navigate(`/dashboard/district/district/${dscrictId}/edit`);
     }
   }, [addDescFlag]);
 
@@ -110,15 +111,15 @@ function AddCity() {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
-            <ErrorMessage msg={error} timeOut={1000} variant="danger" />
+            <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} variant="danger" />
           ) : null}
           {descError ? (
-            <ErrorMessage msg={descError} timeOut={1000} variant="danger" />
+            <ErrorMessage msg={descError} timeOut={TIME_SET_TIMEOUT} variant="danger" />
           ) : null}
           {success ? (
             <ErrorMessage
-              msg={t("AddDiscrict_success")}
-              timeOut={4000}
+              msg={t("AddCity_success")}
+              timeOut={TIME_SET_TIMEOUT}
               variant="success"
               success={true}
             />
@@ -152,12 +153,12 @@ function AddCity() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
-                        value: 6,
-                        message: t("Form_minLength_6"),
+                        value: 3,
+                        message: t("Form_minLength_3"),
                       },
                       maxLength: {
                         value: 30,
@@ -187,16 +188,16 @@ function AddCity() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
-                        message: t("Form_letters_pl_and_digits"),
+                        value:/^[0-9A-Z ]+$/,
+                        message: t("Form_post_code"),
                       },
                       minLength: {
-                        value: 6,
-                        message: t("Form_minLength_6"),
+                        value: 5,
+                        message: t("Form_minLength_5"),
                       },
                       maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
+                        value: 10,
+                        message: t("Form_maxLength_10"),
                       },
                     })}
                     onKeyUp={() => {
@@ -228,7 +229,7 @@ function AddCity() {
           {nextDesc & descFlag ? (
             <AddDescription
               objId={idNewDistrict}
-              descType={DISCTRICT_DESCRIPTION}
+              descType={CITY_DESCRIPTION}
             />
           ) : null}
         </div>

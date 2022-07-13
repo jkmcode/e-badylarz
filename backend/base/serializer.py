@@ -50,7 +50,7 @@ class DistrictsSerializer(serializers.ModelSerializer):
         model = Districts
         fields = '__all__'
 
-class CitisSerializer(serializers.ModelSerializer):
+class CitiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Citis
         fields = '__all__'

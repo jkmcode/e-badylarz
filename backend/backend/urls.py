@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
+    path('api/get-cites/<str:Id>/list', getCites),
     
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),

@@ -9,6 +9,7 @@
     "ErrorMessage_invalid_token": "Token jest nieprawidłowy",
     "ErrorMessage_no_permission": "Nie masz uprawnień do wykonania tej czynności.",
     "ErrorMessage_disctrict_already_exist": "Powiat o podanej nazwie już istnieje",
+    "ErrorMessage_city_already_exist":"Miejscowość dla wybranego powiatu juz istnieje",
 
     "No_data": "Brak dostępnych danych",
 
@@ -23,21 +24,26 @@
     "btn_submit":"Zatwierdź",
     "btn_active" : "AKTYWUJ",
     "btn_unactive" : "DEZAKTYWUJ",
-    "btn_citis":"MIEJSCOWOŚCI",
+    "btn_cities":"MIEJSCOWOŚCI",
     "btn_add_citi":"DODAJ MIEJSCOWOŚĆ",
     "btn_ok":"OK",
-
 
     "Table_head_name" : "Nazwa",
     "Table_head_ID" : "Lp.",
 
+    "AddDescription_window_confirm":"Dodać opis ?",
+
     "Form_field_required": "Pole wymagane",
     "Form_only_letters": "Możesz wpisać tylko litery",
     "Form_letters_pl_and_digits":"Możesz wpisać tylko litery i cyfry",
+    "Form_post_code":"Liczby, spacja lub duże litery",
+    "Form_minLength_3" : "Minimum 3 znaki",
+    "Form_minLength_5" : "Minimum 5 znaków",
     "Form_minLength_6" : "Minimum 6 znaków",
     "Form_minLength_8": "Minimum 8 znaków",
     "Form_maxLength_255" : "Maksymalnie 255 znaków",
     "Form_maxLength_30" : "Maksymalnie 30 znaków",
+    "Form_maxLength_10" : "Maksymalnie 10 znaków",
 
     "FormAddressScreen_title" : "Podaj swój adres",
     "FormAddressScreen_subtitle" : "w celu oszacowania kosztu dostawy",
@@ -58,7 +64,6 @@
 
     "AddDiscrict_title": "Dodaj powiat",
     "AddDiscrict_success":"Powiat prawidłowo dodany",
-    "AddDiscrict_window_confirm":"Dodać opis ?",
 
     "AddDistrict_label_name": "Nazwa powiatu",
     "AddDistrict_name_placeholder" : "Podaj nazwe powiatu ...",
@@ -90,6 +95,7 @@
     "AddCiti_name_placeholder":"Podaj nazwę miejscowosci ...",
     "AddCiti_label_post_code":"Kod pocztowy",
     "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
+    "AddCity_success": "Miejscowość prawidłowo dodana",
 
     "InfoComponent_title" : "Opis dla powatu:"
 }

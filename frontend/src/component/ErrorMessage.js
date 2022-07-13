@@ -9,6 +9,7 @@ import {
   INVALID_TOKEN,
   NO_PERMISSION,
   DISCTRICT_ALREADY_EXIST,
+  CITY_ALREADY_EXIST,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -32,7 +33,9 @@ function ErrorMessage(props) {
       case NO_PERMISSION:
         return setErrorMessage("ErrorMessage_no_permission");
       case DISCTRICT_ALREADY_EXIST:
-          return setErrorMessage("ErrorMessage_disctrict_already_exist");
+        return setErrorMessage("ErrorMessage_disctrict_already_exist");
+      case CITY_ALREADY_EXIST:
+        return setErrorMessage("ErrorMessage_city_already_exist");
       default:
         return setErrorMessage(props.msg);
     }

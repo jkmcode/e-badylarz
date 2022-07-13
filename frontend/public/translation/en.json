@@ -9,6 +9,7 @@
     "ErrorMessage_invalid_token": "Given token not valid for any token type",
     "ErrorMessage_no_permission": "You do not have permission to perform this action.",
     "ErrorMessage_disctrict_already_exist": "Disctrict already exist",
+    "ErrorMessage_city_already_exist":"City exists in the selected district",
 
     "No_data": "No data available",
 
@@ -23,20 +24,26 @@
     "btn_submit":"Submit",
     "btn_active" : "ACTIVE",
     "btn_unactive" : "UNACTIVE",
-    "btn_citis":"CITIS",
+    "btn_cities":"CITIS",
     "btn_add_citi":"ADD CITI",
     "btn_ok":"OK",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
 
+    "AddDescription_window_confirm":"Add a description ?",
+
     "Form_field_required": "Field is required",
     "Form_only_letters": "Only letters",
     "Form_letters_pl_and_digits":"Only letters, polishletters and digits",
+    "Form_post_code":"Only digits, space or big letters",
+    "Form_minLength_3" : "Minimum 3 chracters",
+    "Form_minLength_5" : "Minimum 5 chracters",
     "Form_minLength_6" : "Minimum 6 chracters",
     "Form_minLength_8": "Minimum 8 chracters",
     "Form_maxLength_255" : "Maximum 255 characters",
     "Form_maxLength_30" : "Maximum 30 characters",
+    "Form_maxLength_10" : "Maximum 10 characters",
 
     "FormAddressScreen_title" : "Enter your address",
     "FormAddressScreen_subtitle" : "in order to estimate the cost of delivery",
@@ -57,7 +64,6 @@
 
     "AddDiscrict_title": "Add district",
     "AddDiscrict_success":"District correctly added",
-    "AddDiscrict_window_confirm":"Add a description ?",
 
     "AddDistrict_label_name": "District name",
     "AddDistrict_name_placeholder" : "Enter district name ...",
@@ -89,6 +95,7 @@
     "AddCiti_name_placeholder":"Enter city name ...",
     "AddCiti_label_post_code":"Post code",
     "AddCiti_post_code_placeholder": "Enter main post code ...",
+    "AddCity_success": "City correctly added",
 
     "InfoComponent_title" : "Description of district:"
     

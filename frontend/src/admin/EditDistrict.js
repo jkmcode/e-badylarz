@@ -9,11 +9,13 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { getDiscrict } from "../actions/discrictsActions";
 
 import AddDescription from "./AddDescription";
+import CitiesList from "./CitiesList";
 
 import {
   DISCTRICT_DESCRIPTION,
   SET_FLAG_DESC_TRUE,
   SET_FLAG_DESC_FALSE,
+  GET_CITES_LIST_DELETE
 } from "../constants/adminConstans";
 
 function EditDistrict() {
@@ -25,6 +27,7 @@ function EditDistrict() {
   const districtId = Number(params.id);
 
   const [addDescr, setAddDescr] = useState(false);
+  const [cities, setCities] = useState(false);
 
   // data from redux
   const discrictListRedux = useSelector((state) => state.districts);
@@ -38,14 +41,14 @@ function EditDistrict() {
     dispatch({ type: SET_FLAG_DESC_TRUE });
   };
 
-  const addCitiHandler = () => {
+  const addCityHandler = () => {
     navigate(`/add-city/${districtId}/add`);
   };
 
-  const citisHandler = () => {
+  const citiesHandler = () => {
     console.log("działa--->");
-    // setAddDescr(true);
-    // dispatch({ type: SET_FLAG_DESC_TRUE });
+    setCities(true)
+    dispatch({ type: GET_CITES_LIST_DELETE });
   };
 
   useEffect(() => {
@@ -88,16 +91,16 @@ function EditDistrict() {
               <Button
                 variant="info"
                 className="btn-sm d-flex"
-                onClick={() => citisHandler()}
+                onClick={() => citiesHandler()}
               >
-                {t("btn_citis")}
+                {t("btn_cities")}
               </Button>
             </Col>
             <Col>
               <Button
                 variant="info"
                 className="btn-sm d-flex"
-                onClick={() => addCitiHandler()}
+                onClick={() => addCityHandler()}
               >
                 {t("btn_add_citi")}
               </Button>
@@ -107,6 +110,11 @@ function EditDistrict() {
             <AddDescription
               objId={districtId}
               descType={DISCTRICT_DESCRIPTION}
+            />
+          ) : null}
+          {cities ? (
+            <CitiesList
+              Id={districtId}
             />
           ) : null}
         </div>

@@ -38,6 +38,11 @@ import {
   CITI_ADD_FAIL,
   CITI_ADD_DELETE,
 
+  GET_CITES_LIST_REQUEST,
+  GET_CITES_LIST_SUCCESS,
+  GET_CITES_LIST_FAIL,
+  GET_CITES_LIST_DELETE,
+
 } from "../constants/adminConstans";
 
 export const flagReducer = (state = {}, action) => {
@@ -54,6 +59,21 @@ export const flagReducer = (state = {}, action) => {
       return { addDescFlag: false };
     case SET_FLAG_ADD_DESC_TRUE:
         return { addDescFlag: true };
+    default:
+      return state;
+  }
+};
+
+export const citesListReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_CITES_LIST_REQUEST:
+      return { loading: true, success: false };
+    case GET_CITES_LIST_SUCCESS:
+      return { loading: false, success: true, citiesList: action.payload};
+    case GET_CITES_LIST_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case GET_CITES_LIST_DELETE:
+      return {};
     default:
       return state;
   }

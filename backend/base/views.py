@@ -35,22 +35,38 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getCites(request, Id):
+    cities = Citis.objects.filter(id_district = Id) 
+    seriaziler = CitiesSerializer(cities, many=True)
+    return Response(seriaziler.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def addCiti(request):
     data = request.data
 
-    discrict = Districts.objects.get(id=data['desc_id'])
+    alreadyExists = Citis.objects.filter(name=data['name'], id_district=data['desc_id']).exists()
 
-    citi = Citis.objects.create(
-        name=data['name'],
-        creator = data['creator'],
-        post_code = data['post'],
-        is_active=True
-    )
-    newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
-    seriaziler = CitisSerializer(newdciti, many=True)
-    return Response(seriaziler.data)
+    if alreadyExists:
+        content = {"detail": "City exists in the selected district"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        discrict = Districts.objects.get(id=data['desc_id'])
+
+        citi = Citis.objects.create(
+            id_district=discrict,
+            name=data['name'],
+            creator = data['creator'],
+            post_code = data['post'],
+            is_active=True
+        )
+        newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
+        seriaziler = CitiesSerializer(newdciti, many=True)
+        return Response(seriaziler.data)
+
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
