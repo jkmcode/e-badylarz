@@ -106,7 +106,7 @@
     "AddCiti_label_post_code":"Post code",
     "AddCiti_post_code_placeholder": "Enter main post code ...",
     "AddCity_success": "City correctly added",
-    "AddCity_body_window":"Add description ?"
+    "AddCity_body_window":"Add description ?",
 
     "InfoComponent_title" : "Description of district:",
     "InfoComponent_title_city":"Description of city:",

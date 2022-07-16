@@ -5,10 +5,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import InfoComponent from "../component/infoComponent";
-import { Button, Table,  ButtonGroup,
-  ToggleButton, } from "react-bootstrap";
+import { Button, Table, ButtonGroup, ToggleButton } from "react-bootstrap";
 
-import { getCitiesList, unOrActiveList }  from "../actions/adminActions"
+import { getCitiesList, unOrActiveList } from "../actions/adminActions";
 
 import {
   GET_CITES_LIST_DELETE,
@@ -17,8 +16,6 @@ import {
 } from "../constants/adminConstans";
 
 function CitiesList(props) {
-
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
@@ -26,13 +23,16 @@ function CitiesList(props) {
 
   // data from redux
   const dataRedux = useSelector((state) => state.citesList);
-  const { loading, citiesList, error, success } = dataRedux;
+  const { loading, citiesList, error } = dataRedux;
 
   const infoFlagRedux = useSelector((state) => state.flag);
   const { infoFlag, cityFlag } = infoFlagRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const data2 = useSelector((state) => state.unOrActiveDescription);
+  const { success, loading: loadingUpdate } = data2;
 
   const [citiesData, setCitiesData] = useState(false);
   const [info, setInfo] = useState(false);
@@ -45,7 +45,8 @@ function CitiesList(props) {
   ];
 
   const activeHandler = (id) => {
-    setCitiesData(false)
+    dispatch({ type: GET_CITES_LIST_DELETE });
+    setCitiesData(false);
     dispatch(
       unOrActiveList({
         Id: id,
@@ -54,11 +55,13 @@ function CitiesList(props) {
         objType: CITY_DESCRIPTION,
       })
     );
-    dispatch({ type: GET_CITES_LIST_DELETE });
   };
 
+  console.log("citiesList", citiesList);
+
   const unActiveHandler = (id) => {
-    setCitiesData(false)
+    dispatch({ type: GET_CITES_LIST_DELETE });
+    setCitiesData(false);
     dispatch(
       unOrActiveList({
         Id: id,
@@ -67,7 +70,6 @@ function CitiesList(props) {
         objType: CITY_DESCRIPTION,
       })
     );
-    dispatch({ type: GET_CITES_LIST_DELETE });
   };
 
   const infoHandler = (i) => {
@@ -77,33 +79,53 @@ function CitiesList(props) {
   };
 
   const descriptionHandler = (i) => {
-    console.log('-------->',i)
+    console.log("-------->", i);
     navigate(`/add-description/${i.name}/${i.id_district}/${i.id}/add`);
   };
 
+  // run if citiesList is empty
   useEffect(() => {
-    if(!citiesList){
-        dispatch(getCitiesList({
-          Id:props.Id
-        }
-        ));
-    }else{
-      setCitiesData(true)
+    console.log("useEffect citiesList");
+    if (!citiesList) {
+      dispatch(
+        getCitiesList({
+          Id: props.Id,
+        })
+      );
+    } else {
+      setCitiesData(true);
     }
-  }, [dispatch,citiesList]);
+  }, [dispatch, citiesList]);
+
+  // run if success is true (unOrActiveDescription)
+  useEffect(() => {
+    console.log("useEffect success");
+    if (success) {
+      dispatch(
+        getCitiesList({
+          Id: props.Id,
+        })
+      );
+      //dispatch({ type: GET_CITES_LIST_DELETE });
+      //setCitiesData(false);
+    }
+  }, [dispatch, success]);
 
   useEffect(() => {
+    console.log("pusty useEffect");
     dispatch({ type: GET_CITES_LIST_DELETE });
   }, []);
 
+  console.log("citiesData", citiesData);
+
   return (
     <>
-      {loading ? (
+      {loading || loadingUpdate ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          
+
           {info & infoFlag ? (
             <InfoComponent
               title={t("InfoComponent_title_city")}
@@ -112,101 +134,99 @@ function CitiesList(props) {
             />
           ) : null}
 
-          {citiesData & cityFlag ?  
+          {citiesData & cityFlag ? (
             <>
               <ButtonGroup className="mb-2">
-              {radios.map((radio, idx) => (
-                <ToggleButton
-                  key={idx}
-                  id={`radio-${idx}`}
-                  type="radio"
-                  variant={idx % 2 ? "outline-danger" : "outline-success"}
-                  name="radio"
-                  value={radio.value}
-                  checked={radioValue === radio.value}
-                  onChange={(e) => setRadioValue(e.currentTarget.value)}
-                >
-                  {radio.name}
-                </ToggleButton>
-              ))}
+                {radios.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    id={`radio-${idx}`}
+                    type="radio"
+                    variant={idx % 2 ? "outline-danger" : "outline-success"}
+                    name="radio"
+                    value={radio.value}
+                    checked={radioValue === radio.value}
+                    onChange={(e) => setRadioValue(e.currentTarget.value)}
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
               </ButtonGroup>
-            <Table striped hover responsive className="table-sm mt-2">
-              <thead>
+              <Table striped hover responsive className="table-sm mt-2">
+                <thead>
                   <tr>
                     <th className="w-100">{t("Table_head_name")}</th>
                     <th></th>
                     <th></th>
                     <th></th>
                   </tr>
-              </thead> 
-              <tbody>
-                {citiesList.map((i) => (
-                  <tr key={i.id}>
-                    <>
-                      {(radioValue === "1") & i.is_active ? (
-                        <>
-                      <td>{i.name}</td>
-                      <td>
-                          <Button
-                            variant="danger"
-                            className="btn-sm d-flex"
-                            onClick={() => unActiveHandler(i.id)}
-                          >
-                            {t("btn_unactive")}
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            variant="warning"
-                            className="btn-sm d-flex"
-                            onClick={() => descriptionHandler(i)}
-                          >
-                            {t("btn_description")}
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            variant="info"
-                            className="btn-sm d-flex"
-                            onClick={() => infoHandler(i)}
-                          >
-                            {t("btn_info")}
-                          </Button>
-                        </td>
-                        </>
-                      ): null}
-                      {(radioValue === "0") & (i.is_active === false) ? (
-                        <>
-                      <td>{i.name}</td>
-                      <td>
-                          <Button
-                            variant="danger"
-                            className="btn-sm d-flex"
-                            onClick={() => activeHandler(i.id)}
-                          >
-                            {t("btn_unactive")}
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            variant="info"
-                            className="btn-sm d-flex"
-                            onClick={() => infoHandler(i)}
-                          >
-                            {t("btn_info")}
-                          </Button>
-                        </td>
-                        </>
-                      ): null}
-                    
-                    </>
-                  </tr>
-                ))}
-              </tbody> 
-            </Table>
+                </thead>
+                <tbody>
+                  {citiesList.map((i) => (
+                    <tr key={i.id}>
+                      <>
+                        {(radioValue === "1") & i.is_active ? (
+                          <>
+                            <td>{i.name}</td>
+                            <td>
+                              <Button
+                                variant="danger"
+                                className="btn-sm d-flex"
+                                onClick={() => unActiveHandler(i.id)}
+                              >
+                                {t("btn_unactive")}
+                              </Button>
+                            </td>
+                            <td>
+                              <Button
+                                variant="warning"
+                                className="btn-sm d-flex"
+                                onClick={() => descriptionHandler(i)}
+                              >
+                                {t("btn_description")}
+                              </Button>
+                            </td>
+                            <td>
+                              <Button
+                                variant="info"
+                                className="btn-sm d-flex"
+                                onClick={() => infoHandler(i)}
+                              >
+                                {t("btn_info")}
+                              </Button>
+                            </td>
+                          </>
+                        ) : null}
+                        {(radioValue === "0") & (i.is_active === false) ? (
+                          <>
+                            <td>{i.name}</td>
+                            <td>
+                              <Button
+                                variant="danger"
+                                className="btn-sm d-flex"
+                                onClick={() => activeHandler(i.id)}
+                              >
+                                {t("btn_active")}
+                              </Button>
+                            </td>
+                            <td>
+                              <Button
+                                variant="info"
+                                className="btn-sm d-flex"
+                                onClick={() => infoHandler(i)}
+                              >
+                                {t("btn_info")}
+                              </Button>
+                            </td>
+                          </>
+                        ) : null}
+                      </>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </>
-            :null}
-          
+          ) : null}
         </div>
       )}
     </>
