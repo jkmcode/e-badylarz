@@ -98,7 +98,7 @@ export const addCiti = (insertData) => async (dispatch, getState) => {
 };
 
 
-export const unOrActiveDescription = (insertData) => async (dispatch, getState) => {
+export const unOrActiveList = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: ACTIVE_DESCRIPTION_REQUEST });
 

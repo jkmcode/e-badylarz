@@ -5,20 +5,19 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
-import ErrorMessage from "../component/ErrorMessage";
+import ErrorMessage  from "../component/ErrorMessage";
+import InfoWindow from "../component/infoWindow";
 import { getDiscrict } from "../actions/discrictsActions";
 
 import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
 import {
-  DISTRICT_ADD_DELETE,
   CITI_ADD_DELETE,
-  DISTRICT_DELETE,
   CITY_DESCRIPTION,
   SET_FLAG_DESC_FALSE,
   SET_FLAG_DESC_TRUE,
-  SET_FLAG_ADD_DESC_FALSE,
   SET_FLAG_ADD_DESC_TRUE,
+  SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
@@ -32,6 +31,7 @@ function AddCity() {
   const dscrictId = Number(params.id);
 
   const [nextDesc, setNextDesc] = useState(false);
+  const [addDescription, setAddDescription] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
 
   const {
@@ -48,6 +48,9 @@ function AddCity() {
 
   const dflag = useSelector((state) => state.flag);
   const { descFlag, addDescFlag } = dflag;
+
+  const d2flag = useSelector((state) => state.flag);
+  const { windowFlag } = d2flag;
 
   const newCity = useSelector((state) => state.addCity);
   const { loading, error, success, result } = newCity;
@@ -72,20 +75,27 @@ function AddCity() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        if (window.confirm(t("AddDescription_window_confirm"))) {
-          setNextDesc(true);
-          setIdNewDistrict(result[0].id);
-          dispatch({ type: SET_FLAG_DESC_TRUE });
-          dispatch({ type: CITI_ADD_DELETE });
-          // dispatch({ type: DISTRICT_DELETE });
-        } else {
-          dispatch({ type: CITI_ADD_DELETE });
-          //dispatch({ type: DISTRICT_DELETE });
-          dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-        }
+        setAddDescription(true)
       }, TIME_SET_TIMEOUT);
     }
   }, [ success]);
+  
+  useEffect(() => {
+    if (windowFlag){
+      if (windowFlag) {
+        setNextDesc(true);
+        setIdNewDistrict(result[0].id);
+        dispatch({ type: SET_FLAG_DESC_TRUE });
+        dispatch({ type: CITI_ADD_DELETE });
+        dispatch({ type: SET_WINDOW_FLAG_DELETE });
+      } else {
+        dispatch({ type: CITI_ADD_DELETE });
+        dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
+        dispatch({ type: SET_WINDOW_FLAG_DELETE });
+      }
+    }
+  }, [windowFlag]);
+
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
@@ -124,6 +134,14 @@ function AddCity() {
               success={true}
             />
           ) : null}
+          
+          {addDescription ? (
+          <InfoWindow
+            title={t("Window_title")}
+            body={t("AddCity_body_window")}
+          />) 
+          :null}
+
           <Row className="align-items-center">
             <Col>
               <Link
@@ -139,6 +157,9 @@ function AddCity() {
             {districtList.length === 0
               ? null
               : districtList.filter((i) => i.id === dscrictId)[0].name}
+          </div>
+          <div>
+          {t("AddCiti_subtitle")}
           </div>
           <Form onSubmit={addhandleSubmit(onSubmit)}>
             <Row>
@@ -188,7 +209,7 @@ function AddCity() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value:/^[0-9A-Z ]+$/,
+                        value: t("Post_code_validate"),
                         message: t("Form_post_code"),
                       },
                       minLength: {

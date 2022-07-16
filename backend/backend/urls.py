@@ -18,7 +18,7 @@ urlpatterns = [
     path('api/get-district-desc/<str:Id>/<str:lng>/<str:obj_type>', getDiscrictDesc, name="getDiscrictDesc"),
     path('api/add-desc/', addDesc, name="addDesc"),
     path('api/get-desc/full/<str:Id>/<str:obj_type>', getFullDescriptionsDesc, name="get-full-descriptions"),
-    path('api/desc-active/', activeDiscr, name="activeDiscr"),
+    path('api/desc-active/', activeList, name="activeList"),
     
 ]
 

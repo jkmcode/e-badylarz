@@ -43,14 +43,34 @@ import {
   GET_CITES_LIST_FAIL,
   GET_CITES_LIST_DELETE,
 
+  SET_FLAG_CITY_TRUE,
+  SET_FLAG_CITY_FALSE,
+
+  SET_WINDOW_FLAG_FALSE,
+  SET_WINDOW_FLAG_TRUE,
+  SET_WINDOW_FLAG_DELETE,
+
 } from "../constants/adminConstans";
+
+export const flagWindowReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SET_WINDOW_FLAG_FALSE:
+      return {  windowFlag: false };
+    case SET_WINDOW_FLAG_TRUE:
+        return { windowFlag: true };
+    case SET_WINDOW_FLAG_DELETE:
+        return {  };
+    default:
+      return state;
+  }
+};
 
 export const flagReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_FLAG_INFO_FALSE:
-      return { infoFlag: false };
+      return { infoFlag: false, cityFlag: true };
     case SET_FLAG_INFO_TRUE:
-        return { infoFlag: true };
+        return { infoFlag: true, cityFlag: true };
     case SET_FLAG_DESC_FALSE:
       return { descFlag: false };
     case SET_FLAG_DESC_TRUE:
@@ -59,6 +79,10 @@ export const flagReducer = (state = {}, action) => {
       return { addDescFlag: false };
     case SET_FLAG_ADD_DESC_TRUE:
         return { addDescFlag: true };
+        case SET_FLAG_CITY_FALSE:
+      return { cityFlag: false };
+    case SET_FLAG_CITY_TRUE:
+        return { cityFlag: true };
     default:
       return state;
   }

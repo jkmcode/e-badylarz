@@ -77,7 +77,7 @@ function InfoComponent(props) {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                Close
+              {t("btn_close")}
               </Button>
             </Modal.Footer>
           </Modal>

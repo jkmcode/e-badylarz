@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
@@ -20,7 +20,6 @@ import { USER_LOGOUT } from "../constants/userConstans";
 
 import {
   CREDENTIALS_WERE_NOT_PROVIDED,
-  INVALID_TOKEN,
   NO_PERMISSION,
   TIME_SET_TIMEOUT,
 } from "../constants/errorsConstants";
@@ -31,9 +30,6 @@ function AddDescription(props) {
   const {
     register,
     formState: { errors },
-    // handleSubmit,
-    // reset,
-    // trigger,
   } = useForm();
 
   const { t } = useTranslation();
@@ -102,9 +98,15 @@ function AddDescription(props) {
   useEffect(() => {
     if (addsuccess) {
       setTimeout(() => {
-        dispatch({ type: SET_FLAG_DESC_FALSE });
-        dispatch({ type: ADD_DESC_DELETE });
-        dispatch({ type: SET_FLAG_ADD_DESC_TRUE });     
+        if(props.return){
+          dispatch({ type: ADD_DESC_DELETE });
+          navigate(props.path)
+
+        }else{
+          dispatch({ type: SET_FLAG_DESC_FALSE });
+          dispatch({ type: ADD_DESC_DELETE });
+          dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
+        }     
       }, TIME_SET_TIMEOUT);
     }
   }, [addsuccess]);
@@ -125,9 +127,9 @@ function AddDescription(props) {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
-          {adderror ? <ErrorMessage msg={adderror} timeOut={4000} /> : null}
-          {addsuccess ? <ErrorMessage msg={t("DistrictAddDescription_success")} timeOut={4000} variant='success'  success={true}/> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} /> : null}
+          {adderror ? <ErrorMessage msg={adderror} timeOut={TIME_SET_TIMEOUT} /> : null}
+          {addsuccess ? <ErrorMessage msg={t("DistrictAddDescription_success")} timeOut={TIME_SET_TIMEOUT} variant='success'  success={true}/> : null}
           <Form>
             <Form.Group>
               <Row>

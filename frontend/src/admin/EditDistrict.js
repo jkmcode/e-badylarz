@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Table, Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 
 import { getDiscrict } from "../actions/discrictsActions";
 
@@ -15,7 +15,8 @@ import {
   DISCTRICT_DESCRIPTION,
   SET_FLAG_DESC_TRUE,
   SET_FLAG_DESC_FALSE,
-  GET_CITES_LIST_DELETE
+  GET_CITES_LIST_DELETE,
+  SET_FLAG_CITY_TRUE
 } from "../constants/adminConstans";
 
 function EditDistrict() {
@@ -34,10 +35,11 @@ function EditDistrict() {
   const { loading, districtList, error } = discrictListRedux;
 
   const dflag = useSelector((state) => state.flag);
-  const { descFlag } = dflag;
+  const { descFlag, cityFlag } = dflag;
 
   const descrHandler = () => {
     setAddDescr(true);
+    setCities(false)
     dispatch({ type: SET_FLAG_DESC_TRUE });
   };
 
@@ -46,9 +48,12 @@ function EditDistrict() {
   };
 
   const citiesHandler = () => {
-    console.log("działa--->");
-    setCities(true)
-    dispatch({ type: GET_CITES_LIST_DELETE });
+    if(!cities){
+      setAddDescr(false)
+      setCities(true)
+      dispatch({ type: SET_FLAG_CITY_TRUE });
+      dispatch({ type: GET_CITES_LIST_DELETE });
+    }
   };
 
   useEffect(() => {
@@ -112,7 +117,7 @@ function EditDistrict() {
               descType={DISCTRICT_DESCRIPTION}
             />
           ) : null}
-          {cities ? (
+          {cities & cityFlag ? (
             <CitiesList
               Id={districtId}
             />

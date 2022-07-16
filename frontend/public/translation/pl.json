@@ -10,6 +10,7 @@
     "ErrorMessage_no_permission": "Nie masz uprawnień do wykonania tej czynności.",
     "ErrorMessage_disctrict_already_exist": "Powiat o podanej nazwie już istnieje",
     "ErrorMessage_city_already_exist":"Miejscowość dla wybranego powiatu juz istnieje",
+    "ErrorMessage_no_type_object":"Brak typu objektu",
 
     "No_data": "Brak dostępnych danych",
 
@@ -27,9 +28,19 @@
     "btn_cities":"MIEJSCOWOŚCI",
     "btn_add_citi":"DODAJ MIEJSCOWOŚĆ",
     "btn_ok":"OK",
+    "btn_description":"Opis",
+    "btn_yes":"TAK",
+    "btn_no":"NIE",
 
     "Table_head_name" : "Nazwa",
     "Table_head_ID" : "Lp.",
+
+    "Radio_true" : "Aktywne",
+    "Radio_false" : "Nieaktywne",
+
+    "Window_title": "Pytanie",
+
+    "Post_code_validate":"/^[0-9]{2}-[0-9]{3}+$/",
 
     "AddDescription_window_confirm":"Dodać opis ?",
 
@@ -59,8 +70,6 @@
 
     "AdminScreenDistrict_title_active" : "Lista aktywnych powiatów",
     "AdminScreenDistrict_title_unactive" : "Lista nieaktywnych powiatów",
-    "AdminScreenDistrict_radio_true" : "Aktywne",
-    "AdminScreenDistrict_radio_false" : "Nieaktywne",
 
     "AddDiscrict_title": "Dodaj powiat",
     "AddDiscrict_success":"Powiat prawidłowo dodany",
@@ -91,11 +100,17 @@
     "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
 
     "AddCiti_title":"Dodaj miejscowość dla powiatu :",
+    "AddCiti_subtitle":"Dla poprwanej walidacji kodu pocztowego zastosuj język właściwy dla dodawanej miejscowości",
     "AddCiti_label_name":"Nazwa miejscowości",
     "AddCiti_name_placeholder":"Podaj nazwę miejscowosci ...",
     "AddCiti_label_post_code":"Kod pocztowy",
     "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
     "AddCity_success": "Miejscowość prawidłowo dodana",
+    "AddCity_body_window":"Dodać opis ?",
 
-    "InfoComponent_title" : "Opis dla powatu:"
+    "InfoComponent_title" : "Opis dla powatu:",
+    "InfoComponent_title_city":"Opis dla miejscowości:",
+
+    "CityDistrict_title_1":"Opis miejscowości :",
+    "CityDistrict_title_2":", powiat"
 }

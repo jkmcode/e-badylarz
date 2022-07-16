@@ -15,7 +15,7 @@ import { getDiscrict } from "../actions/discrictsActions";
 import Loader from "../component/Loader";
 import InfoComponent from "../component/infoComponent";
 import ErrorMessage from "../component/ErrorMessage";
-import { unOrActiveDescription } from "../actions/adminActions";
+import { unOrActiveList } from "../actions/adminActions";
 
 import {
   DISCTRICT_DESCRIPTION,
@@ -31,18 +31,13 @@ function AdminScreenDistrict() {
 
   const [radioValue, setRadioValue] = useState("1");
   const radios = [
-    { name: t("AdminScreenDistrict_radio_true"), value: "1" },
-    { name: t("AdminScreenDistrict_radio_false"), value: "0" },
+    { name: t("Radio_true"), value: "1" },
+    { name: t("Radio_false"), value: "0" },
   ];
 
   // fech data from Redux
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
-
-  // const descriptions = useSelector((state) => state.fullDescriptions);
-  // const { loading: descloading, desc, error:descError } = descriptions;
-
-  // const [modalShow, setModalShow] = useState(false);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -57,10 +52,11 @@ function AdminScreenDistrict() {
 
   const activeHandler = (id) => {
     dispatch(
-      unOrActiveDescription({
+      unOrActiveList({
         Id: id,
         active: true,
         userId: userInfo.id,
+        objType: DISCTRICT_DESCRIPTION,
       })
     );
     dispatch({ type: DISTRICT_DELETE });
@@ -68,10 +64,11 @@ function AdminScreenDistrict() {
 
   const unActiveHandler = (id) => {
     dispatch(
-      unOrActiveDescription({
+      unOrActiveList({
         Id: id,
         active: false,
         userId: userInfo.id,
+        objType: DISCTRICT_DESCRIPTION,
       })
     );
     dispatch({ type: DISTRICT_DELETE });
@@ -96,28 +93,6 @@ function AdminScreenDistrict() {
   useEffect(() => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
   }, []);
-  // useEffect(() => {
-  //   if (info) {
-  //     window.alert('Dane są w desc.descriptions - trzeba je wyswietlić w normalnym oknie')
-  //     setInfo(false)
-  //   }
-  // }, [info, desc]);
-
-  // useEffect(() => {
-  //   if (radioValue === '1') {
-  //     districtList.map((i)=>{
-  //       if(i.is_active===true){
-  //         console.log( 'objekt i--->',i)
-  //         newdistrictList=newdistrictList+i;
-  //       }
-  //     })
-  //     newdistrictList=districtList.filter((i)=> i.is_active === true)
-  //     console.log( 'ratio aktywne--->',radioValue)
-  //   }else{
-  //     newdistrictList=districtList.filter(is_active=>false)
-  //     console.log( 'ratio NIEaktywne--->',radioValue)
-  //   }
-  // }, [radioValue]);
 
   return (
     <>
@@ -125,9 +100,7 @@ function AdminScreenDistrict() {
         <Loader />
       ) : (
         <div className="bg-container mt-4 p-4 rounded">
-          {/* <infoTest show={true} onHide={() => setModalShow(false)} /> */}
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          {/* {descError ? <ErrorMessage msg={descError} timeOut={1000} /> : null} */}
           <Row className="align-items-center">
             <Col></Col>
             {!error && (
@@ -192,7 +165,6 @@ function AdminScreenDistrict() {
                   <tr key={i.id}>
                     {(radioValue === "1") & i.is_active ? (
                       <>
-                        {/* <td>{index + 1}.</td> */}
                         <td>{i.name}</td>
                         <td>
                           <Button

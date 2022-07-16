@@ -12,6 +12,7 @@ import {
   unOrActiveDescriptionReducer,
   addCitiReducer,
   citesListReducer,
+  flagWindowReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   addDistrictDesc: addDistrictDescReducer,
   addDesc: addDescReducer,
   flag: flagReducer,
+  windowFlag: flagWindowReducer,
   fullDescriptions: getFullDescriptionsReducer,
   unOrActiveDescription: unOrActiveDescriptionReducer,
   addCity:addCitiReducer,

@@ -32,6 +32,7 @@ import LogoutScreen from "./screens/LogoutScreen";
 import LoginAdmin from "./admin/LoginAdmin";
 
 import AddCity from "./admin/AddCity";
+import CityDescription from "./admin/CityDescription";
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
             element={<EditDistrict />}
           />
           <Route path="add-city/:id/add" element={<AddCity />} />
+          <Route path="add-description/:name/:id/:cityId/add" element={<CityDescription />} />
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

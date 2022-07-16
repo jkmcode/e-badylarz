@@ -70,10 +70,17 @@ def addCiti(request):
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
-def activeDiscr(request):
+def activeList(request):
     data=request.data
 
-    descrip = Districts.objects.get(id=data['Id'])
+    if data['objType']=='DISTRICT':
+        descrip = Districts.objects.get(id=data['Id'])
+    elif data['objType']=='CITY':
+        descrip = Citis.objects.get(id=data['Id'])
+    else:
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST) 
+    
     if data['active']:
         descrip.is_active=True
     else:

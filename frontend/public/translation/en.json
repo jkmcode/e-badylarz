@@ -10,6 +10,7 @@
     "ErrorMessage_no_permission": "You do not have permission to perform this action.",
     "ErrorMessage_disctrict_already_exist": "Disctrict already exist",
     "ErrorMessage_city_already_exist":"City exists in the selected district",
+    "ErrorMessage_no_type_object":"Changing the active flag - no object type",
 
     "No_data": "No data available",
 
@@ -27,9 +28,19 @@
     "btn_cities":"CITIS",
     "btn_add_citi":"ADD CITI",
     "btn_ok":"OK",
+    "btn_description":"Description",
+    "btn_yes":"YES",
+    "btn_no":"NO",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
+
+    "Radio_true" : "Active",
+    "Radio_false" : "Unactive",
+
+    "Window_title": "Question",
+
+    "Post_code_validate":"/^[0-9A-Z ]+$/",
 
     "AddDescription_window_confirm":"Add a description ?",
 
@@ -59,8 +70,6 @@
 
     "AdminScreenDistrict_title_active" : "List of active districts",
     "AdminScreenDistrict_title_unactive" : "List of unactive districts",
-    "AdminScreenDistrict_radio_true" : "Active",
-    "AdminScreenDistrict_radio_false" : "Unactive",
 
     "AddDiscrict_title": "Add district",
     "AddDiscrict_success":"District correctly added",
@@ -91,12 +100,18 @@
     "DistrictAddDescription_success": "Description correctly changed",
 
     "AddCiti_title":"Add city for districts :",
+    "AddCiti_subtitle":"For the correct validation of the postal code, use the language appropriate for the added city",
     "AddCiti_label_name":"City name",
     "AddCiti_name_placeholder":"Enter city name ...",
     "AddCiti_label_post_code":"Post code",
     "AddCiti_post_code_placeholder": "Enter main post code ...",
     "AddCity_success": "City correctly added",
+    "AddCity_body_window":"Add description ?"
 
-    "InfoComponent_title" : "Description of district:"
+    "InfoComponent_title" : "Description of district:",
+    "InfoComponent_title_city":"Description of city:",
+
+    "CityDistrict_title_1":"Description city :",
+    "CityDistrict_title_2":", district"
     
 }

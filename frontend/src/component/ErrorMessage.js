@@ -10,6 +10,7 @@ import {
   NO_PERMISSION,
   DISCTRICT_ALREADY_EXIST,
   CITY_ALREADY_EXIST,
+  ACTIVE_NO_TYPE_OBJECT,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -36,6 +37,8 @@ function ErrorMessage(props) {
         return setErrorMessage("ErrorMessage_disctrict_already_exist");
       case CITY_ALREADY_EXIST:
         return setErrorMessage("ErrorMessage_city_already_exist");
+      case ACTIVE_NO_TYPE_OBJECT:
+          return setErrorMessage("ErrorMessage_no_type_object");
       default:
         return setErrorMessage(props.msg);
     }
