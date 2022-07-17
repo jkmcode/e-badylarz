@@ -37,7 +37,6 @@ function FormAddressScreen() {
     console.log("data.district", data.district);
 
     if (data.district === zero) {
-      console.log("wchodze do ifa");
       setDistricRequired("Pole wymagane");
     } else {
       if (data.city !== zero && data.pickupLocation !== zero) {

@@ -11,6 +11,7 @@
     "ErrorMessage_disctrict_already_exist": "Disctrict already exist",
     "ErrorMessage_city_already_exist":"City exists in the selected district",
     "ErrorMessage_no_type_object":"Changing the active flag - no object type",
+    "ErrorMessage_product_type_already_exist": "Product type already exist",
 
     "No_data": "No data available",
 
@@ -47,6 +48,7 @@
     "Form_field_required": "Field is required",
     "Form_only_letters": "Only letters",
     "Form_letters_pl_and_digits":"Only letters, polishletters and digits",
+    "Form_blank_space_is_not_allow":"Blank space is not allow",
     "Form_post_code":"Only digits, space or big letters",
     "Form_minLength_3" : "Minimum 3 chracters",
     "Form_minLength_5" : "Minimum 5 chracters",
@@ -89,6 +91,7 @@
     "DashboardScreen_sidebar_subtitle_1" :  "District",
     "DashboardScreen_sidebar_subtitle_2" :  "Shops",
     "DashboardScreen_sidebar_subtitle_3" :  "Products",
+    "DashboardScreen_sidebar_subtitle_3a" :  "Product type",
     "DashboardScreen_sidebar_subtitle_4" :  "Others",
 
     "EditDistrict_title": "Edit district",
@@ -112,6 +115,23 @@
     "InfoComponent_title_city":"Description of city:",
 
     "CityDistrict_title_1":"Description city :",
-    "CityDistrict_title_2":", district"
+    "CityDistrict_title_2":", district",
+
+
+
+
+    "AdminAddProducts_title": "Add product",
+    "AdminAddProducts_label_productCategory": "Product categories",
+    "AdminAddProducts_label_name" : "Product name",
+    "AdminAddProducts_name_placeholder": "Enter product name ....",
+    "AdminAddProducts_label_desc": "Product description",
+    "AdminAddProducts_placeholder_desc" : "Enter description ...",
+    "AdminAddProducts_label_choose_photos": "Add photos",
     
+
+    "AdminProductType_title": "List of active product types",
+
+    "AddProductType_title": "Add a product type",
+    "AddProductType_label_name": "Product type name",
+    "AddProductType_name_placeholder": "Enter product type name ..."    
 }

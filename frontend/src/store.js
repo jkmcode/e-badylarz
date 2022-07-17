@@ -13,6 +13,7 @@ import {
   addCitiReducer,
   citesListReducer,
   flagWindowReducer,
+  addProductTypeReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -27,8 +28,9 @@ const reducer = combineReducers({
   windowFlag: flagWindowReducer,
   fullDescriptions: getFullDescriptionsReducer,
   unOrActiveDescription: unOrActiveDescriptionReducer,
-  addCity:addCitiReducer,
-  citesList:citesListReducer,
+  addCity: addCitiReducer,
+  citesList: citesListReducer,
+  addProductType: addProductTypeReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

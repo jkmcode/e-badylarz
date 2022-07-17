@@ -17,12 +17,10 @@ import {
   SET_FLAG_DESC_FALSE,
   SET_FLAG_DESC_TRUE,
   SET_FLAG_ADD_DESC_FALSE,
-  SET_FLAG_ADD_DESC_TRUE
+  SET_FLAG_ADD_DESC_TRUE,
 } from "../constants/adminConstans";
 
-import {
-  TIME_SET_TIMEOUT,
-} from "../constants/errorsConstants";
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddDiscrict() {
   const { t } = useTranslation();
@@ -50,41 +48,39 @@ function AddDiscrict() {
   const newDistrict = useSelector((state) => state.addDistrict);
   const { loading, error, success, district } = newDistrict;
 
-  const onSubmit = (data) => {  
-      const insertData = {
-        name: data.name,
-        creator: userInfo.id 
-      };
-      dispatch(addDiscrict(insertData));         
+  const onSubmit = (data) => {
+    const insertData = {
+      name: data.name,
+      creator: userInfo.id,
+    };
+    dispatch(addDiscrict(insertData));
   };
 
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        if (window.confirm(t("AddDiscrict_window_confirm"))){
-          setNextDesc(true)
-          setIdNewDistrict(district[0].id)
+        if (window.confirm(t("AddDiscrict_window_confirm"))) {
+          setNextDesc(true);
+          setIdNewDistrict(district[0].id);
           dispatch({ type: SET_FLAG_DESC_TRUE });
           dispatch({ type: DISTRICT_ADD_DELETE });
           dispatch({ type: DISTRICT_DELETE });
-        }else{
+        } else {
           dispatch({ type: DISTRICT_ADD_DELETE });
           dispatch({ type: DISTRICT_DELETE });
           dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-
         }
-
       }, TIME_SET_TIMEOUT);
     }
   }, [navigate, success]);
-  
+
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: DISTRICT_ADD_DELETE });
   }, []);
 
   useEffect(() => {
-    if(addDescFlag){
+    if (addDescFlag) {
       navigate("/dashboard/district/district");
     }
   }, [addDescFlag]);
@@ -98,7 +94,14 @@ function AddDiscrict() {
           {error ? (
             <ErrorMessage msg={error} timeOut={1000} variant="danger" />
           ) : null}
-          {success ? <ErrorMessage msg={t("AddDiscrict_success")} timeOut={4000} variant='success'  success={true}/> : null}
+          {success ? (
+            <ErrorMessage
+              msg={t("AddDiscrict_success")}
+              timeOut={4000}
+              variant="success"
+              success={true}
+            />
+          ) : null}
           <Row className="align-items-center">
             <Col>
               <Link
@@ -147,20 +150,23 @@ function AddDiscrict() {
               )}
             </Form.Group>
             <div className="d-flex justify-content-end">
-            {nextDesc ? null
-              :
-                  <Button type="submit" variant="success" className="rounded my-3 ">
-                    {t("btn-add")}
-                  </Button>
-              }
-
+              {nextDesc ? null : (
+                <Button
+                  type="submit"
+                  variant="success"
+                  className="rounded my-3 "
+                >
+                  {t("btn-add")}
+                </Button>
+              )}
             </div>
           </Form>
-          {nextDesc & descFlag ?(
-              <AddDescription
-                objId={idNewDistrict}
-                descType={DISCTRICT_DESCRIPTION}
-              />):null}
+          {nextDesc & descFlag ? (
+            <AddDescription
+              objId={idNewDistrict}
+              descType={DISCTRICT_DESCRIPTION}
+            />
+          ) : null}
         </div>
       )}
     </>

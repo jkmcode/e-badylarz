@@ -1,7 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+## Products 
 
+# Product type
+class ProductType(models.Model):
+    name = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+
+
+
+
+
+
+
+## Location
+
+# District
 class Districts(models.Model):
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
@@ -13,17 +35,7 @@ class Districts(models.Model):
     def __str__(self):
          return self.name
 
-class Descriptions(models.Model):
-    description =  models.CharField(max_length=255, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
-    obj_type = models.CharField(max_length=50, null=True, blank=True)
-    obj_id = models.CharField(max_length=10, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    creator = models.CharField(max_length=5, null=True, blank=True)
-    modifier = models.CharField(max_length=5, null=True, blank=True)
-
-
+# Cities 
 class Citis(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True, blank=True)
@@ -38,6 +50,19 @@ class Citis(models.Model):
          return self.name
    
 
+# Descriptions
+class Descriptions(models.Model):
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    obj_type = models.CharField(max_length=50, null=True, blank=True)
+    obj_id = models.CharField(max_length=10, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+
+# To change
 class Place_of_pickups(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True, blank=True)
@@ -55,6 +80,9 @@ class Place_of_pickups(models.Model):
 
     def __str__(self):
          return self.name
+
+
+
 
 
 

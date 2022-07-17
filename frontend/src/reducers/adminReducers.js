@@ -38,7 +38,26 @@ import {
   SET_WINDOW_FLAG_FALSE,
   SET_WINDOW_FLAG_TRUE,
   SET_WINDOW_FLAG_DELETE,
+  PRODUCT_TYPE_ADD_REQUEST,
+  PRODUCT_TYPE_ADD_SUCCESS,
+  PRODUCT_TYPE_ADD_FAIL,
+  PRODUCT_TYPE_ADD_DELETE,
 } from "../constants/adminConstans";
+
+export const addProductTypeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_TYPE_ADD_REQUEST:
+      return { loading: true, success: false };
+    case PRODUCT_TYPE_ADD_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case PRODUCT_TYPE_ADD_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case PRODUCT_TYPE_ADD_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const flagWindowReducer = (state = {}, action) => {
   switch (action.type) {

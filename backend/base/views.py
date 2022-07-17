@@ -35,6 +35,28 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addProductType(request):
+    data = request.data
+
+    alreadyExists = ProductType.objects.filter(name=data['name']).exists()
+
+    if alreadyExists:
+        content = {"detail": "Product type already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        product_type = ProductType.objects.create(
+            name=data['name'],
+            creator = data['creator'],
+            is_active=True
+        )
+
+        new_type_product=ProductType.objects.get(name=data['name'])
+        seriaziler = ProductTypeSerializer(new_type_product, many=False)
+        return Response(seriaziler.data)
+
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getCites(request, Id):

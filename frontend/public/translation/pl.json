@@ -11,6 +11,7 @@
     "ErrorMessage_disctrict_already_exist": "Powiat o podanej nazwie już istnieje",
     "ErrorMessage_city_already_exist":"Miejscowość dla wybranego powiatu juz istnieje",
     "ErrorMessage_no_type_object":"Brak typu objektu",
+    "ErrorMessage_product_type_already_exist": "Typ produktu już istnieje",
 
     "No_data": "Brak dostępnych danych",
 
@@ -47,6 +48,7 @@
     "Form_field_required": "Pole wymagane",
     "Form_only_letters": "Możesz wpisać tylko litery",
     "Form_letters_pl_and_digits":"Możesz wpisać tylko litery i cyfry",
+    "Form_blank_space_is_not_allow":"Space nie są dozwolone",
     "Form_post_code":"Liczby, spacja lub duże litery",
     "Form_minLength_3" : "Minimum 3 znaki",
     "Form_minLength_5" : "Minimum 5 znaków",
@@ -89,6 +91,7 @@
     "DashboardScreen_sidebar_subtitle_1" :  "Powiaty",
     "DashboardScreen_sidebar_subtitle_2" :  "Sklepy",
     "DashboardScreen_sidebar_subtitle_3" :  "Produkty",
+    "DashboardScreen_sidebar_subtitle_3a" :  "Typ produktów",
     "DashboardScreen_sidebar_subtitle_4" :  "inne",
 
     "EditDistrict_title": "Edycja powiatu",
@@ -112,5 +115,23 @@
     "InfoComponent_title_city":"Opis dla miejscowości:",
 
     "CityDistrict_title_1":"Opis miejscowości :",
-    "CityDistrict_title_2":", powiat"
+    "CityDistrict_title_2":", powiat",
+
+
+    "AdminAddProducts_title": "Dodaj produkt",
+    "AdminAddProducts_label_productCategory": "Kategorie produktu",
+    "AdminAddProducts_label_name" : "Nazwa produktu",
+    "AdminAddProducts_name_placeholder": "Wprowadź nazwe produktu ....",
+    "AdminAddProducts_label_desc": "Opis produktu",
+    "AdminAddProducts_placeholder_desc" : "Wprowadź opis produktu ...",
+    "AdminAddProducts_label_choose_photos": "Dodaj zdjęcia",
+
+
+
+    "AdminProductType_title": "Lista aktywnych typów produktów",
+
+
+    "AddProductType_title": "Dodaj typ produktów",
+    "AddProductType_label_name": "Nazwa typu produktu",
+    "AddProductType_name_placeholder": "Wpisz nawę typu produktu ..."  
 }

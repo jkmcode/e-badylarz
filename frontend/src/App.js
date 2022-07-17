@@ -21,6 +21,9 @@ import AdminShops from "./admin/AdminShops";
 import DashboardScreen from "./screens/DashboardScreen";
 import EditDistrict from "./admin/EditDistrict";
 import AdminCities from "./admin/AdminCities";
+import AdminAddProducts from "./admin/AdminAddProducts";
+import AdminProductType from "./admin/AdminProductType";
+import AddProductType from "./admin/AddProductType";
 
 //SerachBoxComponent
 import SearchBox from "./component/SearchBox";
@@ -79,6 +82,14 @@ function App() {
               element={<AdminScreenDistrict />}
             />
             <Route path=":citiesParam/cities" element={<AdminCities />} />
+            <Route
+              path=":productsParam/products"
+              element={<AdminAddProducts />}
+            />
+            <Route
+              path=":productsTypeParam/products-type"
+              element={<AdminProductType />}
+            />
           </Route>
 
           <Route
@@ -86,7 +97,14 @@ function App() {
             element={<EditDistrict />}
           />
           <Route path="add-city/:id/add" element={<AddCity />} />
-          <Route path="add-description/:name/:id/:cityId/add" element={<CityDescription />} />
+          <Route
+            path="add-description/:name/:id/:cityId/add"
+            element={<CityDescription />}
+          />
+          <Route
+            path="dashboard/productsType/products-type/add"
+            element={<AddProductType />}
+          />
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

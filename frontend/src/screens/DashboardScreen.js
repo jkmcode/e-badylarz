@@ -13,6 +13,8 @@ function DashboardScreen() {
   const shopsParam = params.shopsParam;
   const districtParam = params.districtParam;
   const citiesParam = params.citiesParam;
+  const productsParam = params.productsParam;
+  const productTypeParam = params.productsTypeParam;
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const detectSize = () => {
@@ -125,7 +127,14 @@ function DashboardScreen() {
               </li>
 
               <li class="nav-item">
-                <a class="nav-link text-white " href="../pages/billing.html">
+                <Link
+                  to="/dashboard/products/products"
+                  className={
+                    productsParam === "products"
+                      ? "nav-link text-white active bg-gradient-primary"
+                      : "nav-link text-white"
+                  }
+                >
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <img
                       src={Main}
@@ -136,12 +145,17 @@ function DashboardScreen() {
                       {t("DashboardScreen_sidebar_subtitle_3")}
                     </span>
                   </div>
-                </a>
+                </Link>
               </li>
+
               <li class="nav-item">
-                <a
-                  class="nav-link text-white "
-                  href="../pages/virtual-reality.html"
+                <Link
+                  to="/dashboard/productsType/products-type"
+                  className={
+                    productTypeParam === "productsType"
+                      ? "nav-link text-white active bg-gradient-primary"
+                      : "nav-link text-white"
+                  }
                 >
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <img
@@ -150,10 +164,10 @@ function DashboardScreen() {
                       alt="main_logo"
                     ></img>
                     <span class="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
+                      {t("DashboardScreen_sidebar_subtitle_3a")}
                     </span>
                   </div>
-                </a>
+                </Link>
               </li>
               <li class="nav-item">
                 <a

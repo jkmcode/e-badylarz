@@ -11,6 +11,7 @@ import {
   DISCTRICT_ALREADY_EXIST,
   CITY_ALREADY_EXIST,
   ACTIVE_NO_TYPE_OBJECT,
+  PRODUCT_TYPE_ALREADY_EXIST,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -38,7 +39,9 @@ function ErrorMessage(props) {
       case CITY_ALREADY_EXIST:
         return setErrorMessage("ErrorMessage_city_already_exist");
       case ACTIVE_NO_TYPE_OBJECT:
-          return setErrorMessage("ErrorMessage_no_type_object");
+        return setErrorMessage("ErrorMessage_no_type_object");
+      case PRODUCT_TYPE_ALREADY_EXIST:
+        return setErrorMessage("ErrorMessage_product_type_already_exist");
       default:
         return setErrorMessage(props.msg);
     }
@@ -61,8 +64,9 @@ function ErrorMessage(props) {
           dismissible
         >
           <Alert.Heading>
-             {props.success ? t("ErrorMessage_title_success"):t("ErrorMessage_title")}
-
+            {props.success
+              ? t("ErrorMessage_title_success")
+              : t("ErrorMessage_title")}
           </Alert.Heading>
           <p>{t(errorMessage)}</p>
         </Alert>
