@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
-import ErrorMessage  from "../component/ErrorMessage";
+import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
 import { getDiscrict } from "../actions/discrictsActions";
 
@@ -75,11 +75,11 @@ function AddCity() {
     if (success) {
       setTimeout(() => {
         setIdNewDistrict(result[0].id);
-        setAddDescription(true)
+        setAddDescription(true);
       }, TIME_SET_TIMEOUT);
     }
-  }, [ success]);
-  
+  }, [success]);
+
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: CITI_ADD_DELETE });
@@ -104,10 +104,18 @@ function AddCity() {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
-            <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} variant="danger" />
+            <ErrorMessage
+              msg={error}
+              timeOut={TIME_SET_TIMEOUT}
+              variant="danger"
+            />
           ) : null}
           {descError ? (
-            <ErrorMessage msg={descError} timeOut={TIME_SET_TIMEOUT} variant="danger" />
+            <ErrorMessage
+              msg={descError}
+              timeOut={TIME_SET_TIMEOUT}
+              variant="danger"
+            />
           ) : null}
           {success ? (
             <ErrorMessage
@@ -117,13 +125,13 @@ function AddCity() {
               success={true}
             />
           ) : null}
-          
+
           {addDescription ? (
-          <InfoWindow
-            title={t("Window_title")}
-            body={t("AddCity_body_window")}
-          />) 
-          :null}
+            <InfoWindow
+              title={t("Window_title")}
+              body={t("AddCity_body_window")}
+            />
+          ) : null}
 
           <Row className="align-items-center">
             <Col>
@@ -141,9 +149,7 @@ function AddCity() {
               ? null
               : districtList.filter((i) => i.id === dscrictId)[0].name}
           </div>
-          <div>
-          {t("AddCiti_subtitle")}
-          </div>
+          <div>{t("AddCiti_subtitle")}</div>
           <Form onSubmit={addhandleSubmit(onSubmit)}>
             <Row>
               <Col>
@@ -219,7 +225,7 @@ function AddCity() {
             </Row>
 
             <div className="d-flex justify-content-end">
-                {windowFlag ? null : (
+              {windowFlag ? null : (
                 <Button
                   type="submit"
                   variant="success"
@@ -231,10 +237,7 @@ function AddCity() {
             </div>
           </Form>
           {windowFlag ? (
-            <AddDescription
-              objId={idNewDistrict}
-              descType={CITY_DESCRIPTION}
-            />
+            <AddDescription objId={idNewDistrict} descType={CITY_DESCRIPTION} />
           ) : null}
         </div>
       )}

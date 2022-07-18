@@ -15,42 +15,36 @@ function InfoWindow(props) {
   const [modalShow, setModalShow] = useState(true);
 
   const handleYes = () => {
-    console.log('---->YES')
     setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_TRUE });
   };
 
   const handleNo = () => {
-    console.log('---->NO')
     setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_FALSE });
   };
 
   return (
     <>
-          <Modal
-            show={modalShow}
-            // onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {props.title} 
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {props.body}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleYes}>
-              {t("btn_yes")}
-              </Button>
-              <Button variant="secondary" onClick={handleNo}>
-              {t("btn_no")}
-              </Button>
-            </Modal.Footer>
-          </Modal>
+      <Modal
+        show={modalShow}
+        // onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{props.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{props.body}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleYes}>
+            {t("btn_yes")}
+          </Button>
+          <Button variant="secondary" onClick={handleNo}>
+            {t("btn_no")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

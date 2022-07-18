@@ -21,9 +21,6 @@ function FormAddressScreen() {
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
 
-  //console.log("districtList", districtList);
-  //console.log("discrictListRedux", discrictListRedux);
-
   const {
     register,
     formState: { errors },
@@ -70,14 +67,26 @@ function FormAddressScreen() {
     }
   }, [dispatch, districtList.length]);
 
+  // test
+  const myStyle = {
+    backgroundImage:
+      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
+    height: "100vh",
+    marginTop: "-70px",
+    fontSize: "50px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+  };
+
   return (
-    <div className="mt-3">
+    <div className="mt-2" style={myStyle}>
       {loading ? (
         <Loader />
       ) : error ? (
         <p>error</p>
       ) : (
-        <div className="container bg-container max-sizing mt-5 p-4 rounded">
+        // <div className="container bg-container max-sizing mt-5 p-4 rounded">
+        <div className="container bg-container max-sizing p-4 rounded">
           <Row>
             <Col>
               <h5 className="text-center">{t("FormAddressScreen_title")}</h5>

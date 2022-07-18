@@ -57,8 +57,6 @@ function CitiesList(props) {
     );
   };
 
-  console.log("citiesList", citiesList);
-
   const unActiveHandler = (id) => {
     dispatch({ type: GET_CITES_LIST_DELETE });
     setCitiesData(false);
@@ -79,13 +77,11 @@ function CitiesList(props) {
   };
 
   const descriptionHandler = (i) => {
-    console.log("-------->", i);
     navigate(`/add-description/${i.name}/${i.id_district}/${i.id}/add`);
   };
 
   // run if citiesList is empty
   useEffect(() => {
-    console.log("useEffect citiesList");
     if (!citiesList) {
       dispatch(
         getCitiesList({
@@ -99,24 +95,14 @@ function CitiesList(props) {
 
   // run if success is true (unOrActiveDescription)
   useEffect(() => {
-    console.log("useEffect success");
     if (success) {
       dispatch(
         getCitiesList({
           Id: props.Id,
         })
       );
-      //dispatch({ type: GET_CITES_LIST_DELETE });
-      //setCitiesData(false);
     }
   }, [dispatch, success]);
-
-  useEffect(() => {
-    console.log("pusty useEffect");
-    dispatch({ type: GET_CITES_LIST_DELETE });
-  }, []);
-
-  console.log("citiesData", citiesData);
 
   return (
     <>

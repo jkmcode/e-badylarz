@@ -5,10 +5,15 @@ import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import AddDescription from "./AddDescription";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { addProductType } from "../actions/adminActions";
-
+import InfoWindow from "../component/infoWindow";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
+import {
+  PRODUCT_TYPE_DESCRIPTION,
+  SET_WINDOW_FLAG_DELETE,
+} from "../constants/adminConstans";
 
 function AddProductType() {
   const {
@@ -31,16 +36,42 @@ function AddProductType() {
   const data = useSelector((state) => state.addProductType);
   const { loading, error, success, result } = data;
 
-  useEffect(() => {}, []);
+  // const successDesc = useSelector((state) => state.addDistrictDesc);
+  // const { success: successDescription } = successDesc;
+
+  const d2flag = useSelector((state) => state.windowFlag);
+  const { windowFlag } = d2flag;
+
+  const [idNewTypeProduct, setIdNewTypeProduct] = useState("");
+  const [addDescription, setAddDescription] = useState(false);
+
+  useEffect(() => {
+    console.log("przed if");
+    if (success) {
+      console.log("w if");
+      setTimeout(() => {
+        setIdNewTypeProduct(result.id);
+        setAddDescription(true);
+        console.log("w setTimeOut");
+      }, TIME_SET_TIMEOUT);
+    }
+  }, [success]);
 
   const onSubmit = (data) => {
-    console.log("dodany typ produktu", data.productTypeName);
     const insertData = {
       name: data.productTypeName,
       creator: userInfo.id,
     };
     dispatch(addProductType(insertData));
   };
+
+  // useEffect(() => {
+  //   if (successDescription) {
+  //     dispatch({ type: SET_WINDOW_FLAG_DELETE });
+  //   }
+  // }, [successDescription]);
+
+  console.log("success", success);
 
   return (
     <>
@@ -50,6 +81,12 @@ function AddProductType() {
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
             <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
+          ) : null}
+          {addDescription ? (
+            <InfoWindow
+              title={t("Window_title")}
+              body={t("AddCity_body_window")}
+            />
           ) : null}
           <Row className="align-items-center">
             <Col>
@@ -99,11 +136,20 @@ function AddProductType() {
               )}
             </Form.Group>
             <div className="d-flex justify-content-end">
+              {/* {windowFlag ? (
+              ) : null} */}
+
               <Button type="submit" variant="success" className="rounded my-3 ">
                 {t("btn-add")}
               </Button>
             </div>
           </Form>
+          {windowFlag ? (
+            <AddDescription
+              objId={idNewTypeProduct}
+              descType={PRODUCT_TYPE_DESCRIPTION}
+            />
+          ) : null}
         </div>
       )}
     </>

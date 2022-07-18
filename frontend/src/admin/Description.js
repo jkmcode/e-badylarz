@@ -5,9 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { addDesc } from "../actions/adminActions";
 
-import {
-  DISTRICT_ADD_DESC_DELETE,
-} from "../constants/adminConstans";
+import { DISTRICT_ADD_DESC_DELETE } from "../constants/adminConstans";
 
 function Description(props) {
   const {
@@ -24,7 +22,6 @@ function Description(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-
     dispatch({ type: DISTRICT_ADD_DESC_DELETE });
 
     if (props.getDesc.length < 1) {
@@ -51,7 +48,6 @@ function Description(props) {
         })
       );
     }
-
   };
 
   return (
