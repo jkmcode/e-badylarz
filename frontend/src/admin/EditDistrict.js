@@ -44,6 +44,7 @@ function EditDistrict() {
   };
 
   const addCityHandler = () => {
+    dispatch({ type: GET_CITES_LIST_DELETE });
     navigate(`/add-city/${districtId}/add`);
   };
 

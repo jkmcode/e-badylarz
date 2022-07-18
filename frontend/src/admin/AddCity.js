@@ -30,7 +30,6 @@ function AddCity() {
 
   const dscrictId = Number(params.id);
 
-  const [nextDesc, setNextDesc] = useState(false);
   const [addDescription, setAddDescription] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
 
@@ -49,7 +48,7 @@ function AddCity() {
   const dflag = useSelector((state) => state.flag);
   const { descFlag, addDescFlag } = dflag;
 
-  const d2flag = useSelector((state) => state.flag);
+  const d2flag = useSelector((state) => state.windowFlag);
   const { windowFlag } = d2flag;
 
   const newCity = useSelector((state) => state.addCity);
@@ -75,28 +74,12 @@ function AddCity() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
+        setIdNewDistrict(result[0].id);
         setAddDescription(true)
       }, TIME_SET_TIMEOUT);
     }
   }, [ success]);
   
-  useEffect(() => {
-    if (windowFlag){
-      if (windowFlag) {
-        setNextDesc(true);
-        setIdNewDistrict(result[0].id);
-        dispatch({ type: SET_FLAG_DESC_TRUE });
-        dispatch({ type: CITI_ADD_DELETE });
-        dispatch({ type: SET_WINDOW_FLAG_DELETE });
-      } else {
-        dispatch({ type: CITI_ADD_DELETE });
-        dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-        dispatch({ type: SET_WINDOW_FLAG_DELETE });
-      }
-    }
-  }, [windowFlag]);
-
-
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: CITI_ADD_DELETE });
@@ -236,7 +219,7 @@ function AddCity() {
             </Row>
 
             <div className="d-flex justify-content-end">
-              {nextDesc ? null : (
+                {windowFlag ? null : (
                 <Button
                   type="submit"
                   variant="success"
@@ -247,7 +230,7 @@ function AddCity() {
               )}
             </div>
           </Form>
-          {nextDesc & descFlag ? (
+          {windowFlag ? (
             <AddDescription
               objId={idNewDistrict}
               descType={CITY_DESCRIPTION}
