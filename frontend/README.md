@@ -29,3 +29,10 @@ To Do:
 2. zrobić komponent z windowWidth
 3. Autentykacja dla actions AdminActions (wszystkie)
 4. backend: Permissions for SuperUsera and IsStaff
+
+Do zrobienia:
+
+1. Dodawanie sklepu do bazy danych + formularz
+2. Modyfikacja sklepu (Edit - zmiana danych)
+3. Opis/komentarz wielojęzyczyny dla sklepu
+4. Dodawanie obsaru zakupów + modyfikacja + komentarz/opis (jak dla sklepu)

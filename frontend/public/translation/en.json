@@ -47,6 +47,8 @@
 
     "Form_field_required": "Field is required",
     "Form_only_letters": "Only letters",
+    "Form_only_digits_or_dot": "Only digits or dot",
+    "Form_only_digits_or_space": "Only digits or space",
     "Form_letters_pl_and_digits":"Only letters, polishletters and digits",
     "Form_blank_space_is_not_allow":"Blank space is not allow",
     "Form_post_code":"Only digits, space or big letters",
@@ -133,5 +135,31 @@
 
     "AddProductType_title": "Add a product type",
     "AddProductType_label_name": "Product type name",
-    "AddProductType_name_placeholder": "Enter product type name ..."    
+    "AddProductType_name_placeholder": "Enter product type name ...",
+    
+    
+
+    "AddShops_title": "Add shop",
+    "AddShops_title_address":"Address",
+    "AddShops_label_nip":"Tax number",
+    "AddShops_nip_placeholder": "Enter tax number ...",
+    "AddShops_name_placeholder": "Enter shop name ...",
+    "AddShops_label_name": "Shop name",
+    "AddShops_label_city": "City",
+    "AddShops_city_placeholder": "Enter city name ...",
+    "AddShops_label_street": "Street",
+    "AddShops_street_placeholder":"Enter street name ...",
+    "AddShops_label_number": "No building",
+    "AddShops_number_placeholder" : "Enter building number ...",
+    "AddShops_label_postCode": "Post code",
+    "AddShops_postCode_placeholder": "Enter post code ...",
+    "AddShops_label_post": "Post",
+    "AddShops_post_placeholder":"Enter post ...",
+    "AddShops_title_geolocation": "Geolocation",
+    "AddShops_label_latitude": "Latitude",
+    "AddShops_latitude_placeholder": "Enter latitude ...",
+    "AddShops_label_longitude": "Longitude",
+    "AddShops_longitude_placeholder": "Enter longitude ..."
+    
+    
 }

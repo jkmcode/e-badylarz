@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getDiscrict } from "../actions/discrictsActions";
+import background from "./jabłka.png";
 
 //https://react-select.com/advanced
 
@@ -69,8 +70,7 @@ function FormAddressScreen() {
 
   // test
   const myStyle = {
-    backgroundImage:
-      "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')",
+    backgroundImage: `url(${background})`,
     height: "100vh",
     marginTop: "-70px",
     fontSize: "50px",

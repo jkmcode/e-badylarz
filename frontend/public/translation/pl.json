@@ -47,6 +47,8 @@
 
     "Form_field_required": "Pole wymagane",
     "Form_only_letters": "Możesz wpisać tylko litery",
+    "Form_only_digits_or_dot": "Tylko liczby lub kropka",
+    "Form_only_digits_or_space": "Tylko liczby lub spacja",
     "Form_letters_pl_and_digits":"Możesz wpisać tylko litery i cyfry",
     "Form_blank_space_is_not_allow":"Space nie są dozwolone",
     "Form_post_code":"Liczby, spacja lub duże litery",
@@ -133,5 +135,27 @@
 
     "AddProductType_title": "Dodaj typ produktów",
     "AddProductType_label_name": "Nazwa typu produktu",
-    "AddProductType_name_placeholder": "Wpisz nawę typu produktu ..."  
+    "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
+    
+    "AddShops_title": "Dodaj sklep",
+    "AddShops_title_address":"Adres",
+    "AddShops_label_nip":"NIP",
+    "AddShops_nip_placeholder": "Wpisz NIP ...",
+    "AddShops_name_placeholder": "Wpisz nazwe sklepu ...",
+    "AddShops_label_name": "Nazwa sklepu",
+    "AddShops_label_city": "Miejscowość",
+    "AddShops_city_placeholder": "Wpisz nazwe miejscowości ...",
+    "AddShops_label_street": "Ulica",
+    "AddShops_street_placeholder":"Wpisz nazwe ulicy ...",
+    "AddShops_label_number": "Nr budynku",
+    "AddShops_number_placeholder" : "Wpisz numer budynku ...",
+    "AddShops_label_postCode": "Kod pocztowy",
+    "AddShops_postCode_placeholder": "Wpisz kod pocztowy ...",
+    "AddShops_label_post": "Poczta",
+    "AddShops_post_placeholder":"Wpisz poczte ...",
+    "AddShops_title_geolocation": "Współrzędne geograficzne",
+    "AddShops_label_latitude": "Szerokość",
+    "AddShops_latitude_placeholder": "Wpisz szerokość ...",
+    "AddShops_label_longitude": "Długość",
+    "AddShops_longitude_placeholder": "Wpisz długość ..."
 }
