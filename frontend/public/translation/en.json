@@ -69,6 +69,7 @@
     "FormAddressScreen__pickup_location_placeholder": "Pickup location...",
     "FormAddressScreen__info" : "After choosing the location, the closest shopping area will be selected for you!",
     "FormAddressScreen__btn" : "Search shopping area",
+    "FormAddressScreen__learn_more_btn" : "Learn more",
 
     "AdminScreen_district_btn" : "District",
 

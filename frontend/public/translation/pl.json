@@ -69,6 +69,7 @@
     "FormAddressScreen__pickup_location_placeholder": "Miejsce odbioru...",
     "FormAddressScreen__info" : "Po wyborze lokalizacji nastąpi dobranie dla Ciebie najbiższego obszaru zakupów!",
     "FormAddressScreen__btn" : "Szukaj obszaru zakupów",
+    "FormAddressScreen__learn_more_btn" : "Dowiec się więcej",
 
     "AdminScreen_district_btn" : "Powiat",
 
