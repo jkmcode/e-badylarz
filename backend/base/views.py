@@ -35,12 +35,18 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getShops(request):
+    shops = Shops.objects.filter(is_active=True).order_by('name')
+    seriaziler = ShopsSerializer(shops, many=True)
+
+    return Response(seriaziler.data)
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def addShop(request):
     data = request.data
-
-    print(data['photo'])
 
     shopAlreadyExists = Shops.objects.filter(name=data['name']).exists()
     NIPAlreadyExists = Shops.objects.filter(name=data['nip']).exists()
@@ -132,6 +138,8 @@ def activeList(request):
         descrip = Districts.objects.get(id=data['Id'])
     elif data['objType']=='CITY':
         descrip = Citis.objects.get(id=data['Id'])
+    elif data['objType']=='SHOP':
+        descrip = Shops.objects.get(id=data['Id'])
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 

@@ -28,7 +28,45 @@ import {
   ADD_SHOP_REQUEST,
   ADD_SHOP_SUCCESS,
   ADD_SHOP_FAIL,
+  GET_SHOPS_LIST_REQUEST,
+  GET_SHOPS_LIST_SUCCESS,
+  GET_SHOPS_LIST_FAIL,
+  DEACTIVE_SHOPS_REQUEST,
+  DEACTIVE_SHOPS_SUCCESS,
+  DEACTIVE_SHOPS_FAIL,
 } from "../constants/adminConstans";
+
+export const getShops = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_SHOPS_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/get-shops/`, config);
+
+    dispatch({
+      type: GET_SHOPS_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SHOPS_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
 
 export const addShop = (insertData) => async (dispatch, getState) => {
   try {

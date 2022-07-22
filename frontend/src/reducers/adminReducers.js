@@ -46,7 +46,31 @@ import {
   ADD_SHOP_SUCCESS,
   ADD_SHOP_FAIL,
   ADD_SHOP_DELETE,
+  GET_SHOPS_LIST_REQUEST,
+  GET_SHOPS_LIST_SUCCESS,
+  GET_SHOPS_LIST_FAIL,
+  GET_SHOPS_LIST_DELETE,
 } from "../constants/adminConstans";
+
+export const shopListReducer = (state = { shopList: [] }, action) => {
+  switch (action.type) {
+    case GET_SHOPS_LIST_REQUEST:
+      return { loading: true, success: false, shopList: [] };
+    case GET_SHOPS_LIST_SUCCESS:
+      return { loading: false, success: true, shopList: action.payload };
+    case GET_SHOPS_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        shopList: [],
+      };
+    case GET_SHOPS_LIST_DELETE:
+      return { shopList: [] };
+    default:
+      return state;
+  }
+};
 
 export const addShopReducer = (state = {}, action) => {
   switch (action.type) {

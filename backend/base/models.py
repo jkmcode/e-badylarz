@@ -16,6 +16,8 @@ class Shops(models.Model):
     latitude = models.CharField(max_length=20)
     longitude = models.CharField(max_length=20)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)    
     creator = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     photo = models.CharField(max_length=150, null=True,blank=True)

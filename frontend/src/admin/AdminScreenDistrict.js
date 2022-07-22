@@ -102,7 +102,6 @@ function AdminScreenDistrict() {
         <div className="bg-container mt-4 p-4 rounded">
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           <Row className="align-items-center">
-            <Col></Col>
             {!error && (
               <Col>
                 <Link

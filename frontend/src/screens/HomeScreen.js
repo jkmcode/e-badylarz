@@ -56,12 +56,10 @@ function FormAddressScreen() {
   };
 
   const cities = ["Chrzanów", "Pogorzyce", "Płaza"];
-  console.log("districtList", districtList, typeof loading);
 
   useEffect(() => {
     console.log(districtList.length);
     if (districtList.length === 0) {
-      console.log("jesem w ifie");
       dispatch(getDiscrict());
     }
   }, [dispatch, districtList.length]);

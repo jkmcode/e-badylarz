@@ -19,9 +19,11 @@
 
     "btn-return": "Return",
     "btn-add" : "Add",
+    "btn_add_shop": "Add shop",
     "btn_delete": "DELETE",
     "btn_close": "Close",
     "btn_edit" : "EDIT",
+    "btn_contact" : "CONTACT",
     "btn_info" : "INFO",
     "btn-login": "Login",
     "btn_add_description": "Add description",
@@ -135,6 +137,12 @@
     
 
     "AdminProductType_title": "List of active product types",
+
+    "AdminShops_shop_name": "Name",
+    "AdminShops_area": "Area",
+    "AdminShops_status": "Status",
+    "AdminShops_shop_address": "Address",
+    "AdminShops_shop_tax_number": "Tax No",
 
     "AddProductType_title": "Add a product type",
     "AddProductType_label_name": "Product type name",

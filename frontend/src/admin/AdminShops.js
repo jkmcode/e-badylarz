@@ -1,118 +1,163 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { getShops } from "../actions/adminActions";
+import Loader from "../component/Loader";
+import { unOrActiveList } from "../actions/adminActions";
+import {
+  GET_SHOPS_LIST_DELETE,
+  SHOP_DESCRIPTION,
+} from "../constants/adminConstans";
 
 function AdminShops() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  // fech data from Redux
+  const shopListRedux = useSelector((state) => state.shopList);
+  const { loading, shopList, error } = shopListRedux;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  // fetching list active shops from DB
+  useEffect(() => {
+    if (shopList.length === 0) {
+      dispatch(getShops());
+    }
+  }, [dispatch, shopList.length]);
+
+  //  handle function
+  const activeHandler = (id) => {
+    dispatch(
+      unOrActiveList({
+        Id: id,
+        active: false,
+        userId: userInfo.id,
+        objType: SHOP_DESCRIPTION,
+      })
+    );
+    dispatch({ type: GET_SHOPS_LIST_DELETE });
+  };
+
+  // style
+  const btnDelete = {
+    color: "red",
+    backgroundColor: "white",
+    border: "none",
+    fontWeight: "bold",
+  };
+
   return (
     <>
-      <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-        <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-          <h3 className="text-white text-capitalize text-center ps-3">
-            Authors table
-          </h3>
-          <Link className="text-white text-capitalize ps-3" to="add">
-            {t("btn-add")}
-          </Link>
-        </div>
-      </div>
-      <div className="card-body px-0 pb-2">
-        <div className="card-body px-0 pb-2">
-          <div className="table-responsive p-0">
-            <table className="table align-items-center mb-0">
-              <thead>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                  Author
-                </th>
-                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                  Function
-                </th>
-                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                  Status
-                </th>
-                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                  Employed
-                </th>
-                <th className="text-secondary opacity-7"></th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div className="d-flex px-2 py-1">
-                      <div className="d-flex flex-column justify-content-center">
-                        <h6 className="mb-0 text-sm">John Michael</h6>
-                        <p className="text-xs text-secondary mb-0">
-                          john@creative-tim.com
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p className="text-xs font-weight-bold mb-0">Manager</p>
-                    <p className="text-xs text-secondary mb-0">Organization</p>
-                  </td>
-                  <td className="align-middle text-center text-sm">
-                    <span className="badge badge-sm bg-gradient-success">
-                      Online
-                    </span>
-                  </td>
-                  <td className="align-middle text-center">
-                    <span className="text-secondary text-xs font-weight-bold">
-                      23/04/18
-                    </span>
-                  </td>
-                  <td className="align-middle">
-                    <a
-                      href="javascript:;"
-                      className="text-secondary font-weight-bold text-xs"
-                      data-toggle="tooltip"
-                      data-original-title="Edit user"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="d-flex px-2 py-1">
-                      <div className="d-flex flex-column justify-content-center">
-                        <h6 className="mb-0 text-sm">John Michael</h6>
-                        <p className="text-xs text-secondary mb-0">
-                          john@creative-tim.com
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p className="text-xs font-weight-bold mb-0">Manager</p>
-                    <p className="text-xs text-secondary mb-0">Organization</p>
-                  </td>
-                  <td className="align-middle text-center text-sm">
-                    <span className="badge badge-sm bg-gradient-success">
-                      Online
-                    </span>
-                  </td>
-                  <td className="align-middle text-center">
-                    <span className="text-secondary text-xs font-weight-bold">
-                      23/04/18
-                    </span>
-                  </td>
-                  <td className="align-middle">
-                    <a
-                      href="javascript:;"
-                      className="text-secondary font-weight-bold text-xs"
-                      data-toggle="tooltip"
-                      data-original-title="Edit user"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h3 className="text-white text-capitalize text-center ps-3">
+                Authors table
+              </h3>
+              <div className="d-flex justify-content-between">
+                <Link className="text-white text-capitalize ps-3" to="add">
+                  {t("btn_add_shop")}
+                </Link>
+                <div>Active</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          {error ? (
+            <p>{t("No_data")}</p>
+          ) : (
+            <div className="card-body px-0 pb-2">
+              <div className="card-body px-0 pb-2">
+                <div className="table-responsive p-0">
+                  <table className="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                          {t("AdminShops_shop_name")}
+                        </th>
+                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                          {t("AdminShops_shop_address")}
+                        </th>
+                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                          {t("AdminShops_shop_tax_number")}
+                        </th>
+                        <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                          {t("AdminShops_status")}
+                        </th>
+                        <th className="text-secondary opacity-7"></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {shopList.map((shop) => (
+                        <tr key={shop.id}>
+                          <td>
+                            <div className="d-flex px-2 py-1">
+                              <div className="d-flex flex-column justify-content-center">
+                                <p className="text-xs text-secondary mb-0">
+                                  {shop.name}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <p className="text-xs font-weight-bold mb-0">
+                              {shop.city}
+                            </p>
+                            <p className="text-xs text-secondary mb-0">
+                              {shop.street} {shop.no_building}
+                            </p>
+                          </td>
+                          <td>
+                            <p className="text-xs font-weight-bold mb-0">
+                              {shop.nip}
+                            </p>
+                          </td>
+                          <td className="align-middle text-center text-sm">
+                            {shop.is_active ? (
+                              <span className="badge badge-sm bg-gradient-success">
+                                Active
+                              </span>
+                            ) : (
+                              <span className="badge badge-sm bg-gradient-danger">
+                                Unactive
+                              </span>
+                            )}
+                          </td>
+                          <td className="align-middle">
+                            <button
+                              style={btnDelete}
+                              className="text-xs"
+                              onClick={() => activeHandler(shop.id)}
+                            >
+                              {t("btn_delete")}
+                            </button>
+                          </td>
+                          <td className="align-middle">
+                            <Link to="add" className="text-xs text-warning">
+                              {t("btn_edit")}
+                            </Link>
+                          </td>
+                          <td className="align-middle">
+                            <Link to="add" className="text-xs text-info">
+                              {t("btn_contact")}
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }
