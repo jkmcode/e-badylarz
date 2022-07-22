@@ -11,5 +11,7 @@ export const CITY_ALREADY_EXIST = "City exists in the selected district";
 export const ACTIVE_NO_TYPE_OBJECT =
   "Changing the active flag - no object type";
 export const PRODUCT_TYPE_ALREADY_EXIST = "Product type already exist";
+export const SHOP_ALREADY_EXIST = "Shop with this name already exist";
+export const NIP_ALREADY_EXIST = "NIP already exist";
 
 export const TIME_SET_TIMEOUT = 4000;

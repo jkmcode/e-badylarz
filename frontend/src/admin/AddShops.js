@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
+import { addShop } from "../actions/adminActions";
 
 function AddShops() {
   const {
@@ -21,11 +23,64 @@ function AddShops() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const loading = false;
-  const error = false;
+  const [uploading, setUploading] = useState(false);
+
+  // data from redux
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const addShopInfo = useSelector((state) => state.addShop);
+  const { loading, error, success } = addShopInfo;
+
+  // Rozwiązanie dodania zdjęcia po dodaniu do bazy sklepu.
+  // Musimy w pierwszej kolejności dostać success na true z Redux (addShopInfo)
+  // a potem za pomocą UseEffecta uruchomimy kolejną funkcje (action) z odpowiednimi Content-Type dla image
+  const uploadFilesHandler = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+
+    formData.append("image", file);
+
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      // const { data } = await axios.post(
+      //   "/api/products/upload/",
+      //   formData,
+      //   config
+      // );
+      // setMsg(true);
+      // setImage(data.image);
+      // setUploading(false);
+      // setMsgTextUpload(data.text);
+    } catch (error) {
+      //setUploading(false);
+      console.log("aaaaaa");
+    }
+  };
 
   const onSubmit = (data) => {
-    console.log("działa", data);
+    dispatch(
+      addShop({
+        city: data.city,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        name: data.name,
+        nip: data.nip,
+        number: data.number,
+        photo: data.photo,
+        post: data.post,
+        postCode: data.postCode,
+        street: data.street,
+        creator: userInfo.id,
+      })
+    );
   };
 
   useEffect(() => {}, []);
@@ -36,7 +91,7 @@ function AddShops() {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <div className="d-flex justify-content-center display-6">
             {t("AddShops_title")}
           </div>
@@ -196,14 +251,6 @@ function AddShops() {
                         value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
-                      minLength: {
-                        value: 6,
-                        message: t("Form_minLength_6"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
                     })}
                     onKeyUp={() => {
                       trigger("number");
@@ -332,14 +379,6 @@ function AddShops() {
                         value: /^[0-9.]+$/,
                         message: t("Form_only_digits_or_dot"),
                       },
-                      minLength: {
-                        value: 5,
-                        message: t("Form_minLength_5"),
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: t("Form_maxLength_10"),
-                      },
                     })}
                     onKeyUp={() => {
                       trigger("longitude");
@@ -351,6 +390,20 @@ function AddShops() {
                       {errors.longitude.message}
                     </div>
                   )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Group
+                  controlId="photo"
+                  className="btn-img-upload rounded mb-3"
+                  onChange={uploadFilesHandler}
+                >
+                  <Form.Label>
+                    {t("AdminAddProducts_label_choose_photos")}
+                  </Form.Label>
+                  <Form.Control type="file" {...register("photo", {})} />
                 </Form.Group>
               </Col>
             </Row>

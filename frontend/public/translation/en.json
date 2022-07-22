@@ -10,6 +10,8 @@
     "ErrorMessage_no_permission": "You do not have permission to perform this action.",
     "ErrorMessage_disctrict_already_exist": "Disctrict already exist",
     "ErrorMessage_city_already_exist":"City exists in the selected district",
+    "ErrorMessage_store_already_exist":"Shop with this name already exist",
+    "ErrorMessage_nip_already_exist":"This Tax noumber already exist",
     "ErrorMessage_no_type_object":"Changing the active flag - no object type",
     "ErrorMessage_product_type_already_exist": "Product type already exist",
 

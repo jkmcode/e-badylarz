@@ -1,6 +1,77 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+## Shops
+
+#Shops
+class Shops(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    nip = models.CharField(max_length=20, unique=True)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=10)
+    post_code = models.CharField(max_length=10)
+    post = models.CharField(max_length=40)
+    latitude = models.CharField(max_length=20)
+    longitude = models.CharField(max_length=20)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.CharField(max_length=150, null=True,blank=True)
+
+    def __str__(self):
+         return self.name
+
+#Shops_ARC
+class ShopsARC(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    nip = models.CharField(max_length=20)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=10)
+    post_code = models.CharField(max_length=10)
+    post = models.CharField(max_length=40)
+    latitude = models.CharField(max_length=20)
+    longitude = models.CharField(max_length=20)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.CharField(max_length=150)
+    type_of_change = models.CharField(max_length=50)
+
+    def __str__(self):
+         return self.name
+
+#Shops_description
+class ShopsDescription(models.Model):
+    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    description = models.CharField(max_length=255)
+    language = models.CharField(max_length=5)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)
+
+#Shops_contact
+class ShopsContact(models.Model):
+    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, unique=True)
+    email = models.CharField(max_length=150, unique=True)
+    phone = models.CharField(max_length=20)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)    
+
+
+
 ## Products 
 
 # Product type
@@ -14,12 +85,6 @@ class ProductType(models.Model):
 
     def __str__(self):
          return self.name
-
-
-
-
-
-
 
 ## Location
 

@@ -42,7 +42,26 @@ import {
   PRODUCT_TYPE_ADD_SUCCESS,
   PRODUCT_TYPE_ADD_FAIL,
   PRODUCT_TYPE_ADD_DELETE,
+  ADD_SHOP_REQUEST,
+  ADD_SHOP_SUCCESS,
+  ADD_SHOP_FAIL,
+  ADD_SHOP_DELETE,
 } from "../constants/adminConstans";
+
+export const addShopReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_SHOP_REQUEST:
+      return { loading: true, success: false };
+    case ADD_SHOP_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case ADD_SHOP_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case ADD_SHOP_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const addProductTypeReducer = (state = {}, action) => {
   switch (action.type) {

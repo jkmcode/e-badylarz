@@ -25,7 +25,42 @@ import {
   PRODUCT_TYPE_ADD_REQUEST,
   PRODUCT_TYPE_ADD_SUCCESS,
   PRODUCT_TYPE_ADD_FAIL,
+  ADD_SHOP_REQUEST,
+  ADD_SHOP_SUCCESS,
+  ADD_SHOP_FAIL,
 } from "../constants/adminConstans";
+
+export const addShop = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_SHOP_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/add-shop/`, insertData, config);
+
+    dispatch({
+      type: ADD_SHOP_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_SHOP_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
 export const addProductType = (insertData) => async (dispatch, getState) => {
   try {

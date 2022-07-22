@@ -37,6 +37,39 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
+def addShop(request):
+    data = request.data
+
+    print(data['photo'])
+
+    shopAlreadyExists = Shops.objects.filter(name=data['name']).exists()
+    NIPAlreadyExists = Shops.objects.filter(name=data['nip']).exists()
+
+    if shopAlreadyExists:
+        content = {"detail": "Shop with this name already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    elif NIPAlreadyExists:
+        content = {"detail": "NIP already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)        
+    else:
+        shop = Shops.objects.create(
+            name=data['name'],
+            nip = data['nip'],
+            city = data['city'],
+            street = data['street'],
+            no_building = data['number'],
+            post_code = data['postCode'],
+            post = data['post'],
+            latitude = data['latitude'],
+            longitude = data['longitude'],
+            creator = data['creator'],
+            is_active=True,
+        )
+
+        return Response("okey - add shop")
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
 def addProductType(request):
     data = request.data
 

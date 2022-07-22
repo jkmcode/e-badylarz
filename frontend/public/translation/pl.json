@@ -12,6 +12,8 @@
     "ErrorMessage_city_already_exist":"Miejscowość dla wybranego powiatu juz istnieje",
     "ErrorMessage_no_type_object":"Brak typu objektu",
     "ErrorMessage_product_type_already_exist": "Typ produktu już istnieje",
+    "ErrorMessage_store_already_exist":"Sklep z taką nazwą już istneje",
+    "ErrorMessage_nip_already_exist":"Podany NIP juz istnieje",    
 
     "No_data": "Brak dostępnych danych",
 

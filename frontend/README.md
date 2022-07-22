@@ -32,7 +32,7 @@ To Do:
 
 Do zrobienia:
 
-1. Dodawanie sklepu do bazy danych + formularz
+1. Dodawanie sklepu do bazy danych + formularz (formluarz będzie posiadać zdjęcie ale do zrobenia później)
 2. Modyfikacja sklepu (Edit - zmiana danych)
 3. Opis/komentarz wielojęzyczyny dla sklepu
 4. Dodawanie obsaru zakupów + modyfikacja + komentarz/opis (jak dla sklepu)

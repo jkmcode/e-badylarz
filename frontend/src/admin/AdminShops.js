@@ -8,8 +8,12 @@ function AdminShops() {
     <>
       <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
         <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-          <h6 className="text-white text-capitalize ps-3">Authors table</h6>
-          <Link to="add">{t("btn-add")}</Link>
+          <h3 className="text-white text-capitalize text-center ps-3">
+            Authors table
+          </h3>
+          <Link className="text-white text-capitalize ps-3" to="add">
+            {t("btn-add")}
+          </Link>
         </div>
       </div>
       <div className="card-body px-0 pb-2">
@@ -32,42 +36,6 @@ function AdminShops() {
                 <th className="text-secondary opacity-7"></th>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <div className="d-flex px-2 py-1">
-                      <div className="d-flex flex-column justify-content-center">
-                        <h6 className="mb-0 text-sm">John Michael</h6>
-                        <p className="text-xs text-secondary mb-0">
-                          john@creative-tim.com
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p className="text-xs font-weight-bold mb-0">Manager</p>
-                    <p className="text-xs text-secondary mb-0">Organization</p>
-                  </td>
-                  <td className="align-middle text-center text-sm">
-                    <span className="badge badge-sm bg-gradient-success">
-                      Online
-                    </span>
-                  </td>
-                  <td className="align-middle text-center">
-                    <span className="text-secondary text-xs font-weight-bold">
-                      23/04/18
-                    </span>
-                  </td>
-                  <td className="align-middle">
-                    <a
-                      href="javascript:;"
-                      className="text-secondary font-weight-bold text-xs"
-                      data-toggle="tooltip"
-                      data-original-title="Edit user"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
                 <tr>
                   <td>
                     <div className="d-flex px-2 py-1">

@@ -12,6 +12,8 @@ import {
   CITY_ALREADY_EXIST,
   ACTIVE_NO_TYPE_OBJECT,
   PRODUCT_TYPE_ALREADY_EXIST,
+  SHOP_ALREADY_EXIST,
+  NIP_ALREADY_EXIST,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -38,6 +40,10 @@ function ErrorMessage(props) {
         return setErrorMessage("ErrorMessage_disctrict_already_exist");
       case CITY_ALREADY_EXIST:
         return setErrorMessage("ErrorMessage_city_already_exist");
+      case SHOP_ALREADY_EXIST:
+        return setErrorMessage("ErrorMessage_store_already_exist");
+      case NIP_ALREADY_EXIST:
+        return setErrorMessage("ErrorMessage_nip_already_exist");
       case ACTIVE_NO_TYPE_OBJECT:
         return setErrorMessage("ErrorMessage_no_type_object");
       case PRODUCT_TYPE_ALREADY_EXIST:
