@@ -46,13 +46,10 @@ function AddProductType() {
   const [addDescription, setAddDescription] = useState(false);
 
   useEffect(() => {
-    console.log("przed if");
     if (success) {
-      console.log("w if");
       setTimeout(() => {
         setIdNewTypeProduct(result.id);
         setAddDescription(true);
-        console.log("w setTimeOut");
       }, TIME_SET_TIMEOUT);
     }
   }, [success]);

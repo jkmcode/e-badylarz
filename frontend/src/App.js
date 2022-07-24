@@ -22,6 +22,7 @@ import AdminAddProducts from "./admin/AdminAddProducts";
 import AdminProductType from "./admin/AdminProductType";
 import AddProductType from "./admin/AddProductType";
 import AddShops from "./admin/AddShops";
+import AddContact from "./admin/AddContact";
 
 //SerachBoxComponent
 import SearchBox from "./component/SearchBox";
@@ -95,6 +96,10 @@ function App() {
             element={<AddProductType />}
           />
           <Route path="dashboard/shops/shops/add" element={<AddShops />} />
+          <Route
+            path="dashboard/shops/shops/:id/contact"
+            element={<AddContact />}
+          />
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

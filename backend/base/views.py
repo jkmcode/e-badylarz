@@ -35,10 +35,38 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addShopContacts(request):
+    data = request.data
+
+    alreadyExists = ShopsContact.objects.filter(name=data['firstName'], surname=data['surname']).exists()
+
+    if alreadyExists:
+        content = {"detail": "Contact already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+
+        shop = Shops.objects.get(id=data['shop_id'])
+        shop_contact = ShopsContact.objects.create(
+            id_shops=shop,
+            name=data['firstName'],
+            surname = data['surname'],
+            email = data['email'],
+            phone = data['phone'],
+            creator = data['creator'],
+            is_active=True
+        )
+
+        new_shop_contact=ShopsContact.objects.get(name=data['firstName'], surname=data['surname'])
+        seriaziler = ProductTypeSerializer(new_shop_contact, many=False)
+        return Response(seriaziler.data)
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getShops(request):
-    shops = Shops.objects.filter(is_active=True).order_by('name')
+    shops = Shops.objects.all().order_by('name') 
+
     seriaziler = ShopsSerializer(shops, many=True)
 
     return Response(seriaziler.data)
@@ -133,6 +161,8 @@ def addCiti(request):
 @permission_classes([IsAdminUser])
 def activeList(request):
     data=request.data
+
+    print('data', data)
 
     if data['objType']=='DISTRICT':
         descrip = Districts.objects.get(id=data['Id'])

@@ -10,8 +10,9 @@ urlpatterns = [
     path('api/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
+    path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
-    path('api/get-cites/<str:Id>/list', getCites),
+    path('api/add-shop-contact/', addShopContacts),
     path('api/get-shops/', getShops),
 
     path('api/add-shop/', addShop),

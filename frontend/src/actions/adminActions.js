@@ -31,10 +31,45 @@ import {
   GET_SHOPS_LIST_REQUEST,
   GET_SHOPS_LIST_SUCCESS,
   GET_SHOPS_LIST_FAIL,
-  DEACTIVE_SHOPS_REQUEST,
-  DEACTIVE_SHOPS_SUCCESS,
-  DEACTIVE_SHOPS_FAIL,
+  ADD_CONTACT_REQUEST,
+  ADD_CONTACT_SUCCESS,
+  ADD_CONTACT_FAIL,
 } from "../constants/adminConstans";
+
+export const addContact = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_CONTACT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `/api/add-shop-contact/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: ADD_CONTACT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_CONTACT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
 export const getShops = () => async (dispatch, getState) => {
   try {
@@ -43,6 +78,7 @@ export const getShops = () => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
+
     const config = {
       headers: {
         "Content-type": "application/json",

@@ -36,6 +36,8 @@
     "btn_description":"Description",
     "btn_yes":"YES",
     "btn_no":"NO",
+    "btn_show_active_shops": "Show active shops",
+    "btn_show_inactive_shops": "Show inactive shops",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
@@ -62,7 +64,9 @@
     "Form_minLength_8": "Minimum 8 chracters",
     "Form_maxLength_255" : "Maximum 255 characters",
     "Form_maxLength_30" : "Maximum 30 characters",
+    "Form_maxLength_50" : "Maksymalnie 50 characters",
     "Form_maxLength_10" : "Maximum 10 characters",
+    "Form_inproper_pattern_email": "Invalid email format",  
 
     "FormAddressScreen_title" : "Enter your address",
     "FormAddressScreen_subtitle" : "in order to estimate the cost of delivery",
@@ -143,6 +147,8 @@
     "AdminShops_status": "Status",
     "AdminShops_shop_address": "Address",
     "AdminShops_shop_tax_number": "Tax No",
+    "AdminShops_activate_shop_InfoWindow_body": "Are you sure you want to change status on active?",
+    "AdminShops_inactivate_shop_InfoWindow_body": "Are you sure you want to change status on inactive?",
 
     "AddProductType_title": "Add a product type",
     "AddProductType_label_name": "Product type name",
@@ -170,7 +176,16 @@
     "AddShops_label_latitude": "Latitude",
     "AddShops_latitude_placeholder": "Enter latitude ...",
     "AddShops_label_longitude": "Longitude",
-    "AddShops_longitude_placeholder": "Enter longitude ..."
+    "AddShops_longitude_placeholder": "Enter longitude ...",
     
-    
+    "AddContact_title": "Contact Form",
+
+    "AddContact_label_name": "First name",
+    "AddContact_name_placeholder": "Enter first name ...",
+    "AddContact_label_surname": "Surname",
+    "AddContact_surname_placeholder": "Enter surname ...",
+    "AddContact_label_email": "email",
+    "AddContact_email_placeholder": "Enter email ...",
+    "AddContact_label_phone": "phone no",
+    "AddContact_phone_placeholder": "Enter phone no ..."     
 }

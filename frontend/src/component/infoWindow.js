@@ -6,9 +6,12 @@ import { Button, Modal } from "react-bootstrap";
 import {
   SET_WINDOW_FLAG_FALSE,
   SET_WINDOW_FLAG_TRUE,
+  GET_SHOPS_LIST_DELETE,
+  SET_FLAG_SHOP_FALSE,
 } from "../constants/adminConstans";
 
 function InfoWindow(props) {
+  console.log("props.type", props.type);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -17,18 +20,26 @@ function InfoWindow(props) {
   const handleYes = () => {
     setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_TRUE });
+    if (props.type === "shop") {
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      dispatch({ type: SET_FLAG_SHOP_FALSE });
+    }
   };
 
   const handleNo = () => {
     setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_FALSE });
+    if (props.type === "shop") {
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      dispatch({ type: SET_FLAG_SHOP_FALSE });
+    }
   };
 
   return (
     <>
       <Modal
         show={modalShow}
-        // onHide={handleClose}
+        //onHide={handleClose}
         backdrop="static"
         keyboard={false}
       >

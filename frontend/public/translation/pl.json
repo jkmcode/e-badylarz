@@ -35,6 +35,8 @@
     "btn_description":"Opis",
     "btn_yes":"TAK",
     "btn_no":"NIE",
+    "btn_show_active_shops": "Pokaż skley aktywne",
+    "btn_show_inactive_shops": "Pokaż sklepy nieaktywne",
 
     "Table_head_name" : "Nazwa",
     "Table_head_ID" : "Lp.",
@@ -52,16 +54,21 @@
     "Form_only_letters": "Możesz wpisać tylko litery",
     "Form_only_digits_or_dot": "Tylko liczby lub kropka",
     "Form_only_digits_or_space": "Tylko liczby lub spacja",
+    "Form_phone_number": "Nieporawny numer kontaktowy",
     "Form_letters_pl_and_digits":"Możesz wpisać tylko litery i cyfry",
     "Form_blank_space_is_not_allow":"Space nie są dozwolone",
     "Form_post_code":"Liczby, spacja lub duże litery",
     "Form_minLength_3" : "Minimum 3 znaki",
     "Form_minLength_5" : "Minimum 5 znaków",
     "Form_minLength_6" : "Minimum 6 znaków",
+    "Form_minLength_9" : "Minimum 9 znaków",
     "Form_minLength_8": "Minimum 8 znaków",
     "Form_maxLength_255" : "Maksymalnie 255 znaków",
     "Form_maxLength_30" : "Maksymalnie 30 znaków",
+    "Form_maxLength_50" : "Maksymalnie 50 znaków",
     "Form_maxLength_10" : "Maksymalnie 10 znaków",
+    "Form_maxLength_14" : "Maksymalnie 14 znaków",
+    "Form_inproper_pattern_email": "Niepoprawny format emial", 
 
     "FormAddressScreen_title" : "Podaj swój adres",
     "FormAddressScreen_subtitle" : "w celu oszacowania kosztu dostawy",
@@ -141,7 +148,8 @@
     "AdminShops_status": "Status",
     "AdminShops_shop_address": "Adres",
     "AdminShops_shop_tax_number": "NIP",
-
+    "AdminShops_activate_shop_InfoWindow_body": "Czy napewno chcesz zminić status na aktywny?",
+    "AdminShops_inactivate_shop_InfoWindow_body": "Czy napewno chcesz zminić status na nieaktywny?",
 
     "AddProductType_title": "Dodaj typ produktów",
     "AddProductType_label_name": "Nazwa typu produktu",
@@ -167,5 +175,16 @@
     "AddShops_label_latitude": "Szerokość",
     "AddShops_latitude_placeholder": "Wpisz szerokość ...",
     "AddShops_label_longitude": "Długość",
-    "AddShops_longitude_placeholder": "Wpisz długość ..."
+    "AddShops_longitude_placeholder": "Wpisz długość ...",
+
+    "AddContact_title": "Formularz kontaktowy",
+
+    "AddContact_label_name": "Imię",
+    "AddContact_name_placeholder": "Wpisz imię ...",
+    "AddContact_label_surname": "Nazwisko",
+    "AddContact_surname_placeholder": "Wpisz nazwisko ...",
+    "AddContact_label_email": "email",
+    "AddContact_email_placeholder": "Wpisz emial ...",
+    "AddContact_label_phone": "Numer telefonu",
+    "AddContact_phone_placeholder": "Wpisz numer kontaktowy ..."      
 }

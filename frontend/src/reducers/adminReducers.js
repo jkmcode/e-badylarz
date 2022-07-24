@@ -35,6 +35,8 @@ import {
   GET_CITES_LIST_DELETE,
   SET_FLAG_CITY_TRUE,
   SET_FLAG_CITY_FALSE,
+  SET_FLAG_SHOP_TRUE,
+  SET_FLAG_SHOP_FALSE,
   SET_WINDOW_FLAG_FALSE,
   SET_WINDOW_FLAG_TRUE,
   SET_WINDOW_FLAG_DELETE,
@@ -50,7 +52,26 @@ import {
   GET_SHOPS_LIST_SUCCESS,
   GET_SHOPS_LIST_FAIL,
   GET_SHOPS_LIST_DELETE,
+  ADD_CONTACT_REQUEST,
+  ADD_CONTACT_SUCCESS,
+  ADD_CONTACT_FAIL,
+  ADD_CONTACT_DELETE,
 } from "../constants/adminConstans";
+
+export const addContactReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_CONTACT_REQUEST:
+      return { loading: true, success: false };
+    case ADD_CONTACT_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case ADD_CONTACT_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case ADD_CONTACT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const shopListReducer = (state = { shopList: [] }, action) => {
   switch (action.type) {
@@ -133,6 +154,10 @@ export const flagReducer = (state = {}, action) => {
       return { cityFlag: false };
     case SET_FLAG_CITY_TRUE:
       return { cityFlag: true };
+    case SET_FLAG_SHOP_TRUE:
+      return { shopFlag: true };
+    case SET_FLAG_SHOP_FALSE:
+      return { shopFlag: false };
     default:
       return state;
   }

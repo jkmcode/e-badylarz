@@ -4,32 +4,53 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getShops } from "../actions/adminActions";
 import Loader from "../component/Loader";
+import InfoWindow from "../component/infoWindow";
 import { unOrActiveList } from "../actions/adminActions";
 import {
   GET_SHOPS_LIST_DELETE,
   SHOP_DESCRIPTION,
+  SET_FLAG_SHOP_TRUE,
 } from "../constants/adminConstans";
 
 function AdminShops() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const [activeShops, setActiveShops] = useState(false);
+  const [active, setActive] = useState(false);
+
   // fech data from Redux
   const shopListRedux = useSelector((state) => state.shopList);
-  const { loading, shopList, error } = shopListRedux;
+  const { loading, shopList, error, success } = shopListRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const shopFlagVar = useSelector((state) => state.flag);
+  const { shopFlag } = shopFlagVar;
 
   // fetching list active shops from DB
   useEffect(() => {
     if (shopList.length === 0) {
       dispatch(getShops());
     }
-  }, [dispatch, shopList.length]);
+  }, [dispatch, shopList.length, activeShops]);
 
   //  handle function
   const activeHandler = (id) => {
+    dispatch(
+      unOrActiveList({
+        Id: id,
+        active: true,
+        userId: userInfo.id,
+        objType: SHOP_DESCRIPTION,
+      })
+    );
+    setActive(true);
+    dispatch({ type: SET_FLAG_SHOP_TRUE });
+  };
+
+  const unActiveHandler = (id) => {
     dispatch(
       unOrActiveList({
         Id: id,
@@ -38,15 +59,28 @@ function AdminShops() {
         objType: SHOP_DESCRIPTION,
       })
     );
-    dispatch({ type: GET_SHOPS_LIST_DELETE });
+    setActive(false);
+    dispatch({ type: SET_FLAG_SHOP_TRUE });
+  };
+
+  /// toggle active and inactive shops
+  const showShops = () => {
+    setActiveShops(!activeShops);
+    console.log("shopList", shopList);
   };
 
   // style
   const btnDelete = {
-    color: "red",
     backgroundColor: "white",
     border: "none",
     fontWeight: "bold",
+  };
+
+  const btnShowShops = {
+    border: "none",
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "transparent",
   };
 
   return (
@@ -55,6 +89,18 @@ function AdminShops() {
         <Loader />
       ) : (
         <>
+          {shopFlag ? (
+            <InfoWindow
+              title={t("Window_title")}
+              body={
+                active
+                  ? t("AdminShops_activate_shop_InfoWindow_body")
+                  : t("AdminShops_inactivate_shop_InfoWindow_body")
+              }
+              type="shop"
+            />
+          ) : null}
+
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
               <h3 className="text-white text-capitalize text-center ps-3">
@@ -64,7 +110,15 @@ function AdminShops() {
                 <Link className="text-white text-capitalize ps-3" to="add">
                   {t("btn_add_shop")}
                 </Link>
-                <div>Active</div>
+                <button
+                  style={btnShowShops}
+                  className="text-sm"
+                  onClick={() => showShops()}
+                >
+                  {activeShops
+                    ? t("btn_show_active_shops")
+                    : t("btn_show_inactive_shops")}
+                </button>
               </div>
             </div>
           </div>
@@ -96,58 +150,112 @@ function AdminShops() {
                     <tbody>
                       {shopList.map((shop) => (
                         <tr key={shop.id}>
-                          <td>
-                            <div className="d-flex px-2 py-1">
-                              <div className="d-flex flex-column justify-content-center">
-                                <p className="text-xs text-secondary mb-0">
-                                  {shop.name}
+                          {activeShops & !shop.is_active ? (
+                            <>
+                              <td>
+                                <div className="d-flex px-2 py-1">
+                                  <div className="d-flex flex-column justify-content-center">
+                                    <p className="text-xs text-secondary mb-0">
+                                      {shop.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p className="text-xs font-weight-bold mb-0">
+                                  {shop.city}
                                 </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <p className="text-xs font-weight-bold mb-0">
-                              {shop.city}
-                            </p>
-                            <p className="text-xs text-secondary mb-0">
-                              {shop.street} {shop.no_building}
-                            </p>
-                          </td>
-                          <td>
-                            <p className="text-xs font-weight-bold mb-0">
-                              {shop.nip}
-                            </p>
-                          </td>
-                          <td className="align-middle text-center text-sm">
-                            {shop.is_active ? (
-                              <span className="badge badge-sm bg-gradient-success">
-                                Active
-                              </span>
-                            ) : (
-                              <span className="badge badge-sm bg-gradient-danger">
-                                Unactive
-                              </span>
-                            )}
-                          </td>
-                          <td className="align-middle">
-                            <button
-                              style={btnDelete}
-                              className="text-xs"
-                              onClick={() => activeHandler(shop.id)}
-                            >
-                              {t("btn_delete")}
-                            </button>
-                          </td>
-                          <td className="align-middle">
-                            <Link to="add" className="text-xs text-warning">
-                              {t("btn_edit")}
-                            </Link>
-                          </td>
-                          <td className="align-middle">
-                            <Link to="add" className="text-xs text-info">
-                              {t("btn_contact")}
-                            </Link>
-                          </td>
+                                <p className="text-xs text-secondary mb-0">
+                                  {shop.street} {shop.no_building}
+                                </p>
+                              </td>
+                              <td>
+                                <p className="text-xs font-weight-bold mb-0">
+                                  {shop.nip}
+                                </p>
+                              </td>
+                              <td className="align-middle text-center text-sm">
+                                <span className="badge badge-sm bg-gradient-danger">
+                                  Inactive
+                                </span>
+                              </td>
+                              <td className="align-middle">
+                                <button
+                                  style={btnDelete}
+                                  className="text-xs text-success"
+                                  onClick={() => activeHandler(shop.id)}
+                                >
+                                  {t("btn_active")}
+                                </button>
+                              </td>
+                              <td className="align-middle">
+                                <Link to="add" className="text-xs text-warning">
+                                  {t("btn_edit")}
+                                </Link>
+                              </td>
+                              <td className="align-middle">
+                                <Link
+                                  to={`${shop.id}/contact`}
+                                  className="text-xs text-info"
+                                >
+                                  {t("btn_contact")}
+                                </Link>
+                              </td>
+                            </>
+                          ) : null}
+                          {!activeShops & shop.is_active ? (
+                            <>
+                              <td>
+                                <div className="d-flex px-2 py-1">
+                                  <div className="d-flex flex-column justify-content-center">
+                                    <p className="text-xs text-secondary mb-0">
+                                      {shop.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p className="text-xs font-weight-bold mb-0">
+                                  {shop.city}
+                                </p>
+                                <p className="text-xs text-secondary mb-0">
+                                  {shop.street} {shop.no_building}
+                                </p>
+                              </td>
+                              <td>
+                                <p className="text-xs font-weight-bold mb-0">
+                                  {shop.nip}
+                                </p>
+                              </td>
+                              <td className="align-middle text-center text-sm">
+                                <span className="badge badge-sm bg-gradient-success">
+                                  Active
+                                </span>
+                              </td>
+                              <td className="align-middle">
+                                <button
+                                  style={btnDelete}
+                                  className="text-xs text-danger"
+                                  onClick={() => unActiveHandler(shop.id)}
+                                >
+                                  {t("btn_unactive")}
+                                </button>
+                              </td>
+                              <td className="align-middle">
+                                <Link to="add" className="text-xs text-warning">
+                                  {t("btn_edit")}
+                                </Link>
+                              </td>
+                              <td className="align-middle">
+                                <Link
+                                  to={`${shop.id}/contact`}
+                                  className="text-xs text-info"
+                                >
+                                  {t("btn_contact")}
+                                </Link>
+                              </td>
+                            </>
+                          ) : null}
                         </tr>
                       ))}
                     </tbody>

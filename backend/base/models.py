@@ -63,6 +63,7 @@ class ShopsDescription(models.Model):
 class ShopsContact(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True)
+    surname = models.CharField(max_length=50, unique=True)
     email = models.CharField(max_length=150, unique=True)
     phone = models.CharField(max_length=20)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
