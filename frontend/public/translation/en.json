@@ -179,6 +179,7 @@
     "AddShops_longitude_placeholder": "Enter longitude ...",
     
     "AddContact_title": "Contact Form",
+    "AddContact_contactList": "Conatct list",
 
     "AddContact_label_name": "First name",
     "AddContact_name_placeholder": "Enter first name ...",

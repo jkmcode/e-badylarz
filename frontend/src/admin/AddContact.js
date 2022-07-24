@@ -5,7 +5,7 @@ import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form, Table } from "react-bootstrap";
 import { addContact } from "../actions/adminActions";
 
 function AddContact() {
@@ -55,321 +55,205 @@ function AddContact() {
       {loading ? (
         <Loader />
       ) : (
-        <div div className=" d-flex">
-          <div className="mx-4 bg-container mt-5 p-4 rounded w-80">
-            {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-            <div className="d-flex justify-content-center display-6">
-              <div className="px-3">{t("AddContact_title")}</div>
-              {shopList.length === 0
-                ? null
-                : shopList.filter((shop) => shop.id === shopId)[0].name}
-            </div>
+        <Row>
+          <Col lg={7}>
+            <div className="mx-2 bg-container mt-5 p-4 rounded">
+              {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+              <div className="d-flex justify-content-center display-6">
+                <div className="px-3">{t("AddContact_title")}</div>
+                {shopList.length === 0
+                  ? null
+                  : shopList.filter((shop) => shop.id === shopId)[0].name}
+              </div>
 
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Row>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="firstName">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_name")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_name_placeholder")}
-                      {...register("firstName", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
-                          message: t("Form_letters_pl_and_digits"),
-                        },
-                        minLength: {
-                          value: 3,
-                          message: t("Form_minLength_3"),
-                        },
-                        maxLength: {
-                          value: 50,
-                          message: t("Form_maxLength_50"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("firstName");
-                      }}
-                      name="firstName"
-                    ></Form.Control>
-                    {errors.firstName && (
-                      <div className="text-danger form-msg-style">
-                        {errors.firstName.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="surname">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_surname")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_surname_placeholder")}
-                      {...register("surname", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
-                          message: t("Form_letters_pl_and_digits"),
-                        },
-                        minLength: {
-                          value: 5,
-                          message: t("Form_minLength_5"),
-                        },
-                        maxLength: {
-                          value: 50,
-                          message: t("Form_maxLength_50"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("surname");
-                      }}
-                      name="surname"
-                    ></Form.Control>
-                    {errors.surname && (
-                      <div className="text-danger form-msg-style">
-                        {errors.surname.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="email">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_email")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_email_placeholder")}
-                      {...register("email", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: t("Form_inproper_pattern_email"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("email");
-                      }}
-                      name="email"
-                    ></Form.Control>
-                    {errors.email && (
-                      <div className="text-danger form-msg-style">
-                        {errors.email.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="phone">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_phone")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_phone_placeholder")}
-                      {...register("phone", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[0-9+]+$/,
-                          message: t("Form_phone_number"),
-                        },
-                        minLength: {
-                          value: 9,
-                          message: t("Form_minLength_9"),
-                        },
-                        maxLength: {
-                          value: 14,
-                          message: t("Form_maxLength_14"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("phone");
-                      }}
-                      name="phone"
-                    ></Form.Control>
-                    {errors.phone && (
-                      <div className="text-danger form-msg-style">
-                        {errors.phone.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <div className="d-flex justify-content-end">
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3"
-                >
-                  {t("btn-add")}
-                </Button>
-              </div>
-            </Form>
-          </div>
-          <div className="mx-4 bg-container mt-5 p-4 rounded w-40">
-            {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-            <div className="d-flex justify-content-center display-6">
-              <div className="px-3">{t("AddContact_title")}</div>
-              {shopList.length === 0
-                ? null
-                : shopList.filter((shop) => shop.id === shopId)[0].name}
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <Row>
+                  <Col md={12} lg={6}>
+                    <Form.Group controlId="firstName">
+                      <Form.Label className="form-msg-style ms-2">
+                        {t("AddContact_label_name")}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder={t("AddContact_name_placeholder")}
+                        {...register("firstName", {
+                          required: t("Form_field_required"),
+                          pattern: {
+                            value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                            message: t("Form_letters_pl_and_digits"),
+                          },
+                          minLength: {
+                            value: 3,
+                            message: t("Form_minLength_3"),
+                          },
+                          maxLength: {
+                            value: 50,
+                            message: t("Form_maxLength_50"),
+                          },
+                        })}
+                        onKeyUp={() => {
+                          trigger("firstName");
+                        }}
+                        name="firstName"
+                      ></Form.Control>
+                      {errors.firstName && (
+                        <div className="text-danger form-msg-style">
+                          {errors.firstName.message}
+                        </div>
+                      )}
+                    </Form.Group>
+                  </Col>
+                  <Col md={12} lg={6}>
+                    <Form.Group controlId="surname">
+                      <Form.Label className="form-msg-style ms-2">
+                        {t("AddContact_label_surname")}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder={t("AddContact_surname_placeholder")}
+                        {...register("surname", {
+                          required: t("Form_field_required"),
+                          pattern: {
+                            value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                            message: t("Form_letters_pl_and_digits"),
+                          },
+                          minLength: {
+                            value: 5,
+                            message: t("Form_minLength_5"),
+                          },
+                          maxLength: {
+                            value: 50,
+                            message: t("Form_maxLength_50"),
+                          },
+                        })}
+                        onKeyUp={() => {
+                          trigger("surname");
+                        }}
+                        name="surname"
+                      ></Form.Control>
+                      {errors.surname && (
+                        <div className="text-danger form-msg-style">
+                          {errors.surname.message}
+                        </div>
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12} lg={6}>
+                    <Form.Group controlId="email">
+                      <Form.Label className="form-msg-style ms-2">
+                        {t("AddContact_label_email")}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder={t("AddContact_email_placeholder")}
+                        {...register("email", {
+                          required: t("Form_field_required"),
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: t("Form_inproper_pattern_email"),
+                          },
+                        })}
+                        onKeyUp={() => {
+                          trigger("email");
+                        }}
+                        name="email"
+                      ></Form.Control>
+                      {errors.email && (
+                        <div className="text-danger form-msg-style">
+                          {errors.email.message}
+                        </div>
+                      )}
+                    </Form.Group>
+                  </Col>
+                  <Col md={12} lg={6}>
+                    <Form.Group controlId="phone">
+                      <Form.Label className="form-msg-style ms-2">
+                        {t("AddContact_label_phone")}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder={t("AddContact_phone_placeholder")}
+                        {...register("phone", {
+                          required: t("Form_field_required"),
+                          pattern: {
+                            value: /^[0-9+]+$/,
+                            message: t("Form_phone_number"),
+                          },
+                          minLength: {
+                            value: 9,
+                            message: t("Form_minLength_9"),
+                          },
+                          maxLength: {
+                            value: 14,
+                            message: t("Form_maxLength_14"),
+                          },
+                        })}
+                        onKeyUp={() => {
+                          trigger("phone");
+                        }}
+                        name="phone"
+                      ></Form.Control>
+                      {errors.phone && (
+                        <div className="text-danger form-msg-style">
+                          {errors.phone.message}
+                        </div>
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    type="submit"
+                    variant="success"
+                    className="rounded my-3"
+                  >
+                    {t("btn-add")}
+                  </Button>
+                </div>
+              </Form>
             </div>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Row>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="firstName">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_name")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_name_placeholder")}
-                      {...register("firstName", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
-                          message: t("Form_letters_pl_and_digits"),
-                        },
-                        minLength: {
-                          value: 3,
-                          message: t("Form_minLength_3"),
-                        },
-                        maxLength: {
-                          value: 50,
-                          message: t("Form_maxLength_50"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("firstName");
-                      }}
-                      name="firstName"
-                    ></Form.Control>
-                    {errors.firstName && (
-                      <div className="text-danger form-msg-style">
-                        {errors.firstName.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="surname">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_surname")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_surname_placeholder")}
-                      {...register("surname", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
-                          message: t("Form_letters_pl_and_digits"),
-                        },
-                        minLength: {
-                          value: 5,
-                          message: t("Form_minLength_5"),
-                        },
-                        maxLength: {
-                          value: 50,
-                          message: t("Form_maxLength_50"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("surname");
-                      }}
-                      name="surname"
-                    ></Form.Control>
-                    {errors.surname && (
-                      <div className="text-danger form-msg-style">
-                        {errors.surname.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="email">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_email")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_email_placeholder")}
-                      {...register("email", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: t("Form_inproper_pattern_email"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("email");
-                      }}
-                      name="email"
-                    ></Form.Control>
-                    {errors.email && (
-                      <div className="text-danger form-msg-style">
-                        {errors.email.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-                <Col md={12} lg={6}>
-                  <Form.Group controlId="phone">
-                    <Form.Label className="form-msg-style ms-2">
-                      {t("AddContact_label_phone")}
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder={t("AddContact_phone_placeholder")}
-                      {...register("phone", {
-                        required: t("Form_field_required"),
-                        pattern: {
-                          value: /^[0-9+]+$/,
-                          message: t("Form_phone_number"),
-                        },
-                        minLength: {
-                          value: 9,
-                          message: t("Form_minLength_9"),
-                        },
-                        maxLength: {
-                          value: 14,
-                          message: t("Form_maxLength_14"),
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("phone");
-                      }}
-                      name="phone"
-                    ></Form.Control>
-                    {errors.phone && (
-                      <div className="text-danger form-msg-style">
-                        {errors.phone.message}
-                      </div>
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <div className="d-flex justify-content-end">
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3"
-                >
-                  {t("btn-add")}
-                </Button>
+          </Col>
+          <Col lg={5}>
+            <div className="mx-2 bg-container mt-5 p-4 rounded">
+              {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+              <div className="d-flex justify-content-center h4">
+                <div className="px-3">{t("AddContact_contactList")}</div>
               </div>
-            </Form>
-          </div>
-        </div>
+              <Table striped hover responsive className="table-sm mt-2">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Jakub</td>
+                    <td>Kumala</td>
+                    <td>694819030</td>
+                    <td>jakub.kumala@interia.pl</td>
+                  </tr>
+                  <tr>
+                    <td>Jakub</td>
+                    <td>Kumala</td>
+                    <td>694819030</td>
+                    <td>jakub.kumala@interia.pl</td>
+                  </tr>
+                  <tr>
+                    <td>Jakub</td>
+                    <td>Kumala</td>
+                    <td>694819030</td>
+                    <td>jakub.kumala@interia.pl</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </div>
+          </Col>
+        </Row>
       )}
     </>
   );

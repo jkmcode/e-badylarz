@@ -151,7 +151,6 @@ function AdminScreenDistrict() {
             <Table striped hover responsive className="table-sm mt-2">
               <thead>
                 <tr>
-                  {/* <th>{t("Table_head_ID")}</th> */}
                   <th className="w-100">{t("Table_head_name")}</th>
                   <th></th>
                   <th></th>
