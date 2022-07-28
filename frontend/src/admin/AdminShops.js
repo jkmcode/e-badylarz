@@ -29,7 +29,7 @@ function AdminShops() {
   const shopFlagVar = useSelector((state) => state.flag);
   const { shopFlag } = shopFlagVar;
 
-  // fetching list active shops from DB
+  // fetching list of shops from DB
   useEffect(() => {
     if (shopList.length === 0) {
       dispatch(getShops());
@@ -66,7 +66,6 @@ function AdminShops() {
   /// toggle active and inactive shops
   const showShops = () => {
     setActiveShops(!activeShops);
-    console.log("shopList", shopList);
   };
 
   // style
@@ -104,7 +103,7 @@ function AdminShops() {
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
               <h3 className="text-white text-capitalize text-center ps-3">
-                Authors table
+                Shop list
               </h3>
               <div className="d-flex justify-content-between">
                 <Link className="text-white text-capitalize ps-3" to="add">
@@ -242,7 +241,10 @@ function AdminShops() {
                                 </button>
                               </td>
                               <td className="align-middle">
-                                <Link to="add" className="text-xs text-warning">
+                                <Link
+                                  to={`${shop.id}/edit`}
+                                  className="text-xs text-warning"
+                                >
                                   {t("btn_edit")}
                                 </Link>
                               </td>

@@ -13,9 +13,17 @@ urlpatterns = [
     path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
     path('api/add-shop-contact/', addShopContacts),
-    path('api/get-shops/', getShops),
 
+    #shop
+    path('api/get-shops/', getShops),
+    path('api/<str:Id>/get-shop/', getShop),
+    path('api/shop/<str:Id>/update/', updateShop),
+    path('api/get-contacts/', getContacts),
+    path('api/get-cites/<str:Id>/list', getCites),
     path('api/add-shop/', addShop),
+
+    # area
+    path('api/get-areas/', getAreas),
     
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),

@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
-import { addShop } from "../actions/adminActions";
+import { addShop, getShop, updateShop } from "../actions/adminActions";
+import UploadImage from "../component/UploadImage";
 
 function AddShops() {
   const {
@@ -24,6 +25,13 @@ function AddShops() {
   const navigate = useNavigate();
 
   const [uploading, setUploading] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const editShopParam = params.edit;
+  const addShopParam = params.add;
+  const shopId = params.id;
+
+  console.log("addShopParam", addShopParam);
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -31,6 +39,9 @@ function AddShops() {
 
   const addShopInfo = useSelector((state) => state.addShop);
   const { loading, error, success } = addShopInfo;
+
+  const getShopRedux = useSelector((state) => state.getShop);
+  const { shopDetails } = getShopRedux;
 
   // Rozwiązanie dodania zdjęcia po dodaniu do bazy sklepu.
   // Musimy w pierwszej kolejności dostać success na true z Redux (addShopInfo)
@@ -66,46 +77,95 @@ function AddShops() {
   };
 
   const onSubmit = (data) => {
-    dispatch(
-      addShop({
-        city: data.city,
-        latitude: data.latitude,
-        longitude: data.longitude,
-        name: data.name,
-        nip: data.nip,
-        number: data.number,
-        photo: data.photo,
-        post: data.post,
-        postCode: data.postCode,
-        street: data.street,
-        creator: userInfo.id,
-      })
-    );
+    if (addShopParam) {
+      dispatch(
+        addShop({
+          city: data.city,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          name: data.name,
+          nip: data.nip,
+          number: data.number,
+          photo: data.photo,
+          post: data.post,
+          postCode: data.postCode,
+          street: data.street,
+          creator: userInfo.id,
+        })
+      );
+    } else {
+      dispatch(
+        updateShop({
+          id: shopId,
+          city: data.city,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          name: data.name,
+          nip: data.nip,
+          number: data.number,
+          photo: data.photo,
+          post: data.post,
+          postCode: data.postCode,
+          street: data.street,
+          creator: userInfo.id,
+          typeOfChnage: "Edit date",
+        })
+      );
+    }
   };
 
-  useEffect(() => {}, []);
+  // fetch data from DB -- shop to edit
+  useEffect(() => {
+    if (shopId) {
+      dispatch(
+        getShop({
+          Id: shopId,
+        })
+      );
+    }
+  }, []);
+
+  //style
+
+  const background = {
+    backgroundColor: "rgba(231, 231, 235, 1)",
+    backgroundImage:
+      "linear-gradient(322deg, rgba(233, 243, 250, 1) 35%, rgba(161, 174, 205, 1) 100%)",
+    boxShadow: "-9px 8px 34px -13px rgba(66, 68, 90, 1)",
+  };
+
+  const formInvalid = {
+    borderColor: "red",
+  };
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div className="container mt-5 p-4 rounded" style={background}>
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <div className="d-flex justify-content-center display-6">
-            {t("AddShops_title")}
+            {editShopParam === "edit"
+              ? t("EditShops_title")
+              : t("AddShops_title")}
           </div>
-
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row>
-              <Col>
-                <Form.Group controlId="name">
+              <Col md={6}>
+                <Form.Group controlId="name" className="formInvalid">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_name")}
                   </Form.Label>
                   <Form.Control
+                    className="formInvalid"
                     type="text"
                     placeholder={t("AddShops_name_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.name
+                        : null
+                    }
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -134,7 +194,7 @@ function AddShops() {
                 </Form.Group>
               </Col>
 
-              <Col>
+              <Col md={6}>
                 <Form.Group controlId="nip">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_nip")}
@@ -142,6 +202,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_nip_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.nip
+                        : null
+                    }
                     {...register("nip", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -165,7 +230,7 @@ function AddShops() {
             <hr />
             <h6>{t("AddShops_title_address")}</h6>
             <Row className="mb-3">
-              <Col>
+              <Col md={6}>
                 <Form.Group controlId="city">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_city")}
@@ -173,6 +238,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_city_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.city
+                        : null
+                    }
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -200,7 +270,7 @@ function AddShops() {
                   )}
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={6}>
                 <Form.Group controlId="street">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_street")}
@@ -208,6 +278,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_street_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.street
+                        : null
+                    }
                     {...register("street", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -237,7 +312,7 @@ function AddShops() {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col xs={6} md={4}>
                 <Form.Group controlId="number">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_number")}
@@ -245,6 +320,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_number_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.no_building
+                        : null
+                    }
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -264,7 +344,7 @@ function AddShops() {
                   )}
                 </Form.Group>
               </Col>
-              <Col>
+              <Col xs={6} md={4}>
                 <Form.Group controlId="postCode">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_postCode")}
@@ -272,6 +352,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_postCode_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.post_code
+                        : null
+                    }
                     {...register("postCode", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -299,7 +384,7 @@ function AddShops() {
                   )}
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={4}>
                 <Form.Group controlId="post">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_post")}
@@ -307,6 +392,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_post_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.post
+                        : null
+                    }
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -338,7 +428,7 @@ function AddShops() {
             <hr />
             <h6>{t("AddShops_title_geolocation")}</h6>
             <Row>
-              <Col>
+              <Col md={6}>
                 <Form.Group controlId="latitude">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_latitude")}
@@ -346,6 +436,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_latitude_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.latitude
+                        : null
+                    }
                     {...register("latitude", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -365,7 +460,7 @@ function AddShops() {
                   )}
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md={6}>
                 <Form.Group controlId="longitude">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_longitude")}
@@ -373,6 +468,11 @@ function AddShops() {
                   <Form.Control
                     type="text"
                     placeholder={t("AddShops_longitude_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.longitude
+                        : null
+                    }
                     {...register("longitude", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -395,7 +495,7 @@ function AddShops() {
             </Row>
             <Row>
               <Col>
-                <Form.Group
+                {/* <Form.Group
                   controlId="photo"
                   className="btn-img-upload rounded mb-3"
                   onChange={uploadFilesHandler}
@@ -404,13 +504,28 @@ function AddShops() {
                     {t("AdminAddProducts_label_choose_photos")}
                   </Form.Label>
                   <Form.Control type="file" {...register("photo", {})} />
-                </Form.Group>
+                </Form.Group> */}
+                <UploadImage />
               </Col>
             </Row>
             <div className="d-flex justify-content-end">
-              <Button type="submit" variant="success" className="rounded my-3 ">
-                {t("btn-add")}
-              </Button>
+              {editShopParam === "edit" ? (
+                <Button
+                  type="submit"
+                  variant="warning"
+                  className="rounded my-3 "
+                >
+                  {t("btn_edit")}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="success"
+                  className="rounded my-3 "
+                >
+                  {t("btn-add")}
+                </Button>
+              )}
             </div>
           </Form>
         </div>

@@ -101,6 +101,7 @@
     "DashboardScreen_sidebar_title" : "Admin Panel",
     "DashboardScreen_sidebar_subtitle_1" :  "District",
     "DashboardScreen_sidebar_subtitle_2" :  "Shops",
+    "DashboardScreen_sidebar_subtitle_areas" :  "Areas",
     "DashboardScreen_sidebar_subtitle_3" :  "Products",
     "DashboardScreen_sidebar_subtitle_3a" :  "Product type",
     "DashboardScreen_sidebar_subtitle_4" :  "Others",
@@ -157,6 +158,9 @@
     
 
     "AddShops_title": "Add shop",
+    "EditShops_title": "Edit shop",
+
+
     "AddShops_title_address":"Address",
     "AddShops_label_nip":"Tax number",
     "AddShops_nip_placeholder": "Enter tax number ...",

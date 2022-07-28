@@ -103,6 +103,7 @@
     "DashboardScreen_sidebar_title" : "Panel administracyjny",
     "DashboardScreen_sidebar_subtitle_1" :  "Powiaty",
     "DashboardScreen_sidebar_subtitle_2" :  "Sklepy",
+    "DashboardScreen_sidebar_subtitle_areas" :  "Obszary",
     "DashboardScreen_sidebar_subtitle_3" :  "Produkty",
     "DashboardScreen_sidebar_subtitle_3a" :  "Typ produktów",
     "DashboardScreen_sidebar_subtitle_4" :  "inne",
@@ -156,6 +157,9 @@
     "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
     
     "AddShops_title": "Dodaj sklep",
+    "EditShops_title": "Edycja skelpu",
+
+
     "AddShops_title_address":"Adres",
     "AddShops_label_nip":"NIP",
     "AddShops_nip_placeholder": "Wpisz NIP ...",

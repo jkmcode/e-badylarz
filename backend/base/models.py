@@ -25,8 +25,8 @@ class Shops(models.Model):
     def __str__(self):
          return self.name
 
-#Shops_ARC
 class ShopsARC(models.Model):
+    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, primary_key = True)
     name = models.CharField(max_length=50, unique=True)
     nip = models.CharField(max_length=20)
     city = models.CharField(max_length=40)

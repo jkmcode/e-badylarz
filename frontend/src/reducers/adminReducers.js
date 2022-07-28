@@ -56,7 +56,100 @@ import {
   ADD_CONTACT_SUCCESS,
   ADD_CONTACT_FAIL,
   ADD_CONTACT_DELETE,
+  GET_CONTACT_LIST_REQUEST,
+  GET_CONTACT_LIST_SUCCESS,
+  GET_CONTACT_LIST_FAIL,
+  GET_CONTACT_LIST_DELETE,
+  GET_SHOP_REQUEST,
+  GET_SHOP_SUCCESS,
+  GET_SHOP_FAIL,
+  GET_SHOP_DELETE,
+  EDIT_SHOP_REQUEST,
+  EDIT_SHOP_SUCCESS,
+  EDIT_SHOP_FAIL,
+  EDIT_SHOP_DELETE,
+  GET_AREA_LIST_REQUEST,
+  GET_AREA_LIST_SUCCESS,
+  GET_AREA_LIST_FAIL,
+  GET_AREA_LIST_DELETE,
 } from "../constants/adminConstans";
+
+//Area
+
+export const areaListReducer = (state = { areaList: [] }, action) => {
+  switch (action.type) {
+    case GET_AREA_LIST_REQUEST:
+      return { loading: true, success: false, areaList: [] };
+    case GET_AREA_LIST_SUCCESS:
+      return { loading: false, success: true, areaList: action.payload };
+    case GET_AREA_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        areaList: [],
+      };
+    case GET_AREA_LIST_DELETE:
+      return { areaList: [] };
+    default:
+      return state;
+  }
+};
+
+//Shops
+export const updateShopReducer = (state = {}, action) => {
+  switch (action.type) {
+    case EDIT_SHOP_REQUEST:
+      return { loading: true, success: false };
+    case EDIT_SHOP_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        shopUpdateDetails: action.payload,
+      };
+    case EDIT_SHOP_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case EDIT_SHOP_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getShopReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_SHOP_REQUEST:
+      return { loading: true, success: false };
+    case GET_SHOP_SUCCESS:
+      return { loading: false, success: true, shopDetails: action.payload };
+    case GET_SHOP_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case GET_SHOP_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const contactListReducer = (state = { ListOfContact: [] }, action) => {
+  switch (action.type) {
+    case GET_CONTACT_LIST_REQUEST:
+      return { loading: true, success: false, ListOfContact: [] };
+    case GET_CONTACT_LIST_SUCCESS:
+      return { loading: false, success: true, ListOfContact: action.payload };
+    case GET_CONTACT_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        ListOfContact: [],
+      };
+    case GET_CONTACT_LIST_DELETE:
+      return { ListOfContact: [] };
+    default:
+      return state;
+  }
+};
 
 export const addContactReducer = (state = {}, action) => {
   switch (action.type) {
@@ -107,6 +200,8 @@ export const addShopReducer = (state = {}, action) => {
       return state;
   }
 };
+
+//Product
 
 export const addProductTypeReducer = (state = {}, action) => {
   switch (action.type) {

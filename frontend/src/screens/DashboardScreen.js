@@ -15,6 +15,7 @@ function DashboardScreen() {
   const citiesParam = params.citiesParam;
   const productsParam = params.productsParam;
   const productTypeParam = params.productsTypeParam;
+  const areaParam = params.areaParam;
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const detectSize = () => {
@@ -102,6 +103,27 @@ function DashboardScreen() {
                     ></img>
                     <span className="nav-link-text ms-1">
                       {t("DashboardScreen_sidebar_subtitle_2")}
+                    </span>
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/dashboard/areas/areas"
+                  className={
+                    areaParam === "areas"
+                      ? "nav-link text-white active bg-gradient-primary"
+                      : "nav-link text-white"
+                  }
+                >
+                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <img
+                      src={Main}
+                      className="navbar-brand-img h-100"
+                      alt="main_logo"
+                    ></img>
+                    <span className="nav-link-text ms-1">
+                      {t("DashboardScreen_sidebar_subtitle_areas")}
                     </span>
                   </div>
                 </Link>

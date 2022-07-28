@@ -208,6 +208,9 @@ function DropdownMenu() {
             </DropdownItem>
           )}
 
+          <DropdownItem leftIcon={<BoltIcon />} refer="uploadImage">
+            Upload Image
+          </DropdownItem>
           <DropdownItem leftIcon={<BoltIcon />} refer="searchBox">
             SearchBox
           </DropdownItem>

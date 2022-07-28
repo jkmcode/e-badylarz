@@ -34,7 +34,165 @@ import {
   ADD_CONTACT_REQUEST,
   ADD_CONTACT_SUCCESS,
   ADD_CONTACT_FAIL,
+  GET_CONTACT_LIST_REQUEST,
+  GET_CONTACT_LIST_SUCCESS,
+  GET_CONTACT_LIST_FAIL,
+  GET_SHOP_REQUEST,
+  GET_SHOP_SUCCESS,
+  GET_SHOP_FAIL,
+  EDIT_SHOP_REQUEST,
+  EDIT_SHOP_SUCCESS,
+  EDIT_SHOP_FAIL,
+  GET_AREA_LIST_REQUEST,
+  GET_AREA_LIST_SUCCESS,
+  GET_AREA_LIST_FAIL,
 } from "../constants/adminConstans";
+
+// Areas
+
+export const getAreas = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_AREA_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/get-areas/`, config);
+
+    console.log("data", data);
+
+    dispatch({
+      type: GET_AREA_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_AREA_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
+
+// Shops
+export const updateShop = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: EDIT_SHOP_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/shop/${insertData.id}/update/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: EDIT_SHOP_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: EDIT_SHOP_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getShop = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_SHOP_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/get-shop`,
+      config,
+      insertData
+    );
+
+    console.log("data", data);
+
+    dispatch({
+      type: GET_SHOP_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SHOP_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getShopContacts = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_CONTACT_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/get-contacts/`, config);
+
+    console.log("data", data);
+
+    dispatch({
+      type: GET_CONTACT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CONTACT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
 
 export const addContact = (insertData) => async (dispatch, getState) => {
   try {

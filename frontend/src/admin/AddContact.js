@@ -7,6 +7,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form, Table } from "react-bootstrap";
 import { addContact } from "../actions/adminActions";
+import { getShopContacts } from "../actions/adminActions";
 
 function AddContact() {
   const {
@@ -28,14 +29,25 @@ function AddContact() {
   const error = false;
 
   // data from redux
+  const contactListRedux = useSelector((state) => state.contactList);
+  const { ListOfContact } = contactListRedux;
+
+  console.log("ListOfContact", ListOfContact);
+
   const shopListRedux = useSelector((state) => state.shopList);
   const { shopList, loading: shopLoading, error: shopError } = shopListRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  // fetching list of contact from DB
+  useEffect(() => {
+    if (ListOfContact.length === 0) {
+      dispatch(getShopContacts());
+    }
+  }, [dispatch, ListOfContact.length]);
+
   const onSubmit = (data) => {
-    console.log("data", data);
     const insertData = {
       shop_id: shopId,
       firstName: data.firstName,
@@ -231,24 +243,14 @@ function AddContact() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Jakub</td>
-                    <td>Kumala</td>
-                    <td>694819030</td>
-                    <td>jakub.kumala@interia.pl</td>
-                  </tr>
-                  <tr>
-                    <td>Jakub</td>
-                    <td>Kumala</td>
-                    <td>694819030</td>
-                    <td>jakub.kumala@interia.pl</td>
-                  </tr>
-                  <tr>
-                    <td>Jakub</td>
-                    <td>Kumala</td>
-                    <td>694819030</td>
-                    <td>jakub.kumala@interia.pl</td>
-                  </tr>
+                  {ListOfContact.map((contact) => (
+                    <tr key={contact.map}>
+                      <td>{contact.name}</td>
+                      <td>Kumala</td>
+                      <td>694819030</td>
+                      <td>jakub.kumala@interia.pl</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>

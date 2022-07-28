@@ -30,7 +30,6 @@ function InfoWindow(props) {
     setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_FALSE });
     if (props.type === "shop") {
-      dispatch({ type: GET_SHOPS_LIST_DELETE });
       dispatch({ type: SET_FLAG_SHOP_FALSE });
     }
   };

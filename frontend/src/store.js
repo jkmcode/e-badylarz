@@ -17,6 +17,10 @@ import {
   addShopReducer,
   shopListReducer,
   addContactReducer,
+  contactListReducer,
+  getShopReducer,
+  updateShopReducer,
+  areaListReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -37,6 +41,10 @@ const reducer = combineReducers({
   addShop: addShopReducer,
   shopList: shopListReducer,
   addContact: addContactReducer,
+  contactList: contactListReducer,
+  getShop: getShopReducer,
+  updateShop: updateShopReducer,
+  areaList: areaListReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

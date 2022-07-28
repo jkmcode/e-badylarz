@@ -8,6 +8,7 @@ import CurrentAdress from "./screens/CurrentAdress";
 import HomeScreen from "./screens/HomeScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import ProductCarousel from "./component/ProductCarousel";
+import UploadImage from "./component/UploadImage";
 import CartScreen from "./screens/CartScreen";
 
 //Admin
@@ -23,8 +24,9 @@ import AdminProductType from "./admin/AdminProductType";
 import AddProductType from "./admin/AddProductType";
 import AddShops from "./admin/AddShops";
 import AddContact from "./admin/AddContact";
+import AdminAreas from "./admin/AdminAreas";
+import AddArea from "./admin/AddArea";
 
-//SerachBoxComponent
 import SearchBox from "./component/SearchBox";
 import BookData from "./Data/data.json";
 
@@ -61,12 +63,14 @@ function App() {
               <SearchBox placeholder="Enter data ...." data={BookData} />
             }
           />
+          <Route path="uploadImage" element={<UploadImage />} />
 
           <Route path="cartScreen" element={<CartScreen />} />
           {/* <Route path="home/*" element={<NotFoundScreen />} /> */}
 
           <Route path="dashboard" element={<DashboardScreen />}>
             <Route path=":shopsParam/shops" element={<AdminShops />} />
+            <Route path=":areaParam/areas" element={<AdminAreas />} />
             <Route
               path=":districtParam/district"
               element={<AdminScreenDistrict />}
@@ -95,11 +99,17 @@ function App() {
             path="dashboard/productsType/products-type/add"
             element={<AddProductType />}
           />
-          <Route path="dashboard/shops/shops/add" element={<AddShops />} />
+          <Route path="dashboard/shops/shops/:add" element={<AddShops />} />
+          <Route
+            path="dashboard/shops/shops/:id/:edit"
+            element={<AddShops />}
+          />
           <Route
             path="dashboard/shops/shops/:id/contact"
             element={<AddContact />}
           />
+          <Route path="dashboard/areas/areas/:add" element={<AddArea />} />
+
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
         <NavbarBottom />

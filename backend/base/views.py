@@ -34,6 +34,84 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAreas(request):
+
+
+    ## we need to create Area model
+
+    # area = Shops.objects.all().order_by('name') 
+
+    # seriaziler = ShopsSerializer(shops, many=True)
+
+    # return Response(seriaziler.data)
+    return Response("okey")
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def updateShop(request, Id):
+    data = request.data
+    shop = Shops.objects.get(id=Id)
+
+    shop_ARC = ShopsARC.objects.create(
+        id_shops=shop,
+        name=data['name'],
+        nip=data['nip'],
+        city=data['city'],
+        street=data['street'],
+        no_building=data["number"],
+        post_code=data["postCode"],
+        post=data["post"],
+        latitude=data["latitude"],
+        longitude=data["longitude"],
+        date_of_change = shop.date_of_entry,
+        modifier = shop.creator,
+        creator = data['creator'],
+        is_active = True,
+        type_of_change = data['typeOfChnage']
+    )
+
+    try:
+        shop.name=data['name'],
+        shop.nip = data['nip'],
+        shop.city = data['city'],
+        shop.street = data['street'],
+        shop.no_building = data['number'],
+        shop.post_code = data['postCode'],
+        shop.post = data['post'],
+        shop.latitude = data['latitude'],
+        shop.longitude = data['longitude'],
+        shop.creator = data['creator'],
+        shop.is_active=False,
+
+        shop.save()
+
+        serializer = ShopsSerializer(shop, many=False)
+
+        return Response(serializer.data)
+    except:
+        message = {"detail": "Podany kod rejestracyjny już istnieje"}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)        
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getShop(request, Id):
+    shop = Shops.objects.get(id = Id) 
+    seriaziler = ShopsSerializer(shop, many=False)
+    return Response(seriaziler.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getContacts(request):
+    shops = ShopsContact.objects.all().order_by('name') 
+
+    seriaziler = ShopsContactSerializer(shops, many=True)
+
+    return Response(seriaziler.data)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -161,8 +239,6 @@ def addCiti(request):
 @permission_classes([IsAdminUser])
 def activeList(request):
     data=request.data
-
-    print('data', data)
 
     if data['objType']=='DISTRICT':
         descrip = Districts.objects.get(id=data['Id'])
