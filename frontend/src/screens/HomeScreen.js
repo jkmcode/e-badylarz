@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../component/Loader";
 import AboutUsScreeen from "./AboutUsScreen";
+import PwaInstallaction from "./PwaInstallaction";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getDiscrict } from "../actions/discrictsActions";
 import background from "../images/jabłka.png";
+import { scroller } from "react-scroll";
 
 //https://react-select.com/advanced
 
@@ -64,32 +66,78 @@ function FormAddressScreen() {
     }
   }, [dispatch, districtList.length]);
 
+  // responsive
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const detectSize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", detectSize);
+
+    return () => {
+      window.removeEventListener("resize", detectSize);
+    };
+  }, [windowWidth]);
+
+  //scroll
+
+  const [pwaInst, setPwaInst] = useState(false);
+
+  useEffect(() => {
+    if (pwaInst) {
+      scroller.scrollTo("pwaInstallaction", {
+        smooth: true,
+        offset: 0,
+        duration: 200,
+      });
+      setPwaInst(false);
+    }
+  }, [pwaInst]);
+
   // Style
+
+  const title = {
+    color: "#ae1d1d",
+    letterSpacing: "1.2px",
+  };
+
   const backgroungImage = {
     backgroundImage: `url(${background})`,
-    height: "120vh",
+    height: "90vh",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     position: "relative",
+    backgroundPosition: "50% 50%",
   };
 
   const positionRelative = {
     position: "relative",
   };
 
-  const shadowTransparent = {
-    backgroundColor: "black",
-    height: "30vh",
+  const shadowForMobile = {
+    backgroundColor: "#1d1c1b",
+    height: "20vh",
     width: "100%",
-    opacity: "40%",
-    marginTop: "-30vh",
+    opacity: "30%",
+    marginTop: "-20vh",
+  };
+
+  const shadowForDesktop = {
+    backgroundColor: "#1d1c1b",
+    height: "25vh",
+    width: "100%",
+    opacity: "30%",
+    marginTop: "-25vh",
   };
 
   const centerForm = {
     position: "absolute",
-    top: "30%",
+    top: "40%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+    borderRadius: "20px",
   };
 
   const positionBtn = {
@@ -97,13 +145,26 @@ function FormAddressScreen() {
     top: "70%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+    color: "white",
+    backgroundColor: "#207B00",
+    borderRadius: "20px",
+    border: "none",
+  };
+
+  const info = {
+    backgroundColor: "#EAFEE1",
+    marginTop: "1rem",
+    color: "#1A5E02",
+    borderRadius: "10px",
   };
 
   const positionInfo = {
-    textAlign: "justify",
+    fontSize: "20px",
+    lineHeight: "20px",
+    textAlign: "center",
     color: "white",
     position: "absolute",
-    top: "30%",
+    top: "20%",
     left: "50%",
     transform: "translate(-50%, -50%)",
   };
@@ -111,6 +172,7 @@ function FormAddressScreen() {
   const searchAreaBtn = {
     color: "white",
     backgroundColor: "#207B00",
+    borderRadius: "20px",
     border: "none",
   };
 
@@ -122,20 +184,19 @@ function FormAddressScreen() {
         ) : error ? (
           <p>error</p>
         ) : (
-          <div
-            style={centerForm}
-            className="container bg-container max-sizing p-4 rounded"
-          >
+          <div style={centerForm} className="bg-container max-sizing p-4 w-90">
             <Row>
               <Col>
-                <h5 className="text-center">{t("FormAddressScreen_title")}</h5>
+                <p style={title} className="text-center h5 fw-bolder">
+                  {t("FormAddressScreen_title")}
+                </p>
               </Col>
             </Row>
             <Row>
               <Col>
-                <h5 className="text-center">
+                <p className="text-center h5 fw-bolder letter-spacing-1">
                   {t("FormAddressScreen_subtitle")}
-                </h5>
+                </p>
               </Col>
             </Row>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -210,17 +271,22 @@ function FormAddressScreen() {
                 {locationMsg ? <p>{locationMsg}</p> : null}
               </Form.Group> */}
               <Row>
-                <h5 className="mt-3 text-justify">
+                {/* <h5 className="mt-3 text-justify">
                   {t("FormAddressScreen__info")}
-                </h5>
+                </h5> */}
               </Row>
+              <div style={info} className="p-3">
+                <div>Podaj swój adres w celu oszacowania kosztu dostawy</div>
+              </div>
+
               <div className="d-flex justify-content-center">
                 <button
                   type="submit"
-                  className="rounded my-3 w-60 p-3"
+                  className="w-90 w-md-50 my-1 py-3 h6"
                   style={searchAreaBtn}
                 >
-                  {t("FormAddressScreen__btn")}
+                  {/* {t("FormAddressScreen__btn")} */}
+                  Szukaj obszaru zakupów
                 </button>
               </div>
             </Form>
@@ -228,18 +294,24 @@ function FormAddressScreen() {
         )}
       </div>
       <div style={positionRelative}>
-        <div style={shadowTransparent} />
-        <h5 style={positionInfo}>
-          Twoje ulubione lokalne sklepy w jednym miejscu!
-        </h5>
-        <Button
+        <div style={windowWidth > 600 ? shadowForDesktop : shadowForMobile} />
+        <Row>
+          <p style={positionInfo} className="fw-bolder">
+            Twoje ulubione lokalne sklepy w jednym miejscu!
+          </p>
+        </Row>
+
+        <button
           type="submit"
-          variant="success"
-          className="rounded w-30"
+          className="w-80 w-md-25 py-3 h6"
           style={positionBtn}
+          onClick={() => setPwaInst(true)}
         >
           {t("FormAddressScreen__learn_more_btn")}
-        </Button>
+        </button>
+      </div>
+      <div id="pwaInstallaction">
+        <PwaInstallaction />
       </div>
       <AboutUsScreeen />
     </>

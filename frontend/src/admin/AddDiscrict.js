@@ -122,6 +122,7 @@ function AddDiscrict() {
               </Form.Label>
               <Form.Control
                 type="text"
+                className={errors.name ? "formInvalid" : null}
                 placeholder={t("AddDistrict_name_placeholder")}
                 {...register("name", {
                   required: t("Form_field_required"),

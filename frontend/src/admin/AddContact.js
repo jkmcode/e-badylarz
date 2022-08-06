@@ -67,8 +67,8 @@ function AddContact() {
       {loading ? (
         <Loader />
       ) : (
-        <Row>
-          <Col lg={7}>
+        <Row className="gx-0">
+          <Col lg={6}>
             <div className="mx-2 bg-container mt-5 p-4 rounded">
               {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
               <div className="d-flex justify-content-center display-6">
@@ -87,6 +87,7 @@ function AddContact() {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        className={errors.firstName ? "formInvalid" : null}
                         placeholder={t("AddContact_name_placeholder")}
                         {...register("firstName", {
                           required: t("Form_field_required"),
@@ -122,6 +123,7 @@ function AddContact() {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        className={errors.surname ? "formInvalid" : null}
                         placeholder={t("AddContact_surname_placeholder")}
                         {...register("surname", {
                           required: t("Form_field_required"),
@@ -159,6 +161,7 @@ function AddContact() {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        className={errors.email ? "formInvalid" : null}
                         placeholder={t("AddContact_email_placeholder")}
                         {...register("email", {
                           required: t("Form_field_required"),
@@ -186,6 +189,7 @@ function AddContact() {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        className={errors.phone ? "formInvalid" : null}
                         placeholder={t("AddContact_phone_placeholder")}
                         {...register("phone", {
                           required: t("Form_field_required"),
@@ -227,8 +231,8 @@ function AddContact() {
               </Form>
             </div>
           </Col>
-          <Col lg={5}>
-            <div className="mx-2 bg-container mt-5 p-4 rounded">
+          <Col lg={6}>
+            <div className="bg-container mt-5 p-4 mx-2 rounded">
               {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
               <div className="d-flex justify-content-center h4">
                 <div className="px-3">{t("AddContact_contactList")}</div>

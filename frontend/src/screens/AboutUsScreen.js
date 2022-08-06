@@ -34,7 +34,7 @@ function AboutUsScreeen() {
       <h3 style={textTitle} className="text-center pt-5">
         O nas
       </h3>
-      <p style={textInfo} className="px-5 ">
+      <p style={textInfo} className="px-5">
         Zajmujemy się sprzedażą żywności rzemieślniczej od lokalnych rolników i
         producentów. Jesteśmy firmą, której misją jest zapewnienie naszym
         klientom jak najlepszych wrażeń z dokonanych przez nich zakupów. Naszym

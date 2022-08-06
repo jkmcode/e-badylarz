@@ -22,7 +22,7 @@ import AdminCities from "./admin/AdminCities";
 import AdminAddProducts from "./admin/AdminAddProducts";
 import AdminProductType from "./admin/AdminProductType";
 import AddProductType from "./admin/AddProductType";
-import AddShops from "./admin/AddShops";
+import ShopActivity from "./admin/ShopActivity";
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
 import AddArea from "./admin/AddArea";
@@ -99,10 +99,10 @@ function App() {
             path="dashboard/productsType/products-type/add"
             element={<AddProductType />}
           />
-          <Route path="dashboard/shops/shops/:add" element={<AddShops />} />
+          <Route path="dashboard/shops/shops/:add" element={<ShopActivity />} />
           <Route
             path="dashboard/shops/shops/:id/:edit"
-            element={<AddShops />}
+            element={<ShopActivity />}
           />
           <Route
             path="dashboard/shops/shops/:id/contact"
@@ -112,7 +112,7 @@ function App() {
 
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
-        <NavbarBottom />
+        {/* <NavbarBottom /> */}
       </>
     </>
   );

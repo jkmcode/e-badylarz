@@ -10,6 +10,8 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import { addShop, getShop, updateShop } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
 
+import { Icon } from "@iconify/react";
+
 function AddShops() {
   const {
     register,
@@ -145,6 +147,14 @@ function AddShops() {
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          <Row className="align-items-center ">
+            <Col>
+              <Link to="/dashboard/shops/shops" className="text-dark h6">
+                <Icon icon="ion:arrow-back" />
+                {t("btn-return")}
+              </Link>
+            </Col>
+          </Row>
           <div className="d-flex justify-content-center display-6">
             {editShopParam === "edit"
               ? t("EditShops_title")
@@ -153,12 +163,12 @@ function AddShops() {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row>
               <Col md={6}>
-                <Form.Group controlId="name" className="formInvalid">
+                <Form.Group controlId="name">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_name")}
                   </Form.Label>
                   <Form.Control
-                    className="formInvalid"
+                    className={errors.name ? "formInvalid" : null}
                     type="text"
                     placeholder={t("AddShops_name_placeholder")}
                     defaultValue={
@@ -173,8 +183,8 @@ function AddShops() {
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
-                        value: 6,
-                        message: t("Form_minLength_6"),
+                        value: 3,
+                        message: t("Form_minLength_3"),
                       },
                       maxLength: {
                         value: 30,
@@ -201,6 +211,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.nip ? "formInvalid" : null}
                     placeholder={t("AddShops_nip_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -237,6 +248,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.city ? "formInvalid" : null}
                     placeholder={t("AddShops_city_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -277,6 +289,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.street ? "formInvalid" : null}
                     placeholder={t("AddShops_street_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -319,6 +332,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.number ? "formInvalid" : null}
                     placeholder={t("AddShops_number_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -351,6 +365,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.postCode ? "formInvalid" : null}
                     placeholder={t("AddShops_postCode_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -391,6 +406,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.post ? "formInvalid" : null}
                     placeholder={t("AddShops_post_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -435,6 +451,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.latitude ? "formInvalid" : null}
                     placeholder={t("AddShops_latitude_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
@@ -467,6 +484,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control
                     type="text"
+                    className={errors.longitude ? "formInvalid" : null}
                     placeholder={t("AddShops_longitude_placeholder")}
                     defaultValue={
                       editShopParam === "edit" && shopDetails
