@@ -26,7 +26,7 @@ class Shops(models.Model):
          return self.name
 
 class ShopsARC(models.Model):
-    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, primary_key = True)
+    id_shops = models.IntegerField()
     name = models.CharField(max_length=50, unique=True)
     nip = models.CharField(max_length=20)
     city = models.CharField(max_length=40)
@@ -62,9 +62,9 @@ class ShopsDescription(models.Model):
 #Shops_contact
 class ShopsContact(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=50, unique=True)
-    surname = models.CharField(max_length=50, unique=True)
-    email = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    email = models.CharField(max_length=150)
     phone = models.CharField(max_length=20)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
     creator = models.CharField(max_length=50, null=True, blank=True)

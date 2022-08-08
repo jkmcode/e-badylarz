@@ -176,8 +176,6 @@ export const getShopContacts = () => async (dispatch, getState) => {
 
     const { data } = await axios.get(`/api/get-contacts/`, config);
 
-    console.log("data", data);
-
     dispatch({
       type: GET_CONTACT_LIST_SUCCESS,
       payload: data,

@@ -146,21 +146,12 @@ export const contactListReducer = (state = { ListOfContact: [] }, action) => {
       };
     case GET_CONTACT_LIST_DELETE:
       return { ListOfContact: [] };
-    default:
-      return state;
-  }
-};
-
-export const addContactReducer = (state = {}, action) => {
-  switch (action.type) {
     case ADD_CONTACT_REQUEST:
-      return { loading: true, success: false };
+      return { loading: true, success: false, ListOfContact: [] };
     case ADD_CONTACT_SUCCESS:
-      return { loading: false, success: true, result: action.payload };
+      return { loading: false, success: true, ListOfContact: action.payload };
     case ADD_CONTACT_FAIL:
       return { loading: false, error: action.payload, success: false };
-    case ADD_CONTACT_DELETE:
-      return {};
     default:
       return state;
   }

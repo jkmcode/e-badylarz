@@ -118,27 +118,21 @@ def getContacts(request):
 def addShopContacts(request):
     data = request.data
 
-    alreadyExists = ShopsContact.objects.filter(name=data['firstName'], surname=data['surname']).exists()
 
-    if alreadyExists:
-        content = {"detail": "Contact already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    else:
+    shop = Shops.objects.get(id=data['shop_id'])
+    shop_contact = ShopsContact.objects.create(
+        id_shops=shop,
+        name=data['firstName'],
+        surname = data['surname'],
+        email = data['email'],
+        phone = data['phone'],
+        creator = data['creator'],
+        is_active=True
+    )
 
-        shop = Shops.objects.get(id=data['shop_id'])
-        shop_contact = ShopsContact.objects.create(
-            id_shops=shop,
-            name=data['firstName'],
-            surname = data['surname'],
-            email = data['email'],
-            phone = data['phone'],
-            creator = data['creator'],
-            is_active=True
-        )
-
-        new_shop_contact=ShopsContact.objects.get(name=data['firstName'], surname=data['surname'])
-        seriaziler = ProductTypeSerializer(new_shop_contact, many=False)
-        return Response(seriaziler.data)
+    shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
+    seriaziler = ShopsContactSerializer(shop_contacts, many=True)
+    return Response(seriaziler.data)
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])

@@ -188,7 +188,10 @@ function AdminShops() {
                                 </button>
                               </td>
                               <td className="align-middle">
-                                <Link to="add" className="text-xs text-warning">
+                                <Link
+                                  to={`${shop.id}/edit`}
+                                  className="text-xs text-warning"
+                                >
                                   {t("btn_edit")}
                                 </Link>
                               </td>

@@ -32,8 +32,6 @@ function AddContact() {
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact } = contactListRedux;
 
-  console.log("ListOfContact", ListOfContact);
-
   const shopListRedux = useSelector((state) => state.shopList);
   const { shopList, loading: shopLoading, error: shopError } = shopListRedux;
 
@@ -248,11 +246,11 @@ function AddContact() {
                 </thead>
                 <tbody>
                   {ListOfContact.map((contact) => (
-                    <tr key={contact.map}>
+                    <tr key={contact.id}>
                       <td>{contact.name}</td>
-                      <td>Kumala</td>
-                      <td>694819030</td>
-                      <td>jakub.kumala@interia.pl</td>
+                      <td>{contact.surname}</td>
+                      <td>{contact.phone}</td>
+                      <td>{contact.email}</td>
                     </tr>
                   ))}
                 </tbody>
