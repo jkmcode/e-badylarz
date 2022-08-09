@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "react-click-away-listener";
+import { Row, Col } from "react-bootstrap";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "react-router-dom";
@@ -8,18 +9,19 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
+//images
 import { ReactComponent as CogIcon } from "../icons/cog.svg";
 import { ReactComponent as ChevronIcon } from "../icons/chevron.svg";
 import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
 import { ReactComponent as BoltIcon } from "../icons/bolt.svg";
-
 import { ReactComponent as Home } from "../icons/Home.svg";
 import { ReactComponent as Favorite } from "../icons/Favorite.svg";
 import { ReactComponent as Profil } from "../icons/Profil.svg";
 import { ReactComponent as Cart } from "../icons/Cart.svg";
 import { ReactComponent as Hamburger } from "../icons/Hamburger.svg";
+import LogoNavbar from "../images/logoNavbar.png";
 
-function NavbarTop() {
+function AdminNavbarTop() {
   const { t } = useTranslation();
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -38,6 +40,7 @@ function NavbarTop() {
 
   return (
     <Navbar>
+      <img className="testtttt" src={LogoNavbar} />
       {windowWidth > 600 && (
         <>
           <LanguageSwitcher />
@@ -254,4 +257,4 @@ function DropdownMenu() {
   );
 }
 
-export default NavbarTop;
+export default AdminNavbarTop;

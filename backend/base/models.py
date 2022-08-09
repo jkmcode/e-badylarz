@@ -20,7 +20,7 @@ class Shops(models.Model):
     modifier = models.CharField(max_length=50, null=True, blank=True)    
     creator = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    photo = models.CharField(max_length=150, null=True,blank=True)
+    photo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -41,7 +41,7 @@ class ShopsARC(models.Model):
     modifier = models.CharField(max_length=50, null=True, blank=True)
     creator = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    photo = models.CharField(max_length=150)
+    photo = models.ImageField(null=True, blank=True)
     type_of_change = models.CharField(max_length=50)
 
     def __str__(self):

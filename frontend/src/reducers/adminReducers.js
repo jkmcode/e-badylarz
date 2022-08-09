@@ -164,11 +164,11 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
     case GET_SHOPS_LIST_SUCCESS:
       return { loading: false, success: true, shopList: action.payload };
     case ADD_SHOP_REQUEST:
-        return { loading: true, successAdd: false, shopList: [] };
+      return { loading: true, successAdd: false, shopList: [] };
     case ADD_SHOP_SUCCESS:
-        return { loading: false, successAdd: true, shopList: action.payload };
+      return { loading: false, successAdd: true, shopList: action.payload };
     case ADD_SHOP_FAIL:
-        return { loading: false, error: action.payload, successAdd: false };
+      return { loading: false, error: action.payload, successAdd: false };
     case GET_SHOPS_LIST_FAIL:
       return {
         loading: false,

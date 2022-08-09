@@ -28,19 +28,18 @@ function AddShops() {
 
   const [uploading, setUploading] = useState(false);
   const [render, setRender] = useState(false);
+  const [currentTaxNo, setCurrentTaxNo] = useState("");
 
   const editShopParam = params.edit;
   const addShopParam = params.add;
   const shopId = params.id;
 
-  console.log("addShopParam", addShopParam);
-
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const addShopInfo = useSelector((state) => state.addShop);
-  const { loading, error, success } = addShopInfo;
+  const shopListRedux = useSelector((state) => state.shopList);
+  const { loading, error, successAdd, shopList } = shopListRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
   const { shopDetails } = getShopRedux;
@@ -80,6 +79,7 @@ function AddShops() {
 
   const onSubmit = (data) => {
     if (addShopParam) {
+      setCurrentTaxNo(data.nip);
       dispatch(
         addShop({
           city: data.city,
@@ -126,6 +126,16 @@ function AddShops() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (successAdd) {
+      const currentShopId = shopList.map((value) => {
+        if (value.nip === currentTaxNo) {
+          console.log("value.id", value.id);
+        }
+      });
+    }
+  }, [successAdd]);
 
   //style
 

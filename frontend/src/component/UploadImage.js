@@ -20,6 +20,36 @@ function UploadImage() {
 
       reader.readAsDataURL(e.target.files[0]);
     }
+
+    // add photo to DB
+    const file = e.target.files[0];
+    console.log(file);
+    const formData = new FormData();
+
+    formData.append("image", file);
+
+    //setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      // const { data } = await axios.post(
+      //   "/api/products/upload/",
+      //   formData,
+      //   config
+      // );
+      // setMsg(true);
+      // setImage(data.image);
+      // setUploading(false);
+      // setMsgTextUpload(data.text);
+    } catch (error) {
+      //setUploading(false);
+      console.log("aaaaaa");
+    }
   }
 
   //style

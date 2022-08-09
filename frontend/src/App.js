@@ -2,8 +2,12 @@ import React from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import LocationScreen from "./screens/LocationScreen";
-import NavbarTop from "./component/NavbarTop";
+
+//Navbars
+import NavbarTopAdmin from "./component/NavbarTopAdmin";
+import NavbarTopUser from "./component/NavbarTopUser";
 import NavbarBottom from "./component/NavbarBottom";
+
 import CurrentAdress from "./screens/CurrentAdress";
 import HomeScreen from "./screens/HomeScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
@@ -42,7 +46,8 @@ function App() {
   return (
     <>
       <>
-        <NavbarTop />
+        <NavbarTopAdmin />
+        <NavbarTopUser />
         <Routes>
           <Route path="/" element={<HomeScreen />} />
 
