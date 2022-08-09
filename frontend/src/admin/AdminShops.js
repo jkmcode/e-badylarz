@@ -21,7 +21,7 @@ function AdminShops() {
 
   // fech data from Redux
   const shopListRedux = useSelector((state) => state.shopList);
-  const { loading, shopList, error, success } = shopListRedux;
+  const { loading, shopList, error } = shopListRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -103,7 +103,7 @@ function AdminShops() {
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
               <h3 className="text-white text-capitalize text-center ps-3">
-                Shop list
+                {t("AdminShops_title")} 
               </h3>
               <div className="d-flex justify-content-between">
                 <Link className="text-white text-capitalize ps-3" to="add">

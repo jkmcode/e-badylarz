@@ -277,6 +277,8 @@ export const addShop = (insertData) => async (dispatch, getState) => {
 
     const { data } = await axios.post(`/api/add-shop/`, insertData, config);
 
+    console.log('data-->', data)
+
     dispatch({
       type: ADD_SHOP_SUCCESS,
       payload: data,

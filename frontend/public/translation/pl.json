@@ -22,6 +22,7 @@
     "btn_add_shop": "Dodaj sklep",
     "btn_delete": "USUŃ",
     "btn_close": "Zakończ",
+    "btn_contact" : "Kontakt",
     "btn_edit" : "EDYCJA",
     "btn_info" : "Info",
     "btn-login": "Zaloguj się",
@@ -144,6 +145,7 @@
 
     "AdminProductType_title": "Lista aktywnych typów produktów",
 
+    "AdminShops_title":"Lista sklepów",
     "AdminShops_shop_name": "Nazwa",
     "AdminShops_area": "Obszar",
     "AdminShops_status": "Status",

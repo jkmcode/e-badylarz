@@ -163,6 +163,12 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
       return { loading: true, success: false, shopList: [] };
     case GET_SHOPS_LIST_SUCCESS:
       return { loading: false, success: true, shopList: action.payload };
+    case ADD_SHOP_REQUEST:
+        return { loading: true, successAdd: false, shopList: [] };
+    case ADD_SHOP_SUCCESS:
+        return { loading: false, successAdd: true, shopList: action.payload };
+    case ADD_SHOP_FAIL:
+        return { loading: false, error: action.payload, successAdd: false };
     case GET_SHOPS_LIST_FAIL:
       return {
         loading: false,
@@ -172,21 +178,6 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
       };
     case GET_SHOPS_LIST_DELETE:
       return { shopList: [] };
-    default:
-      return state;
-  }
-};
-
-export const addShopReducer = (state = {}, action) => {
-  switch (action.type) {
-    case ADD_SHOP_REQUEST:
-      return { loading: true, success: false };
-    case ADD_SHOP_SUCCESS:
-      return { loading: false, success: true, result: action.payload };
-    case ADD_SHOP_FAIL:
-      return { loading: false, error: action.payload, success: false };
-    case ADD_SHOP_DELETE:
-      return {};
     default:
       return state;
   }

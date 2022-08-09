@@ -172,7 +172,10 @@ def addShop(request):
             is_active=True,
         )
 
-        return Response("okey - add shop")
+        shops=Shops.objects.all()
+        seriaziler = ShopsSerializer(shops, many=True)
+        return Response(seriaziler.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])

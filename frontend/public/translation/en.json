@@ -146,6 +146,7 @@
 
     "AdminProductType_title": "List of active product types",
 
+    "AdminShops_title":"Shops list",
     "AdminShops_shop_name": "Name",
     "AdminShops_area": "Area",
     "AdminShops_status": "Status",
