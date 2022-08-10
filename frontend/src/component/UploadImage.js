@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import FolderIcon from "../images/folder_icon.png";
 import CloseIcon from "../images/CloseIcon.svg";
 
-function UploadImage() {
+function UploadImage(params) {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
 
-  function handleImageChange(e) {
+  const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       setTypeFile(e.target.files[0].type);
       let reader = new FileReader();
@@ -21,12 +22,14 @@ function UploadImage() {
       reader.readAsDataURL(e.target.files[0]);
     }
 
+    // DODANIE PHOTO
+
     // add photo to DB
     const file = e.target.files[0];
-    console.log(file);
     const formData = new FormData();
 
     formData.append("image", file);
+    formData.append("shopTaxNo", params.nip);
 
     //setUploading(true);
 
@@ -37,11 +40,7 @@ function UploadImage() {
         },
       };
 
-      // const { data } = await axios.post(
-      //   "/api/products/upload/",
-      //   formData,
-      //   config
-      // );
+      const { data } = await axios.post("/api/upload-image/", formData, config);
       // setMsg(true);
       // setImage(data.image);
       // setUploading(false);
@@ -50,7 +49,7 @@ function UploadImage() {
       //setUploading(false);
       console.log("aaaaaa");
     }
-  }
+  };
 
   //style
   // https://github.com/rodriguesabner/ImagePreview-React/blob/main/src/App.js

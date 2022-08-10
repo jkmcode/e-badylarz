@@ -47,35 +47,32 @@ function AddShops() {
   // Rozwiązanie dodania zdjęcia po dodaniu do bazy sklepu.
   // Musimy w pierwszej kolejności dostać success na true z Redux (addShopInfo)
   // a potem za pomocą UseEffecta uruchomimy kolejną funkcje (action) z odpowiednimi Content-Type dla image
-  const uploadFilesHandler = (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
+  // const uploadFilesHandler = async (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
 
-    formData.append("image", file);
+  //   formData.append("image", file);
+  //   //formData.append("shopNip", )
 
-    setUploading(true);
+  //   setUploading(true);
 
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     };
 
-      // const { data } = await axios.post(
-      //   "/api/products/upload/",
-      //   formData,
-      //   config
-      // );
-      // setMsg(true);
-      // setImage(data.image);
-      // setUploading(false);
-      // setMsgTextUpload(data.text);
-    } catch (error) {
-      //setUploading(false);
-      console.log("aaaaaa");
-    }
-  };
+  //     const { data } = await axios.post("/api/upload-image/", formData, config);
+  // setMsg(true);
+  // setImage(data.image);
+  // setUploading(false);
+  // setMsgTextUpload(data.text);
+  // } catch (error) {
+  //setUploading(false);
+  //console.log("aaaaaa");
+  //   }
+  // };
 
   const onSubmit = (data) => {
     if (addShopParam) {
@@ -127,11 +124,12 @@ function AddShops() {
     }
   }, []);
 
+  // set current Tax Number
   useEffect(() => {
     if (successAdd) {
       const currentShopId = shopList.map((value) => {
         if (value.nip === currentTaxNo) {
-          console.log("value.id", value.id);
+          setCurrentTaxNo(value.nip);
         }
       });
     }
@@ -533,7 +531,7 @@ function AddShops() {
                   </Form.Label>
                   <Form.Control type="file" {...register("photo", {})} />
                 </Form.Group> */}
-                <UploadImage />
+                <UploadImage nip={currentTaxNo} />
               </Col>
             </Row>
             <div className="d-flex justify-content-end">

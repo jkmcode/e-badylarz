@@ -40,7 +40,7 @@ function AdminNavbarTop() {
 
   return (
     <Navbar>
-      <img className="testtttt" src={LogoNavbar} />
+      <img className="NavbarLogo" src={LogoNavbar} />
       {windowWidth > 600 && (
         <>
           <LanguageSwitcher />

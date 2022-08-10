@@ -6,6 +6,9 @@ from base.views import *
 
 
 urlpatterns = [
+    #upload image 
+    path("api/upload-image/", uploadMultiImages),
+
     path('admin/', admin.site.urls),
     path('api/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),

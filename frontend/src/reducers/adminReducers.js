@@ -119,7 +119,7 @@ export const updateShopReducer = (state = {}, action) => {
 export const getShopReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SHOP_REQUEST:
-      return { loading: true, success: false };
+      return { loading: true, success: false, shopDetails: {} };
     case GET_SHOP_SUCCESS:
       return { loading: false, success: true, shopDetails: action.payload };
     case GET_SHOP_FAIL:

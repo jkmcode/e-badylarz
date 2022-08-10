@@ -47,7 +47,7 @@ function App() {
     <>
       <>
         <NavbarTopAdmin />
-        <NavbarTopUser />
+        {/* <NavbarTopUser /> */}
         <Routes>
           <Route path="/" element={<HomeScreen />} />
 

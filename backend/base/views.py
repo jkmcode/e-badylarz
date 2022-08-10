@@ -21,7 +21,7 @@ from rest_framework import status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-
+#create user
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -33,6 +33,21 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+#uploading image
+@api_view(["POST"])
+def uploadMultiImages(request):
+    data = request.data
+    images_upload = request.FILES.getlist("files")
+    shop_tax_no = data["shopTaxNo"]
+    shop = Shops.objects.get(nip=shop_tax_no)
+
+    shop.image = request.FILES.get('image')
+    shop.save()
+
+    return Response("Image was uploaded")
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -322,3 +337,5 @@ def addDiscrict(request):
         newdistrict=Districts.objects.filter(name=data['name'])
         seriaziler = DistrictsSerializer(newdistrict, many=True)
         return Response(seriaziler.data)
+
+
