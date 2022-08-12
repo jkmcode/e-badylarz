@@ -72,7 +72,22 @@ import {
   GET_AREA_LIST_SUCCESS,
   GET_AREA_LIST_FAIL,
   GET_AREA_LIST_DELETE,
+  SAVE_IMAGE_REDAX,
+  DELETE_IMAGE_REDAX,
 } from "../constants/adminConstans";
+
+// Save image to Redax
+
+export const saveImageReducer = (state = { imageUpload: {} }, action) => {
+  switch (action.type) {
+    case SAVE_IMAGE_REDAX:
+      return { isImage:true, imageUpload: action.payload};
+    case DELETE_IMAGE_REDAX:
+        return { isImage:false, imageUpload: {}};
+    default:
+      return state;
+  }
+};
 
 //Area
 

@@ -46,7 +46,20 @@ import {
   GET_AREA_LIST_REQUEST,
   GET_AREA_LIST_SUCCESS,
   GET_AREA_LIST_FAIL,
+  SAVE_IMAGE_REDAX,
 } from "../constants/adminConstans";
+
+// Save image in redax
+
+export const saveImage = (imageToSeve) => (dispatch) => {
+
+  console.log('file in Action -->', imageToSeve)  
+  dispatch({
+      type: SAVE_IMAGE_REDAX,
+      payload: imageToSeve,
+    });
+
+};
 
 // Areas
 
@@ -276,8 +289,6 @@ export const addShop = (insertData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(`/api/add-shop/`, insertData, config);
-
-    console.log('data-->', data)
 
     dispatch({
       type: ADD_SHOP_SUCCESS,

@@ -129,7 +129,12 @@ function AddShops() {
     if (successAdd) {
       const currentShopId = shopList.map((value) => {
         if (value.nip === currentTaxNo) {
-          setCurrentTaxNo(value.nip);
+          setCurrentTaxNo(value.nip); //// ?????????
+          // 1. warunek czy jest zdjecie
+          // 2. uruchomic endpointa z modyfikacja zdjecia
+          // w url podac nip lub id shopu
+          // 3. skasować zdjęcie z ridaxa
+
         }
       });
     }

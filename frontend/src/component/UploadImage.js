@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import FolderIcon from "../images/folder_icon.png";
 import CloseIcon from "../images/CloseIcon.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { saveImage } from "../actions/adminActions";
 
 function UploadImage(params) {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
+
+  const dispatch = useDispatch();
+  
+  const imageRedux = useSelector((state) => state.saveImage);
+  const { imageUpload } = imageRedux;
 
   const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -31,25 +38,40 @@ function UploadImage(params) {
     formData.append("image", file);
     formData.append("shopTaxNo", params.nip);
 
+    dispatch(
+      saveImage({file})
+    );
+
+    console.log('formData -->', file)
+    console.log('imageUpload z redxa-->', imageUpload)
+
+
+  
     //setUploading(true);
 
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
+    // try {
+    //   const config = {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   };
 
-      const { data } = await axios.post("/api/upload-image/", formData, config);
-      // setMsg(true);
-      // setImage(data.image);
-      // setUploading(false);
-      // setMsgTextUpload(data.text);
-    } catch (error) {
-      //setUploading(false);
-      console.log("aaaaaa");
-    }
+    //   const { data } = await axios.post("/api/upload-image/", formData, config);
+    //   setMsg(true);
+    //   setImage(data.image);
+    //   setUploading(false);
+    //   setMsgTextUpload(data.text);
+    // } catch (error) {
+    //   setUploading(false);
+    //   console.log("aaaaaa");
+    // }
   };
+
+  useEffect(() => {
+      console.log('imageUpload z redxa-->', imageUpload)    
+    }
+  , [imageUpload]);
+
 
   //style
   // https://github.com/rodriguesabner/ImagePreview-React/blob/main/src/App.js
