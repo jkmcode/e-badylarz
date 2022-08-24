@@ -10,6 +10,7 @@ import {
   GET_SHOPS_LIST_DELETE,
   SHOP_DESCRIPTION,
   SET_FLAG_SHOP_TRUE,
+  GET_SHOP_DELETE,
 } from "../constants/adminConstans";
 
 function AdminShops() {
@@ -29,10 +30,19 @@ function AdminShops() {
   const shopFlagVar = useSelector((state) => state.flag);
   const { shopFlag } = shopFlagVar;
 
+  const getShopRedux = useSelector((state) => state.getShop);
+  const { shopDetails } = getShopRedux;
+
   // fetching list of shops from DB
   useEffect(() => {
     if (shopList.length === 0) {
       dispatch(getShops());
+    }
+
+    // delete current data shop in order to edit general data
+    // we need to delete them because form in ShopActivity take defaultValue from the old one
+    if (shopDetails) {
+      dispatch({ type: GET_SHOP_DELETE });
     }
   }, [dispatch, shopList.length, activeShops]);
 
@@ -103,7 +113,7 @@ function AdminShops() {
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
               <h3 className="text-white text-capitalize text-center ps-3">
-                {t("AdminShops_title")} 
+                {t("AdminShops_title")}
               </h3>
               <div className="d-flex justify-content-between">
                 <Link className="text-white text-capitalize ps-3" to="add">

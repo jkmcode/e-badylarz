@@ -46,6 +46,7 @@ import {
   PRODUCT_TYPE_ADD_DELETE,
   ADD_SHOP_REQUEST,
   ADD_SHOP_SUCCESS,
+  ADD_SHOP_DELETE_SUCCESS,
   ADD_SHOP_FAIL,
   ADD_SHOP_DELETE,
   GET_SHOPS_LIST_REQUEST,
@@ -72,18 +73,40 @@ import {
   GET_AREA_LIST_SUCCESS,
   GET_AREA_LIST_FAIL,
   GET_AREA_LIST_DELETE,
-  SAVE_IMAGE_REDAX,
-  DELETE_IMAGE_REDAX,
+  SAVE_IMAGE_REDUX,
+  DELETE_IMAGE_REDUX,
+  ADD_IMAGE_REQUEST,
+  ADD_IMAGE_SUCCESS,
+  ADD_IMAGE_FAIL,
 } from "../constants/adminConstans";
 
-// Save image to Redax
+// Inser image
 
-export const saveImageReducer = (state = { imageUpload: {} }, action) => {
+export const insertImageReducer = (state = {}, action) => {
   switch (action.type) {
-    case SAVE_IMAGE_REDAX:
-      return { isImage:true, imageUpload: action.payload};
-    case DELETE_IMAGE_REDAX:
-        return { isImage:false, imageUpload: {}};
+    case ADD_IMAGE_REQUEST:
+      return { loadingInsertImage: true, successInsertImage: false };
+    case ADD_IMAGE_SUCCESS:
+      return { loadingInsertImage: false, successInsertImage: true };
+    case ADD_IMAGE_FAIL:
+      return {
+        loadingInsertImage: false,
+        successInsertImage: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+// Save image to Redux
+
+export const saveImageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SAVE_IMAGE_REDUX:
+      return { isImage: true, imageUpload: action.payload };
+    case DELETE_IMAGE_REDUX:
+      return { isImage: false, imageUpload: {} };
     default:
       return state;
   }
@@ -182,6 +205,8 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
       return { loading: true, successAdd: false, shopList: [] };
     case ADD_SHOP_SUCCESS:
       return { loading: false, successAdd: true, shopList: action.payload };
+    case ADD_SHOP_DELETE_SUCCESS:
+      return { loading: false, successAdd: false, shopList: action.payload };
     case ADD_SHOP_FAIL:
       return { loading: false, error: action.payload, successAdd: false };
     case GET_SHOPS_LIST_FAIL:

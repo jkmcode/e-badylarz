@@ -6,8 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 
 //css
 // kolejność wywyływanych plików css ma znaczenie (inaczej powstaje konflikt w UI)
-import "./material-dashboard.css";
 import "./index.css";
+import "./material-dashboard.css";
 import "./bootstrap.min.css";
 
 import { BrowserRouter } from "react-router-dom";

@@ -8,6 +8,7 @@ import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form, Table } from "react-bootstrap";
 import { addContact } from "../actions/adminActions";
 import { getShopContacts } from "../actions/adminActions";
+import { Icon } from "@iconify/react";
 
 function AddContact() {
   const {
@@ -58,8 +59,6 @@ function AddContact() {
     dispatch(addContact(insertData));
   };
 
-  useEffect(() => {}, []);
-
   return (
     <>
       {loading ? (
@@ -69,6 +68,10 @@ function AddContact() {
           <Col lg={6}>
             <div className="mx-2 bg-container mt-5 p-4 rounded">
               {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+              <Link to="/dashboard/shops/shops" className="text-dark h6">
+                <Icon icon="ion:arrow-back" />
+                {t("btn-return")}
+              </Link>
               <div className="d-flex justify-content-center display-6">
                 <div className="px-3">{t("AddContact_title")}</div>
                 {shopList.length === 0

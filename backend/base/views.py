@@ -37,12 +37,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
 #uploading image
 @api_view(["POST"])
 def uploadMultiImages(request):
+    print('jest uruchamiany uploadMultiImages')
     data = request.data
-    images_upload = request.FILES.getlist("files")
-    shop_tax_no = data["shopTaxNo"]
-    shop = Shops.objects.get(nip=shop_tax_no)
+    taxNo = data["taxNo"]
+    images_upload = request.FILES.get("image")
 
-    shop.image = request.FILES.get('image')
+    shop = Shops.objects.get(nip=taxNo)
+
+    shop.photo = request.FILES.get('image')
     shop.save()
 
     return Response("Image was uploaded")
@@ -185,9 +187,10 @@ def addShop(request):
             longitude = data['longitude'],
             creator = data['creator'],
             is_active=True,
+            bank_account = data['bankAccount']
         )
 
-        shops=Shops.objects.all()
+        shops=Shops.objects.all().order_by('name')
         seriaziler = ShopsSerializer(shops, many=True)
         return Response(seriaziler.data)
 

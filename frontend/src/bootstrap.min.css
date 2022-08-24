@@ -2553,7 +2553,6 @@ textarea.form-control.is-valid {
   z-index: 3;
 }
 .invalid-feedback {
-  display: none;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 0.875em;
@@ -6547,6 +6546,10 @@ fieldset:disabled .btn {
 }
 .w-75 {
   width: 75% !important;
+}
+
+.w-90 {
+  width: 90% !important;
 }
 .w-100 {
   width: 100% !important;

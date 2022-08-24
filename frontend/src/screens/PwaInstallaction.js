@@ -14,6 +14,10 @@ function PwaInstallaction() {
   const error = false;
 
   //style
+  const photo = {
+    width: "300px",
+  };
+
   const instSteps = {
     fontWeight: "600",
   };
@@ -34,27 +38,27 @@ function PwaInstallaction() {
           <div className="text-center">
             <Col className="pt-4">
               <div className="d-flex justify-content-evenly">
-                <p className="my-auto mx-3 h1 text-dark" style={instTitle}>
+                <div className="my-auto mx-3 h1 text-dark" style={instTitle}>
                   Ściągnij aplikacje w
                   <p className="display-2 m-0 text-dark">3</p>
                   prostych krokach
-                </p>
+                </div>
                 <img src={Devices} />
               </div>
             </Col>
           </div>
-          <Row className="text-center">
-            <Col className="pt-4">
+          <Row className="d-flex justify-content-center text-center">
+            <Col className="px-0 py-4">
               <p style={instSteps}>Naciśnij menu paska przeglądarki</p>
-              <img src={PWA1} />
+              <img style={photo} src={PWA1} />
             </Col>
-            <Col className="pt-4">
+            <Col className="px-0 py-4">
               <p style={instSteps}>Naciśnij przycisk „Zainstaluj aplikację”</p>
-              <img src={PWA2} />
+              <img style={photo} src={PWA2} />
             </Col>
-            <Col className="pt-4">
+            <Col className="px-0 py-4">
               <p style={instSteps}>Na końcu zatwierdź instalacje</p>
-              <img src={PWA3} />
+              <img style={photo} src={PWA3} />
             </Col>
           </Row>
         </main>

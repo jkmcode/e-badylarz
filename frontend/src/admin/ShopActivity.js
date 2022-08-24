@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
-import { addShop, getShop, updateShop } from "../actions/adminActions";
+import {
+  addShop,
+  getShop,
+  updateShop,
+  InsertImage,
+  Test,
+} from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
+
+import {
+  DELETE_IMAGE_REDUX,
+  ADD_SHOP_DELETE_SUCCESS,
+} from "../constants/adminConstans";
 
 import { Icon } from "@iconify/react";
 
@@ -44,36 +54,13 @@ function AddShops() {
   const getShopRedux = useSelector((state) => state.getShop);
   const { shopDetails } = getShopRedux;
 
-  // Rozwiązanie dodania zdjęcia po dodaniu do bazy sklepu.
-  // Musimy w pierwszej kolejności dostać success na true z Redux (addShopInfo)
-  // a potem za pomocą UseEffecta uruchomimy kolejną funkcje (action) z odpowiednimi Content-Type dla image
-  // const uploadFilesHandler = async (e) => {
-  //   const file = e.target.files[0];
-  //   const formData = new FormData();
+  const imageRedux = useSelector((state) => state.saveImage);
+  const { imageUpload, isImage } = imageRedux;
 
-  //   formData.append("image", file);
-  //   //formData.append("shopNip", )
+  const insertImageRedux = useSelector((state) => state.insertImage);
+  const { successInsertImage, loadingInsertImage } = insertImageRedux;
 
-  //   setUploading(true);
-
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     };
-
-  //     const { data } = await axios.post("/api/upload-image/", formData, config);
-  // setMsg(true);
-  // setImage(data.image);
-  // setUploading(false);
-  // setMsgTextUpload(data.text);
-  // } catch (error) {
-  //setUploading(false);
-  //console.log("aaaaaa");
-  //   }
-  // };
-
+  // Handlers
   const onSubmit = (data) => {
     if (addShopParam) {
       setCurrentTaxNo(data.nip);
@@ -90,6 +77,7 @@ function AddShops() {
           postCode: data.postCode,
           street: data.street,
           creator: userInfo.id,
+          bankAccount: data.bankAccount,
         })
       );
     } else {
@@ -114,31 +102,45 @@ function AddShops() {
   };
 
   // fetch data from DB -- shop to edit
+  // remove old image
   useEffect(() => {
+    dispatch({ type: DELETE_IMAGE_REDUX });
     if (shopId) {
       dispatch(
         getShop({
           Id: shopId,
         })
       );
+    } else {
     }
   }, []);
 
   // set current Tax Number
   useEffect(() => {
     if (successAdd) {
-      const currentShopId = shopList.map((value) => {
+      shopList.map((value) => {
         if (value.nip === currentTaxNo) {
-          setCurrentTaxNo(value.nip); //// ?????????
-          // 1. warunek czy jest zdjecie
-          // 2. uruchomic endpointa z modyfikacja zdjecia
-          // w url podac nip lub id shopu
-          // 3. skasować zdjęcie z ridaxa
-
+          if (isImage) {
+            dispatch(
+              InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+            );
+            // 3. skasować zdjęcie z ridaxa
+          }
         }
       });
     }
   }, [successAdd]);
+
+  // navigate to ShopAdmin
+  useEffect(() => {
+    if (successAdd && !isImage) {
+      dispatch(Test(shopList));
+      navigate("/dashboard/shops/shops");
+    } else if (successAdd && isImage && successInsertImage) {
+      dispatch(Test(shopList));
+      navigate("/dashboard/shops/shops");
+    }
+  }, [successAdd, isImage, successInsertImage]);
 
   //style
 
@@ -155,7 +157,7 @@ function AddShops() {
 
   return (
     <>
-      {loading ? (
+      {loading || loadingInsertImage ? (
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
@@ -337,7 +339,7 @@ function AddShops() {
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
+            <Row className="mb-3">
               <Col xs={6} md={4}>
                 <Form.Group controlId="number">
                   <Form.Label className="form-msg-style ms-2">
@@ -455,6 +457,50 @@ function AddShops() {
               </Col>
             </Row>
             <hr />
+            <Row>
+              <Col>
+                <Form.Group controlId="bankAccount">
+                  <Form.Label className="form-msg-style ms-2">
+                    {t("AddShops_label_bankAccound")}
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={errors.bankAccount ? "formInvalid" : null}
+                    placeholder={t("AddShops_bankAccound_placeholder")}
+                    defaultValue={
+                      editShopParam === "edit" && shopDetails
+                        ? shopDetails.bankAccount
+                        : null
+                    }
+                    {...register("bankAccount", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[A-Z0-9]+$/,
+                        message: t("Form_IBAN"),
+                      },
+                      minLength: {
+                        value: 15,
+                        message: t("Form_minLength_15"),
+                      },
+                      maxLength: {
+                        value: 34,
+                        message: t("Form_maxLength_34"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("bankAccount");
+                    }}
+                    name="bankAccount"
+                  ></Form.Control>
+                  {errors.bankAccount && (
+                    <div className="text-danger form-msg-style">
+                      {errors.bankAccount.message}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+            <hr />
             <h6>{t("AddShops_title_geolocation")}</h6>
             <Row>
               <Col md={6}>
@@ -526,16 +572,6 @@ function AddShops() {
             </Row>
             <Row>
               <Col>
-                {/* <Form.Group
-                  controlId="photo"
-                  className="btn-img-upload rounded mb-3"
-                  onChange={uploadFilesHandler}
-                >
-                  <Form.Label>
-                    {t("AdminAddProducts_label_choose_photos")}
-                  </Form.Label>
-                  <Form.Control type="file" {...register("photo", {})} />
-                </Form.Group> */}
                 <UploadImage nip={currentTaxNo} />
               </Col>
             </Row>

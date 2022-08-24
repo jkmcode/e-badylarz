@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     "corsheaders",
+    'storages',
     'base.apps.BaseConfig',
 ]
 
@@ -160,3 +161,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' #django wie, że ma się połączyć z AWS S3 BUCKET
+AWS_S3_ACCESS_KEY_ID = 'AKIA27PW6UDRCKJSSH7H' #KEY ID użytkownika
+AWS_S3_SECRET_ACCESS_KEY = '0zAo9AHleYErogSSAPBC73dNB7qOplMTfcwQ27UY' # Hasło użytkownika
+AWS_STORAGE_BUCKET_NAME = 'e-badylarz' #nazwa produktu S3 BUCKET

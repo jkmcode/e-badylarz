@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDiscrict } from "../actions/discrictsActions";
 import background from "../images/jabłka.png";
 import { scroller } from "react-scroll";
+import ErrorMessage from "../component/ErrorMessage";
 
 //https://react-select.com/advanced
 
@@ -60,7 +61,6 @@ function FormAddressScreen() {
   const cities = ["Chrzanów", "Pogorzyce", "Płaza"];
 
   useEffect(() => {
-    console.log(districtList.length);
     if (districtList.length === 0) {
       dispatch(getDiscrict());
     }
@@ -118,18 +118,18 @@ function FormAddressScreen() {
 
   const shadowForMobile = {
     backgroundColor: "#1d1c1b",
-    height: "20vh",
+    height: "18vh",
     width: "100%",
     opacity: "30%",
-    marginTop: "-20vh",
+    marginTop: "-18vh",
   };
 
   const shadowForDesktop = {
     backgroundColor: "#1d1c1b",
-    height: "25vh",
+    height: "20vh",
     width: "100%",
     opacity: "30%",
-    marginTop: "-25vh",
+    marginTop: "-20vh",
   };
 
   const centerForm = {
@@ -151,10 +151,17 @@ function FormAddressScreen() {
     border: "none",
   };
 
-  const info = {
+  const infoMsg = {
     backgroundColor: "#EAFEE1",
-    marginTop: "1rem",
+    marginTop: "0.5rem",
     color: "#1A5E02",
+    borderRadius: "10px",
+  };
+
+  const errorMsg = {
+    backgroundColor: "#FFE1E1",
+    marginTop: "1rem",
+    color: "#AE1D1D",
     borderRadius: "10px",
   };
 
@@ -182,21 +189,27 @@ function FormAddressScreen() {
         {loading ? (
           <Loader />
         ) : error ? (
-          <p>error</p>
+          <ErrorMessage msg={error} timeOut={4000} />
         ) : (
-          <div style={centerForm} className="bg-container max-sizing p-4 w-90">
+          <div
+            style={centerForm}
+            className="bg-container max-sizing px-4 pt-4 w-90"
+          >
             <Row>
               <Col>
-                <p style={title} className="text-center h5 fw-bolder">
+                <div
+                  style={title}
+                  className="text-center h5 fw-bolder font-size-title"
+                >
                   {t("FormAddressScreen_title")}
-                </p>
+                </div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <p className="text-center h5 fw-bolder letter-spacing-1">
+                <div className="text-center h5 fw-bolder letter-spacing-1 font-size-title">
                   {t("FormAddressScreen_subtitle")}
-                </p>
+                </div>
               </Col>
             </Row>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -215,7 +228,9 @@ function FormAddressScreen() {
                         <option key={i.id}>{i.name}</option>
                       ))}
                     </Form.Select>
-                    {districRequired ? <p>{districRequired}</p> : null}
+                    <div className="invalid-feedback fst-italic">
+                      {districRequired ? <div>{districRequired}</div> : null}
+                    </div>
                   </Col>
                 </Row>
               </Form.Group>
@@ -239,49 +254,30 @@ function FormAddressScreen() {
                       <option>{cities[1]}</option>
                       <option>{cities[2]}</option>
                     </Form.Select>
+                    <div className="invalid-feedback fst-italic">
+                      {districRequired ? <div>{districRequired}</div> : null}
+                    </div>
                   </Col>
                 </Row>
                 {locationMsg ? <p>{locationMsg}</p> : null}
               </Form.Group>
-              {/* <Row>
-                <Col className="text-center mt-4 color-title">
-                  <p className="test3">lub</p>
-                </Col>
-              </Row>
-              <Form.Group>
-                <Row>
-                  <Col>
-                    <Form.Select
-                      name="pickupLocation"
-                      {...register("pickupLocation")}
-                      disabled={disabledField}
-                      className="mt-3"
-                      onChange={selectHandler2}
-                    >
-                      <option key="blankChoice" hidden value={zero}>
-                        {t("FormAddressScreen__pickup_location_placeholder")}
-                      </option>
-                      <option key="zeroValue" value={zero}></option>
-                      <option>{cities[0]}</option>
-                      <option>{cities[1]}</option>
-                      <option>{cities[2]}</option>
-                    </Form.Select>
-                  </Col>
-                </Row>
-                {locationMsg ? <p>{locationMsg}</p> : null}
-              </Form.Group> */}
               <Row>
                 {/* <h5 className="mt-3 text-justify">
                   {t("FormAddressScreen__info")}
                 </h5> */}
               </Row>
-              <div style={info} className="p-3">
-                <div>Podaj swój adres w celu oszacowania kosztu dostawy</div>
+              {districRequired ? (
+                <div style={errorMsg} className="p-3 font-size-msg">
+                  Prosimy o wypełnienie wymaganych pól.
+                </div>
+              ) : null}
+
+              <div style={infoMsg} className="p-3 font-size-msg">
+                <div>Podaj swój adres w celu oszacowania kosztu dostawy.</div>
               </div>
 
               <div className="d-flex justify-content-center">
                 <button
-                  type="submit"
                   className="w-90 w-md-50 my-1 py-3 h6"
                   style={searchAreaBtn}
                 >
@@ -294,15 +290,14 @@ function FormAddressScreen() {
         )}
       </div>
       <div style={positionRelative}>
-        <div style={windowWidth > 600 ? shadowForDesktop : shadowForMobile} />
+        <div style={windowWidth > 1200 ? shadowForDesktop : shadowForMobile} />
         <Row>
-          <p style={positionInfo} className="fw-bolder">
+          <div style={positionInfo} className="fw-bolder">
             Twoje ulubione lokalne sklepy w jednym miejscu!
-          </p>
+          </div>
         </Row>
 
         <button
-          type="submit"
           className="w-80 w-md-25 py-3 h6"
           style={positionBtn}
           onClick={() => setPwaInst(true)}

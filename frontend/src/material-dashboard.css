@@ -3464,7 +3464,6 @@ textarea.form-control.is-valid {
 }
 
 .invalid-feedback {
-  display: none;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 0.875em;
@@ -8883,7 +8882,7 @@ fieldset:disabled .btn {
 }
 
 .w-90 {
-  width: 90% !important;
+  width: 30% !important;
 }
 
 .w-95 {

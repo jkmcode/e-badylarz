@@ -46,19 +46,62 @@ import {
   GET_AREA_LIST_REQUEST,
   GET_AREA_LIST_SUCCESS,
   GET_AREA_LIST_FAIL,
-  SAVE_IMAGE_REDAX,
+  SAVE_IMAGE_REDUX,
+  ADD_IMAGE_REQUEST,
+  ADD_IMAGE_SUCCESS,
+  ADD_IMAGE_FAIL,
+  ADD_SHOP_DELETE_SUCCESS,
 } from "../constants/adminConstans";
 
 // Save image in redax
 
-export const saveImage = (imageToSeve) => (dispatch) => {
+export const InsertImage = (insertData) => async (dispatch, getState) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", insertData.imageUpload);
+    formData.append("taxNo", insertData.taxNo);
 
-  console.log('file in Action -->', imageToSeve)  
-  dispatch({
-      type: SAVE_IMAGE_REDAX,
-      payload: imageToSeve,
+    dispatch({ type: ADD_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(`/api/upload-image/`, formData, config);
+
+    dispatch({
+      type: ADD_IMAGE_SUCCESS,
+      payload: data,
     });
+  } catch (error) {
+    dispatch({
+      type: ADD_IMAGE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
+export const Test = (insertData) => (dispatch) => {
+  dispatch({
+    type: ADD_SHOP_DELETE_SUCCESS,
+    payload: insertData,
+  });
+};
+
+export const saveImage = (imageToSave) => (dispatch) => {
+  dispatch({
+    type: SAVE_IMAGE_REDUX,
+    payload: imageToSave,
+  });
 };
 
 // Areas
@@ -79,8 +122,6 @@ export const getAreas = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(`/api/get-areas/`, config);
-
-    console.log("data", data);
 
     dispatch({
       type: GET_AREA_LIST_SUCCESS,

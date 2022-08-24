@@ -5,29 +5,13 @@ import useGeoLocation from "../component/useGeoLocation";
 import { useTranslation } from "react-i18next";
 import CurrentAdress from "./CurrentAdress";
 import { useDispatch, useSelector } from "react-redux";
-import { testList } from "../actions/testActions";
 import { getDiscrict } from "../actions/discrictsActions";
-
-import {
-  TEST_REQUEST,
-  TEST_SUCCESS,
-  TEST_FAIL,
-} from "../constants/testConstans";
 
 function LocationScreen() {
   const [newLocation, setNewLocation] = useState(false);
   // const location = useGeoLocation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  const funkcjaTestowa = () => {
-    setNewLocation(true);
-    console.log("działa poprawnie");
-  };
-
-  dispatch(testList());
-
-  dispatch(getDiscrict());
 
   return (
     <div className="container text-center bg-container mt-5 p-4 rounded">
@@ -66,11 +50,7 @@ function LocationScreen() {
       </Row>
       <Row>
         <Col>
-          <Button
-            variant="outline-success"
-            className="w-100 mt-2 p-3"
-            onClick={funkcjaTestowa}
-          >
+          <Button variant="outline-success" className="w-100 mt-2 p-3">
             Inny adres
           </Button>
         </Col>

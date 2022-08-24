@@ -26,6 +26,7 @@ function AboutUsScreeen() {
   const searchAreaBtn = {
     color: "white",
     backgroundColor: "#207B00",
+    borderRadius: "20px",
     border: "none",
   };
 
@@ -54,11 +55,7 @@ function AboutUsScreeen() {
         rzemieślniczych produktów ? Zostaw nam namiar na siebie
       </p>
       <div className="d-flex justify-content-center">
-        <button
-          type="submit"
-          className="rounded my-3 w-60 p-3"
-          style={searchAreaBtn}
-        >
+        <button className="w-80 w-md-25 py-3 h6" style={searchAreaBtn}>
           Formularz partnerski
         </button>
       </div>

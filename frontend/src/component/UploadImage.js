@@ -1,5 +1,4 @@
-import React, { useState,useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
 import FolderIcon from "../images/folder_icon.png";
 import CloseIcon from "../images/CloseIcon.svg";
@@ -12,7 +11,7 @@ function UploadImage(params) {
   const [typeFile, setTypeFile] = useState("");
 
   const dispatch = useDispatch();
-  
+
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload } = imageRedux;
 
@@ -29,49 +28,13 @@ function UploadImage(params) {
       reader.readAsDataURL(e.target.files[0]);
     }
 
-    // DODANIE PHOTO
-
-    // add photo to DB
+    // save image in Redux
     const file = e.target.files[0];
-    const formData = new FormData();
+    // const formData = new FormData();
+    // formData.append("image", file);
 
-    formData.append("image", file);
-    formData.append("shopTaxNo", params.nip);
-
-    dispatch(
-      saveImage({file})
-    );
-
-    console.log('formData -->', file)
-    console.log('imageUpload z redxa-->', imageUpload)
-
-
-  
-    //setUploading(true);
-
-    // try {
-    //   const config = {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   };
-
-    //   const { data } = await axios.post("/api/upload-image/", formData, config);
-    //   setMsg(true);
-    //   setImage(data.image);
-    //   setUploading(false);
-    //   setMsgTextUpload(data.text);
-    // } catch (error) {
-    //   setUploading(false);
-    //   console.log("aaaaaa");
-    // }
+    dispatch(saveImage(file));
   };
-
-  useEffect(() => {
-      console.log('imageUpload z redxa-->', imageUpload)    
-    }
-  , [imageUpload]);
-
 
   //style
   // https://github.com/rodriguesabner/ImagePreview-React/blob/main/src/App.js
