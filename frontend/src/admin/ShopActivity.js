@@ -18,6 +18,7 @@ import UploadImage from "../component/UploadImage";
 import {
   DELETE_IMAGE_REDUX,
   ADD_SHOP_DELETE_SUCCESS,
+  SET_FLAG_IMAGE_TRUE,
 } from "../constants/adminConstans";
 
 import { Icon } from "@iconify/react";
@@ -60,10 +61,14 @@ function AddShops() {
   const insertImageRedux = useSelector((state) => state.insertImage);
   const { successInsertImage, loadingInsertImage } = insertImageRedux;
 
+  const imageFlag = useSelector((state) => state.flag);
+  const { shopImageFlag } = imageFlag;
+
   // Handlers
   const onSubmit = (data) => {
+    setCurrentTaxNo(data.nip);
     if (addShopParam) {
-      setCurrentTaxNo(data.nip);
+      dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
         addShop({
           city: data.city,
@@ -81,6 +86,7 @@ function AddShops() {
         })
       );
     } else {
+      dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
         updateShop({
           id: shopId,
@@ -95,9 +101,15 @@ function AddShops() {
           postCode: data.postCode,
           street: data.street,
           creator: userInfo.id,
+          bankAccount: data.bankAccount,
           typeOfChnage: "Edit date",
         })
       );
+      if (isImage) {
+        dispatch(
+          InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+        );
+      }
     }
   };
 
@@ -111,7 +123,6 @@ function AddShops() {
           Id: shopId,
         })
       );
-    } else {
     }
   }, []);
 
@@ -124,7 +135,6 @@ function AddShops() {
             dispatch(
               InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
             );
-            // 3. skasować zdjęcie z ridaxa
           }
         }
       });
@@ -133,10 +143,10 @@ function AddShops() {
 
   // navigate to ShopAdmin
   useEffect(() => {
-    if (successAdd && !isImage) {
+    if (successAdd && !isImage && shopImageFlag) {
       dispatch(Test(shopList));
       navigate("/dashboard/shops/shops");
-    } else if (successAdd && isImage && successInsertImage) {
+    } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
       dispatch(Test(shopList));
       navigate("/dashboard/shops/shops");
     }
@@ -574,6 +584,9 @@ function AddShops() {
               <Col>
                 <UploadImage nip={currentTaxNo} />
               </Col>
+              {/* <Col>
+                <img src={shopDetails.photo} />
+              </Col> */}
             </Row>
             <div className="d-flex justify-content-end">
               {editShopParam === "edit" ? (

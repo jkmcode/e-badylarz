@@ -7,10 +7,10 @@ import Loader from "../component/Loader";
 import InfoWindow from "../component/infoWindow";
 import { unOrActiveList } from "../actions/adminActions";
 import {
-  GET_SHOPS_LIST_DELETE,
   SHOP_DESCRIPTION,
   SET_FLAG_SHOP_TRUE,
   GET_SHOP_DELETE,
+  SET_FLAG_IMAGE_FALSE,
 } from "../constants/adminConstans";
 
 function AdminShops() {
@@ -33,6 +33,9 @@ function AdminShops() {
   const getShopRedux = useSelector((state) => state.getShop);
   const { shopDetails } = getShopRedux;
 
+  const imageFlag = useSelector((state) => state.flag);
+  const { shopImageFlag } = imageFlag;
+
   // fetching list of shops from DB
   useEffect(() => {
     if (shopList.length === 0) {
@@ -44,7 +47,11 @@ function AdminShops() {
     if (shopDetails) {
       dispatch({ type: GET_SHOP_DELETE });
     }
-  }, [dispatch, shopList.length, activeShops]);
+
+    if (shopImageFlag) {
+      dispatch({ type: SET_FLAG_IMAGE_FALSE });
+    }
+  }, [dispatch, shopList.length, activeShops, shopImageFlag]);
 
   //  handle function
   const activeHandler = (id) => {

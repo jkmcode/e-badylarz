@@ -35,11 +35,12 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 #uploading image
-@api_view(["POST"])
+@api_view(["PUT"])
 def uploadMultiImages(request):
-    print('jest uruchamiany uploadMultiImages')
+
     data = request.data
     taxNo = data["taxNo"]
+    print('taxNoooooooooooooooooooooooooooooooooooo', taxNo)
     images_upload = request.FILES.get("image")
 
     shop = Shops.objects.get(nip=taxNo)
@@ -73,21 +74,22 @@ def updateShop(request, Id):
     shop = Shops.objects.get(id=Id)
 
     shop_ARC = ShopsARC.objects.create(
-        id_shops=shop,
-        name=data['name'],
-        nip=data['nip'],
-        city=data['city'],
-        street=data['street'],
-        no_building=data["number"],
-        post_code=data["postCode"],
-        post=data["post"],
-        latitude=data["latitude"],
-        longitude=data["longitude"],
+        id_shops=Id,
+        name=shop.name,
+        nip=shop.nip,
+        city=shop.city,
+        street=shop.street,
+        no_building=shop.no_building,
+        post_code=shop.post_code,
+        post=shop.post,
+        latitude=shop.latitude,
+        longitude=shop.longitude,
         date_of_change = shop.date_of_entry,
         modifier = shop.creator,
         creator = data['creator'],
-        is_active = True,
-        type_of_change = data['typeOfChnage']
+        is_active = shop.is_active,
+        bank_account = shop.bank_account,
+        type_of_change = data['typeOfChnage']        
     )
 
     try:
@@ -101,7 +103,7 @@ def updateShop(request, Id):
         shop.latitude = data['latitude'],
         shop.longitude = data['longitude'],
         shop.creator = data['creator'],
-        shop.is_active=False,
+        shop.bank_account = data['bankAccount']
 
         shop.save()
 

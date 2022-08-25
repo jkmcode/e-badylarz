@@ -78,6 +78,8 @@ import {
   ADD_IMAGE_REQUEST,
   ADD_IMAGE_SUCCESS,
   ADD_IMAGE_FAIL,
+  SET_FLAG_IMAGE_TRUE,
+  SET_FLAG_IMAGE_FALSE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -275,6 +277,10 @@ export const flagReducer = (state = {}, action) => {
       return { shopFlag: true };
     case SET_FLAG_SHOP_FALSE:
       return { shopFlag: false };
+    case SET_FLAG_IMAGE_TRUE:
+      return { shopImageFlag: true };
+    case SET_FLAG_IMAGE_FALSE:
+      return { shopImageFlag: false };
     default:
       return state;
   }

@@ -73,7 +73,7 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.post(`/api/upload-image/`, formData, config);
+    const { data } = await axios.put(`/api/upload-image/`, formData, config);
 
     dispatch({
       type: ADD_IMAGE_SUCCESS,
