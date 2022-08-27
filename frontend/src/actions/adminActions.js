@@ -50,7 +50,6 @@ import {
   ADD_IMAGE_REQUEST,
   ADD_IMAGE_SUCCESS,
   ADD_IMAGE_FAIL,
-  ADD_SHOP_DELETE_SUCCESS,
 } from "../constants/adminConstans";
 
 // Save image in redax
@@ -88,13 +87,6 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
           : error.message,
     });
   }
-};
-
-export const Test = (insertData) => (dispatch) => {
-  dispatch({
-    type: ADD_SHOP_DELETE_SUCCESS,
-    payload: insertData,
-  });
 };
 
 export const saveImage = (imageToSave) => (dispatch) => {

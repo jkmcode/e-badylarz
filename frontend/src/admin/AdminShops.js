@@ -48,6 +48,8 @@ function AdminShops() {
       dispatch({ type: GET_SHOP_DELETE });
     }
 
+    // change shopImageFlag to Flase while every render. We need that to able open edit/add shop.
+    // Otherwise in ShopActivity the condition (successAdd && !isImage) will come true
     if (shopImageFlag) {
       dispatch({ type: SET_FLAG_IMAGE_FALSE });
     }

@@ -40,7 +40,6 @@ def uploadMultiImages(request):
 
     data = request.data
     taxNo = data["taxNo"]
-    print('taxNoooooooooooooooooooooooooooooooooooo', taxNo)
     images_upload = request.FILES.get("image")
 
     shop = Shops.objects.get(nip=taxNo)
@@ -73,7 +72,13 @@ def updateShop(request, Id):
     data = request.data
     shop = Shops.objects.get(id=Id)
 
-    shop_ARC = ShopsARC.objects.create(
+    print('data', data)
+    print("POST", len(data['post']))
+    print("latitude", len(data['latitude']))
+    print("longitude", len(data['longitude']))
+    print("nip", len(data['nip']))
+
+    ShopsARC.objects.create(
         id_shops=Id,
         name=shop.name,
         nip=shop.nip,
@@ -92,27 +97,48 @@ def updateShop(request, Id):
         type_of_change = data['typeOfChnage']        
     )
 
-    try:
-        shop.name=data['name'],
-        shop.nip = data['nip'],
-        shop.city = data['city'],
-        shop.street = data['street'],
-        shop.no_building = data['number'],
-        shop.post_code = data['postCode'],
-        shop.post = data['post'],
-        shop.latitude = data['latitude'],
-        shop.longitude = data['longitude'],
-        shop.creator = data['creator'],
-        shop.bank_account = data['bankAccount']
+    shop.name=data['name'],
+    shop.nip = data['nip'],
+    shop.city = data['city'],
+    shop.street = data['street'],
+    shop.no_building = data['number'],
+    shop.post_code = data['postCode'],
+    shop.post = data['post'],
+    shop.latitude = data['latitude'],
+    shop.longitude = data['longitude'],
+    shop.creator = str(data['creator']),
+    shop.bank_account = data['bankAccount']
 
-        shop.save()
+    shop.save()
 
-        serializer = ShopsSerializer(shop, many=False)
+    serializer = ShopsSerializer(shop, many=False)
 
-        return Response(serializer.data)
-    except:
-        message = {"detail": "Podany kod rejestracyjny już istnieje"}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)        
+    return Response(serializer.data)
+
+    # try:
+    #     shop.name=data['name'],
+    #     shop.nip = data['nip'],
+    #     shop.city = data['city'],
+    #     shop.street = data['street'],
+    #     shop.no_building = data['number'],
+    #     shop.post_code = data['postCode'],
+    #     shop.post = data['post'],
+    #     shop.latitude = data['latitude'],
+    #     shop.longitude = data['longitude'],
+    #     shop.creator = data['creator'],
+    #     shop.bank_account = data['bankAccount']
+
+    #     shop.save()
+
+    #     serializer = ShopsSerializer(shop, many=False)
+
+    #     return Response(serializer.data)
+    # except:
+    #     message = {"detail": "Podany kod rejestracyjny już istnieje"}
+    #     return Response(message, status=status.HTTP_400_BAD_REQUEST)        
+
+
+
 
 
 @api_view(['GET'])
