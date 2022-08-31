@@ -11,14 +11,13 @@ import {
   getShop,
   updateShop,
   InsertImage,
-  Test,
 } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
 
 import {
   DELETE_IMAGE_REDUX,
-  ADD_SHOP_DELETE_SUCCESS,
   SET_FLAG_IMAGE_TRUE,
+  GET_SHOPS_LIST_DELETE,
 } from "../constants/adminConstans";
 
 import { Icon } from "@iconify/react";
@@ -38,7 +37,7 @@ function AddShops() {
   const navigate = useNavigate();
 
   const [uploading, setUploading] = useState(false);
-  const [render, setRender] = useState(false);
+  const [imageRender, setImageRender] = useState(false);
   const [currentTaxNo, setCurrentTaxNo] = useState("");
 
   const editShopParam = params.edit;
@@ -53,7 +52,11 @@ function AddShops() {
   const { loading, error, successAdd, shopList } = shopListRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
-  const { shopDetails } = getShopRedux;
+  const {
+    loading: loadingGetShop,
+    shopDetails,
+    success: successGetShop,
+  } = getShopRedux;
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
@@ -63,6 +66,22 @@ function AddShops() {
 
   const imageFlag = useSelector((state) => state.flag);
   const { shopImageFlag } = imageFlag;
+
+  const updateShopRedux = useSelector((state) => state.updateShop);
+  const { loading: loadingUpdateShop, success: successUpdateShop } =
+    updateShopRedux;
+
+  // normalize function
+  const normalizeCardNumber = (value) => {
+    return (
+      value
+        .replace(/\s/g, "")
+        .match(/.{1,4}/g)
+        ?.join(" ")
+        .substr(0, 39)
+        .toUpperCase() || ""
+    );
+  };
 
   // Handlers
   const onSubmit = (data) => {
@@ -87,6 +106,7 @@ function AddShops() {
       );
     } else {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
       dispatch(
         updateShop({
           id: shopId,
@@ -123,8 +143,27 @@ function AddShops() {
           Id: shopId,
         })
       );
+      setImageRender(true);
     }
   }, []);
+
+  //Reset Default data
+  useEffect(() => {
+    if (successGetShop) {
+      reset({
+        name: shopDetails.name,
+        nip: shopDetails.nip,
+        city: shopDetails.city,
+        street: shopDetails.street,
+        number: shopDetails.no_building,
+        postCode: shopDetails.post_code,
+        post: shopDetails.post,
+        bankAccount: shopDetails.bankAccount,
+        latitude: shopDetails.latitude,
+        longitude: shopDetails.longitude,
+      });
+    }
+  }, [successGetShop]);
 
   // set current Tax Number
   useEffect(() => {
@@ -144,13 +183,20 @@ function AddShops() {
   // navigate to ShopAdmin
   useEffect(() => {
     if (successAdd && !isImage && shopImageFlag) {
-      dispatch(Test(shopList));
       navigate("/dashboard/shops/shops");
     } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
-      dispatch(Test(shopList));
+      navigate("/dashboard/shops/shops");
+    } else if (successUpdateShop && !isImage && shopImageFlag) {
+      navigate("/dashboard/shops/shops");
+    } else if (
+      successUpdateShop &&
+      isImage &&
+      successInsertImage &&
+      shopImageFlag
+    ) {
       navigate("/dashboard/shops/shops");
     }
-  }, [successAdd, isImage, successInsertImage]);
+  }, [successAdd, isImage, successInsertImage, successUpdateShop]);
 
   //style
 
@@ -167,7 +213,7 @@ function AddShops() {
 
   return (
     <>
-      {loading || loadingInsertImage ? (
+      {loading || loadingInsertImage || loadingGetShop || loadingUpdateShop ? (
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
@@ -196,11 +242,7 @@ function AddShops() {
                     className={errors.name ? "formInvalid" : null}
                     type="text"
                     placeholder={t("AddShops_name_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.name
-                        : null
-                    }
+                    ref={register}
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -238,11 +280,6 @@ function AddShops() {
                     type="text"
                     className={errors.nip ? "formInvalid" : null}
                     placeholder={t("AddShops_nip_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.nip
-                        : null
-                    }
                     {...register("nip", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -275,11 +312,6 @@ function AddShops() {
                     type="text"
                     className={errors.city ? "formInvalid" : null}
                     placeholder={t("AddShops_city_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.city
-                        : null
-                    }
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -316,11 +348,6 @@ function AddShops() {
                     type="text"
                     className={errors.street ? "formInvalid" : null}
                     placeholder={t("AddShops_street_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.street
-                        : null
-                    }
                     {...register("street", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -359,11 +386,6 @@ function AddShops() {
                     type="text"
                     className={errors.number ? "formInvalid" : null}
                     placeholder={t("AddShops_number_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.no_building
-                        : null
-                    }
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -392,11 +414,6 @@ function AddShops() {
                     type="text"
                     className={errors.postCode ? "formInvalid" : null}
                     placeholder={t("AddShops_postCode_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.post_code
-                        : null
-                    }
                     {...register("postCode", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -433,11 +450,6 @@ function AddShops() {
                     type="text"
                     className={errors.post ? "formInvalid" : null}
                     placeholder={t("AddShops_post_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.post
-                        : null
-                    }
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -474,26 +486,26 @@ function AddShops() {
                     {t("AddShops_label_bankAccound")}
                   </Form.Label>
                   <Form.Control
-                    type="text"
+                    type="tel"
                     className={errors.bankAccount ? "formInvalid" : null}
                     placeholder={t("AddShops_bankAccound_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.bankAccount
-                        : null
-                    }
+                    ref={register}
                     {...register("bankAccount", {
+                      onChange: (event) => {
+                        const { value } = event.target;
+                        event.target.value = normalizeCardNumber(value);
+                      },
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Z0-9]+$/,
+                        value: /^[A-Za-z0-9 ]+$/,
                         message: t("Form_IBAN"),
                       },
                       minLength: {
-                        value: 15,
+                        value: 21,
                         message: t("Form_minLength_15"),
                       },
                       maxLength: {
-                        value: 34,
+                        value: 40,
                         message: t("Form_maxLength_34"),
                       },
                     })}
@@ -522,11 +534,6 @@ function AddShops() {
                     type="text"
                     className={errors.latitude ? "formInvalid" : null}
                     placeholder={t("AddShops_latitude_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.latitude
-                        : null
-                    }
                     {...register("latitude", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -555,11 +562,6 @@ function AddShops() {
                     type="text"
                     className={errors.longitude ? "formInvalid" : null}
                     placeholder={t("AddShops_longitude_placeholder")}
-                    defaultValue={
-                      editShopParam === "edit" && shopDetails
-                        ? shopDetails.longitude
-                        : null
-                    }
                     {...register("longitude", {
                       required: t("Form_field_required"),
                       pattern: {
@@ -584,9 +586,14 @@ function AddShops() {
               <Col>
                 <UploadImage nip={currentTaxNo} />
               </Col>
-              {/* <Col>
-                <img src={shopDetails.photo} />
-              </Col> */}
+              {imageRender
+                ? editShopParam === "edit" &&
+                  shopDetails.photo !== null && (
+                    <Col>
+                      <img src={shopDetails.photo} />
+                    </Col>
+                  )
+                : null}
             </Row>
             <div className="d-flex justify-content-end">
               {editShopParam === "edit" ? (
