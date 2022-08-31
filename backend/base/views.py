@@ -21,6 +21,9 @@ from rest_framework import status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+
+# testowanie GIT-a repository
+
 #create user
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -152,7 +155,7 @@ def getShop(request, Id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContacts(request, Id):
-    contacts = ShopsContact.objects.filter(id = Id).order_by('name')
+    contacts = ShopsContact.objects.filter(id=Id).order_by('name')
 
     seriaziler = ShopsContactSerializer(contacts, many=True)
 

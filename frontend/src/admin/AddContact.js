@@ -12,6 +12,7 @@ import { Icon } from "@iconify/react";
 import Rocket from "../images/rocket.png";
 
 function AddContact() {
+  // TESTOWANIE
   const {
     register,
     formState: { errors },
