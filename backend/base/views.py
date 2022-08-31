@@ -151,10 +151,10 @@ def getShop(request, Id):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getContacts(request):
-    shops = ShopsContact.objects.all().order_by('name') 
+def getContacts(request, Id):
+    contacts = ShopsContact.objects.filter(id = Id).order_by('name')
 
-    seriaziler = ShopsContactSerializer(shops, many=True)
+    seriaziler = ShopsContactSerializer(contacts, many=True)
 
     return Response(seriaziler.data)
 

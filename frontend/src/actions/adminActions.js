@@ -205,7 +205,7 @@ export const getShop = (insertData) => async (dispatch, getState) => {
   }
 };
 
-export const getShopContacts = () => async (dispatch, getState) => {
+export const getShopContacts = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: GET_CONTACT_LIST_REQUEST });
 
@@ -220,7 +220,10 @@ export const getShopContacts = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/get-contacts/`, config);
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/get-contacts/`,
+      config
+    );
 
     dispatch({
       type: GET_CONTACT_LIST_SUCCESS,

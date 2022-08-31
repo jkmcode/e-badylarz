@@ -9,6 +9,7 @@ import { Row, Col, Button, Form, Table } from "react-bootstrap";
 import { addContact } from "../actions/adminActions";
 import { getShopContacts } from "../actions/adminActions";
 import { Icon } from "@iconify/react";
+import Rocket from "../images/rocket.png";
 
 function AddContact() {
   const {
@@ -42,7 +43,7 @@ function AddContact() {
   // fetching list of contact from DB
   useEffect(() => {
     if (ListOfContact.length === 0) {
-      dispatch(getShopContacts());
+      dispatch(getShopContacts({ Id: shopId }));
     }
   }, [dispatch, ListOfContact.length]);
 
@@ -60,11 +61,11 @@ function AddContact() {
   };
 
   return (
-    <>
+    <div className="full-screen">
       {loading ? (
         <Loader />
       ) : (
-        <Row className="gx-0">
+        <Row className="gx-0 ">
           <Col lg={6}>
             <div className="mx-2 bg-container mt-5 p-4 rounded">
               {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
@@ -262,7 +263,8 @@ function AddContact() {
           </Col>
         </Row>
       )}
-    </>
+      <img className="img-contact" src={Rocket}></img>
+    </div>
   );
 }
 

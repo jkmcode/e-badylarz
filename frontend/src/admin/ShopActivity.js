@@ -11,13 +11,11 @@ import {
   getShop,
   updateShop,
   InsertImage,
-  Test,
 } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
 
 import {
   DELETE_IMAGE_REDUX,
-  ADD_SHOP_DELETE_SUCCESS,
   SET_FLAG_IMAGE_TRUE,
   GET_SHOPS_LIST_DELETE,
 } from "../constants/adminConstans";
@@ -32,12 +30,6 @@ function AddShops() {
     reset,
     trigger,
   } = useForm();
-
-  // const { register } = useForm({
-  //   defaultValues: {
-  //     name: "bIEDRONKA",
-  //   },
-  // });
 
   const { t } = useTranslation();
   const dispatch = useDispatch();

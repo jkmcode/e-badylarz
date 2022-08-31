@@ -11,6 +11,7 @@ import {
   SET_FLAG_SHOP_TRUE,
   GET_SHOP_DELETE,
   SET_FLAG_IMAGE_FALSE,
+  GET_CONTACT_LIST_DELETE,
 } from "../constants/adminConstans";
 
 function AdminShops() {
@@ -36,6 +37,9 @@ function AdminShops() {
   const imageFlag = useSelector((state) => state.flag);
   const { shopImageFlag } = imageFlag;
 
+  const contactListRedux = useSelector((state) => state.contactList);
+  const { ListOfContact } = contactListRedux;
+
   // fetching list of shops from DB
   useEffect(() => {
     if (shopList.length === 0) {
@@ -50,10 +54,21 @@ function AdminShops() {
 
     // change shopImageFlag to Flase while every render. We need that to able open edit/add shop.
     // Otherwise in ShopActivity the condition (successAdd && !isImage) will come true
+
     if (shopImageFlag) {
       dispatch({ type: SET_FLAG_IMAGE_FALSE });
     }
-  }, [dispatch, shopList.length, activeShops, shopImageFlag]);
+
+    if (ListOfContact.length !== 0) {
+      dispatch({ type: GET_CONTACT_LIST_DELETE });
+    }
+  }, [
+    dispatch,
+    shopList.length,
+    activeShops,
+    shopImageFlag,
+    ListOfContact.lengt,
+  ]);
 
   //  handle function
   const activeHandler = (id) => {
