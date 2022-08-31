@@ -22,7 +22,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-# testowanie GIT-a repository
+# testowanie GIT-a repository 1111
 
 #create user
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
