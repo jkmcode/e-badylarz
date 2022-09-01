@@ -16,6 +16,7 @@ function AddContact() {
 
   // Komentarz KUBA !!!!!!!!!!!!!!!!!!!!!!
   /// takie moje komentarze !!!!!
+  // pisze totalne bzdury
 
   const {
     register,
