@@ -13,6 +13,8 @@ import Rocket from "../images/rocket.png";
 
 function AddContact() {
   // TESTOWANIE 123
+
+  // Komentarz KUBA !!!!!!!!!!!!!!!!
   const {
     register,
     formState: { errors },
