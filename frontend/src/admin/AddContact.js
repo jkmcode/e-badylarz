@@ -15,6 +15,8 @@ function AddContact() {
   // TESTOWANIE 123
 
   // Komentarz KUBA !!!!!!!!!!!!!!!!!!!!!!
+  /// takie moje komentarze !!!!!
+
   const {
     register,
     formState: { errors },
