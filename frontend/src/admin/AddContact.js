@@ -14,9 +14,15 @@ import Rocket from "../images/rocket.png";
 function AddContact() {
   // TESTOWANIE 123
 
+  // Komentarz KUBA !!!!!!!!!!!!!!!!!!!!!!
   /// takie moje komentarze !!!!!
 
+
   // mój komentarz bez commit'a
+
+  // pisze totalne bzdury
+
+
   const {
     register,
     formState: { errors },
