@@ -15,6 +15,8 @@ function AddContact() {
   // TESTOWANIE 123
 
   /// takie moje komentarze !!!!!
+
+  // mój komentarz bez commit'a
   const {
     register,
     formState: { errors },
