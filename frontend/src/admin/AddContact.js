@@ -13,6 +13,8 @@ import Rocket from "../images/rocket.png";
 
 function AddContact() {
   // TESTOWANIE 123
+
+  /// takie moje komentarze !!!!!
   const {
     register,
     formState: { errors },
