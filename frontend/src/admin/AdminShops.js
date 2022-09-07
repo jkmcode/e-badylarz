@@ -209,7 +209,7 @@ function AdminShops() {
                               </td>
                               <td className="align-middle text-center text-sm">
                                 <span className="badge badge-sm bg-gradient-danger">
-                                  Inactive
+                                {t("status_inactive")}
                                 </span>
                               </td>
                               <td className="align-middle">
@@ -265,7 +265,7 @@ function AdminShops() {
                               </td>
                               <td className="align-middle text-center text-sm">
                                 <span className="badge badge-sm bg-gradient-success">
-                                  Active
+                                {t("status_active")}
                                 </span>
                               </td>
                               <td className="align-middle">

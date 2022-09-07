@@ -38,6 +38,9 @@
     "btn_no":"NIE",
     "btn_show_active_shops": "Pokaż skley aktywne",
     "btn_show_inactive_shops": "Pokaż sklepy nieaktywne",
+    
+    "status_inactive":"Nieaktywny",
+    "status_active":"Aktywny",
 
     "Table_head_name" : "Nazwa",
     "Table_head_ID" : "Lp.",

@@ -38,6 +38,9 @@
     "btn_no":"NO",
     "btn_show_active_shops": "Show active shops",
     "btn_show_inactive_shops": "Show inactive shops",
+    
+    "status_inactive":"Inactive",
+    "status_active":"Active",
 
     "Table_head_name" : "Name",
     "Table_head_ID" : "ID",
