@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getShops } from "../actions/adminActions";
 import Loader from "../component/Loader";
+import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
 import { unOrActiveList } from "../actions/adminActions";
 import {
@@ -78,6 +79,7 @@ function AdminShops() {
         active: true,
         userId: userInfo.id,
         objType: SHOP_DESCRIPTION,
+        kind: "Inactive shop",
       })
     );
     setActive(true);
@@ -91,6 +93,7 @@ function AdminShops() {
         active: false,
         userId: userInfo.id,
         objType: SHOP_DESCRIPTION,
+        kind: "Active shop",
       })
     );
     setActive(false);
@@ -133,6 +136,7 @@ function AdminShops() {
               type="shop"
             />
           ) : null}
+          {error ? <ErrorMessage msg={error} timeOut={4000} /> :null}
 
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">

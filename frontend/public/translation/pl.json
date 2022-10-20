@@ -38,6 +38,7 @@
     "btn_no":"NIE",
     "btn_show_active_shops": "Pokaż skley aktywne",
     "btn_show_inactive_shops": "Pokaż sklepy nieaktywne",
+    "btn-change":"Zmień",
     
     "status_inactive":"Nieaktywny",
     "status_active":"Aktywny",
@@ -47,6 +48,8 @@
 
     "Radio_true" : "Aktywne",
     "Radio_false" : "Nieaktywne",
+    "Radio_delivery":"Dostawa",
+    "Radio_own_collection":"Odbiór własny",
 
     "Window_title": "Pytanie",
 
@@ -69,6 +72,7 @@
     "Form_minLength_9" : "Minimum 9 znaków",
     "Form_minLength_8": "Minimum 8 znaków",
     "Form_minLength_15" : "Minimum 15 znaków",
+    "Form_maxLength_250" : "Maksymalnie 250 znaków",
     "Form_maxLength_255" : "Maksymalnie 255 znaków",
     "Form_maxLength_30" : "Maksymalnie 30 znaków",
     "Form_maxLength_50" : "Maksymalnie 50 znaków",
@@ -164,11 +168,11 @@
     "AddProductType_label_name": "Nazwa typu produktu",
     "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
     
-    "AddShops_title": "Dodaj sklep",
-    "EditShops_title": "Edycja skelpu",
+    "AddShops_title": "Dodaj sklep - dane siedziby",
+    "EditShops_title": "Edycja siedziby skelpu",
 
 
-    "AddShops_title_address":"Adres",
+    "AddShops_title_address":"Adres siedziby",
     "AddShops_label_nip":"NIP",
     "AddShops_nip_placeholder": "Wpisz NIP ...",
     "AddShops_name_placeholder": "Wpisz nazwe sklepu ...",
@@ -183,7 +187,7 @@
     "AddShops_postCode_placeholder": "Wpisz kod pocztowy ...",
     "AddShops_label_post": "Poczta",
     "AddShops_post_placeholder":"Wpisz poczte ...",
-    "AddShops_title_geolocation": "Współrzędne geograficzne",
+    "AddShops_title_geolocation": "Współrzędne geograficzne siedziby",
     "AddShops_label_latitude": "Szerokość",
     "AddShops_latitude_placeholder": "Wpisz szerokość ...",
     "AddShops_label_longitude": "Długość",
@@ -201,5 +205,38 @@
     "AddContact_label_email": "email",
     "AddContact_email_placeholder": "Wpisz emial ...",
     "AddContact_label_phone": "Numer telefonu",
-    "AddContact_phone_placeholder": "Wpisz numer kontaktowy ..."      
+    "AddContact_phone_placeholder": "Wpisz numer kontaktowy ...",   
+    "AddContact_main_data": "Dane główne",
+    "AddContact_name": "Nazwa",
+    "AddContact_nip":"NIP",
+    "AddContact_address":"Adres siedziby",
+    "AddContact_GPS":"Współrzędne geograficzne siedziby",
+    "AddContact_bank":"Konto bankowe",
+    "AddContact_phone":"Telefon",
+    "AddContact_email":"e-mail",
+    "AddContact_description":"Opis" ,
+    "AddContact_description_placeholder":"Wpisz opis ...",  
+    "AddContact_btn_add":"Nowy kontakt" ,
+    "AddContact_btn_close":"Zamknij nowy kontakt" ,
+    "AddContact_btn_close_edit":"Zamknij edytowany kontakt",
+    "AddContact_new_title":"Dodaj nowy kontakt",
+    "AddContact_edit_title":"Edycja kontaktu",
+    "AddContact_show_unactive":"Pokaż kontakty nieaktywne" ,
+    "AddContact_show_active":"Pokaż aktywne kontakty",
+    "AddContact_spots_title":"Lista punktów sprzedaży towaru",
+    "AddContact_spots_address":"Adres",
+    "AddContact_btn_add_spot":"Nowy punkt",
+    "AddContact_btn_close_edit_spot":"Zamknij edytowany punkt",
+    "AddContact_btn_close_spot":"Zamknij nowy punkt",
+    "AddContact_show_unactive_spot":"Pokaż nieaktywne punkty",
+    "AddContact_show_active_spot":"Pokaż aktywne punkty",
+
+    "ShopsSpot_Edit_title":"Edycja punktu sprzedaży",
+    "ShopsSpot_Add_title":"Dodaj punkt sprzedaży",
+    "ShopsSpot_label_name":"Nazwa punktu sprzedaży",
+    "ShopsSpot_name_placeholder":"Wpisz nazwę punktu sprzedaży ...",
+    "ShopsSpot_title_address":"Adres punktu sprzedaży",
+    "ShopsSpot_title_geolocation":"Współrzędne geograficzne punktu sprzedaży",
+    "ShopsSpot_label_range":"Zasięg dostawy",
+    "ShopsSpot_range_placeholder":"Wpisz zasięg dostawy ..."
 }

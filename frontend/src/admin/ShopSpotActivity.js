@@ -5,11 +5,13 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form,  ButtonGroup,
+  ToggleButton, } from "react-bootstrap";
 import {
-  addShop,
+  addShopSpot,
   getShop,
-  updateShop,
+  getSpot,
+  updateShopSpot,
   InsertImage,
 } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
@@ -18,11 +20,12 @@ import {
   DELETE_IMAGE_REDUX,
   SET_FLAG_IMAGE_TRUE,
   GET_SHOPS_LIST_DELETE,
+  ADD_SHOP_SPOT_DELETE,
 } from "../constants/adminConstans";
 
 import { Icon } from "@iconify/react";
 
-function AddShops() {
+function AddShopsSpot() {
   const {
     register,
     formState: { errors },
@@ -40,10 +43,22 @@ function AddShops() {
   const [imageRender, setImageRender] = useState(false);
   const [currentTaxNo, setCurrentTaxNo] = useState("");
 
+  const [showShop, setShowShop] = useState(false);
+  const [space, setSpace] = useState("  ");
+
+  const SpotParam = params.add;
   const editShopParam = params.edit;
-  const addShopParam = params.add;
-  
   const shopId = params.id;
+  const spotId = params.idSpot
+
+  // console.log('SpotParam-->',SpotParam)
+ 
+
+  const [radioValue, setRadioValue] = useState("1");
+  const radios = [
+    { name: t("Radio_own_collection"), value: "1" },
+    { name: t("Radio_delivery"), value: "0" },
+  ];
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -52,7 +67,13 @@ function AddShops() {
   const shopListRedux = useSelector((state) => state.shopList);
   const { loading, error, successAdd, shopList } = shopListRedux;
 
-    const imageRedux = useSelector((state) => state.saveImage);
+  const spotRedux = useSelector((state) => state.getShopSpot);
+  const { spotDetails, success: successGetSpot , loading: spotLoading, error: spotError } = spotRedux;
+
+  const addSpotRedux = useSelector((state) => state.shopSpotsList);
+  const { successAdd: successAddSpot, loading: addSpotLoading, error: addSpotError } = addSpotRedux;
+
+  const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
 
   const insertImageRedux = useSelector((state) => state.insertImage);
@@ -72,101 +93,137 @@ function AddShops() {
     success: successGetShop,
   } = getShopRedux;
 
-
-
-  // normalize function
-  const normalizeCardNumber = (value) => {
-    return (
-      value
-        .replace(/\s/g, "")
-        .match(/.{1,4}/g)
-        ?.join(" ")
-        .substr(0, 39)
-        .toUpperCase() || ""
-    );
-  };
+  //console.log('spotDetails-->',spotDetails)
 
   // Handlers
   const onSubmit = (data) => {
     setCurrentTaxNo(data.nip);
-    if (addShopParam) {
-      dispatch({ type: SET_FLAG_IMAGE_TRUE });
-      dispatch(
-        addShop({
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          photo: data.photo,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
-          creator: userInfo.id,
-          bankAccount: data.bankAccount,
-        })
-      );
-    } else {
-      dispatch({ type: SET_FLAG_IMAGE_TRUE });
-      dispatch({ type: GET_SHOPS_LIST_DELETE });
-      dispatch(
-        updateShop({
-          id: shopId,
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          photo: data.photo,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
-          creator: userInfo.id,
-          bankAccount: data.bankAccount,
-          typeOfChnage: "Edit date",
-        })
-      );
-      if (isImage) {
-        dispatch(
-          InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
-        );
+    if (SpotParam==='add') {
+      // dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      // if radioValue = 1 without range - not delivery
+      if(radioValue==="1"){
+          const insertData = {
+            add:"true",
+            id_shops: shopId,
+            name: data.name,
+            city: data.city,
+            street: data.street,
+            no_building: data.number,
+            postCode: data.postCode,
+            post: data.post,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            creator: userInfo.id,
+            is_active: "True",
+            delivery:"False",
+            range:"0",
+          };
+         dispatch(addShopSpot(insertData))
+
+      }else{
+          const insertData = {
+            add:"false",
+            id_shops: shopId,
+            name: data.name,
+            city: data.city,
+            street: data.street,
+            no_building: data.number,
+            postCode: data.postCode,
+            post: data.post,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            creator: userInfo.id,
+            is_active: "True",
+            delivery:"True",
+            range:data.range,
+          };
+         dispatch(addShopSpot(insertData))
       }
-    }
+
+    } else {
+          //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
+          //   dispatch({ type: GET_SHOPS_LIST_DELETE });
+        console.log('zapisuję')
+        if(radioValue==="1"){
+          const insertData ={
+            add:"true",
+            id_shops: shopId,
+            name: data.name,
+            city: data.city,
+            street: data.street,
+            no_building: data.number,
+            postCode: data.postCode,
+            post: data.post,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            creator: userInfo.id,
+            is_active: "True",
+            delivery:"False",
+            range:"0", 
+          }
+          dispatch(updateShopSpot(insertData))
+        }else{
+          const insertData = {
+            add:"false",
+            id_shops: shopId,
+            name: data.name,
+            city: data.city,
+            street: data.street,
+            no_building: data.number,
+            postCode: data.postCode,
+            post: data.post,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            creator: userInfo.id,
+            is_active: "True",
+            delivery:"True",
+            range:data.range,
+          };
+          dispatch(updateShopSpot(insertData))
+        }
+        
+      }
   };
 
-  // fetch data from DB -- shop to edit
+  // fetch data from DB -- shop & spot to edit
   // remove old image
   useEffect(() => {
     dispatch({ type: DELETE_IMAGE_REDUX });
     if (shopId) {
-      dispatch(
-        getShop({
-          Id: shopId,
-        })
-      );
+      dispatch(getShop({Id: shopId,})  );
       setImageRender(true);
+    }
+    if(spotId){
+      dispatch(getSpot({Id: spotId,}));
     }
   }, []);
 
   //Reset Default data
   useEffect(() => {
-    if (successGetShop) {
-      reset({
-        name: shopDetails.name,
-        nip: shopDetails.nip,
-        city: shopDetails.city,
-        street: shopDetails.street,
-        number: shopDetails.no_building,
-        postCode: shopDetails.post_code,
-        post: shopDetails.post,
-        bankAccount: shopDetails.bank_account,
-        latitude: shopDetails.latitude,
-        longitude: shopDetails.longitude,
-      });
+    if (successGetSpot) {
+      setShowShop(true)
+      if (SpotParam==="edit"){
+        if(spotDetails.delivery){
+          setRadioValue("0")
+        }else {
+          setRadioValue("1")
+        }
+        reset({
+          name: spotDetails.name,
+          nip: spotDetails.nip,
+          city: spotDetails.city,
+          street: spotDetails.street,
+          number: spotDetails.no_building,
+          postCode: spotDetails.post_code,
+          post: spotDetails.post,
+          range: spotDetails.range,
+          latitude: spotDetails.latitude,
+          longitude: spotDetails.longitude,
+        });
+      }else{reset({})}
+      
     }
-  }, [successGetShop]);
+  }, [successGetSpot]);
 
   // set current Tax Number
   useEffect(() => {
@@ -183,23 +240,33 @@ function AddShops() {
     }
   }, [successAdd]);
 
-  // navigate to ShopAdmin
-  useEffect(() => {
-    if (successAdd && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successUpdateShop && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (
-      successUpdateShop &&
-      isImage &&
-      successInsertImage &&
-      shopImageFlag
-    ) {
-      navigate("/dashboard/shops/shops");
-    }
-  }, [successAdd, isImage, successInsertImage, successUpdateShop]);
+    // NIE WIEM CZY TO POTRZEBNE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                        // navigate to ShopAdmin
+                        useEffect(() => {
+                          if (successAddSpot) {
+                            dispatch({ type: ADD_SHOP_SPOT_DELETE });
+                            navigate(`/dashboard/shops/shops/${shopId}/contact`);
+                          } 
+                        }, [dispatch, successAddSpot]);
+
+  // // navigate to ShopAdmin
+  // useEffect(() => {
+  //   if (successAdd && !isImage && shopImageFlag) {
+  //     navigate("/dashboard/shops/shops");
+  //   } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
+  //     navigate("/dashboard/shops/shops");
+  //   } else if (successUpdateShop && !isImage && shopImageFlag) {
+  //     navigate("/dashboard/shops/shops");
+  //   } else if (
+  //     successUpdateShop &&
+  //     isImage &&
+  //     successInsertImage &&
+  //     shopImageFlag
+  //   ) {
+  //     navigate("/dashboard/shops/shops");
+  //   }
+  // }, [successAdd, isImage, successInsertImage, successUpdateShop]);
 
   //style
 
@@ -216,35 +283,45 @@ function AddShops() {
 
   return (
     <>
-      {loading || loadingInsertImage || loadingGetShop || loadingUpdateShop ? (
+      {loading || loadingInsertImage || loadingGetShop || loadingUpdateShop || 
+      spotLoading || addSpotLoading ? (
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <Row className="align-items-center ">
             <Col>
-              <Link to="/dashboard/shops/shops" className="text-dark h6">
+              <Link to={{pathname: `/dashboard/shops/shops/${shopId}/contact`}} className="text-dark h6">
                 <Icon icon="ion:arrow-back" />
                 {t("btn-return")}
               </Link>
             </Col>
           </Row>
+          {showShop ? 
+                <div className="d-flex justify-content-center display-8">
+                    {shopDetails.name},{space}
+                    {shopDetails.city}{space}
+                    {shopDetails.street}{space}
+                    {shopDetails.no_building}
+                </div>
+                :null }
           <div className="d-flex justify-content-center display-6">
-            {editShopParam === "edit"
-              ? t("EditShops_title")
-              : t("AddShops_title")}
+            {SpotParam === "edit"
+              ? t("ShopsSpot_Edit_title")
+              : t("ShopsSpot_Add_title")}
           </div>
+          <hr />
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row>
-              <Col md={6}>
+              <Col md={5}>
                 <Form.Group controlId="name">
                   <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_name")}
+                    {t("ShopsSpot_label_name")}
                   </Form.Label>
                   <Form.Control
                     className={errors.name ? "formInvalid" : null}
                     type="text"
-                    placeholder={t("AddShops_name_placeholder")}
+                    placeholder={t("ShopsSpot_name_placeholder")}
                     ref={register}
                     {...register("name", {
                       required: t("Form_field_required"),
@@ -274,37 +351,62 @@ function AddShops() {
                 </Form.Group>
               </Col>
 
-              <Col md={6}>
-                <Form.Group controlId="nip">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_nip")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.nip ? "formInvalid" : null}
-                    placeholder={t("AddShops_nip_placeholder")}
-                    {...register("nip", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[0-9 ]+$/,
-                        message: t("Form_only_digits_or_space"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("nip");
-                    }}
-                    name="nip"
-                  ></Form.Control>
-                  {errors.nip && (
-                    <div className="text-danger form-msg-style">
-                      {errors.nip.message}
-                    </div>
-                  )}
-                </Form.Group>
+              <Col md={4}>
+                <ButtonGroup className="mb-2">
+                    {radios.map((radio, idx) => (
+                      <ToggleButton
+                        key={idx}
+                        id={`radio-${idx}`}
+                        type="radio"
+                        variant={idx % 2 ? "outline-danger" : "outline-success"}
+                        name="radio"
+                        value={radio.value}
+                        checked={radioValue === radio.value}
+                        onChange={(e) => setRadioValue(e.currentTarget.value)}
+                      >
+                        {radio.name}
+                      </ToggleButton>
+                    ))}
+                </ButtonGroup>
+              </Col>
+              <Col md={3}>
+                {radioValue ==="0" ? 
+                      <Form.Group controlId="range">
+                      <Form.Label className="form-msg-style ms-2">
+                        {t("ShopsSpot_label_range")}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        className={errors.range ? "formInvalid" : null}
+                        placeholder={t("ShopsSpot_range_placeholder")}
+                        {...register("range", {
+                          required: t("Form_field_required"),
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: t("Form_only_letters"),
+                          },
+                          maxLength: {
+                            value: 14,
+                            message: t("Form_maxLength_14"),
+                          },
+                        })}
+                        onKeyUp={() => {
+                          trigger("range");
+                        }}
+                        name="range"
+                      ></Form.Control>
+                      {errors.range && (
+                        <div className="text-danger form-msg-style">
+                          {errors.range.message}
+                        </div>
+                      )}
+                    </Form.Group>
+                
+                  : null}
               </Col>
             </Row>
             <hr />
-            <h6>{t("AddShops_title_address")}</h6>
+            <h6>{t("ShopsSpot_title_address")}</h6>
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group controlId="city">
@@ -352,7 +454,6 @@ function AddShops() {
                     className={errors.street ? "formInvalid" : null}
                     placeholder={t("AddShops_street_placeholder")}
                     {...register("street", {
-                      // required: t("Form_field_required"),
                       pattern: {
                         value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
@@ -486,51 +587,7 @@ function AddShops() {
               </Col>
             </Row>
             <hr />
-            <Row>
-              <Col>
-                <Form.Group controlId="bankAccount">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_bankAccound")}
-                  </Form.Label>
-                  <Form.Control
-                    type="tel"
-                    className={errors.bankAccount ? "formInvalid" : null}
-                    placeholder={t("AddShops_bankAccound_placeholder")}
-                    ref={register}
-                    {...register("bankAccount", {
-                      onChange: (event) => {
-                        const { value } = event.target;
-                        event.target.value = normalizeCardNumber(value);
-                      },
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[A-Za-z0-9 ]+$/,
-                        message: t("Form_IBAN"),
-                      },
-                      minLength: {
-                        value: 21,
-                        message: t("Form_minLength_15"),
-                      },
-                      maxLength: {
-                        value: 40,
-                        message: t("Form_maxLength_34"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("bankAccount");
-                    }}
-                    name="bankAccount"
-                  ></Form.Control>
-                  {errors.bankAccount && (
-                    <div className="text-danger form-msg-style">
-                      {errors.bankAccount.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
-            <hr />
-            <h6>{t("AddShops_title_geolocation")}</h6>
+            <h6>{t("ShopsSpot_title_geolocation")}</h6>
             <Row>
               <Col md={6}>
                 <Form.Group controlId="latitude">
@@ -628,4 +685,4 @@ function AddShops() {
   );
 }
 
-export default AddShops;
+export default AddShopsSpot;

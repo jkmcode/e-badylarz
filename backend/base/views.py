@@ -22,7 +22,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-# testowanie GIT-a repository 1111
+# czyszczenie danych z bazy z nawiasów ('',)
+def cleanStr(cleanedData):
+    if cleanedData[0] == '(':
+        return cleanedData[2:len(cleanedData)-3]
+    return cleanedData
 
 #create user
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -75,11 +79,7 @@ def updateShop(request, Id):
     data = request.data
     shop = Shops.objects.get(id=Id)
 
-    print('data', data)
-    print("POST", len(data['post']))
-    print("latitude", len(data['latitude']))
-    print("longitude", len(data['longitude']))
-    print("nip", len(data['nip']))
+    # brak obsługi pól po zmianie bazy delivery i range
 
     ShopsARC.objects.create(
         id_shops=Id,
@@ -97,6 +97,7 @@ def updateShop(request, Id):
         creator = data['creator'],
         is_active = shop.is_active,
         bank_account = shop.bank_account,
+
         type_of_change = data['typeOfChnage']        
     )
 
@@ -118,36 +119,22 @@ def updateShop(request, Id):
 
     return Response(serializer.data)
 
-    # try:
-    #     shop.name=data['name'],
-    #     shop.nip = data['nip'],
-    #     shop.city = data['city'],
-    #     shop.street = data['street'],
-    #     shop.no_building = data['number'],
-    #     shop.post_code = data['postCode'],
-    #     shop.post = data['post'],
-    #     shop.latitude = data['latitude'],
-    #     shop.longitude = data['longitude'],
-    #     shop.creator = data['creator'],
-    #     shop.bank_account = data['bankAccount']
-
-    #     shop.save()
-
-    #     serializer = ShopsSerializer(shop, many=False)
-
-    #     return Response(serializer.data)
-    # except:
-    #     message = {"detail": "Podany kod rejestracyjny już istnieje"}
-    #     return Response(message, status=status.HTTP_400_BAD_REQUEST)        
-
-
-
-
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getShop(request, Id):
     shop = Shops.objects.get(id = Id) 
+
+    shop.name = cleanStr(shop.name)
+    shop.nip = cleanStr(shop.nip)
+    shop.city = cleanStr(shop.city)
+    shop.street = cleanStr(shop.street)
+    shop.no_building = cleanStr(shop.no_building)
+    shop.post_code = cleanStr(shop.post_code)
+    shop.post = cleanStr(shop.post)
+    shop.latitude = cleanStr(shop.latitude)
+    shop.longitude = cleanStr(shop.longitude)
+
     seriaziler = ShopsSerializer(shop, many=False)
     return Response(seriaziler.data)
 
@@ -155,28 +142,78 @@ def getShop(request, Id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContacts(request, Id):
-    contacts = ShopsContact.objects.filter(id=Id).order_by('name')
-
+    contacts = ShopsContact.objects.filter(id_shops=Id).order_by('name')
     seriaziler = ShopsContactSerializer(contacts, many=True)
 
     return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSpots(request, Id):
+    spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
+    seriaziler = ShopSpotsSerializer(spots, many=True)
+
+    return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSpot(request, Id):
+    spot = ShopsSpot.objects.get(id=Id)
+    seriaziler = ShopSpotsSerializer(spot, many=False)
+
+    return Response(seriaziler.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def addShopContacts(request):
     data = request.data
 
-
     shop = Shops.objects.get(id=data['shop_id'])
-    shop_contact = ShopsContact.objects.create(
-        id_shops=shop,
-        name=data['firstName'],
-        surname = data['surname'],
-        email = data['email'],
-        phone = data['phone'],
-        creator = data['creator'],
-        is_active=True
-    )
+    
+    if data['editing']:
+        shop_contact_editing = ShopsContact.objects.get(id=data['Id'])
+
+        # Saving archive data
+        ShopsContactARC.objects.create(
+            id_shops = data['shop_id'],
+            name = data['firstName'],
+            surname = data['surname'],
+            email = data['email'],
+            phone = data['phone'],
+            description = data['description'],
+            date_of_entry = shop_contact_editing.date_of_entry,
+            creator = shop_contact_editing.creator,
+            is_active = shop_contact_editing.is_active,
+            date_of_change = shop_contact_editing.date_of_change,
+            type_of_change = "Data change",
+            modifier = data['modifier'],
+            id_contact = data['Id'],
+        )
+
+        # Data change
+        shop_contact_editing.name = data['firstName']
+        shop_contact_editing.surname = data['surname']
+        shop_contact_editing.email = data['email']
+        shop_contact_editing.phone = data['phone']
+        shop_contact_editing.description = data['description']
+        shop_contact_editing.date_of_change = datetime.now()
+        shop_contact_editing.modifier = data['modifier']
+
+        shop_contact_editing.save()
+
+
+    else:
+        shop_contact = ShopsContact.objects.create(
+            id_shops=shop,
+            name=data['firstName'],
+            surname = data['surname'],
+            email = data['email'],
+            phone = data['phone'],
+            creator = data['creator'],
+            description =data['description'],
+            is_active=True
+        )
 
     shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
     seriaziler = ShopsContactSerializer(shop_contacts, many=True)
@@ -186,10 +223,68 @@ def addShopContacts(request):
 @permission_classes([IsAdminUser])
 def getShops(request):
     shops = Shops.objects.all().order_by('name') 
+    for i in shops:
+        i.name=cleanStr(i.name)
+        i.city=cleanStr(i.city)
+        i.street=cleanStr(i.street)
+        i.no_building=cleanStr(i.no_building)
+        i.nip=cleanStr(i.nip)
+        i.post=cleanStr(i.post)
+        i.post_code=cleanStr(i.post_code)
+        i.latitude=cleanStr(i.latitude)
+        i.longitude=cleanStr(i.longitude)
+        # i.bank_account=cleanStr(i.bank_account)
 
     seriaziler = ShopsSerializer(shops, many=True)
 
     return Response(seriaziler.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addShopSpot(request):
+    data = request.data
+
+    if data['add']:
+        shop = Shops.objects.get(id=data['id_shops'])
+
+        spot=ShopsSpot.objects.create(
+            id_shops=shop,
+            name=data['name'],
+            city=data['city'],
+            street=data['street'],
+            no_building=data['no_building'],
+            post_code=data['postCode'],
+            post=data['post'],
+            latitude=data['latitude'],
+            longitude=data['longitude'],
+            creator=data['creator'],
+            is_active=data['is_active'],
+            delivery=data['delivery'],
+            range=data['range']
+        )
+        
+       
+    # else:
+    #     shop12 = Shops.objects.create(
+    #         name=data['name'],
+    #         nip = data['nip'],
+    #         city = data['city'],
+    #         street = data['street'],
+    #         no_building = data['number'],
+    #         post_code = data['postCode'],
+    #         post = data['post'],
+    #         latitude = data['latitude'],
+    #         longitude = data['longitude'],
+    #         creator = data['creator'],
+    #         is_active=True,
+    #         bank_account = data['bankAccount']
+    #     )
+
+        spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
+        seriaziler = ShopSpotsSerializer(spots, many=True)
+        return Response(seriaziler.data)
+        # return Response("OK")
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -292,6 +387,46 @@ def activeList(request):
         descrip = Citis.objects.get(id=data['Id'])
     elif data['objType']=='SHOP':
         descrip = Shops.objects.get(id=data['Id'])
+    elif data['objType']=='SHOP_CONTACT':
+        descrip = ShopsContact.objects.get(id=data['Id'])
+        ShopsContactARC.objects.create(
+            id_shops=int(data['shop_id']),
+            name=descrip.name,
+            surname=descrip.surname,
+            email = descrip.email,
+            phone = descrip.phone,
+            description = descrip.description,
+            date_of_entry = descrip.date_of_entry,
+            creator = descrip.creator,
+            is_active = descrip.is_active,
+            date_of_change = descrip.date_of_change,
+            modifier = descrip.modifier,
+            type_of_change = descrip.type_of_change,
+            id_contact=descrip.id
+        )
+    elif data['objType']=='SHOP_SPOT':
+        descrip = ShopsSpot.objects.get(id=data['Id'])
+        ShopsSpotARC.objects.create(
+            id_shops=int(data['shop_id']),
+            id_spot=descrip.id,
+            name=descrip.name,
+            city = descrip.city,
+            street = descrip.street,
+            no_building = descrip.no_building,
+            post_code = descrip.post_code,
+            post = descrip.post,
+            latitude = descrip.latitude,
+            longitude = descrip.longitude,
+            date_of_entry = descrip.date_of_entry,
+            date_of_change = descrip.date_of_change,
+            creator = descrip.creator,
+            is_active = descrip.is_active,
+            photo = descrip.photo,
+            modifier = descrip.modifier,
+            delivery = descrip.delivery,
+            range = descrip.range,
+            type_of_change = descrip.type_of_change,
+        )
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -301,8 +436,12 @@ def activeList(request):
     else:
         descrip.is_active=False
 
+    # rozwiazanie tymczasowe bo nie wiem czy to nie bedzie sie srało dla innych typów
+    # rozchodzi się o rodzaj - kind
+    descrip.type_of_change = data['kind']
     descrip.date_of_change=datetime.now()
     descrip.modifier=data['userId']
+
     descrip.save()
 
     return Response("OK")

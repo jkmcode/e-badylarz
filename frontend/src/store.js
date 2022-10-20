@@ -21,6 +21,8 @@ import {
   areaListReducer,
   saveImageReducer,
   insertImageReducer,
+  shopSpotListReducer,
+  getShopSpotReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -45,6 +47,8 @@ const reducer = combineReducers({
   areaList: areaListReducer,
   saveImage: saveImageReducer,
   insertImage: insertImageReducer,
+  shopSpotsList: shopSpotListReducer,
+  getShopSpot:getShopSpotReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

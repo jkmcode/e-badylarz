@@ -80,6 +80,22 @@ import {
   ADD_IMAGE_FAIL,
   SET_FLAG_IMAGE_TRUE,
   SET_FLAG_IMAGE_FALSE,
+  ADD_SHOP_SPOT_REQUEST,
+  ADD_SHOP_SPOT_SUCCESS,
+  ADD_SHOP_SPOT_FAIL,
+  ADD_SHOP_SPOT_DELETE,
+  GET_SOPTS_LIST_REQUEST,
+  GET_SOPTS_LIST_SUCCESS,
+  GET_SOPTS_LIST_FAIL,
+  GET_SOPTS_LIST_DELETE,
+  GET_SPOT_REQUEST,
+  GET_SPOT_SUCCESS,
+  GET_SPOT_FAIL,
+  GET_SPOT_DELETE,
+  EDIT_SHOP_SPOT_REQUEST,
+  EDIT_SHOP_SPOT_SUCCESS,
+  EDIT_SHOP_SPOT_FAIL,
+  EDIT_SHOP_SPOT_DELETE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -159,12 +175,27 @@ export const updateShopReducer = (state = {}, action) => {
 export const getShopReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SHOP_REQUEST:
-      return { loading: true, success: false, shopDetails: {} };
+      return { loading: true, success: false, shopDetails: {}};
     case GET_SHOP_SUCCESS:
       return { loading: false, success: true, shopDetails: action.payload };
     case GET_SHOP_FAIL:
       return { loading: false, error: action.payload, success: false };
     case GET_SHOP_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getShopSpotReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_SPOT_REQUEST:
+      return { loading: true, success: false, spotDetails: {}};
+    case GET_SPOT_SUCCESS:
+      return { loading: false, success: true, spotDetails: action.payload };
+    case GET_SPOT_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case GET_SPOT_DELETE:
       return {};
     default:
       return state;
@@ -196,6 +227,31 @@ export const contactListReducer = (state = { ListOfContact: [] }, action) => {
       return state;
   }
 };
+
+export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
+  switch (action.type) {
+    case GET_SHOPS_LIST_REQUEST:
+      return { loading: true, success: false, successAdd: false, shopSpotList: [] };
+    case GET_SOPTS_LIST_SUCCESS:
+      return { loading: false, success: true, successAdd: false, shopSpotList: action.payload };
+    case ADD_SHOP_SPOT_REQUEST:
+      return { loading: true, successAdd: false, success: false, shopSpotList: [] };
+    case ADD_SHOP_SPOT_SUCCESS:
+      return { loading: false, successAdd: true, success: false, shopSpotList: action.payload };
+    case ADD_SHOP_SPOT_DELETE:
+      return { shopSpotList: [] };
+    case ADD_SHOP_SPOT_FAIL:
+      return { loading: false, error: action.payload, successAdd: false, success: false, };
+    case GET_SOPTS_LIST_FAIL:
+      return {
+        loading: false, error: action.payload, success: false, successAdd: false,shopSpotList: [],};
+    case GET_SOPTS_LIST_DELETE:
+      return { shopSpotList: [] };
+    default:
+      return state;
+  }
+};
+
 
 export const shopListReducer = (state = { shopList: [] }, action) => {
   switch (action.type) {

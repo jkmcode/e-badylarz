@@ -27,6 +27,7 @@ import AdminAddProducts from "./admin/AdminAddProducts";
 import AdminProductType from "./admin/AdminProductType";
 import AddProductType from "./admin/AddProductType";
 import ShopActivity from "./admin/ShopActivity";
+import ShopSpotActivity from "./admin/ShopSpotActivity"
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
 import AddArea from "./admin/AddArea";
@@ -109,7 +110,17 @@ function App() {
             path="dashboard/shops/shops/:id/:edit"
             element={<ShopActivity />}
           />
+
+          <Route 
+            path="dashboard/shops/shops/spot/:id/:add" 
+            element={<ShopSpotActivity />} />
+          
+          <Route 
+            path="dashboard/shops/shops/spot/:id/:add/:idSpot" 
+            element={<ShopSpotActivity />} />
+
           <Route
+            name="test"
             path="dashboard/shops/shops/:id/contact"
             element={<AddContact />}
           />

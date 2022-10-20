@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal } from "react-bootstrap";
 
 import {
@@ -8,17 +7,17 @@ import {
   SET_WINDOW_FLAG_TRUE,
   GET_SHOPS_LIST_DELETE,
   SET_FLAG_SHOP_FALSE,
+  SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
 
 function InfoWindow(props) {
-  console.log("props.type", props.type);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [modalShow, setModalShow] = useState(true);
+  const shopFlagVar = useSelector((state) => state.windowFlag);
+  const { windowFlag } = shopFlagVar;
 
   const handleYes = () => {
-    setModalShow(false);
     dispatch({ type: SET_WINDOW_FLAG_TRUE });
     if (props.type === "shop") {
       dispatch({ type: GET_SHOPS_LIST_DELETE });
@@ -26,9 +25,17 @@ function InfoWindow(props) {
     }
   };
 
+  const handleClose =() =>{
+    dispatch({ type: SET_WINDOW_FLAG_DELETE });
+  }
+
   const handleNo = () => {
-    setModalShow(false);
-    dispatch({ type: SET_WINDOW_FLAG_FALSE });
+    if (windowFlag===false){
+      dispatch({ type: SET_WINDOW_FLAG_DELETE });
+    }else{
+      dispatch({ type: SET_WINDOW_FLAG_FALSE });
+    }
+
     if (props.type === "shop") {
       dispatch({ type: SET_FLAG_SHOP_FALSE });
     }
@@ -37,8 +44,8 @@ function InfoWindow(props) {
   return (
     <>
       <Modal
-        show={modalShow}
-        //onHide={handleClose}
+        show='true'
+        onHide={handleClose}
         backdrop="static"
         keyboard={false}
       >

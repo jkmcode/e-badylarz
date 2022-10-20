@@ -2,25 +2,25 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-## Shops
+##################### Shops ######################################
 
-#Shops
+#Shops HQ place - miejsce prowadzenia działalnosci
 class Shops(models.Model):
-    name = models.CharField(max_length=5000, unique=True)
-    nip = models.CharField(max_length=2000, unique=True)
-    city = models.CharField(max_length=4000)
-    street = models.CharField(max_length=5000)
-    no_building = models.CharField(max_length=1000)
-    post_code = models.CharField(max_length=1000)
-    post = models.CharField(max_length=4000)
-    latitude = models.CharField(max_length=2000)
-    longitude = models.CharField(max_length=2000)
+    name = models.CharField(max_length=50, unique=True)
+    nip = models.CharField(max_length=20, unique=True)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=5000, null=True, blank=True)    
-    creator = models.CharField(max_length=5000, null=True, blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    bank_account = models.CharField(max_length=3400, null=True, blank=True)
+    bank_account = models.CharField(max_length=40, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
@@ -28,26 +28,71 @@ class Shops(models.Model):
 
 class ShopsARC(models.Model):
     id_shops = models.IntegerField()
-    name = models.CharField(max_length=5000)
-    nip = models.CharField(max_length=2000)
-    city = models.CharField(max_length=4000)
-    street = models.CharField(max_length=5000)
-    no_building = models.CharField(max_length=1000)
-    post_code = models.CharField(max_length=1000)
-    post = models.CharField(max_length=4000)
-    latitude = models.CharField(max_length=2000)
-    longitude = models.CharField(max_length=2000)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    name = models.CharField(max_length=50)
+    nip = models.CharField(max_length=20)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField( null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=5000, null=True, blank=True)
-    creator = models.CharField(max_length=5000, null=True, blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
+    creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    bank_account = models.CharField(max_length=3400, null=True, blank=True)
+    bank_account = models.CharField(max_length=40, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
-    type_of_change = models.CharField(max_length=5000)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
 
     def __str__(self):
          return self.name
+
+#Shops spot - miejsce sprzedaży, wydania towaru
+class ShopsSpot(models.Model):
+    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    delivery = models.BooleanField(null=True,blank=True)
+    range = models.IntegerField(default=0)
+    type_of_change = models.CharField(max_length=50)
+
+#Shops spot ARC
+class ShopsSpotARC(models.Model):
+    id_shops = models.IntegerField()
+    id_spot = models.IntegerField()
+    name = models.CharField(max_length=50)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField( null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    delivery = models.BooleanField(null=True,blank=True)
+    range = models.IntegerField(default=0)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
 
 #Shops_description
 class ShopsDescription(models.Model):
@@ -55,27 +100,43 @@ class ShopsDescription(models.Model):
     description = models.CharField(max_length=255)
     language = models.CharField(max_length=5)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
     type_of_change = models.CharField(max_length=50)
 
 #Shops_contact
 class ShopsContact(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    email = models.CharField(max_length=150)
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=40)
+    email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
+    description = models.CharField(max_length=255)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
-    creator = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
     type_of_change = models.CharField(max_length=50)    
 
-
+#Shops_contact ARC
+class ShopsContactARC(models.Model):
+    id_shops = models.IntegerField()
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=40)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    description = models.CharField(max_length=255)
+    date_of_entry = models.DateTimeField( null=True,blank=True)   
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    id_contact = models.IntegerField()
 
 ## Products 
 

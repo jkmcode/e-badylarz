@@ -50,6 +50,18 @@ import {
   ADD_IMAGE_REQUEST,
   ADD_IMAGE_SUCCESS,
   ADD_IMAGE_FAIL,
+  ADD_SHOP_SPOT_REQUEST,
+  ADD_SHOP_SPOT_SUCCESS,
+  ADD_SHOP_SPOT_FAIL,
+  GET_SOPTS_LIST_REQUEST,
+  GET_SOPTS_LIST_SUCCESS,
+  GET_SOPTS_LIST_FAIL,
+  GET_SPOT_REQUEST,
+  GET_SPOT_SUCCESS,
+  GET_SPOT_FAIL,
+  EDIT_SHOP_SPOT_REQUEST,
+  EDIT_SHOP_SPOT_SUCCESS,
+  EDIT_SHOP_SPOT_FAIL,
 } from "../constants/adminConstans";
 
 // Save image in redax
@@ -188,8 +200,6 @@ export const getShop = (insertData) => async (dispatch, getState) => {
       insertData
     );
 
-    console.log("data", data);
-
     dispatch({
       type: GET_SHOP_SUCCESS,
       payload: data,
@@ -232,6 +242,76 @@ export const getShopContacts = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_CONTACT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
+
+export const getSpot = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_SPOT_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/get-spot`,
+      config,
+      insertData
+    );
+
+    dispatch({
+      type: GET_SPOT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SPOT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getShopSpots = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_SOPTS_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/get-spots/`,
+      config
+    );
+
+    dispatch({
+      type: GET_SOPTS_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SOPTS_LIST_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail
@@ -333,6 +413,70 @@ export const addShop = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_SHOP_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const addShopSpot = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_SHOP_SPOT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/add-shop-spot/`, insertData, config);
+
+    dispatch({
+      type: ADD_SHOP_SPOT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_SHOP_SPOT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const updateShopSpot = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: EDIT_SHOP_SPOT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/EDIT-shop-spot/`, insertData, config);
+
+    dispatch({
+      type: EDIT_SHOP_SPOT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EDIT_SHOP_SPOT_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

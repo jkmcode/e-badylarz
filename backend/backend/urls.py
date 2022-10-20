@@ -22,8 +22,12 @@ urlpatterns = [
     path('api/<str:Id>/get-shop/', getShop),
     path('api/shop/<str:Id>/update/', updateShop),
     path('api/<str:Id>/get-contacts/', getContacts),
+    path('api/<str:Id>/get-spots/', getSpots),
+    path('api/<str:Id>/get-spot/', getSpot),
     path('api/get-cites/<str:Id>/list', getCites),
     path('api/add-shop/', addShop),
+    path('api/add-shop-spot/', addShopSpot),
+    path('api/edit-shop-spot/', updateShopSpot),
 
     # area
     path('api/get-areas/', getAreas),

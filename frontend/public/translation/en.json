@@ -38,6 +38,7 @@
     "btn_no":"NO",
     "btn_show_active_shops": "Show active shops",
     "btn_show_inactive_shops": "Show inactive shops",
+    "btn-change":"Change",
     
     "status_inactive":"Inactive",
     "status_active":"Active",
@@ -46,7 +47,9 @@
     "Table_head_ID" : "ID",
 
     "Radio_true" : "Active",
-    "Radio_false" : "Unactive",
+    "Radio_false" : "Inactive",
+    "Radio_delivery":"Delivery",
+    "Radio_own_collection":"Own collection",
 
     "Window_title": "Question",
 
@@ -68,6 +71,7 @@
     "Form_minLength_8": "Minimum 8 characters",
     "Form_minLength_9": "Minimum 9 characters",
     "Form_minLength_15" : "Minimum 15 characters",
+    "Form_maxLength_250" : "Maximum 250 characters",
     "Form_maxLength_255" : "Maximum 255 characters",
     "Form_maxLength_30" : "Maximum 30 characters",
     "Form_maxLength_50" : "Maximum 50 characters",
@@ -167,11 +171,11 @@
     
     
 
-    "AddShops_title": "Add shop",
-    "EditShops_title": "Edit shop",
+    "AddShops_title": "Add shop - HQ data",
+    "EditShops_title": "Edit shop - HQ data",
 
 
-    "AddShops_title_address":"Address",
+    "AddShops_title_address":"HQ address",
     "AddShops_label_nip":"Tax number",
     "AddShops_nip_placeholder": "Enter tax number ...",
     "AddShops_name_placeholder": "Enter shop name ...",
@@ -186,7 +190,7 @@
     "AddShops_postCode_placeholder": "Enter post code ...",
     "AddShops_label_post": "Post",
     "AddShops_post_placeholder":"Enter post ...",
-    "AddShops_title_geolocation": "Geolocation",
+    "AddShops_title_geolocation": "HQ geolocation",
     "AddShops_label_latitude": "Latitude",
     "AddShops_latitude_placeholder": "Enter latitude ...",
     "AddShops_label_longitude": "Longitude",
@@ -204,5 +208,39 @@
     "AddContact_label_email": "email",
     "AddContact_email_placeholder": "Enter email ...",
     "AddContact_label_phone": "phone no",
-    "AddContact_phone_placeholder": "Enter phone no ..."     
+    "AddContact_phone_placeholder": "Enter phone no ...", 
+    "AddContact_main_data": "Main data" ,
+    "AddContact_name": "Name",
+    "AddContact_nip":"Tax number",
+    "AddContact_address":"HQ address",
+    "AddContact_GPS":"HQ geolocation",
+    "AddContact_bank":"Bank account",
+    "AddContact_phone":"Phone",
+    "AddContact_email":"Email",
+    "AddContact_description":"Description",
+    "AddContact_description_placeholder":"Enter description ..." , 
+    "AddContact_btn_add":"New contact",
+    "AddContact_btn_close":"Close new contact",
+    "AddContact_btn_close_edit":"Close editing contact",
+    "AddContact_new_title":"Add new contact",
+    "AddContact_edit_title":"Edit contact",
+    "AddContact_show_unactive":"Show inactive contacts",
+    "AddContact_show_active":"Show active contacts",
+    "AddContact_spots_title":"Spots list",
+    "AddContact_spots_address":"Address",
+    "AddContact_btn_add_spot":"New spot",
+    "AddContact_btn_close_edit_spot":"Close editing spot",
+    "AddContact_btn_close_spot":"Close new spot",
+    "AddContact_show_unactive_spot":"Show inactive spots",
+    "AddContact_show_active_spot":"Show active spots",
+
+    "ShopsSpot_Edit_title":"Edit spot",
+    "ShopsSpot_Add_title":"Add spot",
+    "ShopsSpot_label_name":"Spots name",
+    "ShopsSpot_name_placeholder":"Enter spots name ...",
+    "ShopsSpot_title_address":"Spots address",
+    "ShopsSpot_title_geolocation":"Spots geolocation",
+    "ShopsSpot_label_range":"Range delivery",
+    "ShopsSpot_range_placeholder":"Enter range delivery ..."
+
 }
