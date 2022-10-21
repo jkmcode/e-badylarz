@@ -6,10 +6,7 @@ import LocationScreen from "./screens/LocationScreen";
 //Navbars
 import NavbarTopAdmin from "./component/NavbarTopAdmin";
 import NavbarTopUser from "./component/NavbarTopUser";
-import NavbarBottom from "./component/NavbarBottom";
-
 import CurrentAdress from "./screens/CurrentAdress";
-import HomeScreen from "./screens/HomeScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import ProductCarousel from "./component/ProductCarousel";
 import UploadImage from "./component/UploadImage";
@@ -30,37 +27,50 @@ import ShopActivity from "./admin/ShopActivity";
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
 import AddArea from "./admin/AddArea";
-
 import SearchBox from "./component/SearchBox";
 import BookData from "./Data/data.json";
-
 import LoginScreen from "./screens/LoginScreen";
 import LogoutScreen from "./screens/LogoutScreen";
-
 import LoginAdmin from "./admin/LoginAdmin";
-
 import AddCity from "./admin/AddCity";
 import CityDescription from "./admin/CityDescription";
+
+//Customer side
+import HomeScreen from "./screens/HomeScreen";
+import ProductsCategory from "./component/ProductsCategory";
+import SearchBar from "./component/SearchBar";
+import MainPageScreen from "./screens/MainPageScreen";
+import Slider from "./component/Slider";
+import ShopScreen from "./screens/ShopScreen";
+import ProductOfTheDaySlider from "./component/ProductOfTheDaySlider";
 
 function App() {
   return (
     <>
       <>
-        <NavbarTopAdmin />
-        {/* <NavbarTopUser /> */}
+        {/* <NavbarTopAdmin /> */}
+        <NavbarTopUser />
+        <SearchBar />
+
         <Routes>
           <Route path="/" element={<HomeScreen />} />
-
+          <Route path="main-page" element={<MainPageScreen />} />
           <Route path="admin/district" element={<AdminScreenDistrict />} />
           <Route
             path="dashboard/district/district/add"
             element={<AddDiscrict />}
           />
+          <Route path="shop-details" element={<ShopScreen />} />
 
           <Route path="login" element={<LoginScreen />} />
           <Route path="logout" element={<LogoutScreen />} />
 
           <Route path="carousel" element={<ProductCarousel />} />
+
+          <Route
+            path="daily-product-slider"
+            element={<ProductOfTheDaySlider />}
+          />
 
           <Route
             path="searchBox"
@@ -117,7 +127,6 @@ function App() {
 
           <Route path="login-admin" element={<LoginAdmin />}></Route>
         </Routes>
-        {/* <NavbarBottom /> */}
       </>
     </>
   );

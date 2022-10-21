@@ -22,7 +22,7 @@ function NavbarBottom() {
   return (
     <main>
       {windowWidth < 600 ? (
-        <div className="mt-6">
+        <div className="margin-not-overlap">
           <nav className="navbar-bottom fixed-bottom">
             <ul className="navbarBottomNav">
               <li className="nav-bottom-item">

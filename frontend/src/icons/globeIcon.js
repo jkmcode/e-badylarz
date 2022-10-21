@@ -1,13 +1,14 @@
 import React from "react";
 
-function globeIcon() {
+function globeIcon(props) {
   const GlobeIcon = ({ width = 32, height = 32 }) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
-      fill="currentColor"
+      fill={props.bg_icon}
       viewBox="0 0 16 16"
+      className="test"
     >
       <path
         d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887

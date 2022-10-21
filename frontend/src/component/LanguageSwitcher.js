@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Nav, NavDropdown } from "react-bootstrap";
 import i18next from "i18next";
 import Flags from "country-flag-icons/react/3x2";
@@ -12,7 +12,7 @@ function LanguageSwitcher_supp(props) {
   return <Flag className="flag" />;
 }
 
-function LanguageSwitcher() {
+function LanguageSwitcher(props) {
   const [currentLanguageCode, setCurrentLanguageCode] = useState(
     cookies.get("i18next") || "en"
   );
@@ -24,10 +24,27 @@ function LanguageSwitcher() {
     setCurrentLanguageCode(countryCode);
   };
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const detectSize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", detectSize);
+
+    return () => {
+      window.removeEventListener("resize", detectSize);
+    };
+  }, [windowWidth]);
+
   return (
     <Nav>
-      <LanguageSwitcher_supp country_flag={currentLanguage.country} />
-      <NavDropdown title={<GlobeIcon />}>
+      {/* <LanguageSwitcher_supp country_flag={currentLanguage.country} /> */}
+
+      <NavDropdown
+        title={<GlobeIcon bg_icon={props.bg_icon} className="test" />}
+      >
         {language.map(({ code, name, country }) => (
           <div key={code}>
             <NavDropdown.Item

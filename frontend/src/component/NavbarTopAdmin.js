@@ -43,7 +43,7 @@ function AdminNavbarTop() {
       <img className="NavbarLogo" src={LogoNavbar} />
       {windowWidth > 600 && (
         <>
-          <LanguageSwitcher />
+          <LanguageSwitcher bg_icon="white" />
           <NavItem icon={<Home />} refe="/" />
           <NavItem icon={<Favorite />} refe="form" />
           <NavItem icon={<Profil />} refe="login-admin" />

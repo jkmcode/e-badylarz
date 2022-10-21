@@ -14,6 +14,7 @@ import ErrorMessage from "../component/ErrorMessage";
 //https://react-select.com/advanced
 
 function FormAddressScreen() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [disabledField, setDisabledField] = useState(true);
   const [districRequired, setDistricRequired] = useState("");
   const [locationMsg, setLocaionMsg] = useState("");
@@ -65,21 +66,6 @@ function FormAddressScreen() {
       dispatch(getDiscrict());
     }
   }, [dispatch, districtList.length]);
-
-  // responsive
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
 
   //scroll
 
@@ -193,7 +179,7 @@ function FormAddressScreen() {
         ) : (
           <div
             style={centerForm}
-            className="bg-container max-sizing px-4 pt-4 w-90"
+            className="bg-container max-sizing px-4 pt-4 w-90 test66"
           >
             <Row>
               <Col>
