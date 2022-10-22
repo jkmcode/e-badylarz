@@ -659,30 +659,7 @@ input:focus {
   background: rgb(32, 32, 32);
 }
 
-.prev,
-.next {
-  position: absolute;
-  top: 200px;
-  transform: translateY(-50%);
-  background: var(--clr-grey-5);
-  color: var(--clr-white);
-  width: 1.25rem;
-  height: 1.25rem;
-  display: grid;
-  place-items: center;
-  border-color: transparent;
-  font-size: 1rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: var(--transition);
-}
-.prev:hover,
-.next:hover {
-  background: var(--clr-primary-5);
-}
-.prev {
-  left: 0;
-}
-.next {
-  right: 0;
+.map-container {
+  width: 100%;
+  height: 50vh;
 }

@@ -11,7 +11,6 @@ import {
 } from "../constants/adminConstans";
 
 function InfoWindow(props) {
-  console.log("props.type", props.type);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -38,9 +37,10 @@ function InfoWindow(props) {
     <>
       <Modal
         show={modalShow}
-        //onHide={handleClose}
+        // onHide={true}
         backdrop="static"
         keyboard={false}
+        className="d-flex justify-content-center align-items-center"
       >
         <Modal.Header closeButton>
           <Modal.Title>{props.title}</Modal.Title>

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import shopData from "../Data/shopData";
 import shopImage from "../images/vegetables.jpg";
-import { Icon } from "@iconify/react";
+
 import Rating from "../component/Reating";
 import ProductCarousel from "../component/ProductCarousel";
+import ProductOfTheDaySlider from "../component/ProductOfTheDaySlider";
+import ModalGoogleMaps from "../component/ModalGoogleMaps";
+import InfoWindow from "../component/infoWindow";
 
 function ShopScreen() {
   const [readMore, setReadMore] = useState(false);
@@ -20,8 +23,6 @@ function ShopScreen() {
   const [comment, setComment] = useState("");
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("opinion", opinion);
-    console.log("comment", comment);
   };
 
   // styling
@@ -121,7 +122,6 @@ function ShopScreen() {
 
   const reviewForm = {
     backgroundColor: "white",
-    //boxShadow: `1px 5px 4px -3px rgba(0,0,0,0.75)`,
     boxShadow: `3px 3px 5px 0px rgba(0,0,0,0.25)`,
     marginLeft: "1rem",
     marginRight: windowWidth < 768 ? "1rem" : "0rem",
@@ -194,9 +194,16 @@ function ShopScreen() {
         </Col>
         <Col md={5}>
           <div className="mt-4" style={shopDetails}>
-            <div className="mx-4 my-3 h6">
-              Adress: {city}, {street} {number}
+            <div
+              style={{ display: "flex", justifyContent: "flex-start" }}
+              className="mx-4 my-3"
+            >
+              <div className="h6 m-0 d-flex align-items-center">
+                Adress: {city}, {street} {number}
+              </div>
+              <ModalGoogleMaps title={`Adres sklepu: ${name}`} body="Mapa" />
             </div>
+
             <div style={divider}></div>
             <div style={shopTitle}>{name}</div>
             <div className="mt-3" style={shopCategoty}>
@@ -215,6 +222,7 @@ function ShopScreen() {
         </Col>
       </Row>
       <ProductCarousel />
+      <ProductOfTheDaySlider />
     </>
   );
 }
