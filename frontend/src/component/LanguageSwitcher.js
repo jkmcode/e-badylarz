@@ -3,28 +3,18 @@ import { Nav, NavDropdown } from "react-bootstrap";
 import i18next from "i18next";
 import Flags from "country-flag-icons/react/3x2";
 import cookies from "js-cookie";
-import GlobeIcon from "../icons/globeIcon";
 import language from "../language";
+import { Icon } from "@iconify/react";
 
-function LanguageSwitcher_supp(props) {
+function LanguageSwitcherSupp(props) {
   const Flag = Flags[props.country_flag];
 
   return <Flag className="flag" />;
 }
 
-function LanguageSwitcher(props) {
-  const [currentLanguageCode, setCurrentLanguageCode] = useState(
-    cookies.get("i18next") || "en"
-  );
-
-  const currentLanguage = language.find((l) => l.code === currentLanguageCode);
-
-  const handleChangeLng = (countryCode) => {
-    i18next.changeLanguage(countryCode);
-    setCurrentLanguageCode(countryCode);
-  };
-
+function LanguageSwitcher() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isHover, setIsHover] = useState(false);
 
   const detectSize = () => {
     setWindowWidth(window.innerWidth);
@@ -38,22 +28,50 @@ function LanguageSwitcher(props) {
     };
   }, [windowWidth]);
 
+  const [currentLanguageCode, setCurrentLanguageCode] = useState(
+    cookies.get("i18next") || "en"
+  );
+
+  const currentLanguage = language.find((l) => l.code === currentLanguageCode);
+
+  const handleChangeLng = (countryCode) => {
+    i18next.changeLanguage(countryCode);
+    setCurrentLanguageCode(countryCode);
+  };
+
+  const activeIcon = {
+    color: "#e9f5e9",
+    transition: `all 0.7s linear`,
+  };
+
+  const unactiveIcon = {
+    color: "black",
+    transition: `all 0.7s linear`,
+  };
+
   return (
     <Nav>
-      {/* <LanguageSwitcher_supp country_flag={currentLanguage.country} /> */}
-
       <NavDropdown
-        title={<GlobeIcon bg_icon={props.bg_icon} className="test" />}
+        title={
+          <Icon
+            icon="grommet-icons:language"
+            width="32"
+            height="32"
+            style={isHover ? activeIcon : unactiveIcon}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+          />
+        }
       >
         {language.map(({ code, name, country }) => (
-          <div key={code}>
+          <div key={code} style={{ padding: "1rem !important" }}>
             <NavDropdown.Item
               key={country}
               onClick={() => handleChangeLng(code)}
               disabled={currentLanguage.code === code}
             >
-              <LanguageSwitcher_supp country_flag={country} />
-              {name}
+              <LanguageSwitcherSupp country_flag={country} />
+              <span style={{ paddingLeft: "0.8rem" }}>{name}</span>
             </NavDropdown.Item>
           </div>
         ))}

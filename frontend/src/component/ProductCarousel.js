@@ -14,9 +14,11 @@ function ProductCarousel() {
   const [slideIndexDot, setSlideIndexDot] = useState(1);
   const [data, setData] = useState(BookData);
 
+  console.log("data.lenght", data.length);
+
   const breakPoints = [
     { width: 1, itemsToShow: 1 },
-    { width: 550, itemsToShow: 3 },
+    { width: 550, itemsToShow: 2 },
     { width: 768, itemsToShow: 3 },
     { width: 1200, itemsToShow: 3 },
   ];
@@ -75,7 +77,9 @@ function ProductCarousel() {
         enableAutoPlay
         autoPlaySpeed={4000}
         onChange={(currentItem, pageIndex) =>
-          pageIndex === data.length - 9 ? goto() : null
+          setTimeout(() => {
+            return pageIndex === data.length - 6 ? goto() : null;
+          }, 4000)
         }
       >
         {/* {BookData.map((i) =>
@@ -152,10 +156,8 @@ function CarouselItem({ title, id, selected, onClick, slideIndex, indexItem }) {
         <div className="container-dots">
           {Array.from({ length: 2 }).map((item, index) => (
             <div
-              //onClick={() => moveDot(index + 1)}
               onClick={() => onClick(id, index)}
               className={indexItem === index + 1 ? "dot active" : "dot"}
-              //className={selected ? "dot active" : "dot"}
             ></div>
           ))}
         </div>

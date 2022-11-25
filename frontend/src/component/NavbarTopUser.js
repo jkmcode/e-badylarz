@@ -1,19 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import LogoNavbar from "../images/logoNavbar.png";
-import Account from "../images/account.png";
-import ShopList from "../images/shopList.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SearchBox from "./SearchBox";
 import SearchBar from "./SearchBar";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
+import { links } from "../Data/dataNavbar";
+import { useGlobalContext } from "./Cart/context";
+import useLocalStorage from "./Cart/useLocalStorage";
 
 function UserNavbarTop() {
-  const NavbarLogo = {
-    marginRight: "auto",
-  };
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [toggle, setToggle] = useState(false);
+  const linksContainerRef = useRef(null);
+  const linksRef = useRef(null);
+  const [index, setIndex] = useState(-1);
+  const [isHoverProfile, setIsHoverProfile] = useState(false);
+  const [isHoverCart, setIsHoverCart] = useState(false);
+
+  //const { amountItems } = useGlobalContext();
+
+  // testing LocalStorage
+  const [value, setValue] = useLocalStorage("key", "initial");
+  const [testAmount, setTestAmount] = useState(
+    localStorage.getItem("testAmount")
+  );
+
+  // useEffect(() => {
+  //   setTestAmount(localStorage.getItem("testAmount"));
+  // }, [localStorage.getItem("testAmount")]);
+
+  useEffect(() => {
+    // if (testAmount !== localStorage.getItem("key")) {
+    //   setValue(testAmount);
+    // }
+  }, [testAmount]);
+  //
 
   const detectSize = () => {
     setWindowWidth(window.innerWidth);
@@ -27,41 +49,232 @@ function UserNavbarTop() {
     };
   }, [windowWidth]);
 
+  useEffect(() => {
+    const linksHeight = linksRef.current.getBoundingClientRect().height;
+    if (toggle) {
+      linksContainerRef.current.style.height = `${linksHeight}px`;
+    } else {
+      linksContainerRef.current.style.height = `0px`;
+    }
+  }, [toggle]);
+
+  //styling
+  const navbarLogo = {
+    marginRight: "auto",
+  };
+
+  const navSearcher = {
+    position: "absolute",
+    top: "50%",
+    left: "40%",
+    transform: "translate(-50%, -50%)",
+  };
+
+  const navItem = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const iconButtonUser = {
+    margin: "2px",
+    padding: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const profileIconActive = {
+    ...iconButtonUser,
+    color: "#e9f5e9",
+  };
+
+  const profileIconUnactive = {
+    ...iconButtonUser,
+    color: "black",
+  };
+
+  const cartIconActive = {
+    ...iconButtonUser,
+    color: "#e9f5e9",
+  };
+
+  const cartIconUnactive = {
+    ...iconButtonUser,
+    color: "black",
+    position: "relative",
+  };
+
+  const amountContainer = {
+    position: "absolute",
+    bottom: "-0.15rem",
+    right: "0.1rem",
+    backgroundColor: "rgb(253, 241, 0)",
+    width: "1.25rem",
+    height: "1.25rem",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const navBarTopUser = {
+    position: "relative",
+    height: "10vh",
+    minHeight: "50px",
+    backgroundColor: "#c6ebd7",
+    borderBottom: "#c6ebd7",
+    zIndex: "1000",
+    paddingTop: "0.25rem",
+    paddingBottom: "0.25rem",
+    paddingLeft: "0.5rem",
+    paddingRight: "0.5rem",
+  };
+
+  const totalAmount = {
+    marginBottom: "0",
+    fontWeight: "500",
+  };
+
+  const navbarTopNav = {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+  };
+
+  const navToggle = {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+  };
+
+  const linksContainer = {
+    position: "absolute",
+    zIndex: "999",
+    height: windowWidth > 800 ? "0" : "auto !important",
+    overflow: "hidden",
+    backgroundColor: "#c6ebd7",
+    width: "100%",
+    transition: `all 0.3s linear`,
+  };
+
+  const linkCategory = {
+    fontSize: "1.1rem",
+    textTransform: "capitalize",
+    paddingTop: "0.7rem",
+    paddingBottom: "0.7rem",
+    paddingLeft: "0.5rem",
+  };
+
+  const unactiveLink = {
+    ...linkCategory,
+    color: "black",
+    transition: `all 0.3s linear`,
+  };
+
+  const activeLink = {
+    ...linkCategory,
+    color: "white",
+    backgroundColor: "#87edb6",
+    width: "100%",
+    paddingLeft: "1rem",
+    transition: `all 0.3s linear`,
+  };
+
   return (
-    <Navbar>
-      <img className="py-1" style={NavbarLogo} src={LogoNavbar} />
-      {windowWidth > 800 ? (
-        <li className="search-nav">
-          <SearchBox />
+    <>
+      <Navbar>
+        <img style={navbarLogo} src={LogoNavbar} alt="LOGO" />
+        {windowWidth > 800 ? (
+          <li style={navSearcher}>
+            <SearchBox />
+          </li>
+        ) : null}
+        <li style={navItem}>
+          <LanguageSwitcher />
         </li>
-      ) : null}
-
-      <li className="navTop-item">
-        <LanguageSwitcher bg_icon="black" />
-      </li>
-
-      <li className="navTop-item">
-        <Link to="cart" className="icon-button-user">
-          <Icon
-            icon="clarity:list-solid-badged"
-            width="32"
-            height="32"
-            color="black"
-          />
-        </Link>
-      </li>
-      <li className="navTop-item">
-        <Link to="profile" className="icon-button-user">
-          <Icon icon="gg:profile" width="32" height="32" color="black" />
-        </Link>
-      </li>
-    </Navbar>
+        {windowWidth > 800 ? (
+          <>
+            <li style={navItem}>
+              <Link
+                to="cart"
+                style={isHoverCart ? cartIconActive : cartIconUnactive}
+              >
+                <Icon
+                  icon="clarity:list-solid-badged"
+                  width="32"
+                  height="32"
+                  onMouseEnter={() => setIsHoverCart(true)}
+                  onMouseLeave={() => setIsHoverCart(false)}
+                />
+              </Link>
+            </li>
+            <li style={navItem}>
+              <Link
+                to="profile"
+                style={isHoverProfile ? profileIconActive : profileIconUnactive}
+              >
+                <Icon
+                  icon="gg:profile"
+                  width="32"
+                  height="32"
+                  onMouseEnter={() => setIsHoverProfile(true)}
+                  onMouseLeave={() => setIsHoverProfile(false)}
+                />
+              </Link>
+            </li>
+            <li style={navItem}>
+              <Link to="cart" style={cartIconUnactive}>
+                <Icon
+                  icon="material-symbols:shopping-cart-outline"
+                  width="32"
+                  height="32"
+                  style={{ transform: `rotateY(180deg)` }}
+                />
+                <div style={amountContainer}>
+                  <p style={totalAmount}>{value}</p>
+                  {/* <p style={totalAmount}>{testAmount}</p> */}
+                  {/* <p style={totalAmount}>4</p> */}
+                </div>
+              </Link>
+            </li>
+          </>
+        ) : (
+          <button style={navToggle} onClick={() => setToggle(!toggle)}>
+            <Icon icon="charm:menu-hamburger" width="32" height="32" />
+          </button>
+        )}
+      </Navbar>
+      <SearchBar />
+      <div style={linksContainer} ref={linksContainerRef}>
+        <ul ref={linksRef}>
+          {links.map((link, linkIndex) => {
+            const { id, url, text } = link;
+            return (
+              <li
+                key={id}
+                style={linkIndex === index ? activeLink : unactiveLink}
+                onMouseEnter={() => setIndex(linkIndex)}
+              >
+                <Link
+                  style={{ color: linkIndex === index ? "white" : "black" }}
+                  to={url}
+                  onClick={() => setToggle(false)}
+                >
+                  {text}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </>
   );
 
   function Navbar(props) {
     return (
-      <nav className="navBarTopUser">
-        <ul className="navbarTop-nav px-2">{props.children}</ul>
+      <nav style={navBarTopUser}>
+        <ul style={navbarTopNav}>{props.children}</ul>
       </nav>
     );
   }

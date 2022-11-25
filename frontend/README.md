@@ -36,3 +36,5 @@ Do zrobienia:
 2. Modyfikacja sklepu (Edit - zmiana danych)
 3. Opis/komentarz wielojęzyczyny dla sklepu
 4. Dodawanie obsaru zakupów + modyfikacja + komentarz/opis (jak dla sklepu)
+
+Front 5. SVG na logo (zamienić PNG na SVG) 6. Poprawić politykę prywatności o nową domene oraz adres firmy

@@ -24,7 +24,7 @@ function SearchBar() {
 
   const search = {
     position: "absolute",
-    zIndex: "9999",
+    zIndex: "999",
     left: "45%",
     transform: "translate(-45%, 0%)",
   };

@@ -42,7 +42,7 @@ function ModalGoogleMaps(props) {
         </Modal.Header>
         <Modal.Body>
           <GoogleMap
-            zoom={14}
+            zoom={15}
             center={{ lat: 50.14225314644723, lng: 19.402262826521515 }}
             mapContainerClassName="map-container"
           >

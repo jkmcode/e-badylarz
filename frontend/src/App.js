@@ -38,11 +38,14 @@ import CityDescription from "./admin/CityDescription";
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
 import ProductsCategory from "./component/ProductsCategory";
-import SearchBar from "./component/SearchBar";
 import MainPageScreen from "./screens/MainPageScreen";
 import Slider from "./component/Slider";
 import ShopScreen from "./screens/ShopScreen";
 import ProductOfTheDaySlider from "./component/ProductOfTheDaySlider";
+import ToTheTopButton from "./component/ToTheTopButton";
+import Cookie from "./component/Cookie";
+import PrivacyPolicy from "./component/PrivacyPolicy";
+import CartIndex from "./component/Cart/CartIndex";
 
 function App() {
   return (
@@ -50,9 +53,12 @@ function App() {
       <>
         {/* <NavbarTopAdmin /> */}
         <NavbarTopUser />
-        <SearchBar />
+        <ToTheTopButton />
+        <Cookie />
 
         <Routes>
+          <Route path="/cart" element={<CartIndex />} />
+          <Route path="/private-policy" element={<PrivacyPolicy />} />
           <Route path="/" element={<HomeScreen />} />
           <Route path="main-page" element={<MainPageScreen />} />
           <Route path="admin/district" element={<AdminScreenDistrict />} />
