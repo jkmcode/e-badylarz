@@ -106,17 +106,17 @@ function AddContact() {
   }
 
   const newHendlerSpot =() =>{
-    console.log("TEST !!!!!!!!!!  ----> drugi")
+    // console.log("TEST !!!!!!!!!!  ----> drugi")
     navigate(`/dashboard/shops/shops/spot/${shopId}/add`)
   }
 
   const editShopHandler =()=>{
-    console.log("TEST !!!!!!!!!!")
+    // console.log("TEST !!!!!!!!!!")
     navigate(`/dashboard/shops/shops/${shopId}/edit`)
   }
 
   const editSpotHandler =(id)=>{
-    console.log("TEST !!!!!!!!!! - edycja punktu ",id)
+    // console.log("TEST !!!!!!!!!! - edycja punktu ",id)
     navigate(`/dashboard/shops/shops/spot/${shopId}/edit/${id}`)
   }
 

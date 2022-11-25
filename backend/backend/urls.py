@@ -15,7 +15,7 @@ urlpatterns = [
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
-    path('api/add-shop-contact/', addShopContacts),
+    path('api/get-cites/<str:Id>/list', getCites),
 
     #shop
     path('api/get-shops/', getShops),
@@ -24,10 +24,10 @@ urlpatterns = [
     path('api/<str:Id>/get-contacts/', getContacts),
     path('api/<str:Id>/get-spots/', getSpots),
     path('api/<str:Id>/get-spot/', getSpot),
-    path('api/get-cites/<str:Id>/list', getCites),
     path('api/add-shop/', addShop),
+    path('api/add-shop-contact/', addShopContacts),
     path('api/add-shop-spot/', addShopSpot),
-    path('api/edit-shop-spot/', updateShopSpot),
+    path('api/edit-shop-spot/', addShopSpot),
 
     # area
     path('api/get-areas/', getAreas),

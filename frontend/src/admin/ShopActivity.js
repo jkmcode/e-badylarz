@@ -609,7 +609,7 @@ function AddShops() {
                   variant="warning"
                   className="rounded my-3 "
                 >
-                  {t("btn_edit")}
+                  {t("btn-change")}
                 </Button>
               ) : (
                 <Button

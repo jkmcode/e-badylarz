@@ -468,7 +468,9 @@ export const updateShopSpot = (insertData) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/api/EDIT-shop-spot/`, insertData, config);
+    const { data } = await axios.put(`/api/edit-shop-spot/`, insertData, config);
+
+    console.log(data)
 
     dispatch({
       type: EDIT_SHOP_SPOT_SUCCESS,

@@ -46,6 +46,7 @@ class ShopsARC(models.Model):
     photo = models.ImageField(null=True, blank=True)
     type_of_change = models.CharField(max_length=50)
     date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    archiver = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -93,6 +94,7 @@ class ShopsSpotARC(models.Model):
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50)
     date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    archiver = models.CharField(max_length=20, null=True, blank=True)
 
 #Shops_description
 class ShopsDescription(models.Model):
@@ -137,6 +139,7 @@ class ShopsContactARC(models.Model):
     type_of_change = models.CharField(max_length=50)
     date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
     id_contact = models.IntegerField()
+    archiver = models.CharField(max_length=20, null=True, blank=True)
 
 ## Products 
 

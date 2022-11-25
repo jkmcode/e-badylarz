@@ -79,8 +79,6 @@ def updateShop(request, Id):
     data = request.data
     shop = Shops.objects.get(id=Id)
 
-    # brak obsługi pól po zmianie bazy delivery i range
-
     ShopsARC.objects.create(
         id_shops=Id,
         name=shop.name,
@@ -93,25 +91,26 @@ def updateShop(request, Id):
         latitude=shop.latitude,
         longitude=shop.longitude,
         date_of_change = shop.date_of_entry,
-        modifier = shop.creator,
-        creator = data['creator'],
+        modifier = shop.modifier,
+        creator = shop.creator,
         is_active = shop.is_active,
         bank_account = shop.bank_account,
-
-        type_of_change = data['typeOfChnage']        
+        type_of_change = data['typeOfChnage'],  
+        archiver = data['creator'],      
     )
 
-    shop.name=data['name'],
-    shop.nip = data['nip'],
-    shop.city = data['city'],
-    shop.street = data['street'],
-    shop.no_building = data['number'],
-    shop.post_code = data['postCode'],
-    shop.post = data['post'],
-    shop.latitude = data['latitude'],
-    shop.longitude = data['longitude'],
-    shop.creator = str(data['creator']),
+    shop.name=data['name']
+    shop.nip = data['nip']
+    shop.city = data['city']
+    shop.street = data['street']
+    shop.no_building = data['number']
+    shop.post_code = data['postCode']
+    shop.post = data['post']
+    shop.latitude = data['latitude']
+    shop.longitude = data['longitude']
+    shop.modifier = str(data['creator'])
     shop.bank_account = data['bankAccount']
+    shop.date_of_change = datetime.now()
 
     shop.save()
 
@@ -186,9 +185,10 @@ def addShopContacts(request):
             creator = shop_contact_editing.creator,
             is_active = shop_contact_editing.is_active,
             date_of_change = shop_contact_editing.date_of_change,
-            type_of_change = "Data change",
-            modifier = data['modifier'],
+            type_of_change = shop_contact_editing.type_of_change,
+            modifier = shop_contact_editing.modifier,
             id_contact = data['Id'],
+            archiver = data['creator']
         )
 
         # Data change
@@ -198,11 +198,10 @@ def addShopContacts(request):
         shop_contact_editing.phone = data['phone']
         shop_contact_editing.description = data['description']
         shop_contact_editing.date_of_change = datetime.now()
-        shop_contact_editing.modifier = data['modifier']
+        shop_contact_editing.modifier = data['creator']
+        shop_contact_editing.type_of_change = "Data change"
 
         shop_contact_editing.save()
-
-
     else:
         shop_contact = ShopsContact.objects.create(
             id_shops=shop,
@@ -240,7 +239,7 @@ def getShops(request):
     return Response(seriaziler.data)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'PUT'])
 @permission_classes([IsAdminUser])
 def addShopSpot(request):
     data = request.data
@@ -263,28 +262,52 @@ def addShopSpot(request):
             delivery=data['delivery'],
             range=data['range']
         )
-        
-       
-    # else:
-    #     shop12 = Shops.objects.create(
-    #         name=data['name'],
-    #         nip = data['nip'],
-    #         city = data['city'],
-    #         street = data['street'],
-    #         no_building = data['number'],
-    #         post_code = data['postCode'],
-    #         post = data['post'],
-    #         latitude = data['latitude'],
-    #         longitude = data['longitude'],
-    #         creator = data['creator'],
-    #         is_active=True,
-    #         bank_account = data['bankAccount']
-    #     )
+    else:
+        spot = ShopsSpot.objects.get(id=data['id_spot'])
+    
+         # add to archiv
+        spotARC = ShopsSpotARC.objects.create(
+        id_shops = data['id_shops'],
+        id_spot = data['id_spot'],
+        name = spot.name,
+        city = spot.city,
+        street = spot.street,
+        no_building = spot.no_building,
+        post_code = spot.post_code,
+        post = spot.post,
+        latitude = spot.latitude,
+        longitude = spot.longitude,
+        date_of_entry = spot.date_of_entry,
+        date_of_change = spot.date_of_change,
+        modifier = spot.modifier,
+        creator = spot.creator,
+        is_active = spot.is_active,
+        photo = spot.photo,
+        delivery = spot.delivery,
+        range = spot.range,
+        type_of_change = spot.type_of_change,
+        archiver = data['creator']
+        )
+        # change data
+        spot.name = data['name']
+        spot.city = data['city']
+        spot.street = data['street']
+        spot.no_building = data['no_building']
+        spot.post_code = data['postCode']
+        spot.post = data['post']
+        spot.latitude = data['latitude']
+        spot.longitude = data['longitude']
+        spot.date_of_change = datetime.now()
+        spot.modifier = data['creator']
+        spot.delivery = data['delivery']
+        spot.range = data['range']
+        spot.type_of_change = 'Edit - change data'
 
-        spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
-        seriaziler = ShopSpotsSerializer(spots, many=True)
-        return Response(seriaziler.data)
-        # return Response("OK")
+        spot.save()
+
+    spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
+    seriaziler = ShopSpotsSerializer(spots, many=True)
+    return Response(seriaziler.data)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])

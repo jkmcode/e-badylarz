@@ -103,7 +103,7 @@ function AddShopsSpot() {
       // if radioValue = 1 without range - not delivery
       if(radioValue==="1"){
           const insertData = {
-            add:"true",
+            add:true,
             id_shops: shopId,
             name: data.name,
             city: data.city,
@@ -122,7 +122,7 @@ function AddShopsSpot() {
 
       }else{
           const insertData = {
-            add:"false",
+            add:true,
             id_shops: shopId,
             name: data.name,
             city: data.city,
@@ -143,10 +143,10 @@ function AddShopsSpot() {
     } else {
           //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
           //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-        console.log('zapisuję')
         if(radioValue==="1"){
           const insertData ={
-            add:"true",
+            add:false,
+            id_spot:spotId,
             id_shops: shopId,
             name: data.name,
             city: data.city,
@@ -164,7 +164,8 @@ function AddShopsSpot() {
           dispatch(updateShopSpot(insertData))
         }else{
           const insertData = {
-            add:"false",
+            add:false,
+            id_spot:spotId,
             id_shops: shopId,
             name: data.name,
             city: data.city,
