@@ -42,7 +42,7 @@ function AddShops() {
 
   const editShopParam = params.edit;
   const addShopParam = params.add;
-  
+
   const shopId = params.id;
 
   // data from redux
@@ -52,7 +52,7 @@ function AddShops() {
   const shopListRedux = useSelector((state) => state.shopList);
   const { loading, error, successAdd, shopList } = shopListRedux;
 
-    const imageRedux = useSelector((state) => state.saveImage);
+  const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
 
   const insertImageRedux = useSelector((state) => state.insertImage);
@@ -71,8 +71,6 @@ function AddShops() {
     shopDetails,
     success: successGetShop,
   } = getShopRedux;
-
-
 
   // normalize function
   const normalizeCardNumber = (value) => {
@@ -223,7 +221,7 @@ function AddShops() {
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <Row className="align-items-center ">
             <Col>
-              <Link to="/dashboard/shops/shops" className="text-dark h6">
+              <Link to="/dashboard/shops" className="text-dark h6">
                 <Icon icon="ion:arrow-back" />
                 {t("btn-return")}
               </Link>
@@ -398,7 +396,7 @@ function AddShops() {
                       maxLength: {
                         value: 30,
                         message: t("Form_maxLength_30"),
-                      },                      
+                      },
                     })}
                     onKeyUp={() => {
                       trigger("number");

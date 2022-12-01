@@ -10,7 +10,7 @@ urlpatterns = [
     path("api/upload-image/", uploadMultiImages),
 
     path('admin/', admin.site.urls),
-    path('api/discrict/', getDiscrict),
+    path('api/<str:lat>/<str:lng>/discrict/', getDiscrict),
     path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),

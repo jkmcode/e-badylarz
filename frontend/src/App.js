@@ -1,15 +1,11 @@
 import React from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LocationScreen from "./screens/LocationScreen";
 
 //Navbars
 import NavbarTopAdmin from "./component/NavbarTopAdmin";
-import NavbarTopUser from "./component/NavbarTopUser";
-import NavbarBottom from "./component/NavbarBottom";
-
 import CurrentAdress from "./screens/CurrentAdress";
-import HomeScreen from "./screens/HomeScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import ProductCarousel from "./component/ProductCarousel";
 import UploadImage from "./component/UploadImage";
@@ -27,110 +23,124 @@ import AdminAddProducts from "./admin/AdminAddProducts";
 import AdminProductType from "./admin/AdminProductType";
 import AddProductType from "./admin/AddProductType";
 import ShopActivity from "./admin/ShopActivity";
-import ShopSpotActivity from "./admin/ShopSpotActivity"
+import ShopSpotActivity from "./admin/ShopSpotActivity";
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
 import AddArea from "./admin/AddArea";
-
 import SearchBox from "./component/SearchBox";
 import BookData from "./Data/data.json";
-
 import LoginScreen from "./screens/LoginScreen";
 import LogoutScreen from "./screens/LogoutScreen";
-
 import LoginAdmin from "./admin/LoginAdmin";
-
 import AddCity from "./admin/AddCity";
 import CityDescription from "./admin/CityDescription";
 
+//Customer side
+import HomeScreen from "./screens/HomeScreen";
+import ProductsCategory from "./component/ProductsCategory";
+import MainPageScreen from "./screens/MainPageScreen";
+import Slider from "./component/Slider";
+import ShopScreen from "./screens/ShopScreen";
+import ProductOfTheDaySlider from "./component/ProductOfTheDaySlider";
+import PrivacyPolicy from "./component/PrivacyPolicy";
+import CartIndex from "./component/Cart/CartIndex";
+
+import ShareLayouts from "./component/ShareLayouts";
+import ShareLayoutsAdmin from "./component/ShareLayoutsAdmin";
+
 function App() {
   return (
-    <>
-      <>
-        <NavbarTopAdmin />
-        {/* <NavbarTopUser /> */}
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
+    <BrowserRouter>
+      {/* <NavbarTopAdmin /> */}
 
-          <Route path="admin/district" element={<AdminScreenDistrict />} />
+      <Routes>
+        <Route path="/" element={<ShareLayouts />}>
+          <Route index element={<HomeScreen />} />
+          <Route path="cart" element={<CartIndex />} />
+          <Route path="private-policy" element={<PrivacyPolicy />} />
+          <Route path="main-page" element={<MainPageScreen />} />
+          <Route path="shop-details" element={<ShopScreen />} />
+          {/* <Route path="*" element={<NotFoundScreen />} /> */}
+        </Route>
+        <Route path="dashboard" element={<ShareLayoutsAdmin />}>
+          <Route path="district" element={<AdminScreenDistrict />} />
+          <Route path="district/add" element={<AddDiscrict />} />
+          <Route path="district/:id/edit" element={<EditDistrict />} />
+          <Route path="shops" element={<AdminShops />} />
+          <Route path="shops/:add" element={<ShopActivity />} />
+          <Route path="shops/:id/:edit" element={<ShopActivity />} />
+          <Route path="areas" element={<AdminAreas />} />
+          <Route path="areas/:add" element={<AddArea />} />
+          <Route path="cities" element={<AdminCities />} />
+          <Route path="products" element={<AdminAddProducts />} />
+        </Route>
+        {/* <Route path="login-admin" element={<LoginAdmin />}></Route> */}
+      </Routes>
+      <Routes>
+        {/* <Route path="admin/district" element={<AdminScreenDistrict />} /> */}
+        {/* <Route
+          path="dashboard/district/district/add"
+          element={<AddDiscrict />}
+        /> */}
+
+        {/* <Route path="dashboard" element={<DashboardScreen />}>
+          <Route path=":shopsParam/shops" element={<AdminShops />} />
+          <Route path=":areaParam/areas" element={<AdminAreas />} />
           <Route
-            path="dashboard/district/district/add"
-            element={<AddDiscrict />}
+            path=":districtParam/district"
+            element={<AdminScreenDistrict />}
           />
-
-          <Route path="login" element={<LoginScreen />} />
-          <Route path="logout" element={<LogoutScreen />} />
-
-          <Route path="carousel" element={<ProductCarousel />} />
-
+          <Route path=":citiesParam/cities" element={<AdminCities />} />
           <Route
-            path="searchBox"
-            element={
-              <SearchBox placeholder="Enter data ...." data={BookData} />
-            }
-          />
-          <Route path="uploadImage" element={<UploadImage />} />
-
-          <Route path="cartScreen" element={<CartScreen />} />
-          {/* <Route path="home/*" element={<NotFoundScreen />} /> */}
-
-          <Route path="dashboard" element={<DashboardScreen />}>
-            <Route path=":shopsParam/shops" element={<AdminShops />} />
-            <Route path=":areaParam/areas" element={<AdminAreas />} />
-            <Route
-              path=":districtParam/district"
-              element={<AdminScreenDistrict />}
-            />
-            <Route path=":citiesParam/cities" element={<AdminCities />} />
-            <Route
-              path=":productsParam/products"
-              element={<AdminAddProducts />}
-            />
-            <Route
-              path=":productsTypeParam/products-type"
-              element={<AdminProductType />}
-            />
-          </Route>
-
-          <Route
-            path="dashboard/district/district/:id/edit"
-            element={<EditDistrict />}
-          />
-          <Route path="add-city/:id/add" element={<AddCity />} />
-          <Route
-            path="add-description/:name/:id/:cityId/add"
-            element={<CityDescription />}
+            path=":productsParam/products"
+            element={<AdminAddProducts />}
           />
           <Route
-            path="dashboard/productsType/products-type/add"
-            element={<AddProductType />}
+            path=":productsTypeParam/products-type"
+            element={<AdminProductType />}
           />
-          <Route path="dashboard/shops/shops/:add" element={<ShopActivity />} />
-          <Route
-            path="dashboard/shops/shops/:id/:edit"
-            element={<ShopActivity />}
-          />
+        </Route>
 
-          <Route 
-            path="dashboard/shops/shops/spot/:id/:add" 
-            element={<ShopSpotActivity />} />
-          
-          <Route 
-            path="dashboard/shops/shops/spot/:id/:add/:idSpot" 
-            element={<ShopSpotActivity />} />
+        <Route path="add-city/:id/add" element={<AddCity />} />
+        <Route
+          path="add-description/:name/:id/:cityId/add"
+          element={<CityDescription />}
+        />
+        <Route
+          path="dashboard/productsType/products-type/add"
+          element={<AddProductType />}
+        />
+        <Route path="dashboard/shops/shops/:add" element={<ShopActivity />} />
+        <Route
+          path="dashboard/shops/shops/:id/:edit"
+          element={<ShopActivity />}
+        />
 
-          <Route
-            name="test"
-            path="dashboard/shops/shops/:id/contact"
-            element={<AddContact />}
-          />
-          <Route path="dashboard/areas/areas/:add" element={<AddArea />} />
+        <Route
+          path="dashboard/shops/shops/spot/:id/:add"
+          element={<ShopSpotActivity />}
+        />
 
-          <Route path="login-admin" element={<LoginAdmin />}></Route>
-        </Routes>
-        {/* <NavbarBottom /> */}
-      </>
-    </>
+        <Route
+          path="dashboard/shops/shops/spot/:id/:add/:idSpot"
+          element={<ShopSpotActivity />}
+        />
+
+        <Route
+          name="test"
+          path="dashboard/shops/shops/:id/contact"
+          element={<AddContact />}
+        />
+        <Route path="dashboard/areas/areas/:add" element={<AddArea />} />
+
+        <Route path="login-admin" element={<LoginAdmin />}></Route>
+
+        <Route
+          path="searchBox"
+          element={<SearchBox placeholder="Enter data ...." data={BookData} />}
+        /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

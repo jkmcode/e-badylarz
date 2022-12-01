@@ -136,7 +136,7 @@ function AdminShops() {
               type="shop"
             />
           ) : null}
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> :null}
+          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
 
           <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -162,7 +162,10 @@ function AdminShops() {
           {error ? (
             <p>{t("No_data")}</p>
           ) : (
-            <div className="card-body px-0 pb-2">
+            <div
+              style={{ backgroundColor: "white" }}
+              className="card-body px-0 pb-2"
+            >
               <div className="card-body px-0 pb-2">
                 <div className="table-responsive p-0">
                   <table className="table align-items-center mb-0">
@@ -213,7 +216,7 @@ function AdminShops() {
                               </td>
                               <td className="align-middle text-center text-sm">
                                 <span className="badge badge-sm bg-gradient-danger">
-                                {t("status_inactive")}
+                                  {t("status_inactive")}
                                 </span>
                               </td>
                               <td className="align-middle">
@@ -269,7 +272,7 @@ function AdminShops() {
                               </td>
                               <td className="align-middle text-center text-sm">
                                 <span className="badge badge-sm bg-gradient-success">
-                                {t("status_active")}
+                                  {t("status_active")}
                                 </span>
                               </td>
                               <td className="align-middle">

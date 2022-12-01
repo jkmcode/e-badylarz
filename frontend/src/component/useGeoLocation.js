@@ -16,20 +16,6 @@ function useGeoLocation() {
     });
   };
 
-  if (location.loaded) {
-    console.log(location.coordinates.lat, typeof location.coordinates.lat);
-
-    const geocoder = new window.google.maps.Geocoder();
-
-    geocoder.geocode({ location: location.coordinates }).then((response) => {
-      if (response.results[0]) {
-        console.log(response.results[0].formatted_address);
-      } else {
-        console.log("wystąpił error");
-      }
-    });
-  }
-
   const onError = (error) => {
     setLocation({
       loaded: false,
@@ -44,7 +30,7 @@ function useGeoLocation() {
         message: "Geolocation not supported",
       });
 
-      navigator.geolocation.getCurrentPosition(onSuccess, onError); //if user click, the method will be executed
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
   }, []);
 

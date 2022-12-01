@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { testListReducer } from "./reducers/testReducer";
 import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
+import { cartReducer } from "./reducers/cartReducer";
 import {
   addDistrictReducer,
   addDistrictDescReducer,
@@ -48,7 +49,8 @@ const reducer = combineReducers({
   saveImage: saveImageReducer,
   insertImage: insertImageReducer,
   shopSpotsList: shopSpotListReducer,
-  getShopSpot:getShopSpotReducer
+  getShopSpot: getShopSpotReducer,
+  cartReducer: cartReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

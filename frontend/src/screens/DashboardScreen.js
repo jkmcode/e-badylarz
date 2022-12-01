@@ -1,34 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import Main from "../images/logo-ct.png";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+import { adminCategory } from "../Data/dashboardData";
 import BackToLogin from "../admin/BackToLogin";
+import useResponsive from "../component/useResponsive";
 
 function DashboardScreen() {
-  const params = useParams();
-  const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const shopsParam = params.shopsParam;
-  const districtParam = params.districtParam;
-  const citiesParam = params.citiesParam;
-  const productsParam = params.productsParam;
-  const productTypeParam = params.productsTypeParam;
-  const areaParam = params.areaParam;
-
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
+  const { windowWidth } = useResponsive();
 
   return (
     <>
@@ -65,341 +45,39 @@ function DashboardScreen() {
             id="sidenav-collapse-main"
           >
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/district/district"
-                  className={
-                    districtParam === "district"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_1")}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/shops/shops"
-                  className={
-                    shopsParam === "shops"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_2")}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/areas/areas"
-                  className={
-                    areaParam === "areas"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_areas")}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/cities/cities"
-                  className={
-                    citiesParam === "cities"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">Cities</span>
-                  </div>
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/products/products"
-                  className={
-                    productsParam === "products"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_3")}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link
-                  to="/dashboard/productsType/products-type"
-                  className={
-                    productTypeParam === "productsType"
-                      ? "nav-link text-white active bg-gradient-primary"
-                      : "nav-link text-white"
-                  }
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_3a")}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link text-white "
-                  href="../pages/virtual-reality.html"
-                >
-                  <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <img
-                      src={Main}
-                      className="navbar-brand-img h-100"
-                      alt="main_logo"
-                    ></img>
-                    <span className="nav-link-text ms-1">
-                      {t("DashboardScreen_sidebar_subtitle_4")}
-                    </span>
-                  </div>
-                </a>
-              </li>
+              {adminCategory.map((category) => {
+                const { id, path, name } = category;
+                return (
+                  <li key={id}>
+                    <NavLink
+                      to={path}
+                      style={({ isActive }) => {
+                        return {
+                          backgroundColor: isActive ? "#D81B60" : "transparent",
+                          color: "white",
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          textAlign: "center",
+                          padding: "12px 16px",
+                          margin: "0 16px 1.5px",
+                          borderRadius: "0.375rem",
+                        };
+                      }}
+                    >
+                      <img
+                        src={Main}
+                        className="navbar-brand-img h-100"
+                        alt="main_logo"
+                      ></img>
+                      <span className="nav-link-text ms-1">{name}</span>
+                    </NavLink>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </aside>
       )}
-
-      <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-        <div className="w-95 py-4 ps-6">
-          <div className="row">
-            <div className="col-12">
-              <div
-                className={
-                  districtParam === "district"
-                    ? "card-shadow"
-                    : "card my-4 card-shadow"
-                }
-              >
-                <Outlet />
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </>
   );
 }

@@ -5,8 +5,14 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form,  ButtonGroup,
-  ToggleButton, } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  ButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 import {
   addShopSpot,
   getShop,
@@ -49,10 +55,9 @@ function AddShopsSpot() {
   const SpotParam = params.add;
   const editShopParam = params.edit;
   const shopId = params.id;
-  const spotId = params.idSpot
+  const spotId = params.idSpot;
 
   // console.log('SpotParam-->',SpotParam)
- 
 
   const [radioValue, setRadioValue] = useState("1");
   const radios = [
@@ -68,10 +73,19 @@ function AddShopsSpot() {
   const { loading, error, successAdd, shopList } = shopListRedux;
 
   const spotRedux = useSelector((state) => state.getShopSpot);
-  const { spotDetails, success: successGetSpot , loading: spotLoading, error: spotError } = spotRedux;
+  const {
+    spotDetails,
+    success: successGetSpot,
+    loading: spotLoading,
+    error: spotError,
+  } = spotRedux;
 
   const addSpotRedux = useSelector((state) => state.shopSpotsList);
-  const { successAdd: successAddSpot, loading: addSpotLoading, error: addSpotError } = addSpotRedux;
+  const {
+    successAdd: successAddSpot,
+    loading: addSpotLoading,
+    error: addSpotError,
+  } = addSpotRedux;
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
@@ -98,92 +112,89 @@ function AddShopsSpot() {
   // Handlers
   const onSubmit = (data) => {
     setCurrentTaxNo(data.nip);
-    if (SpotParam==='add') {
+    if (SpotParam === "add") {
       // dispatch({ type: SET_FLAG_IMAGE_TRUE });
       // if radioValue = 1 without range - not delivery
-      if(radioValue==="1"){
-          const insertData = {
-            add:true,
-            id_shops: shopId,
-            name: data.name,
-            city: data.city,
-            street: data.street,
-            no_building: data.number,
-            postCode: data.postCode,
-            post: data.post,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            creator: userInfo.id,
-            is_active: "True",
-            delivery:"False",
-            range:"0",
-          };
-         dispatch(addShopSpot(insertData))
-
-      }else{
-          const insertData = {
-            add:true,
-            id_shops: shopId,
-            name: data.name,
-            city: data.city,
-            street: data.street,
-            no_building: data.number,
-            postCode: data.postCode,
-            post: data.post,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            creator: userInfo.id,
-            is_active: "True",
-            delivery:"True",
-            range:data.range,
-          };
-         dispatch(addShopSpot(insertData))
+      if (radioValue === "1") {
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: data.name,
+          city: data.city,
+          street: data.street,
+          no_building: data.number,
+          postCode: data.postCode,
+          post: data.post,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "False",
+          range: "0",
+        };
+        dispatch(addShopSpot(insertData));
+      } else {
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: data.name,
+          city: data.city,
+          street: data.street,
+          no_building: data.number,
+          postCode: data.postCode,
+          post: data.post,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "True",
+          range: data.range,
+        };
+        dispatch(addShopSpot(insertData));
       }
-
     } else {
-          //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
-          //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-        if(radioValue==="1"){
-          const insertData ={
-            add:false,
-            id_spot:spotId,
-            id_shops: shopId,
-            name: data.name,
-            city: data.city,
-            street: data.street,
-            no_building: data.number,
-            postCode: data.postCode,
-            post: data.post,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            creator: userInfo.id,
-            is_active: "True",
-            delivery:"False",
-            range:"0", 
-          }
-          dispatch(updateShopSpot(insertData))
-        }else{
-          const insertData = {
-            add:false,
-            id_spot:spotId,
-            id_shops: shopId,
-            name: data.name,
-            city: data.city,
-            street: data.street,
-            no_building: data.number,
-            postCode: data.postCode,
-            post: data.post,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            creator: userInfo.id,
-            is_active: "True",
-            delivery:"True",
-            range:data.range,
-          };
-          dispatch(updateShopSpot(insertData))
-        }
-        
+      //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      //   dispatch({ type: GET_SHOPS_LIST_DELETE });
+      if (radioValue === "1") {
+        const insertData = {
+          add: false,
+          id_spot: spotId,
+          id_shops: shopId,
+          name: data.name,
+          city: data.city,
+          street: data.street,
+          no_building: data.number,
+          postCode: data.postCode,
+          post: data.post,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "False",
+          range: "0",
+        };
+        dispatch(updateShopSpot(insertData));
+      } else {
+        const insertData = {
+          add: false,
+          id_spot: spotId,
+          id_shops: shopId,
+          name: data.name,
+          city: data.city,
+          street: data.street,
+          no_building: data.number,
+          postCode: data.postCode,
+          post: data.post,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "True",
+          range: data.range,
+        };
+        dispatch(updateShopSpot(insertData));
       }
+    }
   };
 
   // fetch data from DB -- shop & spot to edit
@@ -191,23 +202,23 @@ function AddShopsSpot() {
   useEffect(() => {
     dispatch({ type: DELETE_IMAGE_REDUX });
     if (shopId) {
-      dispatch(getShop({Id: shopId,})  );
+      dispatch(getShop({ Id: shopId }));
       setImageRender(true);
     }
-    if(spotId){
-      dispatch(getSpot({Id: spotId,}));
+    if (spotId) {
+      dispatch(getSpot({ Id: spotId }));
     }
   }, []);
 
   //Reset Default data
   useEffect(() => {
     if (successGetSpot) {
-      setShowShop(true)
-      if (SpotParam==="edit"){
-        if(spotDetails.delivery){
-          setRadioValue("0")
-        }else {
-          setRadioValue("1")
+      setShowShop(true);
+      if (SpotParam === "edit") {
+        if (spotDetails.delivery) {
+          setRadioValue("0");
+        } else {
+          setRadioValue("1");
         }
         reset({
           name: spotDetails.name,
@@ -221,8 +232,9 @@ function AddShopsSpot() {
           latitude: spotDetails.latitude,
           longitude: spotDetails.longitude,
         });
-      }else{reset({})}
-      
+      } else {
+        reset({});
+      }
     }
   }, [successGetSpot]);
 
@@ -241,15 +253,15 @@ function AddShopsSpot() {
     }
   }, [successAdd]);
 
-    // NIE WIEM CZY TO POTRZEBNE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // NIE WIEM CZY TO POTRZEBNE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                        // navigate to ShopAdmin
-                        useEffect(() => {
-                          if (successAddSpot) {
-                            dispatch({ type: ADD_SHOP_SPOT_DELETE });
-                            navigate(`/dashboard/shops/shops/${shopId}/contact`);
-                          } 
-                        }, [dispatch, successAddSpot]);
+  // navigate to ShopAdmin
+  useEffect(() => {
+    if (successAddSpot) {
+      dispatch({ type: ADD_SHOP_SPOT_DELETE });
+      navigate(`/dashboard/shops/shops/${shopId}/contact`);
+    }
+  }, [dispatch, successAddSpot]);
 
   // // navigate to ShopAdmin
   // useEffect(() => {
@@ -284,28 +296,37 @@ function AddShopsSpot() {
 
   return (
     <>
-      {loading || loadingInsertImage || loadingGetShop || loadingUpdateShop || 
-      spotLoading || addSpotLoading ? (
+      {loading ||
+      loadingInsertImage ||
+      loadingGetShop ||
+      loadingUpdateShop ||
+      spotLoading ||
+      addSpotLoading ? (
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <Row className="align-items-center ">
             <Col>
-              <Link to={{pathname: `/dashboard/shops/shops/${shopId}/contact`}} className="text-dark h6">
+              <Link
+                to={{ pathname: `/dashboard/shops/shops/${shopId}/contact` }}
+                className="text-dark h6"
+              >
                 <Icon icon="ion:arrow-back" />
                 {t("btn-return")}
               </Link>
             </Col>
           </Row>
-          {showShop ? 
-                <div className="d-flex justify-content-center display-8">
-                    {shopDetails.name},{space}
-                    {shopDetails.city}{space}
-                    {shopDetails.street}{space}
-                    {shopDetails.no_building}
-                </div>
-                :null }
+          {showShop ? (
+            <div className="d-flex justify-content-center display-8">
+              {shopDetails.name},{space}
+              {shopDetails.city}
+              {space}
+              {shopDetails.street}
+              {space}
+              {shopDetails.no_building}
+            </div>
+          ) : null}
           <div className="d-flex justify-content-center display-6">
             {SpotParam === "edit"
               ? t("ShopsSpot_Edit_title")
@@ -354,56 +375,55 @@ function AddShopsSpot() {
 
               <Col md={4}>
                 <ButtonGroup className="mb-2">
-                    {radios.map((radio, idx) => (
-                      <ToggleButton
-                        key={idx}
-                        id={`radio-${idx}`}
-                        type="radio"
-                        variant={idx % 2 ? "outline-danger" : "outline-success"}
-                        name="radio"
-                        value={radio.value}
-                        checked={radioValue === radio.value}
-                        onChange={(e) => setRadioValue(e.currentTarget.value)}
-                      >
-                        {radio.name}
-                      </ToggleButton>
-                    ))}
+                  {radios.map((radio, idx) => (
+                    <ToggleButton
+                      key={idx}
+                      id={`radio-${idx}`}
+                      type="radio"
+                      variant={idx % 2 ? "outline-danger" : "outline-success"}
+                      name="radio"
+                      value={radio.value}
+                      checked={radioValue === radio.value}
+                      onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    >
+                      {radio.name}
+                    </ToggleButton>
+                  ))}
                 </ButtonGroup>
               </Col>
               <Col md={3}>
-                {radioValue ==="0" ? 
-                      <Form.Group controlId="range">
-                      <Form.Label className="form-msg-style ms-2">
-                        {t("ShopsSpot_label_range")}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        className={errors.range ? "formInvalid" : null}
-                        placeholder={t("ShopsSpot_range_placeholder")}
-                        {...register("range", {
-                          required: t("Form_field_required"),
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: t("Form_only_letters"),
-                          },
-                          maxLength: {
-                            value: 14,
-                            message: t("Form_maxLength_14"),
-                          },
-                        })}
-                        onKeyUp={() => {
-                          trigger("range");
-                        }}
-                        name="range"
-                      ></Form.Control>
-                      {errors.range && (
-                        <div className="text-danger form-msg-style">
-                          {errors.range.message}
-                        </div>
-                      )}
-                    </Form.Group>
-                
-                  : null}
+                {radioValue === "0" ? (
+                  <Form.Group controlId="range">
+                    <Form.Label className="form-msg-style ms-2">
+                      {t("ShopsSpot_label_range")}
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      className={errors.range ? "formInvalid" : null}
+                      placeholder={t("ShopsSpot_range_placeholder")}
+                      {...register("range", {
+                        required: t("Form_field_required"),
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: t("Form_only_letters"),
+                        },
+                        maxLength: {
+                          value: 14,
+                          message: t("Form_maxLength_14"),
+                        },
+                      })}
+                      onKeyUp={() => {
+                        trigger("range");
+                      }}
+                      name="range"
+                    ></Form.Control>
+                    {errors.range && (
+                      <div className="text-danger form-msg-style">
+                        {errors.range.message}
+                      </div>
+                    )}
+                  </Form.Group>
+                ) : null}
               </Col>
             </Row>
             <hr />
@@ -500,7 +520,7 @@ function AddShopsSpot() {
                       maxLength: {
                         value: 30,
                         message: t("Form_maxLength_30"),
-                      },                      
+                      },
                     })}
                     onKeyUp={() => {
                       trigger("number");

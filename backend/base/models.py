@@ -165,6 +165,8 @@ class Districts(models.Model):
     is_active = models.BooleanField(null=True,blank=True)
     creator = models.CharField(max_length=50, null=True, blank=True)
     modifier = models.CharField(max_length=50, null=True, blank=True)
+    latitude = models.CharField(max_length=25, null=True, blank=True)
+    longitude = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
          return self.name

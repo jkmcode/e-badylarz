@@ -10,15 +10,17 @@ import { getDiscrict } from "../actions/discrictsActions";
 import background from "../images/jabłka.png";
 import { scroller } from "react-scroll";
 import ErrorMessage from "../component/ErrorMessage";
+import LocationFormScreen from "./LocationFormScreen";
+import useGeoLocation from "../component/useGeoLocation";
 
 //https://react-select.com/advanced
 
 function FormAddressScreen() {
-  const [disabledField, setDisabledField] = useState(true);
-  const [districRequired, setDistricRequired] = useState("");
-  const [locationMsg, setLocaionMsg] = useState("");
-  const [resetContent, setResetContent] = useState(false);
-  const zero = "0";
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const { coordinates } = useGeoLocation();
+
+  console.log("coordinates", coordinates);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -26,60 +28,13 @@ function FormAddressScreen() {
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
-
-  const onSubmit = (data) => {
-    if (data.district === zero) {
-      setDistricRequired("Pole wymagane");
-    } else {
-      if (data.city !== zero && data.pickupLocation !== zero) {
-        setLocaionMsg("Można wybrać tylko jedno z tych pól");
-        setResetContent(!resetContent);
-      } else if (data.city === zero && data.pickupLocation === zero) {
-        setLocaionMsg("Należy wybrać jedno z tych pól");
-      } else {
-        console.log("walidacja poprawna");
-      }
-    }
-  };
-
-  const selectHandler = () => {
-    setDistricRequired("");
-    setDisabledField(false);
-  };
-
-  const selectHandler2 = () => {
-    setLocaionMsg("");
-  };
-
-  const cities = ["Chrzanów", "Pogorzyce", "Płaza"];
-
   useEffect(() => {
     if (districtList.length === 0) {
-      dispatch(getDiscrict());
+      if (coordinates.lat && coordinates.lng) {
+        dispatch(getDiscrict(coordinates));
+      }
     }
-  }, [dispatch, districtList.length]);
-
-  // responsive
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
+  }, [dispatch, districtList.length, coordinates]);
 
   //scroll
 
@@ -151,20 +106,6 @@ function FormAddressScreen() {
     border: "none",
   };
 
-  const infoMsg = {
-    backgroundColor: "#EAFEE1",
-    marginTop: "0.5rem",
-    color: "#1A5E02",
-    borderRadius: "10px",
-  };
-
-  const errorMsg = {
-    backgroundColor: "#FFE1E1",
-    marginTop: "1rem",
-    color: "#AE1D1D",
-    borderRadius: "10px",
-  };
-
   const positionInfo = {
     fontSize: "20px",
     lineHeight: "20px",
@@ -174,13 +115,6 @@ function FormAddressScreen() {
     top: "20%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-  };
-
-  const searchAreaBtn = {
-    color: "white",
-    backgroundColor: "#207B00",
-    borderRadius: "20px",
-    border: "none",
   };
 
   return (
@@ -212,80 +146,7 @@ function FormAddressScreen() {
                 </div>
               </Col>
             </Row>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Form.Group>
-                <Row>
-                  <Col>
-                    <Form.Select
-                      name="district"
-                      {...register("district")}
-                      onChange={selectHandler}
-                    >
-                      <option key="blankChoice" hidden value={zero}>
-                        {t("FormAddressScreen__district_placeholder")}
-                      </option>
-                      {districtList.map((i) => (
-                        <option key={i.id}>{i.name}</option>
-                      ))}
-                    </Form.Select>
-                    <div className="invalid-feedback fst-italic">
-                      {districRequired ? <div>{districRequired}</div> : null}
-                    </div>
-                  </Col>
-                </Row>
-              </Form.Group>
-              <Form.Group>
-                <Row>
-                  <Col>
-                    <Form.Select
-                      //aria-label="Default select example"
-                      name="city"
-                      {...register("city")}
-                      disabled={disabledField}
-                      className="mt-3"
-                      onChange={selectHandler2}
-                      defaultValue="0"
-                    >
-                      <option key="blankChoice" hidden value={zero}>
-                        {t("FormAddressScreen__city_placeholder")}
-                      </option>
-                      <option key="zeroValue" value={zero}></option>
-                      <option>{cities[0]}</option>
-                      <option>{cities[1]}</option>
-                      <option>{cities[2]}</option>
-                    </Form.Select>
-                    <div className="invalid-feedback fst-italic">
-                      {districRequired ? <div>{districRequired}</div> : null}
-                    </div>
-                  </Col>
-                </Row>
-                {locationMsg ? <p>{locationMsg}</p> : null}
-              </Form.Group>
-              <Row>
-                {/* <h5 className="mt-3 text-justify">
-                  {t("FormAddressScreen__info")}
-                </h5> */}
-              </Row>
-              {districRequired ? (
-                <div style={errorMsg} className="p-3 font-size-msg">
-                  Prosimy o wypełnienie wymaganych pól.
-                </div>
-              ) : null}
-
-              <div style={infoMsg} className="p-3 font-size-msg">
-                <div>Podaj swój adres w celu oszacowania kosztu dostawy.</div>
-              </div>
-
-              <div className="d-flex justify-content-center">
-                <button
-                  className="w-90 w-md-50 my-1 py-3 h6"
-                  style={searchAreaBtn}
-                >
-                  {/* {t("FormAddressScreen__btn")} */}
-                  Szukaj obszaru zakupów
-                </button>
-              </div>
-            </Form>
+            <LocationFormScreen />
           </div>
         )}
       </div>

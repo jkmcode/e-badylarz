@@ -2,11 +2,6 @@ import React from "react";
 import CurrentLocation from "react-current-location-address";
 
 function CurrentAdress() {
-  //   const [address, setAddress] = useState({
-  //     loaded: false,
-  //     currentAddress: "",
-  //   });
-
   return (
     <div>
       <CurrentLocation

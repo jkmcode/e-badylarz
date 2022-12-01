@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "react-click-away-listener";
-import { Row, Col } from "react-bootstrap";
-
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "react-router-dom";
-
-import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import useResponsive from "./useResponsive";
 
 //images
 import { ReactComponent as CogIcon } from "../icons/cog.svg";
@@ -22,28 +19,14 @@ import { ReactComponent as Hamburger } from "../icons/Hamburger.svg";
 import LogoNavbar from "../images/logoNavbar.png";
 
 function AdminNavbarTop() {
-  const { t } = useTranslation();
-
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
+  const { windowWidth } = useResponsive();
 
   return (
     <Navbar>
       <img className="NavbarLogo" src={LogoNavbar} />
       {windowWidth > 600 && (
         <>
-          <LanguageSwitcher />
+          <LanguageSwitcher bg_icon="white" />
           <NavItem icon={<Home />} refe="/" />
           <NavItem icon={<Favorite />} refe="form" />
           <NavItem icon={<Profil />} refe="login-admin" />

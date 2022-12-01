@@ -16,7 +16,7 @@ import {
   SET_FLAG_DESC_TRUE,
   SET_FLAG_DESC_FALSE,
   GET_CITES_LIST_DELETE,
-  SET_FLAG_CITY_TRUE
+  SET_FLAG_CITY_TRUE,
 } from "../constants/adminConstans";
 
 function EditDistrict() {
@@ -39,7 +39,7 @@ function EditDistrict() {
 
   const descrHandler = () => {
     setAddDescr(true);
-    setCities(false)
+    setCities(false);
     dispatch({ type: SET_FLAG_DESC_TRUE });
   };
 
@@ -49,9 +49,9 @@ function EditDistrict() {
   };
 
   const citiesHandler = () => {
-    if(!cities){
-      setAddDescr(false)
-      setCities(true)
+    if (!cities) {
+      setAddDescr(false);
+      setCities(true);
       dispatch({ type: SET_FLAG_CITY_TRUE });
       dispatch({ type: GET_CITES_LIST_DELETE });
     }
@@ -73,7 +73,7 @@ function EditDistrict() {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          <Link to="/dashboard/district/district" className="text-secondary">
+          <Link to="/dashboard/district" className="text-secondary">
             {t("btn-return")}
           </Link>
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
@@ -118,11 +118,7 @@ function EditDistrict() {
               descType={DISCTRICT_DESCRIPTION}
             />
           ) : null}
-          {cities & cityFlag ? (
-            <CitiesList
-              Id={districtId}
-            />
-          ) : null}
+          {cities & cityFlag ? <CitiesList Id={districtId} /> : null}
         </div>
       )}
     </>

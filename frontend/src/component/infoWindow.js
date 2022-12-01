@@ -25,14 +25,14 @@ function InfoWindow(props) {
     }
   };
 
-  const handleClose =() =>{
+  const handleClose = () => {
     dispatch({ type: SET_WINDOW_FLAG_DELETE });
-  }
+  };
 
   const handleNo = () => {
-    if (windowFlag===false){
+    if (windowFlag === false) {
       dispatch({ type: SET_WINDOW_FLAG_DELETE });
-    }else{
+    } else {
       dispatch({ type: SET_WINDOW_FLAG_FALSE });
     }
 
@@ -44,10 +44,13 @@ function InfoWindow(props) {
   return (
     <>
       <Modal
-        show='true'
-        onHide={handleClose}
+        show="true"
+        //onHide={handleClose}
+        //show={modalShow}
+        onHide={true}
         backdrop="static"
         keyboard={false}
+        className="d-flex justify-content-center align-items-center"
       >
         <Modal.Header closeButton>
           <Modal.Title>{props.title}</Modal.Title>

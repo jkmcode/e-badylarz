@@ -507,9 +507,18 @@ def getDiscrictDesc(request, Id, lng, obj_type):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def getDiscrict(request):
-    discrict = Districts.objects.all().order_by('name')
-    seriaziler = DistrictsSerializer(discrict, many=True)
+def getDiscrict(request, lat, lng):
+    data = request.data
+    discricts = Districts.objects.all().order_by('name')
+
+    print(discricts)
+
+    for i in discricts:
+        lat = i.latitude
+        lng = i.longitude
+        print('lat, lng', lat, lng)
+
+    seriaziler = DistrictsSerializer(discricts, many=True)
 
     return Response(seriaziler.data)
 

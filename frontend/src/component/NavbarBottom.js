@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ReactComponent as Home } from "../icons/Home.svg";
 import { ReactComponent as Favorite } from "../icons/Favorite.svg";
 import { ReactComponent as Profil } from "../icons/Profil.svg";
 import { ReactComponent as Cart } from "../icons/Cart.svg";
+import useResponsive from "./useResponsive";
 
 function NavbarBottom() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
+  const { windowWidth } = useResponsive();
 
   return (
     <main>
-      {windowWidth < 600 ? (
-        <div className="mt-6">
+      {windowWidth < 300 ? (
+        <div className="margin-not-overlap">
           <nav className="navbar-bottom fixed-bottom">
             <ul className="navbarBottomNav">
               <li className="nav-bottom-item">

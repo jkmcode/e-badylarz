@@ -36,3 +36,16 @@ Do zrobienia:
 2. Modyfikacja sklepu (Edit - zmiana danych)
 3. Opis/komentarz wielojęzyczyny dla sklepu
 4. Dodawanie obsaru zakupów + modyfikacja + komentarz/opis (jak dla sklepu)
+
+Front 5. SVG na logo (zamienić PNG na SVG) 6. Poprawić politykę prywatności o nową domene oraz adres firmy
+
+/// Kosztyk / Cart -- do zrobienia
+
+1. jak wybieram produkty z MuliImageSlidera i przechodzę do Kosztyka to musze odświeżyć strone żeby je zobaczyć.
+   Rozwiązanie
+   --- w context.js przeniosłem obiekt InitialState do funkcj komponentu. Dzięki temu InitialState (wartość początkowa) zawsze się renderuje przy wywyołaniu komponentu
+2. W koszyku --- jak zmienie ilość produktów i odświeże strone to mam ilość produktów przed ich zmniejszeniem lub zwiększeniem
+   Rozwiązanie
+   --- dodałem w actionach dopisywanie bierzących zmian ilości do LocalStorage
+3. na navbarze nie pokazuje się ilość gdy jestem na głownej stronie (home z formularzem)
+   --- Problem powstaje gdy odświażamy stronę. Wtedy wszytskie dane w Reduxsie zostaja usunięte. Gdy przechodzę do głównje strony za pomocą Link albo Navigate to ilość produktów pochodząca z Reduxa jest widoczna (wszytsko działa okey).

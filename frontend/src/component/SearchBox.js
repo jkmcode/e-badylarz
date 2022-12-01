@@ -4,13 +4,16 @@ import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
 import { ReactComponent as Clear } from "../icons/clear.svg";
 import { ReactComponent as Search } from "../icons/search.svg";
 
+import data from "../Data/data.json";
+
 function SearchBox(props) {
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
+  const [menuHeight, setMenuHeight] = useState(null);
   const handleFilter = (event) => {
     const searchWord = event.target.value;
     setWordEntered(searchWord);
-    const newFilter = props.data.filter((value) => {
+    const newFilter = data.filter((value) => {
       return value.title.toLowerCase().includes(searchWord.toLowerCase());
     });
 
@@ -35,23 +38,24 @@ function SearchBox(props) {
   };
 
   return (
-    <div className="centerContainer">
+    <div>
       <div className="search">
         <div className="searchInputs">
           <input
             type="text"
-            placeholder={props.placeholder}
+            placeholder="Enter data ...."
             value={wordEntered}
             onChange={handleFilter}
           />
           <div className="searchIcon">
             {!wordEntered ? (
-              <Search tabindex="0" />
+              <Search tabIndex="0" />
             ) : (
-              <Clear onClick={clearInput} tabindex="0" />
+              <Clear onClick={clearInput} tabIndex="0" />
             )}
           </div>
         </div>
+
         {filteredData.length != 0 && (
           <div className="dataResult">
             {filteredData.slice(0, 5).map((value, key) => {

@@ -104,10 +104,7 @@ function AddDiscrict() {
           ) : null}
           <Row className="align-items-center">
             <Col>
-              <Link
-                to="/dashboard/district/district"
-                className="text-secondary"
-              >
+              <Link to="/dashboard/district" className="text-secondary">
                 {t("btn-return")}
               </Link>
             </Col>

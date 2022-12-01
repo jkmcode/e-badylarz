@@ -5,11 +5,20 @@ import {
   DISTRICT_FAIL,
 } from "../constants/adminConstans";
 
-export const getDiscrict = () => async (dispatch) => {
+export const getDiscrict = (inserData) => async (dispatch) => {
+  console.log("inserData", inserData);
   try {
     dispatch({ type: DISTRICT_REQUEST });
 
-    const { data } = await axios.get(`/api/discrict/`);
+    // const { data } = await axios.get(
+    //   `/api/${insertData.Id}/get-shop`,
+    //   config,
+    //   insertData
+    // );
+
+    const { data } = await axios.get(
+      `/api/${inserData.lat}/${inserData.lng}/discrict/`
+    );
 
     dispatch({
       type: DISTRICT_SUCCESS,
