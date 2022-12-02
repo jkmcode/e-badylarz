@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getDiscrict } from "../actions/discrictsActions";
+import { getFullDiscricts } from "../actions/discrictsActions";
 import Loader from "../component/Loader";
 import InfoComponent from "../component/infoComponent";
 import ErrorMessage from "../component/ErrorMessage";
@@ -39,6 +39,9 @@ function AdminScreenDistrict() {
   const discrictListRedux = useSelector((state) => state.districts);
   const { loading, districtList, error } = discrictListRedux;
 
+  const unOrActive = useSelector((state) => state.unOrActiveDescription);
+  const { loading: loadingUnOrActive, success, error: errorUnOrActive } = unOrActive;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -48,8 +51,6 @@ function AdminScreenDistrict() {
   const [info, setInfo] = useState(false);
   const [objInfo, setObjInfo] = useState({});
 
-  //const newdistrictList=[]
-
   const activeHandler = (id) => {
     dispatch(
       unOrActiveList({
@@ -57,9 +58,10 @@ function AdminScreenDistrict() {
         active: true,
         userId: userInfo.id,
         objType: DISCTRICT_DESCRIPTION,
+        kind: '',
       })
     );
-    dispatch({ type: DISTRICT_DELETE });
+    //dispatch({ type: DISTRICT_DELETE });
   };
 
   const unActiveHandler = (id) => {
@@ -69,9 +71,10 @@ function AdminScreenDistrict() {
         active: false,
         userId: userInfo.id,
         objType: DISCTRICT_DESCRIPTION,
+        kind: '',
       })
     );
-    dispatch({ type: DISTRICT_DELETE });
+    //dispatch({ type: DISTRICT_DELETE });
   };
 
   const infoHandler = (i) => {
@@ -86,9 +89,15 @@ function AdminScreenDistrict() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      dispatch(getDiscrict());
+      dispatch(getFullDiscricts());
     }
   }, [dispatch, districtList.length]);
+
+  useEffect(() => {
+    if (success) {
+      dispatch({ type: DISTRICT_DELETE });
+    }
+  }, [dispatch, success]);
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
@@ -96,7 +105,7 @@ function AdminScreenDistrict() {
 
   return (
     <>
-      {loading ? (
+      {loading || loadingUnOrActive ? (
         <Loader />
       ) : (
         <div className="bg-container mt-4 p-4 rounded">

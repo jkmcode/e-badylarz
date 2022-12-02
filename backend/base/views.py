@@ -509,16 +509,25 @@ def getDiscrictDesc(request, Id, lng, obj_type):
 @permission_classes([AllowAny])
 def getDiscrict(request, lat, lng):
     data = request.data
-    discricts = Districts.objects.all().order_by('name')
+    discricts = Districts.objects.filter(is_active=True).order_by('name')
 
     # print(discricts)
 
-    for i in discricts:
-        lat = i.latitude
-        lng = i.longitude
+    # for i in discricts:
+    #     lat = i.latitude
+    #     lng = i.longitude
 
     seriaziler = DistrictsSerializer(discricts, many=True)
 
+    return Response(seriaziler.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getFullDiscrict(request):
+    data = request.data
+    discricts = Districts.objects.all().order_by('name')
+    seriaziler = DistrictsSerializer(discricts, many=True)
     return Response(seriaziler.data)
 
 
@@ -537,6 +546,8 @@ def addDiscrict(request):
             name=data['name'],
             creator = data['creator'],
             is_active=True,
+            latitude=data['lat'],
+            longitude=data['lng']
         )
         newdistrict=Districts.objects.filter(name=data['name'])
         seriaziler = DistrictsSerializer(newdistrict, many=True)

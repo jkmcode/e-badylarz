@@ -18,9 +18,9 @@ import useGeoLocation from "../component/useGeoLocation";
 function FormAddressScreen() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const { coordinates } = useGeoLocation();
+  const { coordinates, loaded } = useGeoLocation();
 
-  console.log("coordinates", coordinates);
+  console.log("coordinates", coordinates, "loaded--->", loaded);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ function FormAddressScreen() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      if (coordinates.lat && coordinates.lng) {
+      if (loaded) {
         dispatch(getDiscrict(coordinates));
       }
     }

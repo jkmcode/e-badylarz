@@ -29,3 +29,28 @@ export const getDiscrict = (inserData) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const getFullDiscricts = () => async (dispatch) => {
+
+  try {
+    dispatch({ type: DISTRICT_REQUEST });
+
+    const { data } = await axios.get(
+      `/api/full-discricts/`
+    );
+
+    dispatch({
+      type: DISTRICT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DISTRICT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
