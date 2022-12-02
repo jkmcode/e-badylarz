@@ -46,7 +46,7 @@ export const navItems = [
     icon: (
       <Icon icon="pajamas:hamburger" color="white" width="32" height="32" />
     ),
-    path: "",
+    path: "#",
     name: "hamburger",
   },
 ];

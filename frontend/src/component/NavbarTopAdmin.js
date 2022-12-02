@@ -3,14 +3,15 @@ import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "react-click-away-listener";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useResponsive from "./useResponsive";
 import {
   navItems,
   navLinksItem,
   navLinksSettings,
 } from "../Data/NavTopAdminData";
-import { HAMBURGER } from "../constants/adminConstans";
+import { HAMBURGER, LOGOUT } from "../constants/adminConstans";
+import { logout } from "../actions/userAction";
 
 //images
 import LogoNavbar from "../images/logoNavbar.png";
@@ -100,10 +101,10 @@ function NavItem(props) {
 function DropdownMenu() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  const { windowWidth } = useResponsive();
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
   const [activeMenu, setActiveMenu] = useState("main");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight);
@@ -113,6 +114,10 @@ function DropdownMenu() {
     const height = el.offsetHeight;
     setMenuHeight(height);
   }
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const submenuContainer = {
     height: menuHeight,
@@ -148,18 +153,33 @@ function DropdownMenu() {
         <div className="navTopMenu">
           {navLinksItem.map((navLink) => {
             const { id, icon, path, name, goToMenu } = navLink;
-            return (
-              <Link
-                key={id}
-                to={path}
-                className="hoverMenuItem"
-                style={navlinkItem}
-                onClick={() => (goToMenu ? setActiveMenu(goToMenu) : null)}
-              >
-                <div style={{ marginRight: "0.8rem" }}>{icon}</div>
-                {name}
-              </Link>
-            );
+            if (name !== "Logout") {
+              return (
+                <Link
+                  key={id}
+                  to={path}
+                  className="hoverMenuItem"
+                  style={navlinkItem}
+                  onClick={() => (goToMenu ? setActiveMenu(goToMenu) : null)}
+                >
+                  <div style={{ marginRight: "0.8rem" }}>{icon}</div>
+                  {name}
+                </Link>
+              );
+            } else if (name === LOGOUT) {
+              return (
+                <Link
+                  key={id}
+                  to={path}
+                  className="hoverMenuItem"
+                  style={navlinkItem}
+                  onClick={handleLogout}
+                >
+                  <div style={{ marginRight: "0.8rem" }}>{icon}</div>
+                  {name}
+                </Link>
+              );
+            }
           })}
         </div>
       </CSSTransition>

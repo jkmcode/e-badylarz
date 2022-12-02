@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +25,7 @@ function LoginAdmin() {
   const { loading, error, success, userInfo } = userLogin;
 
   const [permission, setPermission] = useState("");
+  const [isHover, setIsHover] = useState(false);
 
   const onSubmit = (data) => {
     const credentials = {
@@ -46,114 +46,183 @@ function LoginAdmin() {
     }
   }, [success]);
 
+  //styling
+
+  const container = {
+    backgroundImage: `url("https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")`,
+    padding: "0",
+    position: "relative",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: `center`,
+    justifyContent: "center",
+    backgroundSize: "cover",
+    backgroundPosition: "50%",
+    height: "100vh",
+  };
+
+  const formContainer = {
+    position: "relative",
+    backgroundColor: "white",
+    borderRadius: "0.25rem",
+    boxShadow: `0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%)`,
+  };
+
+  const fromHeaderContainer = {
+    padding: "1rem 2rem",
+    position: "absolute",
+    width: "100%",
+    top: "-5rem",
+  };
+
+  const formHeader = {
+    backgroundImage: `linear-gradient(195deg, #EC407A 0%, #D81B60 100%)`,
+    boxShadow: `0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)`,
+    borderRadius: `0.5rem`,
+    padding: `1rem 0`,
+    display: "flex",
+    justifyContent: "center",
+  };
+
+  const formHeaderTitle = {
+    color: "white",
+    fontWeight: "700",
+    fontSize: "1.5rem",
+    textAlign: `center !important`,
+  };
+
+  const formInput = {
+    display: "block",
+    width: "100%",
+    padding: "0.375rem 0.75rem",
+    border: `1px solid #ced4da`,
+    borderRadius: "0.25rem",
+  };
+
+  const fromBtn = {
+    border: "none",
+    backgroundColor: "transparent",
+    boxShadow: isHover
+      ? `0px 4px 14px -5px rgba(150, 21, 75, 1)`
+      : `0px 4px 10px -5px rgba(150, 21, 75, 1)`,
+    width: "100%",
+    paddingTop: "0.4rem",
+    paddingBottom: "0.4rem",
+    borderRadius: "0.25rem",
+    color: "rgb(236, 64, 122)",
+    fontWeight: "500",
+    textTransform: "uppercase",
+    marginTop: "1rem",
+    marginBottom: "1rem",
+  };
+
+  const formError = {
+    color: "#F44335",
+    fontStyle: "italic",
+    fontSize: "0.75rem",
+    marginTop: "0.1rem",
+  };
+
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <main className="main-content mt-0">
-          <div
-            className="page-header align-items-start bg-height z-index--1"
-            style={{
-              backgroundImage: `url(
-            "https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80"
-          )`,
-            }}
-          >
-            <div className="container my-auto">
-              <div className="row">
-                <div className="col-lg-4 col-md-8 col-12 mx-auto">
-                  <div className="card z-index-0 fadeIn3 fadeInBottom">
-                    <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                      <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
-                        <h4 className="text-white font-weight-bolder text-center my-2">
-                          ADMIN PANEL
-                        </h4>
-                      </div>
-                    </div>
-                    <div className="mt-3">
-                      {error ? (
-                        <ErrorMessage msg={error} timeOut={5000} />
-                      ) : null}
-                      {permission ? (
-                        <ErrorMessage msg={permission} timeOut={5000} />
-                      ) : null}
-                    </div>
-
-                    <div className="card-body">
-                      <Form onSubmit={handleSubmit(onSubmit)}>
-                        <Form.Group controlId="userName" className="mb-3">
-                          <Form.Label className="form-msg-style ms-2">
-                            {t("LoginScreen_label_username")}
-                          </Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder={t("LoginScreen_username_placeholder")}
-                            {...register("userName", {
-                              required: t("Form_field_required"),
-                              pattern: {
-                                value: /^[A-Za-z]+$/,
-                                message: t("Form_only_letters"),
-                              },
-                              minLength: {
-                                value: 6,
-                                message: t("Form_minLength_6"),
-                              },
-                            })}
-                            onKeyUp={() => {
-                              trigger("userName");
-                            }}
-                            name="userName"
-                          ></Form.Control>
-                          {errors.userName && (
-                            <div className="text-danger form-msg-style">
-                              {errors.userName.message}
-                            </div>
-                          )}
-                        </Form.Group>
-                        <Form.Group controlId="password">
-                          <Form.Label className="form-msg-style ms-2">
-                            {t("LoginScreen_label_password")}
-                          </Form.Label>
-                          <Form.Control
-                            type="password"
-                            placeholder={t("LoginScreen_password_placeholder")}
-                            {...register("password", {
-                              required: t("Form_field_required"),
-                              minLength: {
-                                value: 8,
-                                message: t("Form_minLength_8"),
-                              },
-                            })}
-                            onKeyUp={() => {
-                              trigger("password");
-                            }}
-                            name="password"
-                          ></Form.Control>
-                          {errors.password && (
-                            <div className="text-danger form-msg-style">
-                              {errors.password.message}
-                            </div>
-                          )}
-                        </Form.Group>
-
-                        <div className="d-flex justify-content-center mt-4">
-                          <Button
-                            type="submit"
-                            className="text-primary text-gradient font-weight-bold w-100"
-                          >
-                            {t("btn-login")}
-                          </Button>
-                        </div>
-                      </Form>
-                    </div>
-                  </div>
-                </div>
+      <main style={container}>
+        <div style={{ width: "80%", maxWidth: "500px" }}>
+          <div style={formContainer}>
+            <div style={fromHeaderContainer}>
+              <div style={formHeader}>
+                <span style={formHeaderTitle}>ADMIN PANEL</span>
               </div>
             </div>
+            <div style={{ marginTop: "1rem" }}>
+              {error ? <ErrorMessage msg={error} timeOut={5000} /> : null}
+              {permission ? (
+                <ErrorMessage msg={permission} timeOut={5000} />
+              ) : null}
+            </div>
+
+            <div className="card-body">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div controlid="userName" className="mb-3">
+                  <label
+                    htmlFor="username"
+                    style={{ fontStyle: "italic", fontSize: "0.875rem" }}
+                  >
+                    {t("LoginScreen_label_username")}
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    className="focusInput"
+                    style={formInput}
+                    placeholder={t("LoginScreen_username_placeholder")}
+                    {...register("userName", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message: t("Form_only_letters"),
+                      },
+                      minLength: {
+                        value: 6,
+                        message: t("Form_minLength_6"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("userName");
+                    }}
+                    name="userName"
+                  ></input>
+                  {errors.userName && (
+                    <div style={formError}>{errors.userName.message}</div>
+                  )}
+                </div>
+                <div controlid="password">
+                  <label
+                    htmlFor="password"
+                    style={{ fontStyle: "italic", fontSize: "0.875rem" }}
+                  >
+                    {t("LoginScreen_label_password")}
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    style={formInput}
+                    className="focusInput"
+                    placeholder={t("LoginScreen_password_placeholder")}
+                    {...register("password", {
+                      required: t("Form_field_required"),
+                      minLength: {
+                        value: 8,
+                        message: t("Form_minLength_8"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("password");
+                    }}
+                    name="password"
+                  ></input>
+                  {errors.password && (
+                    <div style={formError}>{errors.password.message}</div>
+                  )}
+                </div>
+                <div className="d-flex justify-content-center mt-4">
+                  {loading ? (
+                    <Loader />
+                  ) : (
+                    <button
+                      type="submit"
+                      style={fromBtn}
+                      onMouseLeave={() => setIsHover(false)}
+                      onMouseEnter={() => setIsHover(true)}
+                    >
+                      {t("btn-login")}
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
-        </main>
-      )}
+        </div>
+      </main>
     </>
   );
 }
