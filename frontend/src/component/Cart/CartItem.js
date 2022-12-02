@@ -64,7 +64,7 @@ function CartItem({ id, image, text, price, amount, length, index }) {
         <div style={itemPrice}>{price} PLN</div>
       </div>
       <div style={{ textAlign: "right", marginRight: "0.5rem" }}>
-        <div style={{}}>
+        <div>
           <button style={amontBtn} onClick={() => amountItemsIncrease(id)}>
             <Icon icon="ic:round-keyboard-arrow-up" />
           </button>

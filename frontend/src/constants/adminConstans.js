@@ -136,3 +136,4 @@ export const EDIT_SHOP_SPOT_DELETE = "EDIT_SHOP_SPOT_DELETE";
 //NavbarTopAdmin
 
 export const HAMBURGER = "hamburger";
+export const LOGOUT = "Logout";

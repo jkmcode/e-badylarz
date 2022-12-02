@@ -14,6 +14,7 @@ import {
   SET_FLAG_IMAGE_FALSE,
   GET_CONTACT_LIST_DELETE,
 } from "../constants/adminConstans";
+import { Icon } from "@iconify/react";
 
 function AdminShops() {
   const { t } = useTranslation();
@@ -112,11 +113,49 @@ function AdminShops() {
     fontWeight: "bold",
   };
 
+  const headerContainer = {
+    marginTop: "2rem",
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
+  };
+
+  const formHeader = {
+    position: "absolute",
+    display: "grid",
+    alignItems: "center",
+    gridTemplateColumns: `auto auto auto`,
+    width: "80%",
+    top: "-3rem",
+    backgroundImage: `linear-gradient(195deg, #EC407A 0%, #D81B60 100%)`,
+    boxShadow: `0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)`,
+    borderRadius: `0.5rem`,
+    padding: `1rem 0`,
+  };
+
+  const headerTitle = {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    color: "white",
+    fontWeight: "500",
+    fontSize: `calc(1.2rem + 0.7vw)`,
+  };
+
+  const shopAddLink = {
+    display: "flex",
+    alignItems: "center",
+    color: "white",
+    marginRight: "0.5rem",
+  };
+
   const btnShowShops = {
     border: "none",
-    fontWeight: "bold",
-    color: "white",
     backgroundColor: "transparent",
+    color: "white",
+    fontWeight: "500",
+    display: "flex",
+    justifyContent: "flex-end",
   };
 
   return (
@@ -138,25 +177,26 @@ function AdminShops() {
           ) : null}
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
 
-          <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-              <h3 className="text-white text-capitalize text-center ps-3">
-                {t("AdminShops_title")}
-              </h3>
-              <div className="d-flex justify-content-between">
-                <Link className="text-white text-capitalize ps-3" to="add">
-                  {t("btn_add_shop")}
-                </Link>
-                <button
-                  style={btnShowShops}
-                  className="text-sm"
-                  onClick={() => showShops()}
-                >
-                  {activeShops
-                    ? t("btn_show_active_shops")
-                    : t("btn_show_inactive_shops")}
-                </button>
-              </div>
+          <div style={headerContainer}>
+            <div style={formHeader}>
+              <Link style={shopAddLink} to="add">
+                <Icon
+                  icon="ic:baseline-plus"
+                  color="white"
+                  width="32"
+                  height="32"
+                />
+                {t("btn_add_shop")}
+              </Link>
+              <span style={headerTitle}>{t("AdminShops_title")}</span>
+              <button
+                style={btnShowShops}
+                onClick={() => setActiveShops(!activeShops)}
+              >
+                {activeShops
+                  ? t("btn_show_active_shops")
+                  : t("btn_show_inactive_shops")}
+              </button>
             </div>
           </div>
           {error ? (
