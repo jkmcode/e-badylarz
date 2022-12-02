@@ -52,6 +52,8 @@ function AddDiscrict() {
     const insertData = {
       name: data.name,
       creator: userInfo.id,
+      lat: data.latitude,
+      lng: data.longitude
     };
     dispatch(addDiscrict(insertData));
   };
@@ -79,11 +81,11 @@ function AddDiscrict() {
     dispatch({ type: DISTRICT_ADD_DELETE });
   }, []);
 
-  useEffect(() => {
-    if (addDescFlag) {
-      navigate("/dashboard/district/district");
-    }
-  }, [addDescFlag]);
+  // useEffect(() => {
+  //   if (addDescFlag) {
+  //     navigate("/dashboard/district/district");
+  //   }
+  // }, [addDescFlag]);
 
   return (
     <>
@@ -147,6 +149,69 @@ function AddDiscrict() {
                 </div>
               )}
             </Form.Group>
+            <hr />
+            <h6>{t("AddShops_title_geolocation")}</h6>
+            <Row>
+              <Col md={6}>
+                <Form.Group controlId="latitude">
+                  <Form.Label className="form-msg-style ms-2">
+                    {t("AddShops_label_latitude")}
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={errors.latitude ? "formInvalid" : null}
+                    placeholder={t("AddShops_latitude_placeholder")}
+                    {...register("latitude", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[0-9.]+$/,
+                        message: t("Form_only_digits_or_dot"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("latitude");
+                    }}
+                    name="latitude"
+                  ></Form.Control>
+                  {errors.latitude && (
+                    <div className="text-danger form-msg-style">
+                      {errors.latitude.message}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="longitude">
+                  <Form.Label className="form-msg-style ms-2">
+                    {t("AddShops_label_longitude")}
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={errors.longitude ? "formInvalid" : null}
+                    placeholder={t("AddShops_longitude_placeholder")}
+                    {...register("longitude", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[0-9.]+$/,
+                        message: t("Form_only_digits_or_dot"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("longitude");
+                    }}
+                    name="longitude"
+                  ></Form.Control>
+                  {errors.longitude && (
+                    <div className="text-danger form-msg-style">
+                      {errors.longitude.message}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+
+
+
             <div className="d-flex justify-content-end">
               {nextDesc ? null : (
                 <Button

@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('api/<str:lat>/<str:lng>/discrict/', getDiscrict),
+    path('api/full-discricts/', getFullDiscrict),
     path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),
