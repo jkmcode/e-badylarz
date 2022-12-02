@@ -5,129 +5,139 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useResponsive from "./useResponsive";
+import {
+  navItems,
+  navLinksItem,
+  navLinksSettings,
+} from "../Data/NavTopAdminData";
+import { HAMBURGER } from "../constants/adminConstans";
 
 //images
-import { ReactComponent as CogIcon } from "../icons/cog.svg";
-import { ReactComponent as ChevronIcon } from "../icons/chevron.svg";
-import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
-import { ReactComponent as BoltIcon } from "../icons/bolt.svg";
-import { ReactComponent as Home } from "../icons/Home.svg";
-import { ReactComponent as Favorite } from "../icons/Favorite.svg";
-import { ReactComponent as Profil } from "../icons/Profil.svg";
-import { ReactComponent as Cart } from "../icons/Cart.svg";
-import { ReactComponent as Hamburger } from "../icons/Hamburger.svg";
 import LogoNavbar from "../images/logoNavbar.png";
 
 function AdminNavbarTop() {
   const { windowWidth } = useResponsive();
 
+  const navContainer = {
+    backgroundImage: `linear-gradient(90deg, rgba(248, 248, 248, 1) 6%, rgba(36, 37, 38, 1) 43%)`,
+    height: "4rem",
+  };
+
+  const ulContainer = {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "0",
+  };
+
+  const logo = {
+    marginRight: "auto",
+    height: "4rem",
+    marginLeft: "1rem",
+  };
+
+  const contentCenter = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   return (
-    <Navbar>
-      <img className="NavbarLogo" src={LogoNavbar} />
-      {windowWidth > 600 && (
+    <nav style={navContainer}>
+      <ul style={ulContainer}>
+        <img style={logo} src={LogoNavbar} />
         <>
-          <LanguageSwitcher bg_icon="white" />
-          <NavItem icon={<Home />} refe="/" />
-          <NavItem icon={<Favorite />} refe="form" />
-          <NavItem icon={<Profil />} refe="login-admin" />
-          <NavItem icon={<Cart />} refe="/cartScreen" />
+          <li style={contentCenter}>
+            <LanguageSwitcher bg_icon="white" />
+          </li>
+
+          {navItems.map((item) => {
+            const { id, icon, path, name } = item;
+            return (
+              <div key={id}>
+                {windowWidth > 600 && name !== HAMBURGER && (
+                  <NavItem icon={icon} refe={path} name={name} />
+                )}
+                {name == HAMBURGER && (
+                  <NavItem icon={icon} refe={path}>
+                    <DropdownMenu></DropdownMenu>
+                  </NavItem>
+                )}
+              </div>
+            );
+          })}
         </>
-      )}
-
-      <NavItem icon={<Hamburger />} refe="#">
-        <DropdownMenu refer="test"></DropdownMenu>
-      </NavItem>
-    </Navbar>
-  );
-}
-
-function Navbar(props) {
-  return (
-    <nav className="navbarTop">
-      <ul className="navbarTop-nav">{props.children}</ul>
+      </ul>
     </nav>
   );
 }
 
 function NavItem(props) {
   const [open, setOpen] = useState(false);
-
   return (
-    <ClickAwayListener onClickAway={() => setOpen(false)}>
-      <li className="navTop-item">
-        <Link
-          to={props.refe}
-          className="icon-button"
-          onClick={() => setOpen(!open)}
+    <>
+      <ClickAwayListener onClickAway={() => setOpen(false)}>
+        <li
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "60px",
+          }}
         >
-          {props.icon}
-        </Link>
-        {open && props.children}
-      </li>
-    </ClickAwayListener>
+          <Link to={props.refe} onClick={() => setOpen(!open)}>
+            {props.icon}
+          </Link>
+          {open && props.children}
+        </li>
+      </ClickAwayListener>
+    </>
   );
 }
 
 function DropdownMenu() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
-  const [activeMenu, setActiveMenu] = useState("main");
+  const { windowWidth } = useResponsive();
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
+  const [activeMenu, setActiveMenu] = useState("main");
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight);
   }, []);
-
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const detectSize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", detectSize);
-
-    return () => {
-      window.removeEventListener("resize", detectSize);
-    };
-  }, [windowWidth]);
 
   function calcHeight(el) {
     const height = el.offsetHeight;
     setMenuHeight(height);
   }
 
-  function DropdownItem(props) {
-    return (
-      // <a
-      //   href={props.refer}
-      //   className="navTopMenuItem"
-      //   onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
-      // >
-      //   <span className="icon-button">{props.leftIcon}</span>
-      //   {props.children}
-      //   <span className="icon-right">{props.rightIcon}</span>
-      // </a>
-      <Link
-        to={props.refer ? props.refer : "#"}
-        className="navTopMenuItem"
-        onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}
-      >
-        <span className="icon-button">{props.leftIcon}</span>
-        {props.children}
-        <span className="icon-right">{props.rightIcon}</span>
-      </Link>
-    );
-  }
+  const submenuContainer = {
+    height: menuHeight,
+    position: "absolute",
+    zIndex: "100",
+    top: "60px",
+    width: "300px",
+    transform: `translateX(-40%)`,
+    backgroundColor: "#242526",
+    borderRadius: "0.5rem",
+    overflow: "hidden",
+  };
+
+  const navlinkItem = {
+    borderRadius: "0.5rem",
+    color: "#dadce1",
+    height: "50px",
+    display: "flex",
+    alignItems: "center",
+    padding: "0.5rem",
+    marginBottom: "0.5rem",
+  };
 
   return (
-    <div
-      className="navTopDropdown"
-      style={{ height: menuHeight }}
-      ref={dropdownRef}
-    >
+    <div style={submenuContainer} ref={dropdownRef}>
       <CSSTransition
         in={activeMenu === "main"}
         timeout={500}
@@ -136,42 +146,21 @@ function DropdownMenu() {
         onEnter={calcHeight}
       >
         <div className="navTopMenu">
-          <DropdownItem
-            leftIcon={<CogIcon />}
-            rightIcon={<ChevronIcon />}
-            refer="#"
-          >
-            My Profile
-          </DropdownItem>
-          <DropdownItem
-            leftIcon={<CogIcon />}
-            rightIcon={<ChevronIcon />}
-            goToMenu="settings"
-          >
-            UI
-          </DropdownItem>
-          {windowWidth < 1200 && (
-            <DropdownItem
-              leftIcon={<CogIcon />}
-              rightIcon={<ChevronIcon />}
-              goToMenu="adminPanel"
-            >
-              Admin Panel
-            </DropdownItem>
-          )}
-          {userInfo ? (
-            userInfo.IsSuperUser ? (
-              <DropdownItem leftIcon={<Profil />} refer="admin">
-                Admin
-              </DropdownItem>
-            ) : null
-          ) : null}
-
-          {userInfo ? (
-            userInfo.IsAdmin ? (
-              <DropdownItem leftIcon={<Cart />}>Admin Shop</DropdownItem>
-            ) : null
-          ) : null}
+          {navLinksItem.map((navLink) => {
+            const { id, icon, path, name, goToMenu } = navLink;
+            return (
+              <Link
+                key={id}
+                to={path}
+                className="hoverMenuItem"
+                style={navlinkItem}
+                onClick={() => (goToMenu ? setActiveMenu(goToMenu) : null)}
+              >
+                <div style={{ marginRight: "0.8rem" }}>{icon}</div>
+                {name}
+              </Link>
+            );
+          })}
         </div>
       </CSSTransition>
 
@@ -183,7 +172,32 @@ function DropdownMenu() {
         onEnter={calcHeight}
       >
         <div className="navTopMenu">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}></DropdownItem>
+          {navLinksSettings.map((navLink) => {
+            const { id, icon, path, name, goToMenu } = navLink;
+            return (
+              <Link
+                key={id}
+                to={path}
+                className="hoverMenuItem"
+                style={navlinkItem}
+                onClick={() => (goToMenu ? setActiveMenu(goToMenu) : null)}
+              >
+                <div style={{ marginRight: "0.8rem" }}>{icon}</div>
+                {name}
+              </Link>
+            );
+          })}
+        </div>
+      </CSSTransition>
+
+      {/* <CSSTransition
+        in={activeMenu === "settings"}
+        timeout={500}
+        classNames="menu-secondary"
+        unmountOnExit
+        onEnter={calcHeight}
+      >
+        <div className="navTopMenu">
           {userInfo ? (
             <DropdownItem leftIcon={<BoltIcon />} refer="logout">
               Logout
@@ -193,23 +207,10 @@ function DropdownMenu() {
               Login
             </DropdownItem>
           )}
-
-          <DropdownItem leftIcon={<BoltIcon />} refer="uploadImage">
-            Upload Image
-          </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />} refer="searchBox">
-            SearchBox
-          </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />} refer="carousel">
-            Carousel
-          </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />} refer="dashboard">
-            Dashboard
-          </DropdownItem>
         </div>
-      </CSSTransition>
+      </CSSTransition> */}
 
-      <CSSTransition
+      {/* <CSSTransition
         in={activeMenu === "adminPanel"}
         timeout={500}
         classNames="menu-secondary"
@@ -217,7 +218,6 @@ function DropdownMenu() {
         onEnter={calcHeight}
       >
         <div className="navTopMenu">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}></DropdownItem>
           {userInfo && (
             <>
               <DropdownItem
@@ -235,7 +235,7 @@ function DropdownMenu() {
             </>
           )}
         </div>
-      </CSSTransition>
+      </CSSTransition> */}
     </div>
   );
 }

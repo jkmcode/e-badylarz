@@ -10,12 +10,6 @@ export const getDiscrict = (inserData) => async (dispatch) => {
   try {
     dispatch({ type: DISTRICT_REQUEST });
 
-    // const { data } = await axios.get(
-    //   `/api/${insertData.Id}/get-shop`,
-    //   config,
-    //   insertData
-    // );
-
     const { data } = await axios.get(
       `/api/${inserData.lat}/${inserData.lng}/discrict/`
     );

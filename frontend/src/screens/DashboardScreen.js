@@ -1,81 +1,105 @@
 import React from "react";
+import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
-import Main from "../images/logo-ct.png";
 import { NavLink } from "react-router-dom";
 import { adminCategory } from "../Data/dashboardData";
-import BackToLogin from "../admin/BackToLogin";
 import useResponsive from "../component/useResponsive";
+import useBackToLogin from "../component/useBackToLogin";
 
 function DashboardScreen() {
   const { t } = useTranslation();
   const { windowWidth } = useResponsive();
+  useBackToLogin();
+
+  const divider = {
+    marginTop: "1rem",
+    backgroundImage: `linear-gradient(90deg, rgb(216, 27, 96), #fff, rgba(255, 255, 255, 0))`,
+    backgroundColor: "transparent",
+    display: "flex",
+    height: "0.9px",
+    margin: "1rem 0.7rem",
+  };
+
+  const textCenter = {
+    marginLeft: "0.7rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const sidebarHeader = {
+    display: "flex",
+    alignItems: "center",
+    margin: "1rem",
+    paddingBottom: "1rem",
+  };
+
+  const sidebarTitle = {
+    marginLeft: "0.8rem",
+    fontWeight: "500",
+    color: "white",
+  };
+
+  const sidebarContainer = {
+    backgroundImage: `linear-gradient(195deg, #42424a 0%, #191919 100%)`,
+    display: "block",
+    position: "fixed",
+    top: "0",
+    bottom: "0",
+    width: "100%",
+    maxWidth: `14.625rem`,
+    overflowY: "auto",
+    padding: "0",
+    boxShadow: "none",
+    margin: "6rem 0rem 1rem 1rem",
+    borderRadius: "0.75rem",
+  };
 
   return (
     <>
-      <BackToLogin />
       {windowWidth > 1200 && (
-        <aside
-          className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 mt-6 fixed-start ms-3 bg-gradient-dark"
-          id="sidenav-main"
-        >
-          <div className="sidenav-header">
-            <i
-              className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-              aria-hidden="true"
-              id="iconSidenav"
-            ></i>
-            <a
-              className="navbar-brand m-0"
-              href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard "
-              target="_blank"
-            >
-              <img
-                src={Main}
-                className="navbar-brand-img h-100"
-                alt="main_logo"
-              ></img>
-              <span className="ms-1 font-weight-bold text-white">
+        <aside style={sidebarContainer}>
+          <div>
+            <div style={sidebarHeader}>
+              <Icon
+                icon="charm:layout-dashboard"
+                color="white"
+                width="32"
+                height="32"
+              />
+              <span style={sidebarTitle}>
                 {t("DashboardScreen_sidebar_title")}
               </span>
-            </a>
+            </div>
           </div>
-          <hr className="horizontal light mt-0 mb-2"></hr>
-          <div
-            className="collapse navbar-collapse  w-auto "
-            id="sidenav-collapse-main"
-          >
-            <ul className="navbar-nav">
-              {adminCategory.map((category) => {
-                const { id, path, name } = category;
-                return (
-                  <li key={id}>
-                    <NavLink
-                      to={path}
-                      style={({ isActive }) => {
-                        return {
-                          backgroundColor: isActive ? "#D81B60" : "transparent",
-                          color: "white",
-                          display: "flex",
-                          justifyContent: "flex-start",
-                          textAlign: "center",
-                          padding: "12px 16px",
-                          margin: "0 16px 1.5px",
-                          borderRadius: "0.375rem",
-                        };
-                      }}
-                    >
-                      <img
-                        src={Main}
-                        className="navbar-brand-img h-100"
-                        alt="main_logo"
-                      ></img>
-                      <span className="nav-link-text ms-1">{name}</span>
-                    </NavLink>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <div style={divider} />
+          <ul>
+            {adminCategory.map((category) => {
+              const { id, path, name, icon } = category;
+              return (
+                <li key={id}>
+                  <NavLink
+                    to={path}
+                    style={({ isActive }) => {
+                      return {
+                        backgroundColor: isActive ? "#D81B60" : "transparent",
+                        color: "white",
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        textAlign: "center",
+                        padding: "12px 16px",
+                        margin: "0 16px 1.5px",
+                        borderRadius: "0.375rem",
+                      };
+                    }}
+                  >
+                    {icon}
+                    <span style={textCenter}>{name}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
         </aside>
       )}
     </>

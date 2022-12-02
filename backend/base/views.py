@@ -516,7 +516,6 @@ def getDiscrict(request, lat, lng):
     for i in discricts:
         lat = i.latitude
         lng = i.longitude
-        print('lat, lng', lat, lng)
 
     seriaziler = DistrictsSerializer(discricts, many=True)
 

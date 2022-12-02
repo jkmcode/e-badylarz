@@ -124,6 +124,7 @@ a {
 
 .navTopDropdown {
   position: absolute;
+  z-index: 1;
   top: 60px;
   width: 300px;
   transform: translateX(-40%);
@@ -141,6 +142,7 @@ a {
 }
 
 .navTopMenuItem {
+  color: #dadce1;
   height: 50px;
   display: flex;
   align-items: center;
@@ -150,6 +152,15 @@ a {
 }
 
 .navTopMenuItem:hover {
+  background-color: #525357;
+}
+
+.hoverMenuItem {
+  background-color: transparent;
+  transition: background var(--speed);
+}
+
+.hoverMenuItem:hover {
   background-color: #525357;
 }
 

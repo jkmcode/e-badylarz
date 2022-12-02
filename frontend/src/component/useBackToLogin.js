@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function BackToLogin() {
+function useBackToLogin() {
   const navigate = useNavigate();
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -14,7 +14,7 @@ function BackToLogin() {
     }
   }, [navigate, userInfo]);
 
-  return <div></div>;
+  return true;
 }
 
-export default BackToLogin;
+export default useBackToLogin;
