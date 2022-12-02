@@ -96,6 +96,20 @@ export const navLinksItem = [
     name: "Admin",
     goToMenu: "",
   },
+  {
+    id: 5,
+    icon: (
+      <Icon
+        icon="ant-design:logout-outlined"
+        color="white"
+        width="32"
+        height="32"
+        rotate={1}
+      />
+    ),
+    path: "/login-admin",
+    name: "Logout",
+  },
 ];
 
 export const navLinksSettings = [

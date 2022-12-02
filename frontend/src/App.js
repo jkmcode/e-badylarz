@@ -74,7 +74,7 @@ function App() {
           <Route path="cities" element={<AdminCities />} />
           <Route path="products" element={<AdminAddProducts />} />
         </Route>
-        {/* <Route path="login-admin" element={<LoginAdmin />}></Route> */}
+        <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>
       <Routes>
         {/* <Route path="admin/district" element={<AdminScreenDistrict />} /> */}
