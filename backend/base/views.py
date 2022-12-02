@@ -511,7 +511,7 @@ def getDiscrict(request, lat, lng):
     data = request.data
     discricts = Districts.objects.all().order_by('name')
 
-    print(discricts)
+    # print(discricts)
 
     for i in discricts:
         lat = i.latitude
