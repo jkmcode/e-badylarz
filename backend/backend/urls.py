@@ -11,12 +11,12 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('api/<str:lat>/<str:lng>/discrict/', getDiscrict),
-    path('api/full-discricts/', getFullDiscrict),
+    path('api/<str:param>/full-discricts/', getFullDiscricts),
     path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
-    path('api/get-cites/<str:Id>/list', getCites),
+    path('api/get-cites//list', getCites),
 
     #shop
     path('api/get-shops/', getShops),

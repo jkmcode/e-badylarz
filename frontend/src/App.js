@@ -66,6 +66,7 @@ function App() {
           <Route path="district" element={<AdminScreenDistrict />} />
           <Route path="district/add" element={<AddDiscrict />} />
           <Route path="district/:id/edit" element={<EditDistrict />} />
+          <Route path="district/:id/edit/add-city" element={<AddCity />} />
           <Route path="shops" element={<AdminShops />} />
           <Route path="shops/:add" element={<ShopActivity />} />
           <Route path="shops/:id/:edit" element={<ShopActivity />} />

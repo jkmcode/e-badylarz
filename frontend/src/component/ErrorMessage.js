@@ -14,6 +14,8 @@ import {
   PRODUCT_TYPE_ALREADY_EXIST,
   SHOP_ALREADY_EXIST,
   NIP_ALREADY_EXIST,
+  WRONG_LAT,
+  WRONG_LNG,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -48,6 +50,10 @@ function ErrorMessage(props) {
         return setErrorMessage("ErrorMessage_no_type_object");
       case PRODUCT_TYPE_ALREADY_EXIST:
         return setErrorMessage("ErrorMessage_product_type_already_exist");
+      case WRONG_LAT:
+        return setErrorMessage("Wrong_lat");
+      case WRONG_LNG:
+        return setErrorMessage("Wrong_lng");
       default:
         return setErrorMessage(props.msg);
     }
