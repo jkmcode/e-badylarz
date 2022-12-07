@@ -542,7 +542,7 @@ export const getCitiesList = (insertData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `/api/get-cites/${insertData.Id}/list`,
+      `/api/get-cites/${insertData.Id}/${insertData.param}/list`,
       config,
       insertData
     );

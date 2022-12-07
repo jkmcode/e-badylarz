@@ -409,8 +409,12 @@ def addProductType(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getCites(request, Id):
-    cities = Citis.objects.filter(id_district = Id) 
+def getCites(request, Id, param):
+
+    if param == "all":
+        cities = Citis.objects.filter(id_district = Id) 
+    else:
+        cities = Citis.objects.filter(id_district = Id, is_active = True)
     seriaziler = CitiesSerializer(cities, many=True)
     return Response(seriaziler.data)
 
@@ -419,6 +423,16 @@ def getCites(request, Id):
 @permission_classes([IsAdminUser])
 def addCiti(request):
     data = request.data
+    
+    latCorrect = correctLat(float(data['lat']))
+    if latCorrect == False:
+        content = {"detail": "Wrong latitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    lngCorrect = correctLng(float(data['lng']))
+    if lngCorrect == False:
+        content = {"detail": "Wrong longitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     alreadyExists = Citis.objects.filter(name=data['name'], id_district=data['desc_id']).exists()
 
@@ -433,6 +447,8 @@ def addCiti(request):
             name=data['name'],
             creator = data['creator'],
             post_code = data['post'],
+            latitude = data['lat'],
+            longitude = data['lng'],
             is_active=True
         )
         newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
@@ -557,13 +573,8 @@ def getDiscrict(request, lat, lng):
     # print('proba-->',getDistanceBetweenPointsNew(float(lat),float(lng), 50.144392116571424, 19.423779965030423))
 
     for i in discricts:
-        if getDistanceBetweenPointsNew(float(lat),float(lng), float(i.latitude),float(i.longitude)) < 100:
-              print('2--->',i) 
-              newDiscricts.append(i)
-    
-    print('!!!!!!---->',newDiscricts)
-       
-
+        if getDistanceBetweenPointsNew(float(lat),float(lng), float(i.latitude),float(i.longitude)) < 100: 
+              newDiscricts.append(i)      
     seriaziler = DistrictsSerializer(newDiscricts, many=True)
 
     return Response(seriaziler.data)

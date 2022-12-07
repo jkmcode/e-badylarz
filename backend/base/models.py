@@ -155,9 +155,10 @@ class ProductType(models.Model):
     def __str__(self):
          return self.name
 
-## Location
+## ------------  LOCATION  ------------ ##
 
-# District
+## ##################### Districts ######################################
+
 class Districts(models.Model):
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
@@ -171,22 +172,7 @@ class Districts(models.Model):
     def __str__(self):
          return self.name
 
-# Cities 
-class Citis(models.Model):
-    id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=50, null=True, blank=True)
-    post_code = models.CharField(max_length=10, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
-
-    def __str__(self):
-         return self.name
-   
-
-# Descriptions
+# Descriptions Districts
 class Descriptions(models.Model):
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
@@ -197,6 +183,23 @@ class Descriptions(models.Model):
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
+# ##################### Cities ######################################
+ 
+class Citis(models.Model):
+    id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, null=True, blank=True)
+    post_code = models.CharField(max_length=10, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=50, null=True, blank=True)
+    modifier = models.CharField(max_length=50, null=True, blank=True)
+    latitude = models.CharField(max_length=25, null=True, blank=True)
+    longitude = models.CharField(max_length=25, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+   
 
 # To change
 class Place_of_pickups(models.Model):

@@ -6,7 +6,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Button, Row, Col } from "react-bootstrap";
 
-import { getDiscrict } from "../actions/discrictsActions";
+import { getFullDiscricts } from "../actions/discrictsActions";
 
 import AddDescription from "./AddDescription";
 import CitiesList from "./CitiesList";
@@ -45,7 +45,6 @@ function EditDistrict() {
 
   const addCityHandler = () => {
     dispatch({ type: GET_CITES_LIST_DELETE });
-    // navigate(`add-city/${districtId}/add`);
     navigate(`add-city`);
   };
 
@@ -60,7 +59,7 @@ function EditDistrict() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      dispatch(getDiscrict());
+      dispatch(getFullDiscricts("only true"));
     }
   }, [dispatch, districtList.length]);
 
@@ -84,6 +83,7 @@ function EditDistrict() {
               ? null
               : districtList.filter((i) => i.id === districtId)[0].name}
           </div>
+          <hr />
           <Row>
             <Col>
               <Button

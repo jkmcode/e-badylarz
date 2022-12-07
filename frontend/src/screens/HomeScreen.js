@@ -26,7 +26,7 @@ function FormAddressScreen() {
   // const code = 2
   // const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" }
 
-  console.log("coordinates", coordinates, 'code', code);
+  // console.log("coordinates", coordinates, 'code', code);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
