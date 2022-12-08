@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { login } from "../actions/userAction";
+import useResponsive from "../component/useResponsive";
 
 import { NO_PERMISSION } from "../constants/errorsConstants";
 
@@ -13,6 +14,7 @@ function LoginAdmin() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { windowWidth } = useResponsive();
   const {
     register,
     formState: { errors },

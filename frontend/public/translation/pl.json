@@ -36,8 +36,8 @@
   "btn_description": "Opis",
   "btn_yes": "TAK",
   "btn_no": "NIE",
-  "btn_show_active_shops": "Pokaż skley aktywne",
-  "btn_show_inactive_shops": "Pokaż sklepy nieaktywne",
+  "btn_show_active_shops": "skley aktywne",
+  "btn_show_inactive_shops": "sklepy nieaktywne",
   "btn-change": "Zmień",
 
   "cart_currently_empty": "jest obecnie pusty",

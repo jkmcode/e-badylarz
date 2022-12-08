@@ -15,10 +15,12 @@ import {
   GET_CONTACT_LIST_DELETE,
 } from "../constants/adminConstans";
 import { Icon } from "@iconify/react";
+import useResponsive from "../component/useResponsive";
 
 function AdminShops() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { windowWidth } = useResponsive();
 
   const [activeShops, setActiveShops] = useState(false);
   const [active, setActive] = useState(false);
@@ -107,10 +109,12 @@ function AdminShops() {
   };
 
   // style
-  const btnDelete = {
+
+  const btnUnactive = {
     backgroundColor: "white",
     border: "none",
     fontWeight: "bold",
+    fontSize: "0.75rem",
   };
 
   const headerContainer = {
@@ -122,15 +126,15 @@ function AdminShops() {
 
   const formHeader = {
     position: "absolute",
+    top: "-3rem",
     display: "grid",
     alignItems: "center",
-    gridTemplateColumns: `auto auto auto`,
-    width: "80%",
-    top: "-3rem",
+    gridTemplateColumns: `1fr 2fr 1fr`,
+    width: windowWidth < 1200 ? "95%" : "80%",
     backgroundImage: `linear-gradient(195deg, #EC407A 0%, #D81B60 100%)`,
     boxShadow: `0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)`,
     borderRadius: `0.5rem`,
-    padding: `1rem 0`,
+    padding: `1rem 0.5rem`,
   };
 
   const headerTitle = {
@@ -139,7 +143,70 @@ function AdminShops() {
     width: "100%",
     color: "white",
     fontWeight: "500",
-    fontSize: `calc(1.2rem + 0.7vw)`,
+    fontSize: `calc(1rem + 0.7vw)`,
+  };
+
+  const columnTitle = {
+    padding: "1.2rem 0rem",
+    margin: "0",
+    textTransform: "uppercase",
+    color: "grey",
+    fontSize: "0.65rem",
+    fontWeight: "700",
+  };
+
+  const firstColumnTitle = {
+    ...columnTitle,
+    padding: "0.8rem 0.5rem",
+  };
+
+  const statusColumnTitle = {
+    ...columnTitle,
+    textAlign: "center",
+  };
+
+  const mainTableContainer = {
+    width: "100%",
+    minWidth: "800px",
+    alignItems: "center",
+    verticalAlign: "top",
+  };
+
+  const tableContentContainer = {
+    padding: "1rem 0rem",
+    borderBottom: "solid 1px #A0A0A0",
+  };
+
+  const tableActiveLinkContainer = {
+    ...tableContentContainer,
+    textAlign: "center",
+  };
+
+  const tableLinkContainer = {
+    textAlign: "center",
+    width: "10%",
+    paddingLeft: "1.25rem",
+    borderBottom: "solid 1px #A0A0A0",
+  };
+
+  const tableContent = {
+    lineHeight: "1.25",
+    fontWeight: "400",
+    margin: "0",
+    fontSize: "0.75rem",
+  };
+
+  const tableBadge = {
+    display: "block",
+    padding: "0.35rem 0.65rem",
+    fontSize: `calc(0.5rem + 0.35vw)`,
+    fontWeight: "700",
+    lineHeight: "1.25",
+    textTransform: "uppercase",
+    width: "fit-content",
+    color: "white",
+    borderRadius: "0.25rem",
+    backgroundImage: `linear-gradient(195deg, #EF5350 0%, #E53935 100%)`,
   };
 
   const shopAddLink = {
@@ -147,6 +214,7 @@ function AdminShops() {
     alignItems: "center",
     color: "white",
     marginRight: "0.5rem",
+    fontSize: `calc(0.8rem + 0.3vw)`,
   };
 
   const btnShowShops = {
@@ -156,6 +224,34 @@ function AdminShops() {
     fontWeight: "500",
     display: "flex",
     justifyContent: "flex-end",
+    fontSize: `calc(0.8rem + 0.3vw)`,
+  };
+
+  const btn = {
+    backgroundColor: "white",
+    border: "none",
+    fontWeight: "bold",
+    fontSize: `calc(0.5rem + 0.35vw)`,
+  };
+
+  const btnSuccess = {
+    ...btn,
+    color: `#4CAF50`,
+  };
+
+  const btnWarning = {
+    ...btn,
+    color: `#f5f54e`,
+  };
+
+  const btnInfo = {
+    ...btn,
+    color: "#007fff",
+  };
+
+  const btnDanger = {
+    ...btn,
+    color: "#cc0000",
   };
 
   return (
@@ -180,12 +276,7 @@ function AdminShops() {
           <div style={headerContainer}>
             <div style={formHeader}>
               <Link style={shopAddLink} to="add">
-                <Icon
-                  icon="ic:baseline-plus"
-                  color="white"
-                  width="32"
-                  height="32"
-                />
+                <Icon icon="ic:baseline-plus" color="white" />
                 {t("btn_add_shop")}
               </Link>
               <span style={headerTitle}>{t("AdminShops_title")}</span>
@@ -203,150 +294,131 @@ function AdminShops() {
             <p>{t("No_data")}</p>
           ) : (
             <div
-              style={{ backgroundColor: "white" }}
-              className="card-body px-0 pb-2"
+              style={{
+                backgroundColor: "white",
+                padding: "1rem",
+                paddingTop: "3rem",
+              }}
             >
-              <div className="card-body px-0 pb-2">
-                <div className="table-responsive p-0">
-                  <table className="table align-items-center mb-0">
-                    <thead>
-                      <tr>
-                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                          {t("AdminShops_shop_name")}
-                        </th>
-                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                          {t("AdminShops_shop_address")}
-                        </th>
-                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                          {t("AdminShops_shop_tax_number")}
-                        </th>
-                        <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                          {t("AdminShops_status")}
-                        </th>
-                        <th className="text-secondary opacity-7"></th>
-                      </tr>
-                    </thead>
+              <div style={{ height: "65vh", overflowY: "scroll" }}>
+                <table style={mainTableContainer}>
+                  <thead style={{ borderBottom: "solid 2px" }}>
+                    <tr>
+                      <th style={firstColumnTitle}>
+                        {t("AdminShops_shop_name")}
+                      </th>
+                      <th style={columnTitle}>
+                        {t("AdminShops_shop_address")}
+                      </th>
+                      <th style={columnTitle}>
+                        {t("AdminShops_shop_tax_number")}
+                      </th>
+                      <th style={statusColumnTitle}>
+                        {t("AdminShops_status")}
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
 
-                    <tbody>
-                      {shopList.map((shop) => (
-                        <tr key={shop.id}>
-                          {activeShops & !shop.is_active ? (
-                            <>
-                              <td>
-                                <div className="d-flex px-2 py-1">
-                                  <div className="d-flex flex-column justify-content-center">
-                                    <p className="text-xs text-secondary mb-0">
-                                      {shop.name}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <p className="text-xs font-weight-bold mb-0">
-                                  {shop.city}
-                                </p>
-                                <p className="text-xs text-secondary mb-0">
-                                  {shop.street} {shop.no_building}
-                                </p>
-                              </td>
-                              <td>
-                                <p className="text-xs font-weight-bold mb-0">
-                                  {shop.nip}
-                                </p>
-                              </td>
-                              <td className="align-middle text-center text-sm">
-                                <span className="badge badge-sm bg-gradient-danger">
+                  <tbody>
+                    {shopList.map((shop) => (
+                      <tr key={shop.id}>
+                        {activeShops & !shop.is_active ? (
+                          <>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.name}</p>
+                            </td>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.city}</p>
+                              <p style={tableContent}>
+                                {shop.street} {shop.no_building}
+                              </p>
+                            </td>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.nip}</p>
+                            </td>
+                            <td style={tableActiveLinkContainer}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <span style={tableBadge}>
                                   {t("status_inactive")}
                                 </span>
-                              </td>
-                              <td className="align-middle">
-                                <button
-                                  style={btnDelete}
-                                  className="text-xs text-success"
-                                  onClick={() => activeHandler(shop.id)}
-                                >
-                                  {t("btn_active")}
-                                </button>
-                              </td>
-                              <td className="align-middle">
-                                <Link
-                                  to={`${shop.id}/edit`}
-                                  className="text-xs text-warning"
-                                >
-                                  {t("btn_edit")}
-                                </Link>
-                              </td>
-                              <td className="align-middle">
-                                <Link
-                                  to={`${shop.id}/contact`}
-                                  className="text-xs text-info"
-                                >
-                                  {t("btn_contact")}
-                                </Link>
-                              </td>
-                            </>
-                          ) : null}
-                          {!activeShops & shop.is_active ? (
-                            <>
-                              <td>
-                                <div className="d-flex px-2 py-1">
-                                  <div className="d-flex flex-column justify-content-center">
-                                    <p className="text-xs text-secondary mb-0">
-                                      {shop.name}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <p className="text-xs font-weight-bold mb-0">
-                                  {shop.city}
-                                </p>
-                                <p className="text-xs text-secondary mb-0">
-                                  {shop.street} {shop.no_building}
-                                </p>
-                              </td>
-                              <td>
-                                <p className="text-xs font-weight-bold mb-0">
-                                  {shop.nip}
-                                </p>
-                              </td>
-                              <td className="align-middle text-center text-sm">
-                                <span className="badge badge-sm bg-gradient-success">
-                                  {t("status_active")}
+                              </div>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <button
+                                style={btnSuccess}
+                                onClick={() => activeHandler(shop.id)}
+                              >
+                                {t("btn_active")}
+                              </button>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <Link to={`${shop.id}/edit`} style={btnWarning}>
+                                {t("btn_edit")}
+                              </Link>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <Link to={`${shop.id}/contact`} style={btnInfo}>
+                                {t("btn_contact")}
+                              </Link>
+                            </td>
+                          </>
+                        ) : null}
+                        {!activeShops & shop.is_active ? (
+                          <>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.name}</p>
+                            </td>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.city}</p>
+                              <p style={tableContent}>
+                                {shop.street} {shop.no_building}
+                              </p>
+                            </td>
+                            <td style={tableContentContainer}>
+                              <p style={tableContent}>{shop.nip}</p>
+                            </td>
+                            <td style={tableActiveLinkContainer}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <span style={tableBadge}>
+                                  {t("status_inactive")}
                                 </span>
-                              </td>
-                              <td className="align-middle">
-                                <button
-                                  style={btnDelete}
-                                  className="text-xs text-danger"
-                                  onClick={() => unActiveHandler(shop.id)}
-                                >
-                                  {t("btn_unactive")}
-                                </button>
-                              </td>
-                              <td className="align-middle">
-                                <Link
-                                  to={`${shop.id}/edit`}
-                                  className="text-xs text-warning"
-                                >
-                                  {t("btn_edit")}
-                                </Link>
-                              </td>
-                              <td className="align-middle">
-                                <Link
-                                  to={`${shop.id}/contact`}
-                                  className="text-xs text-info"
-                                >
-                                  {t("btn_contact")}
-                                </Link>
-                              </td>
-                            </>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                              </div>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <button
+                                style={btnDanger}
+                                onClick={() => unActiveHandler(shop.id)}
+                              >
+                                {t("btn_unactive")}
+                              </button>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <Link to={`${shop.id}/edit`} style={btnWarning}>
+                                {t("btn_edit")}
+                              </Link>
+                            </td>
+                            <td style={tableLinkContainer}>
+                              <Link to={`${shop.id}/contact`} style={btnInfo}>
+                                {t("btn_contact")}
+                              </Link>
+                            </td>
+                          </>
+                        ) : null}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
