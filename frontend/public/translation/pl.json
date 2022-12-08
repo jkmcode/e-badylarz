@@ -1,6 +1,5 @@
 {
   "test": "po polsku",
-
   "ErrorMessage_title": "Wystąpił błąd",
   "ErrorMessage_title_success": "Sukces",
   "ErrorMessage_inproper_password": "Nieprawidłowy login lub hasło",
@@ -14,9 +13,9 @@
   "ErrorMessage_product_type_already_exist": "Typ produktu już istnieje",
   "ErrorMessage_store_already_exist": "Sklep z taką nazwą już istneje",
   "ErrorMessage_nip_already_exist": "Podany NIP juz istnieje",
-
+  "Wrong_lat": "Błędna wartość szerokości geograficznej",
+  "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",
-
   "btn-return": "Powrót",
   "btn-add": "Dodaj",
   "btn_add_shop": "Dodaj sklep",
@@ -39,31 +38,24 @@
   "btn_show_active_shops": "skley aktywne",
   "btn_show_inactive_shops": "sklepy nieaktywne",
   "btn-change": "Zmień",
-
   "cart_currently_empty": "jest obecnie pusty",
-
   "status_inactive": "Nieaktywny",
   "status_active": "Aktywny",
   "btn_clear": "wyczyść",
   "btn_products_category": "Kategorie Sklepu",
   "btn_buy": "kup",
-
   "price": "cena",
   "promotion": "promocja",
   "my_cart": "Mój koszyk",
   "total_price": "Suma",
-
   "Radio_true": "Aktywne",
   "Radio_false": "Nieaktywne",
   "Radio_delivery": "Dostawa",
   "Radio_own_collection": "Odbiór własny",
   "Table_head_name": "Nazwa",
   "Table_head_ID": "Lp.",
-
   "Window_title": "Pytanie",
-
-  "Post_code_validate": "/^[0-9]{2}-[0-9]{3}+$/",
-
+  "Post_code_validate": "[0-9]{2}-[0-9]{3}",
   "Form_field_required": "Pole wymagane",
   "Form_only_letters": "Możesz wpisać tylko litery",
   "Form_only_digits_or_dot": "Tylko liczby lub kropka",
@@ -87,7 +79,6 @@
   "Form_maxLength_14": "Maksymalnie 14 znaków",
   "Form_maxLength_34": "Maksymalnie 34 znaków",
   "Form_inproper_pattern_email": "Niepoprawny format emial",
-
   "FormAddressScreen_title": "Podaj swój adres",
   "FormAddressScreen_subtitle": "w celu oszacowania kosztu dostawy",
   "FormAddressScreen__city_placeholder": "Miejscowość...",
@@ -98,26 +89,19 @@
   "FormAddressScreen__info": "Po wyborze lokalizacji nastąpi dobranie dla Ciebie najbiższego obszaru zakupów!",
   "FormAddressScreen__btn": "Szukaj obszaru zakupów",
   "FormAddressScreen__learn_more_btn": "Dowiec się więcej",
-
   "AdminScreen_district_btn": "Powiat",
-
   "AdminScreenDistrict_title_active": "Lista aktywnych powiatów",
   "AdminScreenDistrict_title_unactive": "Lista nieaktywnych powiatów",
-
   "AddDiscrict_title": "Dodaj powiat",
   "AddDiscrict_success": "Powiat prawidłowo dodany",
-
   "AddDistrict_label_name": "Nazwa powiatu",
   "AddDistrict_name_placeholder": "Podaj nazwe powiatu ...",
-
   "LoginScreen_title": "Logowanie",
   "LoginScreen_label_username": "Nazwa użytkownika",
   "LoginScreen_username_placeholder": "Podaj nazwę użytkownika ...",
   "LoginScreen_label_password": "Hasło",
   "LoginScreen_password_placeholder": "Podaj hasło ...",
-
   "LogoutScreen_title": "Zostałes wylogowany",
-
   "DashboardScreen_sidebar_title": "Panel administracyjny",
   "DashboardScreen_sidebar_subtitle_1": "Powiaty",
   "DashboardScreen_sidebar_subtitle_2": "Sklepy",
@@ -125,16 +109,13 @@
   "DashboardScreen_sidebar_subtitle_3": "Produkty",
   "DashboardScreen_sidebar_subtitle_3a": "Typ produktów",
   "DashboardScreen_sidebar_subtitle_4": "inne",
-
-  "EditDistrict_title": "Edycja powiatu",
-
+  "EditDistrict_title": "Edycja powiatu : ",
   "DistrictAddDescription_choice_lng": "Wybierz język",
   "DistrictAddDescription_label_desc": "Opis",
   "DistrictAddDescription_placeholder_desc": "Wpisz opis ...",
   "DistrictAddDescription_selected_lng": "Wybrany język",
   "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
-
-  "AddCiti_title": "Dodaj miejscowość dla powiatu :",
+  "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
   "AddCiti_subtitle": "Dla poprwanej walidacji kodu pocztowego zastosuj język właściwy dla dodawanej miejscowości",
   "AddCiti_label_name": "Nazwa miejscowości",
   "AddCiti_name_placeholder": "Podaj nazwę miejscowosci ...",
@@ -142,13 +123,10 @@
   "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
   "AddCity_success": "Miejscowość prawidłowo dodana",
   "AddCity_body_window": "Dodać opis ?",
-
   "InfoComponent_title": "Opis dla powatu:",
   "InfoComponent_title_city": "Opis dla miejscowości:",
-
   "CityDistrict_title_1": "Opis miejscowości :",
   "CityDistrict_title_2": ", powiat",
-
   "AdminAddProducts_title": "Dodaj produkt",
   "AdminAddProducts_label_productCategory": "Kategorie produktu",
   "AdminAddProducts_label_name": "Nazwa produktu",
@@ -156,9 +134,7 @@
   "AdminAddProducts_label_desc": "Opis produktu",
   "AdminAddProducts_placeholder_desc": "Wprowadź opis produktu ...",
   "AdminAddProducts_label_choose_photos": "Dodaj zdjęcia",
-
   "AdminProductType_title": "Lista aktywnych typów produktów",
-
   "AdminShops_title": "Lista sklepów",
   "AdminShops_shop_name": "Nazwa",
   "AdminShops_area": "Obszar",
@@ -167,14 +143,11 @@
   "AdminShops_shop_tax_number": "NIP",
   "AdminShops_activate_shop_InfoWindow_body": "Czy napewno chcesz zminić status na aktywny?",
   "AdminShops_inactivate_shop_InfoWindow_body": "Czy napewno chcesz zminić status na nieaktywny?",
-
   "AddProductType_title": "Dodaj typ produktów",
   "AddProductType_label_name": "Nazwa typu produktu",
   "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
-
   "AddShops_title": "Dodaj sklep",
   "EditShops_title": "Edycja skelpu",
-
   "AddShops_title_address": "Adres",
   "AddShops_label_nip": "NIP",
   "AddShops_nip_placeholder": "Wpisz NIP ...",
@@ -197,10 +170,8 @@
   "AddShops_longitude_placeholder": "Wpisz długość ...",
   "AddShops_label_bankAccound": "Konto bankowe",
   "AddShops_bankAccound_placeholder": "Wpisz konto bankowe ...",
-
   "AddContact_title": "Formularz kontaktowy",
   "AddContact_contactList": "Lista kontaktów",
-
   "AddContact_label_name": "Imię",
   "AddContact_name_placeholder": "Wpisz imię ...",
   "AddContact_label_surname": "Nazwisko",
@@ -209,7 +180,6 @@
   "AddContact_email_placeholder": "Wpisz emial ...",
   "AddContact_label_phone": "Numer telefonu",
   "AddContact_phone_placeholder": "Wpisz numer kontaktowy ...",
-
   "PrivatePolicy_title": "Polityka prywatności opisuje zasady przetwarzania przez nas informacji na Twój temat,w tym danych osobowych oraz ciasteczek, czyli tzw. cookies.",
   "PrivatePolicy_1_General_Information": "1. Informacje ogólne",
   "PrivatePolicy_1.1_General_Information": "Niniejsza polityka dotyczy Serwisu www, funkcjonującego pod adresem url: jkmcode.eu.",
@@ -244,7 +214,6 @@
   "AddContact_btn_close_spot": "Zamknij nowy punkt",
   "AddContact_show_unactive_spot": "Pokaż nieaktywne punkty",
   "AddContact_show_active_spot": "Pokaż aktywne punkty",
-
   "ShopsSpot_Edit_title": "Edycja punktu sprzedaży",
   "ShopsSpot_Add_title": "Dodaj punkt sprzedaży",
   "ShopsSpot_label_name": "Nazwa punktu sprzedaży",
@@ -253,16 +222,13 @@
   "ShopsSpot_title_geolocation": "Współrzędne geograficzne punktu sprzedaży",
   "ShopsSpot_label_range": "Zasięg dostawy",
   "ShopsSpot_range_placeholder": "Wpisz zasięg dostawy ...",
-
   "PrivatePolicy_2_Selected_data_protection": "2. Wybrane metody ochrony danych stosowane przez Operatora",
   "PrivatePolicy_2.1_Selected_data_protection": "Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji (certyfikat SSL). Dzięki temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą być odczytane jedynie na docelowym serwerze.",
   "PrivatePolicy_2.2_Selected_data_protection": "Operator okresowo zmienia swoje hasła administracyjne.",
   "PrivatePolicy_2.3_Selected_data_protection": "W celu ochrony danych Operator regularnie wykonuje kopie bezpieczeństwa.",
   "PrivatePolicy_2.4_Selected_data_protection": "Istotnym elementem ochrony danych jest regularna aktualizacja wszelkiego oprogramowania, wykorzystywanego przez Operatora do przetwarzania danych osobowych, co w szczególności oznacza regularne aktualizacje komponentów programistycznych.",
-
   "PrivatePolicy_3_Hosting": "3. Hosting",
   "PrivatePolicy_3.1_Hosting": "Serwis jest hostowany (technicznie utrzymywany) na serwera operatora: home.pl",
-
   "PrivatePolicy_4_Rights_and_additional_information": "4. Twoje prawa i dodatkowe informacje o sposobie wykorzystania danych",
   "PrivatePolicy_4.1_Rights_and_additional_information": "W niektórych sytuacjach Administrator ma prawo przekazywać Twoje dane osobowe innym odbiorcom, jeśli będzie to niezbędne do wykonania zawartej z Tobą umowy lub do zrealizowania obowiązków ciążących na Administratorze. Dotyczy to takich grup odbiorców:",
   "PrivatePolicy_4.1.1_Rights_and_additional_information": "firma hostingowa na zasadzie powierzenia,",
@@ -272,33 +238,26 @@
   "PrivatePolicy_4.1.5_Rights_and_additional_information": "operatorzy systemu komentarzy.",
   "PrivatePolicy_4.2_Rights_and_additional_information": "Twoje dane osobowe przetwarzane przez Administratora nie dłużej, niż jest to konieczne do wykonania związanych z nimi czynności określonych osobnymi przepisami (np. o prowadzeniu rachunkowości). W odniesieniu do danych marketingowych dane nie będą przetwarzane dłużej niż przez 3 lata.",
   "PrivatePolicy_4.3_Rights_and_additional_information": "Przysługuje Ci prawo żądania od Administratora:",
-
   "PrivatePolicy_4.3.1_Rights_and_additional_information": "dostępu do danych osobowych Ciebie dotyczących,",
   "PrivatePolicy_4.3.2_Rights_and_additional_information": "ich sprostowania,",
   "PrivatePolicy_4.3.3_Rights_and_additional_information": "usunięcia,",
   "PrivatePolicy_4.3.4_Rights_and_additional_information": "ograniczenia przetwarzania,",
   "PrivatePolicy_4.3.5_Rights_and_additional_information": "oraz przenoszenia danych.",
-
   "PrivatePolicy_4.4_Rights_and_additional_information": "Przysługuje Ci prawo do złożenia sprzeciwu w zakresie przetwarzania wskazanego w pkt 3.3 c) wobec przetwarzania danych osobowych w celu wykonania prawnie uzasadnionych interesów realizowanych przez Administratora, w tym profilowania, przy czym prawo sprzeciwu nie będzie mogło być wykonane w przypadku istnienia ważnych prawnie uzasadnionych podstaw do przetwarzania, nadrzędnych wobec Ciebie interesów, praw i wolności, w szczególności ustalenia, dochodzenia lub obrony roszczeń.",
   "PrivatePolicy_4.5_Rights_and_additional_information": "Na działania Administratora przysługuje skarga do Prezesa Urzędu Ochrony Danych Osobowych, ul. Stawki 2, 00-193 Warszawa.",
   "PrivatePolicy_4.6_Rights_and_additional_information": "Podanie danych osobowych jest dobrowolne, lecz niezbędne do obsługi Serwisu.",
   "PrivatePolicy_4.7_Rights_and_additional_information": "W stosunku do Ciebie mogą być podejmowane czynności polegające na zautomatyzowanym podejmowaniu decyzji, w tym profilowaniu w celu świadczenia usług w ramach zawartej umowy oraz w celu prowadzenia przez Administratora marketingu bezpośredniego.",
   "PrivatePolicy_4.8_Rights_and_additional_information": "Dane osobowe nie są przekazywane od krajów trzecich w rozumieniu przepisów o ochronie danych osobowych. Oznacza to, że nie przesyłamy ich poza teren Unii Europejskiej.",
-
   "PrivatePolicy_5_Information_in_the_forms": "5. Informacje w formularzach",
   "PrivatePolicy_5.1_Information_in_the_forms": "Serwis zbiera informacje podane dobrowolnie przez użytkownika, w tym dane osobowe, o ile zostaną one podane,",
   "PrivatePolicy_5.2_Information_in_the_forms": "Serwis może zapisać informacje o parametrach połączenia (oznaczenie czasu, adres IP),",
   "PrivatePolicy_5.3_Information_in_the_forms": "Serwis, w niektórych wypadkach, może zapisać informację ułatwiającą powiązanie danych w formularzu z adresem e-mail użytkownika wypełniającego formularz. W takim wypadku adres e-mail użytkownika pojawia się wewnątrz adresu url strony zawierającej formularz,",
   "PrivatePolicy_5.4_Information_in_the_forms": "Dane podane w formularzu są przetwarzane w celu wynikającym z funkcji konkretnego formularza, np. w celu dokonania procesu obsługi zgłoszenia serwisowego lub kontaktu handlowego, rejestracji usług itp. Każdorazowo kontekst i opis formularza w czytelny sposób informuje, do czego on służy.",
-
   "PrivatePolicy_6_Administrator_logs": "6. Logi Administratora",
   "PrivatePolicy_6.1_Administrator_logs": "Informacje zachowaniu użytkowników w serwisie mogą podlegać logowaniu. Dane te są wykorzystywane w celu administrowania serwisem.",
-
   "PrivatePolicy_7_Relevant_marketing_techniques": "7. Istotne techniki marketingowe",
   "PrivatePolicy_7.1_Relevant_marketing_techniques": "Operator stosuje rozwiązanie badające zachowanie użytkowników poprzez tworzenie map ciepła oraz nagrywanie zachowania na stronie. Te informacje są anonimizowane zanim zostaną przesłane do operatora usługi tak, że nie wie on jakiej osoby fizycznej one dotyczą. W szczególności nagrywaniu nie podlegają wpisywane hasła oraz inne dane osobowe.",
-
   "PrivatePolicy_8_Information_about_cookies": "8. Informacja o plikach cookies",
-
   "PrivatePolicy_8.1_Information_about_cookies": "Serwis korzysta z plików cookies.",
   "PrivatePolicy_8.2_Information_about_cookies": "Pliki cookies (tzw. „ciasteczka”) stanowią dane informatyczne, w szczególności pliki tekstowe, które przechowywane są w urządzeniu końcowym Użytkownika Serwisu i przeznaczone są do korzystania ze stron internetowych Serwisu. Cookies zazwyczaj zawierają nazwę strony internetowej, z której pochodzą, czas przechowywania ich na urządzeniu końcowym oraz unikalny numer.",
   "PrivatePolicy_8.3_Information_about_cookies": "Podmiotem zamieszczającym na urządzeniu końcowym Użytkownika Serwisu pliki cookies oraz uzyskującym do nich dostęp jest operator Serwis.",
@@ -309,7 +268,6 @@
   "PrivatePolicy_8.6_Information_about_cookies": "Oprogramowanie do przeglądania stron internetowych (przeglądarka internetowa) zazwyczaj domyślnie dopuszcza przechowywanie plików cookies w urządzeniu końcowym Użytkownika. Użytkownicy Serwisu mogą dokonać zmiany ustawień w tym zakresie. Przeglądarka internetowa umożliwia usunięcie plików cookies. Możliwe jest także automatyczne blokowanie plików cookies Szczegółowe informacje na ten temat zawiera pomoc lub dokumentacja przeglądarki internetowej.",
   "PrivatePolicy_8.7_Information_about_cookies": "Ograniczenia stosowania plików cookies mogą wpłynąć na niektóre funkcjonalności dostępne na stronach internetowych Serwisu.",
   "PrivatePolicy_8.8_Information_about_cookies": "Pliki cookies zamieszczane w urządzeniu końcowym Użytkownika Serwisu wykorzystywane mogą być również przez współpracujące z operatorem Serwisu podmioty, w szczególności dotyczy to firm: Google (Google Inc. z siedzibą w USA), Facebook (Facebook Inc. z siedzibą w USA), Twitter (Twitter Inc. z siedzibą w USA).",
-
   "PrivatePolicy_9_Managing cookies": "9. Zarządzanie plikami cookies – jak w praktyce wyrażać i cofać zgodę?",
   "PrivatePolicy_9.1_Managing cookies": "Jeśli użytkownik nie chce otrzymywać plików cookies, może zmienić ustawienia przeglądarki. Zastrzegamy, że wyłączenie obsługi plików cookies niezbędnych dla procesów uwierzytelniania, bezpieczeństwa, utrzymania preferencji użytkownika może utrudnić, a w skrajnych przypadkach może uniemożliwić korzystanie ze stron www.",
   "PrivatePolicy_9.2_Managing cookies": "W celu zarządzania ustawienia cookies wybierz z listy poniżej przeglądarkę internetową, której używasz i postępuj zgodnie z instrukcjami:",
@@ -323,9 +281,7 @@
   "PrivatePolicy_9.3.1_Managing cookies": "Android,",
   "PrivatePolicy_9.3.2_Managing cookies": "Safari (iOS),",
   "PrivatePolicy_9.3.3_Managing cookies": "Windows Phone.",
-
   "PrivatePolicy_conclusion": "Niniejszy wzór polityki został wygenerowany bezpłatnie, w celach informacyjnych, w oparciu o naszą wiedzę, branżowe praktyki i przepisy prawa obowiązujące na dzień 2018-08-14. Zalecamy sprawdzenie wzoru polityki przed użyciem jej na stronie. Wzór opiera się na najczęściej występujących na stronach internetowych sytuacjach, ale może nie odzwierciedlać pełnej i dokładnej specyfiki Twojej strony www. Przeczytaj uważnie wygenerowany dokument i w razie potrzeb dostosuj go do Twojej sytuacji lub zasięgnij porady prawnej. Nie bierzemy odpowiedzianości za skutki posługiwania się tym dokumentem, ponieważ tylko Ty masz wpłw na to, czy wszystkie informacje w nim zawarte są zgodne z prawdą. Zwróć także uwagę, że Polityka Prywatności, nawet najlepsza, jest tylko jednym z ekmentów Twojej troski o dane osobowe i prywatność użytkownika na stronie www.",
-
   "Cookie_link_title": "Polityka plików cookies",
   "Cookie_text": "Korzystając z tej strony wyrażasz zgodę na korzystanie z Cookies. Więcej informacji znajdziesz:"
 }

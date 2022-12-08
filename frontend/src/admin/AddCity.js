@@ -7,7 +7,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
-import { getDiscrict } from "../actions/discrictsActions";
+import { getFullDiscricts } from "../actions/discrictsActions";
 
 import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
@@ -19,6 +19,8 @@ import {
   SET_FLAG_ADD_DESC_TRUE,
   SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
+
+import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans"
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
@@ -66,19 +68,21 @@ function AddCity() {
       name: data.name,
       creator: userInfo.id,
       post: data.post,
+      lat: data.latitude,
+      lng: data.longitude,
       desc_id: dscrictId,
     };
     dispatch(addCiti(insertData));
   };
 
-  useEffect(() => {
-    if (success) {
-      setTimeout(() => {
-        setIdNewDistrict(result[0].id);
-        setAddDescription(true);
-      }, TIME_SET_TIMEOUT);
-    }
-  }, [success]);
+  // useEffect(() => {
+  //   if (success) {
+  //     setTimeout(() => {
+  //       setIdNewDistrict(result[0].id);
+  //       setAddDescription(true);
+  //     }, TIME_SET_TIMEOUT);
+  //   }
+  // }, [success]);
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
@@ -87,13 +91,13 @@ function AddCity() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      dispatch(getDiscrict());
+      dispatch(getFullDiscricts("only true"));
     }
   }, [dispatch, districtList.length]);
 
   useEffect(() => {
     if (addDescFlag) {
-      navigate(`/dashboard/district/district/${dscrictId}/edit`);
+      navigate(`/dashboard/district/${dscrictId}/edit`);
     }
   }, [addDescFlag]);
 
@@ -136,7 +140,7 @@ function AddCity() {
           <Row className="align-items-center">
             <Col>
               <Link
-                to={`/dashboard/district/district/${dscrictId}/edit`}
+                to={`/dashboard/district/${dscrictId}/edit`}
                 className="text-secondary"
               >
                 {t("btn-return")}
@@ -149,6 +153,7 @@ function AddCity() {
               ? null
               : districtList.filter((i) => i.id === dscrictId)[0].name}
           </div>
+          <hr />
           <div>{t("AddCiti_subtitle")}</div>
           <Form onSubmit={addhandleSubmit(onSubmit)}>
             <Row>
@@ -163,7 +168,7 @@ function AddCity() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -198,7 +203,8 @@ function AddCity() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: t("Post_code_validate"),
+                        // value: /^t("Post_code_validate")+$/,
+                        value: /^[0-9A-Z -]+$/,
                         message: t("Form_post_code"),
                       },
                       minLength: {
@@ -218,6 +224,67 @@ function AddCity() {
                   {errors.post && (
                     <div className="text-danger form-msg-style">
                       {errors.post.message}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <hr />
+            <h6>{t("AddShops_title_geolocation")}</h6>
+            <Row>
+              <Col md={6}>
+                <Form.Group controlId="latitude">
+                  <Form.Label className="form-msg-style ms-2">
+                    {t("AddShops_label_latitude")}
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={errors.latitude ? "formInvalid" : null}
+                    placeholder={t("AddShops_latitude_placeholder")}
+                    {...register("latitude", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[0-9.]+$/,
+                        message: t("Form_only_digits_or_dot"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("latitude");
+                    }}
+                    name="latitude"
+                  ></Form.Control>
+                  {errors.latitude && (
+                    <div className="text-danger form-msg-style">
+                      {errors.latitude.message}
+                    </div>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="longitude">
+                  <Form.Label className="form-msg-style ms-2">
+                    {t("AddShops_label_longitude")}
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={errors.longitude ? "formInvalid" : null}
+                    placeholder={t("AddShops_longitude_placeholder")}
+                    {...register("longitude", {
+                      required: t("Form_field_required"),
+                      pattern: {
+                        value: /^[0-9.]+$/,
+                        message: t("Form_only_digits_or_dot"),
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("longitude");
+                    }}
+                    name="longitude"
+                  ></Form.Control>
+                  {errors.longitude && (
+                    <div className="text-danger form-msg-style">
+                      {errors.longitude.message}
                     </div>
                   )}
                 </Form.Group>

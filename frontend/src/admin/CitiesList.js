@@ -53,6 +53,7 @@ function CitiesList(props) {
         active: true,
         userId: userInfo.id,
         objType: CITY_DESCRIPTION,
+        kind: '',
       })
     );
   };
@@ -66,6 +67,7 @@ function CitiesList(props) {
         active: false,
         userId: userInfo.id,
         objType: CITY_DESCRIPTION,
+        kind: '',
       })
     );
   };
@@ -86,6 +88,7 @@ function CitiesList(props) {
       dispatch(
         getCitiesList({
           Id: props.Id,
+          param: "all",
         })
       );
     } else {
@@ -119,7 +122,7 @@ function CitiesList(props) {
               typeObj={CITY_DESCRIPTION}
             />
           ) : null}
-
+          <hr />
           {citiesData & cityFlag ? (
             <>
               <ButtonGroup className="mb-2">

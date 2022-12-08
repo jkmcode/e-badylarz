@@ -89,7 +89,7 @@ function AdminScreenDistrict() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      dispatch(getFullDiscricts());
+      dispatch(getFullDiscricts("all"));
     }
   }, [dispatch, districtList.length]);
 

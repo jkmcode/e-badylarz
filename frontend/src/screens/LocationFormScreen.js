@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getCitiesList } from "../actions/adminActions";
+import Loader from "../component/Loader";
+import ErrorMessage from "../component/ErrorMessage";
 
 function LocationFormScreen() {
   const navigate = useNavigate();
@@ -11,16 +14,20 @@ function LocationFormScreen() {
   const [disabledField, setDisabledField] = useState(true);
   const [districRequired, setDistricRequired] = useState("");
   const [cityRequired, setCityRequired] = useState("");
+  const [cityFlag, setCityFlag] = useState(false);
   const [locationMsg, setLocaionMsg] = useState("");
   const [selectedCiti, setSelectedCiti] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState(false);
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
+  // data from redux
   const discrictListRedux = useSelector((state) => state.districts);
   const { districtList } = discrictListRedux;
 
-  const cities = ["Chrzanów", "Pogorzyce", "Płaza"];
+  const dataRedux = useSelector((state) => state.citesList);
+  const { loading, citiesList, error, success } = dataRedux;
 
   const {
     register,
@@ -36,30 +43,42 @@ function LocationFormScreen() {
     } else {
       navigate("/main-page");
     }
-
-    // else {
-    //   if (data.city !== zero && data.pickupLocation !== zero) {
-    //     setLocaionMsg("Można wybrać tylko jedno z tych pól");
-    //     setResetContent(!resetContent);
-    //   } else if (data.city === zero && data.pickupLocation === zero) {
-    //     setLocaionMsg("Należy wybrać jedno z tych pól");
-    //   } else {
-    //     console.log("walidacja poprawna");
-    //   }
-    // }
   };
 
   const selectDistrictHandler = (e) => {
     setDistricRequired("");
     setDisabledField(false);
     setSelectedDistrict(e.target.value);
+    setCityFlag(false)
   };
 
   const selectCitiHandler = (e) => {
     setSelectedCiti(e.target.value);
     setLocaionMsg("");
     setCityRequired("");
+    console.log('e---->', e.target.value)
   };
+
+  // uruchamiany gdy jest wybrany powiat
+  useEffect(() => {
+    if (selectedDistrict) {
+      dispatch(
+        getCitiesList({
+          Id: selectedDistrict,
+          param: "only true"
+        })
+      );
+    }
+
+  }, [dispatch, selectedDistrict]);
+
+  // uruchamiany gdy jest wybrany powiat i zwrócona lista miejscowosci
+  // dla tego powiatu
+  useEffect(() => {
+    if (success) {
+      setCityFlag(true)
+    }
+  }, [success]);
 
   const infoMsg = {
     backgroundColor: "#EAFEE1",
@@ -103,86 +122,85 @@ function LocationFormScreen() {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <button onClick={clearHandler} style={clearBtn}>
-          {t("btn_clear")}
-        </button>
-      </div>
+      {loading ? <Loader />
+        :
+        <>
+          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group>
-          <Row>
-            <Col>
-              <Form.Select
-                name="district"
-                {...register("district")}
-                onChange={selectDistrictHandler}
-                value={selectedDistrict}
-              >
-                <option key="blankChoice" hidden value={zero}>
-                  {t("FormAddressScreen__district_placeholder")}
-                </option>
-                {districtList.map((district) => (
-                  <option key={district.id} value={district.name}>
-                    {district.name}
-                  </option>
-                ))}
-              </Form.Select>
-              <div className="invalid-feedback fst-italic">
-                {districRequired ? <div>{districRequired}</div> : null}
-              </div>
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group>
-          <Row>
-            <Col>
-              <Form.Select
-                name="city"
-                {...register("city")}
-                disabled={disabledField}
-                className="mt-3"
-                onChange={selectCitiHandler}
-                value={selectedCiti}
-              >
-                <option key="blankChoice" hidden value={zero}>
-                  {t("FormAddressScreen__city_placeholder")}
-                </option>
-                <option value={cities[0]}>{cities[0]}</option>
-                <option value={cities[1]}>{cities[1]}</option>
-                <option value={cities[2]}>{cities[2]}</option>
-              </Form.Select>
-              <div className="invalid-feedback fst-italic">
-                {cityRequired ? <div>{cityRequired}</div> : null}
-              </div>
-            </Col>
-          </Row>
-          {locationMsg ? <p>{locationMsg}</p> : null}
-        </Form.Group>
-        {/* <Row>
-        <h5 className="mt-3 text-justify">{t("FormAddressScreen__info")}</h5>
-      </Row> */}
-        {/* {districRequired ? (
-          <div style={errorMsg} className="p-3 font-size-msg">
-            Prosimy o wypełnienie wymaganych pól.
+            <button onClick={clearHandler} style={clearBtn}>
+              {t("btn_clear")}
+            </button>
           </div>
-        ) : null} */}
 
-        {/* <div style={infoMsg} className="p-3 font-size-msg">
-        <div>Podaj swój adres w celu oszacowania kosztu dostawy.</div>
-      </div> */}
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form.Group>
+              <Row>
+                <Col>
+                  <Form.Select
+                    name="district"
+                    {...register("district")}
+                    onChange={selectDistrictHandler}
+                    value={selectedDistrict}
+                  >
+                    <option key="blankChoice" hidden value={zero}>
+                      {t("FormAddressScreen__district_placeholder")}
+                    </option>
+                    {districtList.map((district) => (
+                      <option key={district.id} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <div className="invalid-feedback fst-italic">
+                    {districRequired ? <div>{districRequired}</div> : null}
+                  </div>
+                </Col>
+              </Row>
+            </Form.Group>
+            <Form.Group>
+              <Row>
+                <Col>
+                  <Form.Select
+                    name="city"
+                    {...register("city")}
+                    disabled={disabledField}
+                    className="mt-3"
+                    onChange={selectCitiHandler}
+                    value={selectedCiti}
+                  >
+                    <option key="blankChoice" hidden value={zero}>
+                      {t("FormAddressScreen__city_placeholder")}
+                    </option>
+                    {cityFlag ?
+                      citiesList.map((city) => (
+                        <option key={city.id} value={city.id}>
+                          {city.name}
+                        </option>))
+                      : null
+                    }
+                  </Form.Select>
+                  <div className="invalid-feedback fst-italic">
+                    {cityRequired ? <div>{cityRequired}</div> : null}
+                  </div>
+                </Col>
+              </Row>
+              {locationMsg ? <p>{locationMsg}</p> : null}
+            </Form.Group>
+            <div className="d-flex justify-content-center">
+              <button className="w-90 w-md-50 my-1 py-3 h6" style={searchAreaBtn}>
+                {t("FormAddressScreen__btn")}
+              </button>
+            </div>
+          </Form>
+        </>
+      }
 
-        <div className="d-flex justify-content-center">
-          <button className="w-90 w-md-50 my-1 py-3 h6" style={searchAreaBtn}>
-            {t("FormAddressScreen__btn")}
-          </button>
-        </div>
-      </Form>
     </>
   );
 }

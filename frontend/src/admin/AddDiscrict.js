@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 
-import { addDiscrict } from "../actions/adminActions";
+import { addDiscrict } from "../actions/discrictsActions";
 import AddDescription from "./AddDescription";
 import {
   DISTRICT_ADD_DELETE,
@@ -19,6 +19,8 @@ import {
   SET_FLAG_ADD_DESC_FALSE,
   SET_FLAG_ADD_DESC_TRUE,
 } from "../constants/adminConstans";
+
+import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans"
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
@@ -81,11 +83,11 @@ function AddDiscrict() {
     dispatch({ type: DISTRICT_ADD_DELETE });
   }, []);
 
-  // useEffect(() => {
-  //   if (addDescFlag) {
-  //     navigate("/dashboard/district/district");
-  //   }
-  // }, [addDescFlag]);
+  useEffect(() => {
+    if (addDescFlag) {
+      navigate("/dashboard/district");
+    }
+  }, [addDescFlag]);
 
   return (
     <>
@@ -94,7 +96,7 @@ function AddDiscrict() {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
-            <ErrorMessage msg={error} timeOut={1000} variant="danger" />
+            <ErrorMessage msg={error} timeOut={4000} variant="danger" />
           ) : null}
           {success ? (
             <ErrorMessage
@@ -126,12 +128,13 @@ function AddDiscrict() {
                 {...register("name", {
                   required: t("Form_field_required"),
                   pattern: {
-                    value: /^[A-Za-z1-9ąćĆęłŁńóżŻźŹ ]+$/,
+                    // value: /^[A-Za-z1-9ąćĆśŚęłŁńóżŻźŹ ]+$/,
+                    value: NUMBERS_AND_NATIONAL_LETTERS,
                     message: t("Form_letters_pl_and_digits"),
                   },
                   minLength: {
-                    value: 6,
-                    message: t("Form_minLength_6"),
+                    value: 3,
+                    message: t("Form_minLength_3"),
                   },
                   maxLength: {
                     value: 30,

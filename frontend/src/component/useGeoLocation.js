@@ -4,11 +4,13 @@ function useGeoLocation() {
   const [location, setLocation] = useState({
     loaded: false,
     coordinates: { lat: "", lng: "" },
+    code: 0,
   });
 
   const onSuccess = (location) => {
     setLocation({
       loaded: true,
+      code: 2,
       coordinates: {
         lat: location.coords.latitude,
         lng: location.coords.longitude,
@@ -26,7 +28,7 @@ function useGeoLocation() {
   useEffect(() => {
     if (!("geolocations" in navigator)) {
       onError({
-        code: 0,
+        code: 1,
         message: "Geolocation not supported",
       });
 

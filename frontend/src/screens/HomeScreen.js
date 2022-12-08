@@ -6,7 +6,7 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { getDiscrict } from "../actions/discrictsActions";
+import { getDiscrict, getFullDiscricts } from "../actions/discrictsActions";
 import background from "../images/jabłka.png";
 import { scroller } from "react-scroll";
 import ErrorMessage from "../component/ErrorMessage";
@@ -18,9 +18,15 @@ import useGeoLocation from "../component/useGeoLocation";
 function FormAddressScreen() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const { coordinates, loaded } = useGeoLocation();
+  const { coordinates, code } = useGeoLocation();
 
-  console.log("coordinates", coordinates, "loaded--->", loaded);
+  // const code = 1
+  // const coordinates = { lat: "", lng: "" }
+
+  // const code = 2
+  // const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" }
+
+  // console.log("coordinates", coordinates, 'code', code);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -30,11 +36,14 @@ function FormAddressScreen() {
 
   useEffect(() => {
     if (districtList.length === 0) {
-      if (loaded) {
+      if (code === 2) {
         dispatch(getDiscrict(coordinates));
       }
+      if (code === 1) {
+        dispatch(getFullDiscricts("only active"))
+      }
     }
-  }, [dispatch, districtList.length, coordinates]);
+  }, [dispatch, districtList.length, code]);
 
   //scroll
 

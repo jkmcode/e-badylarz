@@ -21,6 +21,47 @@ from rest_framework import status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from  math import sin, cos, acos, pi
+
+# odliczanie odległości pomiedzy punktami geograficznymi w kilometrach
+# z uwzględnieniem krzywizny ziemi - dokładność 10 metrów
+
+def rad2deg(radians):
+    degrees = radians * 180 / pi
+    return degrees
+
+def deg2rad(degrees):
+    radians = degrees * pi / 180
+    return radians
+
+def getDistanceBetweenPointsNew(latitude1, longitude1, latitude2, longitude2):
+    
+    theta = longitude1 - longitude2
+    
+    distance = 60 * 1.1515 * rad2deg(
+        acos(
+            (sin(deg2rad(latitude1)) * sin(deg2rad(latitude2))) + 
+            (cos(deg2rad(latitude1)) * cos(deg2rad(latitude2)) * cos(deg2rad(theta)))
+        )
+    )
+
+    return round(distance * 1.609344, 2)
+
+# sprwawdzenie poprwaności wartości współrzednych geograficznych
+# szerokość
+def correctLat(lat):
+    if lat< 90 and lat >-90:
+        return True
+    else:
+        return False
+
+
+# długość
+def correctLng(lng):
+    if lng< 180 and lng >-180:
+        return True
+    else:
+        return False
 
 # czyszczenie danych z bazy z nawiasów ('',)
 def cleanStr(cleanedData):
@@ -368,8 +409,12 @@ def addProductType(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getCites(request, Id):
-    cities = Citis.objects.filter(id_district = Id) 
+def getCites(request, Id, param):
+
+    if param == "all":
+        cities = Citis.objects.filter(id_district = Id) 
+    else:
+        cities = Citis.objects.filter(id_district = Id, is_active = True)
     seriaziler = CitiesSerializer(cities, many=True)
     return Response(seriaziler.data)
 
@@ -378,6 +423,16 @@ def getCites(request, Id):
 @permission_classes([IsAdminUser])
 def addCiti(request):
     data = request.data
+    
+    latCorrect = correctLat(float(data['lat']))
+    if latCorrect == False:
+        content = {"detail": "Wrong latitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    lngCorrect = correctLng(float(data['lng']))
+    if lngCorrect == False:
+        content = {"detail": "Wrong longitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     alreadyExists = Citis.objects.filter(name=data['name'], id_district=data['desc_id']).exists()
 
@@ -392,6 +447,8 @@ def addCiti(request):
             name=data['name'],
             creator = data['creator'],
             post_code = data['post'],
+            latitude = data['lat'],
+            longitude = data['lng'],
             is_active=True
         )
         newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
@@ -511,22 +568,28 @@ def getDiscrict(request, lat, lng):
     data = request.data
     discricts = Districts.objects.filter(is_active=True).order_by('name')
 
-    # print(discricts)
+    newDiscricts=[]
 
-    # for i in discricts:
-    #     lat = i.latitude
-    #     lng = i.longitude
+    # print('proba-->',getDistanceBetweenPointsNew(float(lat),float(lng), 50.144392116571424, 19.423779965030423))
 
-    seriaziler = DistrictsSerializer(discricts, many=True)
+    for i in discricts:
+        if getDistanceBetweenPointsNew(float(lat),float(lng), float(i.latitude),float(i.longitude)) < 100: 
+              newDiscricts.append(i)      
+    seriaziler = DistrictsSerializer(newDiscricts, many=True)
 
     return Response(seriaziler.data)
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def getFullDiscrict(request):
+def getFullDiscricts(request,param):
     data = request.data
-    discricts = Districts.objects.all().order_by('name')
+
+    if param == 'all':
+        discricts = Districts.objects.all().order_by('name')
+    else:
+        discricts = Districts.objects.filter(is_active=True).order_by('name')
+    
     seriaziler = DistrictsSerializer(discricts, many=True)
     return Response(seriaziler.data)
 
@@ -536,8 +599,17 @@ def getFullDiscrict(request):
 def addDiscrict(request):
     data = request.data
 
-    alreadyExists = Districts.objects.filter(name=data['name']).exists()
+    latCorrect = correctLat(float(data['lat']))
+    if latCorrect == False:
+        content = {"detail": "Wrong latitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+    lngCorrect = correctLng(float(data['lng']))
+    if lngCorrect == False:
+        content = {"detail": "Wrong longitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    alreadyExists = Districts.objects.filter(name=data['name']).exists()
     if alreadyExists:
         content = {"detail": "Disctrict already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,5 @@
 {
   "test": "po angielsku",
-
   "ErrorMessage_title": "Error occured",
   "ErrorMessage_title_success": "Success",
   "ErrorMessage_inproper_password": "No active account found with the given credentials",
@@ -14,10 +13,10 @@
   "ErrorMessage_nip_already_exist": "This Tax noumber already exist",
   "ErrorMessage_no_type_object": "Changing the active flag - no object type",
   "ErrorMessage_product_type_already_exist": "Product type already exist",
-
+  "Wrong_lat": "Wrong latitude value",
+  "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",
   "btn-change": "Change",
-
   "status_inactive": "Inactive",
   "status_active": "Active",
   "btn-return": "Return",
@@ -44,26 +43,19 @@
   "btn_clear": "clear",
   "btn_products_category": "Shop categories",
   "btn_buy": "buy",
-
   "cart_currently_empty": "is currently empty",
-
   "price": "price",
   "promotion": "promotion",
   "my_cart": "my cart",
   "total_price": "total",
-
   "Radio_delivery": "Delivery",
   "Radio_own_collection": "Own collection",
   "Table_head_name": "Name",
   "Table_head_ID": "ID",
-
   "Radio_true": "Active",
   "Radio_false": "Unactive",
-
   "Window_title": "Question",
-
-  "Post_code_validate": "/^[0-9A-Z ]+$/",
-
+  "Post_code_validate": "[0-9A-Z ]",
   "Form_field_required": "Field is required",
   "Form_only_letters": "Only letters",
   "Form_only_digits_or_dot": "Only digits or dot",
@@ -88,7 +80,6 @@
   "Form_inproper_pattern_email": "Invalid email format",
   "Form_phone_number": "inproper format",
   "AddDescription_window_confirm": "Add a description ?",
-
   "FormAddressScreen_title": "Enter your address",
   "FormAddressScreen_subtitle": "in order to estimate the cost of delivery",
   "FormAddressScreen__city_placeholder": "City...",
@@ -99,26 +90,19 @@
   "FormAddressScreen__info": "After choosing the location, the closest shopping area will be selected for you!",
   "FormAddressScreen__btn": "Search shopping area",
   "FormAddressScreen__learn_more_btn": "Learn more",
-
   "AdminScreen_district_btn": "District",
-
   "AdminScreenDistrict_title_active": "List of active districts",
   "AdminScreenDistrict_title_unactive": "List of unactive districts",
-
   "AddDiscrict_title": "Add district",
   "AddDiscrict_success": "District correctly added",
-
   "AddDistrict_label_name": "District name",
   "AddDistrict_name_placeholder": "Enter district name ...",
-
   "LoginScreen_title": "Login",
   "LoginScreen_label_username": "Username",
   "LoginScreen_username_placeholder": "Enter unsername ...",
   "LoginScreen_label_password": "Password",
   "LoginScreen_password_placeholder": "Enter password ...",
-
   "LogoutScreen_title": "You have been logged out",
-
   "DashboardScreen_sidebar_title": "Admin Panel",
   "DashboardScreen_sidebar_subtitle_1": "District",
   "DashboardScreen_sidebar_subtitle_2": "Shops",
@@ -126,16 +110,13 @@
   "DashboardScreen_sidebar_subtitle_3": "Products",
   "DashboardScreen_sidebar_subtitle_3a": "Product type",
   "DashboardScreen_sidebar_subtitle_4": "Others",
-
-  "EditDistrict_title": "Edit district",
-
+  "EditDistrict_title": "Edit district : ",
   "DistrictAddDescription_choice_lng": "Choice language",
   "DistrictAddDescription_label_desc": "Description",
   "DistrictAddDescription_placeholder_desc": "Enter description ...",
   "DistrictAddDescription_selected_lng": "You have chosen a language",
   "DistrictAddDescription_success": "Description correctly changed",
-
-  "AddCiti_title": "Add city for districts :",
+  "AddCiti_title": "Add city for districts : ",
   "AddCiti_subtitle": "For the correct validation of the postal code, use the language appropriate for the added city",
   "AddCiti_label_name": "City name",
   "AddCiti_name_placeholder": "Enter city name ...",
@@ -143,13 +124,10 @@
   "AddCiti_post_code_placeholder": "Enter main post code ...",
   "AddCity_success": "City correctly added",
   "AddCity_body_window": "Add description ?",
-
   "InfoComponent_title": "Description of district:",
   "InfoComponent_title_city": "Description of city:",
-
   "CityDistrict_title_1": "Description city :",
   "CityDistrict_title_2": ", district",
-
   "AdminAddProducts_title": "Add product",
   "AdminAddProducts_label_productCategory": "Product categories",
   "AdminAddProducts_label_name": "Product name",
@@ -157,9 +135,7 @@
   "AdminAddProducts_label_desc": "Product description",
   "AdminAddProducts_placeholder_desc": "Enter description ...",
   "AdminAddProducts_label_choose_photos": "Add photos",
-
   "AdminProductType_title": "List of active product types",
-
   "AdminShops_title": "Shops list",
   "AdminShops_shop_name": "Name",
   "AdminShops_area": "Area",
@@ -168,14 +144,11 @@
   "AdminShops_shop_tax_number": "Tax No",
   "AdminShops_activate_shop_InfoWindow_body": "Are you sure you want to change status on active?",
   "AdminShops_inactivate_shop_InfoWindow_body": "Are you sure you want to change status on inactive?",
-
   "AddProductType_title": "Add a product type",
   "AddProductType_label_name": "Product type name",
   "AddProductType_name_placeholder": "Enter product type name ...",
-
   "AddShops_title": "Add shop",
   "EditShops_title": "Edit shop",
-
   "AddShops_title_address": "HQ address",
   "AddShops_label_nip": "Tax number",
   "AddShops_nip_placeholder": "Enter tax number ...",
@@ -198,10 +171,8 @@
   "AddShops_longitude_placeholder": "Enter longitude ...",
   "AddShops_label_bankAccound": "Bank account",
   "AddShops_bankAccound_placeholder": "Enter bank account ...",
-
   "AddContact_title": "Contact Form",
   "AddContact_contactList": "Conatct list",
-
   "AddContact_label_name": "First name",
   "AddContact_name_placeholder": "Enter first name ...",
   "AddContact_label_surname": "Surname",
@@ -234,7 +205,6 @@
   "AddContact_btn_close_spot": "Close new spot",
   "AddContact_show_unactive_spot": "Show inactive spots",
   "AddContact_show_active_spot": "Show active spots",
-
   "ShopsSpot_Edit_title": "Edit spot",
   "ShopsSpot_Add_title": "Add spot",
   "ShopsSpot_label_name": "Spots name",
@@ -243,7 +213,6 @@
   "ShopsSpot_title_geolocation": "Spots geolocation",
   "ShopsSpot_label_range": "Range delivery",
   "ShopsSpot_range_placeholder": "Enter range delivery ...",
-
   "PrivatePolicy_title": "THE PRIVACY POLICY DESCRIBES THE RULES FOR THE PROCESSING OF INFORMATION ABOUT YOU, INCLUDING PERSONAL DATA AND COOKIES, i.e. COOKIES.",
   "PrivatePolicy_1_General_Information": "1. General information",
   "PrivatePolicy_1.1_General_Information": "This policy applies to the Website, operating at the url: jkmcode.eu.",
@@ -254,16 +223,13 @@
   "PrivatePolicy_1.5_General_Information": "The website obtains information about users and their behavior in the following way:",
   "PrivatePolicy_1.5.1_General_Information": "Through data entered voluntarily in forms, which are entered into the Operator's systems.",
   "PrivatePolicy_1.5.2_General_Information": "By saving cookie files in end devices (so-called 'cookies').",
-
   "PrivatePolicy_2_Selected_data_protection": "2. Selected data protection methods used by the Operator",
   "PrivatePolicy_2.1_Selected_data_protection": "The places of logging in and entering personal data are protected in the transmission layer (SSL certificate). As a result, personal data and login data entered on the website are encrypted on the user's computer and can only be read on the target server.",
   "PrivatePolicy_2.2_Selected_data_protection": "The operator periodically changes his administrative passwords.",
   "PrivatePolicy_2.3_Selected_data_protection": "In order to protect data, the Operator regularly makes backup copies.",
   "PrivatePolicy_2.4_Selected_data_protection": "An important element of data protection is regular updating of all software used by the Operator to process personal data, which in particular means regular updates of programming components.",
-
   "PrivatePolicy_3_Hosting": "3. Hosting",
   "PrivatePolicy_3.1_Hosting": "The website is hosted (technically maintained) on the operator's server: home.pl",
-
   "PrivatePolicy_4_Rights_and_additional_information": "4. Your rights and additional information on how the data is used",
   "PrivatePolicy_4.1_Rights_and_additional_information": "In some cases, the Administrator has the right to transfer your personal data to other recipients if it is necessary to perform the contract concluded with you or to fulfill the obligations incumbent on the Administrator. This applies to such groups of recipients:",
   "PrivatePolicy_4.1.1_Rights_and_additional_information": "hosting company on an entrustment basis,,",
@@ -283,19 +249,15 @@
   "PrivatePolicy_4.6_Rights_and_additional_information": "Providing personal data is voluntary, but necessary to operate the Website.",
   "PrivatePolicy_4.7_Rights_and_additional_information": "In relation to you, actions may be taken consisting in automated decision making, including profiling to provide services under the concluded contract and for the purpose of conducting direct marketing by the Administrator.",
   "PrivatePolicy_4.8_Rights_and_additional_information": "Personal data is not transferred from third countries within the meaning of the provisions on the protection of personal data. This means that we do not send them outside the European Union.",
-
   "PrivatePolicy_5_Information_in_the_forms": "5. Information in the forms",
   "PrivatePolicy_5.1_Information_in_the_forms": "The website collects information provided voluntarily by the user, including personal data, if provided,",
   "PrivatePolicy_5.2_Information_in_the_forms": "The website may save information about connection parameters (time stamp, IP address),",
   "PrivatePolicy_5.3_Information_in_the_forms": "The website, in some cases, may save information facilitating the linking of data in the form with the e-mail address of the user filling in the form. In this case, the user's e-mail address appears inside the url of the page containing the form,",
   "PrivatePolicy_5.4_Information_in_the_forms": "The data provided in the form is processed for the purpose resulting from the function of a specific form, eg to process the service request or commercial contact, service registration, etc. Each time the context and description of the form clearly informs what it is used for.",
-
   "PrivatePolicy_6_Administrator_logs": "6. ADMINISTRATOR LOGS",
   "PrivatePolicy_6.1_Administrator_logs": "Information on the behavior of users on the website may be subject to logging. These data are used to administer the website.",
-
   "PrivatePolicy_7_Relevant_marketing_techniques": "7. Relevant Marketing Techniques",
   "PrivatePolicy_7.1_Relevant_marketing_techniques": "The operator uses a solution that studies user behavior by creating heat maps and recording behavior on the website. This information is anonymized before it is sent to the service operator so that it does not know what natural person it relates to. In particular, passwords and other personal data are not recorded.",
-
   "PrivatePolicy_8_Information_about_cookies": "8. INFORMATION ON COOKIES",
   "PrivatePolicy_8.1_Information_about_cookies": "The website uses cookies.",
   "PrivatePolicy_8.2_Information_about_cookies": "cookie files (so-called 'cookies') are IT data, in particular text files, which are stored on the Website User's end device and are intended for using the Website's pages. Cookies usually contain the name of the website they come from, the storage time on the end device and a unique number.",
@@ -307,7 +269,6 @@
   "PrivatePolicy_8.6_Information_about_cookies": "Software for browsing websites (web browser) usually allows cookies to be stored on the User's end device by default. Website users can change the settings in this regard. The web browser allows you to delete cookies. It is also possible to automatically block cookies.Detailed information on this subject can be found in the help or documentation of the web browser.",
   "PrivatePolicy_8.7_Information_about_cookies": "Restrictions on the use of cookies may affect some of the functionalities available on the Website pages.",
   "PrivatePolicy_8.8_Information_about_cookies": "Cookies placed on the Website User's end device may also be used by entities cooperating with the Website operator, in particular the following companies: Google (Google Inc. based in the USA), Facebook (Facebook Inc. based in the USA), Twitter (Twitter Inc. based in the USA).",
-
   "PrivatePolicy_9_Managing cookies": "9. COOKIES MANAGEMENT - HOW TO EXPRESS AND WITHDRAW CONSENT IN PRACTICE?",
   "PrivatePolicy_9.1_Managing cookies": "If the user does not want to receive cookies, he may change the browser settings. We reserve that disabling cookies necessary for authentication processes, security, maintaining user preferences may make it difficult, and in extreme cases may prevent the use of websites.",
   "PrivatePolicy_9.2_Managing cookies": "In order to manage cookie settings, select the web browser you use from the list below and follow the instructions:",
@@ -321,9 +282,7 @@
   "PrivatePolicy_9.3.1_Managing cookies": "Android,",
   "PrivatePolicy_9.3.2_Managing cookies": "Safari (iOS),",
   "PrivatePolicy_9.3.3_Managing cookies": "Windows Phone.",
-
   "PrivatePolicy_conclusion": "This policy template has been generated free of charge, for information purposes, based on our knowledge, industry practices and legal provisions in force as of 2018-08-14. We recommend that you check the policy template before using it on the website. The formula is based on the most common situations on websites, but may not reflect the full and exact specificity of your website. Read the generated document carefully and, if necessary, adapt it to your situation or seek legal advice. We do not take responsibility for the consequences of using this document, because only you have the influence on whether all the information contained in it is truthful. Also note that the Privacy Policy, even the best, is only one of the elements of your concern for personal data and user privacy on the website.",
-
   "Cookie_link_title": "Cookies policy",
   "Cookie_text": "By using this website, you consent to the use of cookies. Find out more:"
 }
