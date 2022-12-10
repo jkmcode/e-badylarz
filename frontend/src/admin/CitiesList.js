@@ -53,7 +53,7 @@ function CitiesList(props) {
         active: true,
         userId: userInfo.id,
         objType: CITY_DESCRIPTION,
-        kind: '',
+        kind: "",
       })
     );
   };
@@ -67,7 +67,7 @@ function CitiesList(props) {
         active: false,
         userId: userInfo.id,
         objType: CITY_DESCRIPTION,
-        kind: '',
+        kind: "",
       })
     );
   };
@@ -112,7 +112,13 @@ function CitiesList(props) {
       {loading || loadingUpdate ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div
+          className={
+            props.mainTable
+              ? "container bg-container"
+              : "container bg-container rounded"
+          }
+        >
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
 
           {info & infoFlag ? (
@@ -133,6 +139,7 @@ function CitiesList(props) {
                     type="radio"
                     variant={idx % 2 ? "outline-danger" : "outline-success"}
                     name="radio"
+                    style={{ fontSize: "0.8rem" }}
                     value={radio.value}
                     checked={radioValue === radio.value}
                     onChange={(e) => setRadioValue(e.currentTarget.value)}
@@ -141,7 +148,7 @@ function CitiesList(props) {
                   </ToggleButton>
                 ))}
               </ButtonGroup>
-              <Table striped hover responsive className="table-sm mt-2">
+              <table>
                 <thead>
                   <tr>
                     <th className="w-100">{t("Table_head_name")}</th>
@@ -152,37 +159,48 @@ function CitiesList(props) {
                 </thead>
                 <tbody>
                   {citiesList.map((i) => (
-                    <tr key={i.id}>
+                    <tr key={i.id} style={{ borderBottom: "solid 1px" }}>
                       <>
                         {(radioValue === "1") & i.is_active ? (
                           <>
-                            <td>{i.name}</td>
+                            <td style={{ fontSize: "0.8rem", padding: "1rem" }}>
+                              {i.name}
+                            </td>
                             <td>
-                              <Button
-                                variant="danger"
-                                className="btn-sm d-flex"
+                              <button
+                                style={{
+                                  fontSize: "0.8rem",
+                                  background: "transparent",
+                                  border: "solid red 3px",
+                                }}
                                 onClick={() => unActiveHandler(i.id)}
                               >
                                 {t("btn_unactive")}
-                              </Button>
+                              </button>
                             </td>
                             <td>
-                              <Button
-                                variant="warning"
-                                className="btn-sm d-flex"
+                              <button
+                                style={{
+                                  fontSize: "0.8rem",
+                                  background: "transparent",
+                                  border: "solid green 3px",
+                                }}
                                 onClick={() => descriptionHandler(i)}
                               >
                                 {t("btn_description")}
-                              </Button>
+                              </button>
                             </td>
                             <td>
-                              <Button
-                                variant="info"
-                                className="btn-sm d-flex"
+                              <button
+                                style={{
+                                  fontSize: "0.8rem",
+                                  background: "transparent",
+                                  border: "solid #7070db 3px",
+                                }}
                                 onClick={() => infoHandler(i)}
                               >
                                 {t("btn_info")}
-                              </Button>
+                              </button>
                             </td>
                           </>
                         ) : null}
@@ -213,7 +231,7 @@ function CitiesList(props) {
                     </tr>
                   ))}
                 </tbody>
-              </Table>
+              </table>
             </>
           ) : null}
         </div>

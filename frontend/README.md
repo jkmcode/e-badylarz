@@ -49,3 +49,10 @@ Front 5. SVG na logo (zamienić PNG na SVG) 6. Poprawić politykę prywatności 
    --- dodałem w actionach dopisywanie bierzących zmian ilości do LocalStorage
 3. na navbarze nie pokazuje się ilość gdy jestem na głownej stronie (home z formularzem)
    --- Problem powstaje gdy odświażamy stronę. Wtedy wszytskie dane w Reduxsie zostaja usunięte. Gdy przechodzę do głównje strony za pomocą Link albo Navigate to ilość produktów pochodząca z Reduxa jest widoczna (wszytsko działa okey).
+
+// co zrobiłem
+
+1. poprawienie tytułu
+2. poprawnie przycisku return
+3. divider
+4. grid i styling buttonów

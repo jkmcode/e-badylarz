@@ -701,6 +701,7 @@ input:focus {
   }
 } */
 
+/* form */
 .focusInput {
   box-shadow: none;
   transition: 400ms;
@@ -708,4 +709,49 @@ input:focus {
 
 .focusInput:focus {
   box-shadow: 0px 4px 15px -5px rgb(236, 64, 122);
+}
+
+/* btn */
+
+.btnHover {
+  transition: 800ms;
+}
+
+.btnHover:hover {
+  box-shadow: 6px 18px 24px -12px rgba(66, 68, 90, 1);
+}
+
+.tableHover {
+  transition: 500ms;
+}
+
+.tableHover:hover {
+  background-image: linear-gradient(
+    171deg,
+    rgba(155, 159, 163, 1) 45%,
+    rgba(126, 127, 132, 1) 89%
+  );
+  color: white;
+}
+
+.btnSuccessFocus {
+  transition: 500ms;
+}
+
+.btnSuccessFocus:focus {
+  background-color: #207b00;
+  color: white !important;
+}
+
+.btnDangerFocus {
+  transition: 500ms;
+}
+
+.btnDangerFocus:focus {
+  background-color: red;
+  color: white !important;
+}
+
+.tableCollapse {
+  transition: 600ms;
 }

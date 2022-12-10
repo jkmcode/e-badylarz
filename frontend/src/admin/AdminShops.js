@@ -300,7 +300,7 @@ function AdminShops() {
                 paddingTop: "3rem",
               }}
             >
-              <div style={{ height: "65vh", overflowY: "scroll" }}>
+              <div style={{ height: "65vh", overflowY: "auto" }}>
                 <table style={mainTableContainer}>
                   <thead style={{ borderBottom: "solid 2px" }}>
                     <tr>

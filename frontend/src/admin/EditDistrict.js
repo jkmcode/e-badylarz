@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Button, Row, Col } from "react-bootstrap";
-
 import { getFullDiscricts } from "../actions/discrictsActions";
+import { Icon } from "@iconify/react";
 
 import AddDescription from "./AddDescription";
 import CitiesList from "./CitiesList";
@@ -67,52 +66,131 @@ function EditDistrict() {
     dispatch({ type: SET_FLAG_DESC_FALSE });
   }, []);
 
+  const [seletedCity, setSelectedCity] = useState("");
+
+  useEffect(() => {
+    if (districtList.length !== 0) {
+      setSelectedCity(districtList.filter((i) => i.id === districtId)[0]);
+    }
+  }, []);
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div
+          style={{
+            backgroundColor: "white",
+            height: "auto",
+            minHeight: "80vh",
+            padding: "3rem",
+            borderRadius: "0.5rem",
+          }}
+        >
           <Link to="/dashboard/district" className="text-secondary">
+            <Icon icon="material-symbols:arrow-back-ios" />
             {t("btn-return")}
           </Link>
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          <div className=" d-flex justify-content-center display-6">
-            <div className="px-3">{t("EditDistrict_title")}</div>
-            {districtList.length === 0
-              ? null
-              : districtList.filter((i) => i.id === districtId)[0].name}
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: `calc(1rem + 1.5vw)`,
+              fontWeight: "350",
+            }}
+          >
+            {t("EditDistrict_title")} : {seletedCity.name}
           </div>
-          <hr />
-          <Row>
-            <Col>
-              <Button
-                variant="success"
-                className="btn-sm d-flex"
-                onClick={() => descrHandler()}
-              >
-                {t("btn_add_description")}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                variant="info"
-                className="btn-sm d-flex"
-                onClick={() => citiesHandler()}
-              >
-                {t("btn_cities")}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                variant="info"
-                className="btn-sm d-flex"
-                onClick={() => addCityHandler()}
-              >
-                {t("btn_add_citi")}
-              </Button>
-            </Col>
-          </Row>
+          <div
+            style={{
+              width: "100%",
+              height: "3px",
+              backgroundColor: "rgb(82, 82, 122)",
+              marginBottom: "1rem",
+              borderRadius: "1rem",
+            }}
+          ></div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              style={{
+                backgroundColor: "green",
+                border: "none",
+                color: "white",
+                padding: "0.5rem",
+                width: "300px",
+                borderRadius: "0.25rem",
+                marginRight: "0.75rem",
+                textTransform: "uppercase",
+                marginBottom: "1rem",
+              }}
+              onClick={() => descrHandler()}
+            >
+              {t("btn_add_description")}
+            </button>
+            <button
+              style={{
+                backgroundColor: "green",
+                border: "none",
+                color: "white",
+                padding: "0.5rem",
+                width: "300px",
+                borderRadius: "0.25rem",
+                marginRight: "0.75rem",
+                textTransform: "uppercase",
+                marginBottom: "1rem",
+              }}
+              onClick={() => citiesHandler()}
+            >
+              {t("btn_cities")}
+            </button>
+            <button
+              style={{
+                backgroundColor: "green",
+                border: "none",
+                color: "white",
+                padding: "0.5rem",
+                width: "300px",
+                borderRadius: "0.25rem",
+                marginRight: "0.75rem",
+                textTransform: "uppercase",
+                marginBottom: "1rem",
+              }}
+              onClick={() => addCityHandler()}
+            >
+              {t("btn_add_citi")}
+            </button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              paddingLeft: "4rem",
+              paddingRight: "4rem",
+            }}
+          >
+            <Icon
+              icon="ic:baseline-add-comment"
+              color="gray"
+              width="240"
+              height="240"
+            />
+            <Icon
+              icon="material-symbols:map-outline-rounded"
+              color="gray"
+              width="240"
+              height="240"
+            />
+            <Icon icon="mdi:city" color="gray" width="240" height="240" />
+          </div>
           {addDescr & descFlag ? (
             <AddDescription
               objId={districtId}

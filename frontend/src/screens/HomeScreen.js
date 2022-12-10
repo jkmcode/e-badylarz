@@ -18,13 +18,13 @@ import useGeoLocation from "../component/useGeoLocation";
 function FormAddressScreen() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const { coordinates, code } = useGeoLocation();
+  //const { coordinates, code } = useGeoLocation();
 
-  // const code = 1
-  // const coordinates = { lat: "", lng: "" }
+  // const code = 1;
+  // const coordinates = { lat: "", lng: "" };
 
-  // const code = 2
-  // const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" }
+  const code = 2;
+  const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" };
 
   // console.log("coordinates", coordinates, 'code', code);
 
@@ -40,7 +40,7 @@ function FormAddressScreen() {
         dispatch(getDiscrict(coordinates));
       }
       if (code === 1) {
-        dispatch(getFullDiscricts("only active"))
+        dispatch(getFullDiscricts("only active"));
       }
     }
   }, [dispatch, districtList.length, code]);
