@@ -755,3 +755,11 @@ input:focus {
 .tableCollapse {
   transition: 600ms;
 }
+
+.selectFrom {
+  transition: 600ms;
+}
+
+.selectFrom:focus {
+  outline: none;
+}

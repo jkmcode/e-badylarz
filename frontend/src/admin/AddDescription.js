@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
-import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
 import language from "../language";
 import { getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
@@ -17,6 +15,8 @@ import {
 } from "../constants/adminConstans";
 
 import { USER_LOGOUT } from "../constants/userConstans";
+import { Icon } from "@iconify/react";
+import ErrorMessage from "../component/ErrorMessage";
 
 import {
   CREDENTIALS_WERE_NOT_PROVIDED,
@@ -98,15 +98,14 @@ function AddDescription(props) {
   useEffect(() => {
     if (addsuccess) {
       setTimeout(() => {
-        if(props.return){
+        if (props.return) {
           dispatch({ type: ADD_DESC_DELETE });
-          navigate(props.path)
-
-        }else{
+          navigate(props.path);
+        } else {
           dispatch({ type: SET_FLAG_DESC_FALSE });
           dispatch({ type: ADD_DESC_DELETE });
           dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-        }     
+        }
       }, TIME_SET_TIMEOUT);
     }
   }, [addsuccess]);
@@ -127,39 +126,83 @@ function AddDescription(props) {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} /> : null}
-          {adderror ? <ErrorMessage msg={adderror} timeOut={TIME_SET_TIMEOUT} /> : null}
-          {addsuccess ? <ErrorMessage msg={t("DistrictAddDescription_success")} timeOut={TIME_SET_TIMEOUT} variant='success'  success={true}/> : null}
-          <Form>
-            <Form.Group>
-              <Row>
-                <Col>
-                  {!activeDesc ? (
-                    <>
-                      {t("DistrictAddDescription_choice_lng")}
-                      <Form.Select
-                        name="lng"
-                        {...register("lng")}
-                        onChange={selectHandler}
-                      >
-                        <option key="blankChoice" hidden value="0" />
+          {/* <div> */}
+          {error ? (
+            <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
+          ) : null}
+          {adderror ? (
+            <ErrorMessage msg={adderror} timeOut={TIME_SET_TIMEOUT} />
+          ) : null}
+          {addsuccess ? (
+            <ErrorMessage
+              msg={t("DistrictAddDescription_success")}
+              timeOut={TIME_SET_TIMEOUT}
+              variant="success"
+              success={true}
+            />
+          ) : null}
 
-                        {language.map(({ code, name }) => (
-                          <option key={code} value={code}>
-                            {name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </>
-                  ) : (
-                    <p>{`${t(
-                      "DistrictAddDescription_selected_lng"
-                    )} ${lngName}`}</p>
-                  )}
-                </Col>
-              </Row>
-            </Form.Group>
-          </Form>
+          <form>
+            {!activeDesc ? (
+              <>
+                {t("DistrictAddDescription_choice_lng")}
+                <div
+                  style={{
+                    position: "relative",
+                    width: "80%",
+                    margin: "auto",
+                  }}
+                >
+                  <select
+                    {...register("lng")}
+                    onChange={selectHandler}
+                    className="selectFrom"
+                    style={{
+                      width: "100%",
+                      padding: "0.375rem 3rem 0.375rem 0.75rem",
+                      border: "1px solid #ced4da",
+                      borderRadius: "0.25rem",
+                      backgroundColor: "white",
+                    }}
+                  >
+                    {language.map(({ code, name }) => (
+                      <option key={code} value={code}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      right: "0",
+                      backgroundColor: "white",
+                      border: "1px solid #ced4da",
+                      width: "3rem",
+                      height: "100%",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <Icon
+                        icon="material-symbols:keyboard-double-arrow-down"
+                        width="24"
+                      />
+                    </div>
+                  </span>
+                </div>
+              </>
+            ) : (
+              <p>{`${t("DistrictAddDescription_selected_lng")} ${lngName}`}</p>
+            )}
+          </form>
 
           {activeDesc && (
             <>
