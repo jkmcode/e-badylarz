@@ -12,12 +12,12 @@ function LocationFormScreen() {
   const navigate = useNavigate();
   const zero = "0";
   const [disabledField, setDisabledField] = useState(true);
-  const [districRequired, setDistricRequired] = useState("");
-  const [cityRequired, setCityRequired] = useState("");
+  const [districRequired, setDistricRequired] = useState(false);
+  const [cityRequired, setCityRequired] = useState(false);
   const [cityFlag, setCityFlag] = useState(false);
   const [locationMsg, setLocaionMsg] = useState("");
-  const [selectedCiti, setSelectedCiti] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState(false);
+  const [selectedCiti, setSelectedCiti] = useState(0);
+  const [selectedDistrict, setSelectedDistrict] = useState(0);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -36,18 +36,24 @@ function LocationFormScreen() {
   } = useForm();
 
   const onSubmit = (data) => {
-    if (data.district === zero) {
-      setDistricRequired("Pole wymagane");
-    } else if (!data.city && data.district !== zero) {
-      setCityRequired("Pole wymagane");
-    } else {
+
+    if (selectedDistrict === 0) {
+      setDistricRequired(true)
+    } else { setDistricRequired(false) }
+
+    if (selectedCiti === 0) {
+      setCityRequired(true)
+    } else { setCityRequired(false) }
+
+    if (selectedDistrict !== 0 && selectedCiti !== 0) {
+      localStorage.setItem("selectedCity", JSON.stringify(selectedCiti));
       navigate("/main-page");
     }
   };
 
   const selectDistrictHandler = (e) => {
-    setDistricRequired("");
     setDisabledField(false);
+    setDistricRequired(false)
     setSelectedDistrict(e.target.value);
     setCityFlag(false)
   };
@@ -55,8 +61,13 @@ function LocationFormScreen() {
   const selectCitiHandler = (e) => {
     setSelectedCiti(e.target.value);
     setLocaionMsg("");
-    setCityRequired("");
-    console.log('e---->', e.target.value)
+  };
+
+  const clearHandler = () => {
+    setCityRequired(false);
+    setDistricRequired(false);
+    setSelectedCiti(0);
+    setSelectedDistrict(0);
   };
 
   // uruchamiany gdy jest wybrany powiat
@@ -113,13 +124,6 @@ function LocationFormScreen() {
     textTransform: "capitalize",
   };
 
-  const clearHandler = () => {
-    setCityRequired("");
-    setDistricRequired("");
-    setSelectedCiti("");
-    setSelectedDistrict("");
-  };
-
   return (
     <>
       {loading ? <Loader />
@@ -158,7 +162,7 @@ function LocationFormScreen() {
                     ))}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
-                    {districRequired ? <div>{districRequired}</div> : null}
+                    {districRequired ? <div>{t("Form_field_required")}</div> : null}
                   </div>
                 </Col>
               </Row>
@@ -186,7 +190,7 @@ function LocationFormScreen() {
                     }
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
-                    {cityRequired ? <div>{cityRequired}</div> : null}
+                    {cityRequired ? <div>{t("Form_field_required")}</div> : null}
                   </div>
                 </Col>
               </Row>
