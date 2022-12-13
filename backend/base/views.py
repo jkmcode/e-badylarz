@@ -114,6 +114,53 @@ def getAreas(request):
     return Response("okey")
 
 
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def addArea(request):
+    
+    data = request.data
+
+    latCorrect = correctLat(float(data['latitude']))
+    if latCorrect == False:
+        content = {"detail": "Wrong latitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    lngCorrect = correctLng(float(data['longitude']))
+    if lngCorrect == False:
+        content = {"detail": "Wrong longitude value"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
+    NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()
+
+    if areaAlreadyExists:
+        content = {"detail": "Sales area with this name already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    elif NIPAlreadyExists:
+        content = {"detail": "NIP already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)        
+    elif data['add']:
+        area = Areas.objects.create(
+            name=data['name'],
+            nip = data['nip'],
+            city = data['city'],
+            street = data['street'],
+            no_building = data['number'],
+            post_code = data['postCode'],
+            post = data['post'],
+            latitude = data['latitude'],
+            longitude = data['longitude'],
+            creator = data['creator'],
+            is_active=True,
+            bank_account = data['bankAccount']
+        )
+    else:
+        pass # dopisać działania dla edit
+
+    areas=Areas.objects.all().order_by('name')
+    seriaziler = AreasSerializer(areas, many=True)
+    return Response(seriaziler.data)
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def updateShop(request, Id):
@@ -356,7 +403,7 @@ def addShop(request):
     data = request.data
 
     shopAlreadyExists = Shops.objects.filter(name=data['name']).exists()
-    NIPAlreadyExists = Shops.objects.filter(name=data['nip']).exists()
+    NIPAlreadyExists = Shops.objects.filter(nip=data['nip']).exists()
 
     if shopAlreadyExists:
         content = {"detail": "Shop with this name already exist"}

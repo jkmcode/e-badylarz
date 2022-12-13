@@ -26,7 +26,7 @@ import ShopActivity from "./admin/ShopActivity";
 import ShopSpotActivity from "./admin/ShopSpotActivity";
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
-import AddArea from "./admin/AddArea";
+import AreaActivity from "./admin/AreaActivity";
 import SearchBox from "./component/SearchBox";
 import BookData from "./Data/data.json";
 import LoginScreen from "./screens/LoginScreen";
@@ -71,7 +71,8 @@ function App() {
           <Route path="shops/:add" element={<ShopActivity />} />
           <Route path="shops/:id/:edit" element={<ShopActivity />} />
           <Route path="areas" element={<AdminAreas />} />
-          <Route path="areas/:add" element={<AddArea />} />
+          <Route path="areas/:add" element={<AreaActivity />} />
+          <Route path="shops/:id/:edit" element={<AreaActivity />} />
           <Route path="cities" element={<AdminCities />} />
           <Route path="products" element={<AdminAddProducts />} />
         </Route>

@@ -15,5 +15,6 @@ export const SHOP_ALREADY_EXIST = "Shop with this name already exist";
 export const NIP_ALREADY_EXIST = "NIP already exist";
 export const WRONG_LAT = "Wrong latitude value";
 export const WRONG_LNG = "Wrong longitude value";
+export const AREA_ALREDY_EXIST = "Sales area with this name already exist"
 
 export const TIME_SET_TIMEOUT = 4000;

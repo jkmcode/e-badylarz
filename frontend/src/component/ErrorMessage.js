@@ -16,6 +16,7 @@ import {
   NIP_ALREADY_EXIST,
   WRONG_LAT,
   WRONG_LNG,
+  AREA_ALREDY_EXIST,
 } from "../constants/errorsConstants";
 
 // variants: 'primary','secondary','success','danger','warning','info','light','dark'
@@ -54,6 +55,8 @@ function ErrorMessage(props) {
         return setErrorMessage("Wrong_lat");
       case WRONG_LNG:
         return setErrorMessage("Wrong_lng");
+      case AREA_ALREDY_EXIST:
+        return setErrorMessage("ErrorMessage_area_already_exist");
       default:
         return setErrorMessage(props.msg);
     }

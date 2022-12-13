@@ -2,12 +2,61 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+##################### Areas ######################################
+
+#Areas HQ place - miejsce prowadzenia działalnosci
+class Areas(models.Model):
+    name = models.CharField(max_length=50)
+    nip = models.CharField(max_length=20)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    bank_account = models.CharField(max_length=40, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+
+class AreasARC(models.Model):
+    id_shops = models.IntegerField()
+    name = models.CharField(max_length=50)
+    nip = models.CharField(max_length=20)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField( null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    bank_account = models.CharField(max_length=40, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    archiver = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+
+
 ##################### Shops ######################################
 
 #Shops HQ place - miejsce prowadzenia działalnosci
 class Shops(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    nip = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=50)
+    nip = models.CharField(max_length=20)
     city = models.CharField(max_length=40)
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)

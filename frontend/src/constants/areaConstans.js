@@ -1,0 +1,4 @@
+export const ADD_AREA_REQUEST = "ADD_AREA_REQUEST";
+export const ADD_AREA_SUCCESS = "ADD_AREA_SUCCESS";
+export const ADD_AREA_FAIL = "ADD_AREA_FAIL";
+export const ADD_AREA_DELETE = "ADD_AREA_DELETE";
