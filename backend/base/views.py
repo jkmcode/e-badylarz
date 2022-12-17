@@ -103,15 +103,9 @@ def uploadMultiImages(request):
 @permission_classes([IsAdminUser])
 def getAreas(request):
 
-
-    ## we need to create Area model
-
-    # area = Shops.objects.all().order_by('name') 
-
-    # seriaziler = ShopsSerializer(shops, many=True)
-
-    # return Response(seriaziler.data)
-    return Response("okey")
+    area = Areas.objects.all().order_by('name') 
+    seriaziler = AreasSerializer(area, many=True)
+    return Response(seriaziler.data)
 
 
 @api_view(["POST"])

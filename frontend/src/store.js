@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { testListReducer } from "./reducers/testReducer";
 import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
 import { cartReducer } from "./reducers/cartReducer";
+import { areaActivityReducer } from "./reducers/areaReducer"
 import {
   addDistrictReducer,
   addDistrictDescReducer,
@@ -51,6 +52,7 @@ const reducer = combineReducers({
   shopSpotsList: shopSpotListReducer,
   getShopSpot: getShopSpotReducer,
   cartReducer: cartReducer,
+  areaActivity: areaActivityReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

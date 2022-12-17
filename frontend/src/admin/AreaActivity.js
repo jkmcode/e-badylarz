@@ -7,7 +7,12 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 
-import { addArea } from "../actions/areaAction"
+import { addArea } from "../actions/areaAction";
+
+import {
+  ADD_AREA_DELETE,
+  TIME_AUT
+} from "../constants/areaConstans";
 
 import { Icon } from "@iconify/react";
 
@@ -25,15 +30,18 @@ function AddArea() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const loading = false;
-  const error = false;
-
   const editAreaParam = params.edit;
   const addAreaParam = params.add;
+
+  const [successFlag, setSuccessFlag] = useState(false);
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const addArea12 = useSelector((state) => state.areaActivity);
+  const { loading, success, error } = addArea12;
+
 
   const onSubmit = (data) => {
     //console.log("działam ---->", addAreaParam)
@@ -72,7 +80,20 @@ function AddArea() {
     );
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccessFlag(true)
+        dispatch({ type: ADD_AREA_DELETE });
+      }, TIME_AUT);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (successFlag) {
+      navigate("/dashboard/areas");
+    }
+  }, [successFlag]);
 
   return (
     <>
@@ -80,7 +101,15 @@ function AddArea() {
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT} /> : null}
+          {success ? (
+            <ErrorMessage
+              msg={t("AddArea_success")}
+              timeOut={TIME_AUT}
+              variant="success"
+              success={true}
+            />
+          ) : null}
           <Row className="align-items-center ">
             <Col>
               <Link to="/dashboard/areas" className="text-dark h6">
@@ -109,7 +138,7 @@ function AddArea() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ.@ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ.@ -]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -146,7 +175,7 @@ function AddArea() {
                     {...register("nip", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9 ]+$/,
+                        value: /^[0-9 -]+$/,
                         message: t("Form_only_digits_or_space"),
                       },
                     })}
@@ -178,7 +207,7 @@ function AddArea() {
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -214,7 +243,7 @@ function AddArea() {
                     {...register("street", {
                       // required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ .]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -252,7 +281,7 @@ function AddArea() {
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ/ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       maxLength: {
@@ -320,12 +349,12 @@ function AddArea() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ/ ]+$/,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
-                        value: 5,
-                        message: t("Form_minLength_5"),
+                        value: 3,
+                        message: t("Form_minLength_3"),
                       },
                       maxLength: {
                         value: 30,

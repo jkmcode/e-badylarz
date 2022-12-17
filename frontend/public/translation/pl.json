@@ -39,6 +39,8 @@
   "btn_no": "NIE",
   "btn_show_active_shops": "Pokaż skley aktywne",
   "btn_show_inactive_shops": "Pokaż sklepy nieaktywne",
+  "btn_show_active_areas": "Pokaż aktywne obszary sprzedaży",
+  "btn_show_inactive_areas": "Pokaż nieaktywne obszary sprzedaży",
   "btn-change": "Zmień",
   "cart_currently_empty": "jest obecnie pusty",
   "status_inactive": "Nieaktywny",
@@ -312,5 +314,6 @@
   "AreaActivity_label_latitude": "Szerokość",
   "AreaActivity_latitude_placeholder": "Wprowadź szerokość ...",
   "AreaActivity_label_longitude": "Długość",
-  "AreaActivity_longitude_placeholder": "Wprowadź długość ..."
+  "AreaActivity_longitude_placeholder": "Wprowadź długość ...",
+  "AddArea_success": "Obszar sprzedaży dodany poprawnie"
 }

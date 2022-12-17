@@ -42,6 +42,8 @@
   "btn_no": "NO",
   "btn_show_active_shops": "Show active shops",
   "btn_show_inactive_shops": "Show inactive shops",
+  "btn_show_active_areas": "Show active sales areas",
+  "btn_show_inactive_areas": "Show inactive sales areas",
   "btn_clear": "clear",
   "btn_products_category": "Shop categories",
   "btn_buy": "buy",
@@ -313,5 +315,6 @@
   "AreaActivity_label_latitude": "Latitude",
   "AreaActivity_latitude_placeholder": "Enter latitude ...",
   "AreaActivity_label_longitude": "longitude",
-  "AreaActivity_longitude_placeholder": "Enter longitude ..."
+  "AreaActivity_longitude_placeholder": "Enter longitude ...",
+  "AddArea_success": "Sales area added correctly"
 }
