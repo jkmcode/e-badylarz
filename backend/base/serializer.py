@@ -79,3 +79,8 @@ class ShopSpotsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopsSpot
         fields = '__all__'
+
+class AreasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Areas
+        fields = '__all__' 
