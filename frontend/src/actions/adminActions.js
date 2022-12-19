@@ -105,40 +105,7 @@ export const saveImage = (imageToSave) => (dispatch) => {
   });
 };
 
-// Areas
 
-export const getAreas = () => async (dispatch, getState) => {
-  try {
-    dispatch({ type: GET_AREA_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/get-areas/`, config);
-
-    dispatch({
-      type: GET_AREA_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: GET_AREA_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
-    });
-    console.log(error);
-  }
-};
 
 // Shops
 export const updateShop = (insertData) => async (dispatch, getState) => {

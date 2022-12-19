@@ -315,5 +315,6 @@
   "AreaActivity_latitude_placeholder": "Wprowadź szerokość ...",
   "AreaActivity_label_longitude": "Długość",
   "AreaActivity_longitude_placeholder": "Wprowadź długość ...",
-  "AddArea_success": "Obszar sprzedaży dodany poprawnie"
+  "AddArea_success": "Obszar sprzedaży dodany poprawnie",
+  "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie"
 }

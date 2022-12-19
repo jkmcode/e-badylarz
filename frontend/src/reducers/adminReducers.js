@@ -130,28 +130,6 @@ export const saveImageReducer = (state = {}, action) => {
   }
 };
 
-//Area
-
-export const areaListReducer = (state = { areaList: [] }, action) => {
-  switch (action.type) {
-    case GET_AREA_LIST_REQUEST:
-      return { loading: true, success: false, areaList: [] };
-    case GET_AREA_LIST_SUCCESS:
-      return { loading: false, success: true, areaList: action.payload };
-    case GET_AREA_LIST_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-        success: false,
-        areaList: [],
-      };
-    case GET_AREA_LIST_DELETE:
-      return { areaList: [] };
-    default:
-      return state;
-  }
-};
-
 //Shops
 export const updateShopReducer = (state = {}, action) => {
   switch (action.type) {
@@ -175,7 +153,7 @@ export const updateShopReducer = (state = {}, action) => {
 export const getShopReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SHOP_REQUEST:
-      return { loading: true, success: false, shopDetails: {}};
+      return { loading: true, success: false, shopDetails: {} };
     case GET_SHOP_SUCCESS:
       return { loading: false, success: true, shopDetails: action.payload };
     case GET_SHOP_FAIL:
@@ -190,7 +168,7 @@ export const getShopReducer = (state = {}, action) => {
 export const getShopSpotReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SPOT_REQUEST:
-      return { loading: true, success: false, spotDetails: {}};
+      return { loading: true, success: false, spotDetails: {} };
     case GET_SPOT_SUCCESS:
       return { loading: false, success: true, spotDetails: action.payload };
     case GET_SPOT_FAIL:
@@ -244,7 +222,8 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
       return { loading: false, error: action.payload, successAdd: false, success: false, };
     case GET_SOPTS_LIST_FAIL:
       return {
-        loading: false, error: action.payload, success: false, successAdd: false,shopSpotList: [],};
+        loading: false, error: action.payload, success: false, successAdd: false, shopSpotList: [],
+      };
     case GET_SOPTS_LIST_DELETE:
       return { shopSpotList: [] };
     default:

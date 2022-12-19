@@ -7,12 +7,17 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 
-import { addArea } from "../actions/areaAction";
+import { addArea, getAreaToEdit } from "../actions/areaAction";
 
 import {
   ADD_AREA_DELETE,
-  TIME_AUT
+  GET_AREA_LIST_DELETE
 } from "../constants/areaConstans";
+
+import {
+  TIME_AUT_ERROR,
+  TIME_AUT_SUCCESS
+} from "../constants/environmentConstans"
 
 import { Icon } from "@iconify/react";
 
@@ -30,8 +35,10 @@ function AddArea() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const editAreaParam = params.edit;
   const addAreaParam = params.add;
+  const Id = params.id
+
+  //console.log('id------>', Id)
 
   const [successFlag, setSuccessFlag] = useState(false);
 
@@ -41,6 +48,14 @@ function AddArea() {
 
   const addArea12 = useSelector((state) => state.areaActivity);
   const { loading, success, error } = addArea12;
+
+  const getArea = useSelector((state) => state.areaToEdit);
+  const {
+    loading: loadingAreaToEdit,
+    success: successAreaToEdit,
+    error: errorAreaToEdit,
+    area
+  } = getArea;
 
 
   const onSubmit = (data) => {
@@ -64,7 +79,25 @@ function AddArea() {
           add: true,
         })
       );
-    } else { console.log("działam ---->", addAreaParam) }
+    } else {
+      console.log("działam ---->", addAreaParam)
+      dispatch(
+        addArea({
+          city: data.city,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          name: data.name,
+          nip: data.nip,
+          number: data.number,
+          post: data.post,
+          postCode: data.postCode,
+          street: data.street,
+          creator: userInfo.id,
+          bankAccount: data.bankAccount,
+          add: false,
+          id: Id,
+        }))
+    }
   }
 
 
@@ -85,27 +118,56 @@ function AddArea() {
       setTimeout(() => {
         setSuccessFlag(true)
         dispatch({ type: ADD_AREA_DELETE });
-      }, TIME_AUT);
+      }, TIME_AUT_SUCCESS);
     }
   }, [success]);
 
   useEffect(() => {
+    if ((addAreaParam === 'edit')) {
+      dispatch(
+        getAreaToEdit(Id)
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     if (successFlag) {
+      dispatch({ type: GET_AREA_LIST_DELETE });
       navigate("/dashboard/areas");
     }
   }, [successFlag]);
 
+  //Reset Default data
+  useEffect(() => {
+    if (successAreaToEdit) {
+      reset({
+        name: area.name,
+        nip: area.nip,
+        city: area.city,
+        street: area.street,
+        number: area.no_building,
+        postCode: area.post_code,
+        post: area.post,
+        bankAccount: area.bank_account,
+        latitude: area.latitude,
+        longitude: area.longitude,
+      });
+    }
+  }, [successAreaToEdit]);
+
   return (
     <>
-      {loading ? (
+      {loading || loadingAreaToEdit ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
+          {errorAreaToEdit ? <ErrorMessage msg={errorAreaToEdit} timeOut={TIME_AUT_ERROR} /> : null}
+
           {success ? (
             <ErrorMessage
-              msg={t("AddArea_success")}
-              timeOut={TIME_AUT}
+              msg={addAreaParam === 'add' ? t("AddArea_success") : t("EditArea_success")}
+              timeOut={TIME_AUT_SUCCESS}
               variant="success"
               success={true}
             />
@@ -119,7 +181,7 @@ function AddArea() {
             </Col>
           </Row>
           <div className="d-flex justify-content-center display-6">
-            {editAreaParam === "edit"
+            {addAreaParam === "edit"
               ? t("AreaActivity_EditAreas_title")
               : t("AreaActivity_AddAreas_title")}
           </div>
@@ -492,7 +554,7 @@ function AddArea() {
                 : null}
             </Row> */}
             <div className="d-flex justify-content-end">
-              {editAreaParam === "edit" ? (
+              {addAreaParam === "edit" ? (
                 <Button
                   type="submit"
                   variant="warning"

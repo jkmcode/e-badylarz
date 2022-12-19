@@ -65,8 +65,9 @@ def correctLng(lng):
 
 # czyszczenie danych z bazy z nawiasów ('',)
 def cleanStr(cleanedData):
-    if cleanedData[0] == '(':
-        return cleanedData[2:len(cleanedData)-3]
+    if cleanedData != None:
+        if cleanedData[0] == '(' :
+            return cleanedData[2:len(cleanedData)-3]
     return cleanedData
 
 #create user
@@ -103,8 +104,39 @@ def uploadMultiImages(request):
 @permission_classes([IsAdminUser])
 def getAreas(request):
 
-    area = Areas.objects.all().order_by('name') 
-    seriaziler = AreasSerializer(area, many=True)
+    areas = Areas.objects.all().order_by('name')
+
+    for i in areas : 
+        i.name = cleanStr(i.name)
+        i.nip = cleanStr(i.nip)
+        i.city = cleanStr(i.city)
+        i.street = cleanStr(i.street)
+        i.no_building = cleanStr(i.no_building)
+        i.post_code = cleanStr(i.post_code)
+        i.post = cleanStr(i.post)
+        i.latitude = cleanStr(i.latitude)
+        i.longitude = cleanStr(i.longitude) 
+
+    seriaziler = AreasSerializer(areas, many=True)
+    return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAreaToEdit(request, Id): 
+
+    area = Areas.objects.get(id=Id)
+
+    area.name = cleanStr(area.name)
+    area.nip = cleanStr(area.nip)
+    area.city = cleanStr(area.city)
+    area.street = cleanStr(area.street)
+    area.no_building = cleanStr(area.no_building)
+    area.post_code = cleanStr(area.post_code)
+    area.post = cleanStr(area.post)
+    area.latitude = cleanStr(area.latitude)
+    area.longitude = cleanStr(area.longitude)
+
+    seriaziler = AreasSerializer(area, many=False)
     return Response(seriaziler.data)
 
 
@@ -124,8 +156,15 @@ def addArea(request):
         content = {"detail": "Wrong longitude value"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-    areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
-    NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()
+    if data['add']:
+        areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
+    else:
+        areaAlreadyExists=False
+    
+    if data['add']:
+        NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()
+    else:
+        NIPAlreadyExists = False
 
     if areaAlreadyExists:
         content = {"detail": "Sales area with this name already exist"}
@@ -134,7 +173,7 @@ def addArea(request):
         content = {"detail": "NIP already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)        
     elif data['add']:
-        area = Areas.objects.create(
+        createdArea = Areas.objects.create(
             name=data['name'],
             nip = data['nip'],
             city = data['city'],
@@ -149,11 +188,44 @@ def addArea(request):
             bank_account = data['bankAccount']
         )
     else:
-        pass # dopisać działania dla edit
+        area = Areas.objects.get(id=data['id'])
+        areaARC = AreasARC.objects.create(
+            id_areas = int(area.id),
+            name = area.name,
+            nip =  area.nip,
+            city = area.city,
+            street = area.street,
+            no_building = area.no_building,
+            post_code = area.post_code,
+            post = area.post,
+            latitude = area.latitude,
+            longitude = area.longitude,
+            date_of_entry = area.date_of_entry,
+            date_of_change = area.date_of_change,
+            creator = area.creator,
+            modifier = area.modifier,
+            is_active = area.is_active,
+            bank_account = area.bank_account,
+            type_of_change = area.type_of_change,
+            archiver = data['creator']
+        )
+        area.name=data['name'],
+        area.nip = data['nip'],
+        area.city = data['city'],
+        area.street = data['street'],
+        area.no_building = data['number'],
+        area.post_code = data['postCode'],
+        area.post = data['post'],
+        area.latitude = data['latitude'],
+        area.longitude = data['longitude'],
+        area.modifier = data['creator'],
+        area.bank_account = data['bankAccount']
+        area.date_of_change = datetime.now()
+        area.type_of_change = "modifying sales area data"
 
-    areas=Areas.objects.all().order_by('name')
-    seriaziler = AreasSerializer(areas, many=True)
-    return Response(seriaziler.data)
+        area.save()
+
+    return Response("okey")
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
@@ -547,6 +619,28 @@ def activeList(request):
             delivery = descrip.delivery,
             range = descrip.range,
             type_of_change = descrip.type_of_change,
+        )
+    elif data['objType']=='AREA': 
+        descrip = Areas.objects.get(id=data['Id'])
+        AreasARC.objects.create(
+            id_areas = int(descrip.id),
+            name = descrip.name,
+            nip =  descrip.nip,
+            city = descrip.city,
+            street = descrip.street,
+            no_building = descrip.no_building,
+            post_code = descrip.post_code,
+            post = descrip.post,
+            latitude = descrip.latitude,
+            longitude = descrip.longitude,
+            date_of_entry = descrip.date_of_entry,
+            date_of_change = descrip.date_of_change,
+            creator = descrip.creator,
+            modifier = descrip.modifier,
+            is_active = descrip.is_active,
+            bank_account = descrip.bank_account,
+            type_of_change = descrip.type_of_change,
+            archiver = data['userId']
         )
     else:
         content = {"detail": "Changing the active flag - no object type"}
