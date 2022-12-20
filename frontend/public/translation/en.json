@@ -316,5 +316,6 @@
   "AreaActivity_latitude_placeholder": "Enter latitude ...",
   "AreaActivity_label_longitude": "longitude",
   "AreaActivity_longitude_placeholder": "Enter longitude ...",
-  "AddArea_success": "Sales area added correctly"
+  "AddArea_success": "Sales area added correctly",
+  "EditArea_success": "Sales area editing correctly"
 }

@@ -21,12 +21,13 @@ class Areas(models.Model):
     creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     bank_account = models.CharField(max_length=40, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50,null=True, blank=True)
 
     def __str__(self):
          return self.name
 
 class AreasARC(models.Model):
-    id_shops = models.IntegerField()
+    id_areas = models.IntegerField()
     name = models.CharField(max_length=50)
     nip = models.CharField(max_length=20)
     city = models.CharField(max_length=40)
@@ -42,8 +43,7 @@ class AreasARC(models.Model):
     creator = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     bank_account = models.CharField(max_length=40, null=True, blank=True)
-    photo = models.ImageField(null=True, blank=True)
-    type_of_change = models.CharField(max_length=50)
+    type_of_change = models.CharField(max_length=50,null=True, blank=True)
     date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
     archiver = models.CharField(max_length=20, null=True, blank=True)
 
