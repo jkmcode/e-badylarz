@@ -20,6 +20,18 @@ import {
   GET_SHOPS_LIST_DELETE,
 } from "../constants/adminConstans";
 
+import {
+  TIME_AUT_ERROR,
+  TIME_AUT_SUCCESS
+} from "../constants/environmentConstans"
+
+import {
+  NUMBERS_AND_NATIONAL_LETTERS,
+  NIP_FORMAT,
+  BANK_ACCOUNT_FORMAT,
+  GPS_FORMAT
+} from "../constants/formValueConstans"
+
 import { Icon } from "@iconify/react";
 
 function AddShops() {
@@ -62,14 +74,18 @@ function AddShops() {
   const { shopImageFlag } = imageFlag;
 
   const updateShopRedux = useSelector((state) => state.updateShop);
-  const { loading: loadingUpdateShop, success: successUpdateShop } =
-    updateShopRedux;
+  const {
+    loading: loadingUpdateShop,
+    success: successUpdateShop,
+    error: errorUpdateShop
+  } = updateShopRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
   const {
     loading: loadingGetShop,
     shopDetails,
     success: successGetShop,
+    error: errorGetShop
   } = getShopRedux;
 
   // normalize function
@@ -218,7 +234,28 @@ function AddShops() {
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
+          {errorUpdateShop ? <ErrorMessage msg={errorUpdateShop} timeOut={TIME_AUT_ERROR} /> : null}
+          {errorGetShop ? <ErrorMessage msg={errorGetShop} timeOut={TIME_AUT_ERROR} /> : null}
+
+          {successAdd ? (
+            <ErrorMessage
+              msg={t("AddShops_success")}
+              timeOut={TIME_AUT_SUCCESS}
+              variant="success"
+              success={true}
+            />
+          ) : null}
+          {successUpdateShop ? (
+            <ErrorMessage
+              msg={t("EditShops_success")}
+              timeOut={TIME_AUT_SUCCESS}
+              variant="success"
+              success={true}
+            />
+          ) : null}
+
           <Row className="align-items-center ">
             <Col>
               <Link to="/dashboard/shops" className="text-dark h6">
@@ -247,7 +284,7 @@ function AddShops() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ.@ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -284,7 +321,7 @@ function AddShops() {
                     {...register("nip", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9 ]+$/,
+                        value: NIP_FORMAT,
                         message: t("Form_only_digits_or_space"),
                       },
                     })}
@@ -316,7 +353,7 @@ function AddShops() {
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -352,7 +389,7 @@ function AddShops() {
                     {...register("street", {
                       // required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -390,7 +427,7 @@ function AddShops() {
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       maxLength: {
@@ -458,7 +495,7 @@ function AddShops() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -502,7 +539,7 @@ function AddShops() {
                       },
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9 ]+$/,
+                        value: BANK_ACCOUNT_FORMAT,
                         message: t("Form_IBAN"),
                       },
                       minLength: {
@@ -542,7 +579,7 @@ function AddShops() {
                     {...register("latitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
@@ -570,7 +607,7 @@ function AddShops() {
                     {...register("longitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
@@ -593,11 +630,11 @@ function AddShops() {
               </Col>
               {imageRender
                 ? editShopParam === "edit" &&
-                  shopDetails.photo !== null && (
-                    <Col>
-                      <img src={shopDetails.photo} />
-                    </Col>
-                  )
+                shopDetails.photo !== null && (
+                  <Col>
+                    <img src={shopDetails.photo} />
+                  </Col>
+                )
                 : null}
             </Row>
             <div className="d-flex justify-content-end">

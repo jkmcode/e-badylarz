@@ -151,6 +151,8 @@
   "AddProductType_title": "Add a product type",
   "AddProductType_label_name": "Product type name",
   "AddProductType_name_placeholder": "Enter product type name ...",
+  "AddShops_success": "Shop added correctly",
+  "EditShops_success": "Shops change data correctly",
   "AddShops_title": "Add shop",
   "EditShops_title": "Edit shop",
   "AddShops_title_address": "HQ address",

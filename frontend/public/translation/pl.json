@@ -150,6 +150,8 @@
   "AddProductType_title": "Dodaj typ produktów",
   "AddProductType_label_name": "Nazwa typu produktu",
   "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
+  "AddShops_success": "Sklep dodany prawidłowo",
+  "EditShops_success": "Dane sklepu zmienione prawidłowo",
   "AddShops_title": "Dodaj sklep",
   "EditShops_title": "Edycja skelpu",
   "AddShops_title_address": "Adres",

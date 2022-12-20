@@ -19,6 +19,13 @@ import {
   TIME_AUT_SUCCESS
 } from "../constants/environmentConstans"
 
+import {
+  NUMBERS_AND_NATIONAL_LETTERS,
+  NIP_FORMAT,
+  BANK_ACCOUNT_FORMAT,
+  GPS_FORMAT
+} from "../constants/formValueConstans"
+
 import { Icon } from "@iconify/react";
 
 function AddArea() {
@@ -200,7 +207,7 @@ function AddArea() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ.@ -]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -237,7 +244,7 @@ function AddArea() {
                     {...register("nip", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9 -]+$/,
+                        value: NIP_FORMAT,
                         message: t("Form_only_digits_or_space"),
                       },
                     })}
@@ -269,7 +276,7 @@ function AddArea() {
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -305,7 +312,7 @@ function AddArea() {
                     {...register("street", {
                       // required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ .]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -343,7 +350,7 @@ function AddArea() {
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       maxLength: {
@@ -411,7 +418,7 @@ function AddArea() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -455,7 +462,7 @@ function AddArea() {
                       },
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9 ]+$/,
+                        value: BANK_ACCOUNT_FORMAT,
                         message: t("Form_IBAN"),
                       },
                       minLength: {
@@ -495,7 +502,7 @@ function AddArea() {
                     {...register("latitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
@@ -523,7 +530,7 @@ function AddArea() {
                     {...register("longitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
