@@ -6,6 +6,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { getFullDiscricts } from "../actions/discrictsActions";
 import { Icon } from "@iconify/react";
+import useBackToLogin from "../component/useBackToLogin";
 
 import AddDescription from "./AddDescription";
 import CitiesList from "./CitiesList";
@@ -19,6 +20,7 @@ import {
 } from "../constants/adminConstans";
 
 function EditDistrict() {
+  useBackToLogin();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();

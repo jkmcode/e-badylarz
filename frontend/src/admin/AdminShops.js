@@ -16,8 +16,10 @@ import {
 } from "../constants/adminConstans";
 import { Icon } from "@iconify/react";
 import useResponsive from "../component/useResponsive";
+import useBackToLogin from "../component/useBackToLogin";
 
 function AdminShops() {
+  useBackToLogin();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { windowWidth } = useResponsive();

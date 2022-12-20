@@ -4,6 +4,7 @@ import ErrorMessage from "../component/ErrorMessage";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import useBackToLogin from "../component/useBackToLogin";
 
 import {
   Table,
@@ -17,6 +18,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 function AdminAddProducts() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },

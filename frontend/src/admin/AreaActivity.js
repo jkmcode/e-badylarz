@@ -6,17 +6,16 @@ import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
+import useBackToLogin from "../component/useBackToLogin";
 
 import { addArea } from "../actions/areaAction";
 
-import {
-  ADD_AREA_DELETE,
-  TIME_AUT
-} from "../constants/areaConstans";
+import { ADD_AREA_DELETE, TIME_AUT } from "../constants/areaConstans";
 
 import { Icon } from "@iconify/react";
 
 function AddArea() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },
@@ -42,11 +41,10 @@ function AddArea() {
   const addArea12 = useSelector((state) => state.areaActivity);
   const { loading, success, error } = addArea12;
 
-
   const onSubmit = (data) => {
     //console.log("działam ---->", addAreaParam)
-    if (addAreaParam === 'add') {
-      console.log("działam ---->", addAreaParam)
+    if (addAreaParam === "add") {
+      console.log("działam ---->", addAreaParam);
       // dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
         addArea({
@@ -64,9 +62,10 @@ function AddArea() {
           add: true,
         })
       );
-    } else { console.log("działam ---->", addAreaParam) }
-  }
-
+    } else {
+      console.log("działam ---->", addAreaParam);
+    }
+  };
 
   // normalize function
   const normalizeCardNumber = (value) => {
@@ -83,7 +82,7 @@ function AddArea() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        setSuccessFlag(true)
+        setSuccessFlag(true);
         dispatch({ type: ADD_AREA_DELETE });
       }, TIME_AUT);
     }
@@ -511,10 +510,7 @@ function AddArea() {
               )}
             </div>
           </Form>
-
-
         </div>
-
       )}
     </>
   );

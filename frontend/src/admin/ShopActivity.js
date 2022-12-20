@@ -13,6 +13,7 @@ import {
   InsertImage,
 } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
+import useBackToLogin from "../component/useBackToLogin";
 
 import {
   DELETE_IMAGE_REDUX,
@@ -23,6 +24,7 @@ import {
 import { Icon } from "@iconify/react";
 
 function AddShops() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },

@@ -8,8 +8,10 @@ import { unOrActiveList } from "../actions/adminActions";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { getAreas } from "../actions/adminActions";
+import useBackToLogin from "../component/useBackToLogin";
 
 function AdminAreas() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },

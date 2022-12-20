@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import useBackToLogin from "../component/useBackToLogin";
 
 import { addDiscrict } from "../actions/discrictsActions";
 import AddDescription from "./AddDescription";
@@ -20,7 +21,7 @@ import {
   SET_FLAG_ADD_DESC_TRUE,
 } from "../constants/adminConstans";
 
-import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans"
+import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
@@ -28,6 +29,7 @@ function AddDiscrict() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useBackToLogin();
 
   const [nextDesc, setNextDesc] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
@@ -55,7 +57,7 @@ function AddDiscrict() {
       name: data.name,
       creator: userInfo.id,
       lat: data.latitude,
-      lng: data.longitude
+      lng: data.longitude,
     };
     dispatch(addDiscrict(insertData));
   };
@@ -212,8 +214,6 @@ function AddDiscrict() {
                 </Form.Group>
               </Col>
             </Row>
-
-
 
             <div className="d-flex justify-content-end">
               {nextDesc ? null : (

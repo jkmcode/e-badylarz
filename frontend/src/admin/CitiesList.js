@@ -107,17 +107,64 @@ function CitiesList(props) {
     }
   }, [dispatch, success]);
 
+  const tableCustom = {
+    fontFamily: "Helvetica, sans-serif",
+    borderCollapse: "separate",
+    borderSpacing: "0px",
+    width: "100%",
+  };
+
+  const columnName = {
+    backgroundColor: "#04AA6D",
+    color: "white",
+    padding: "12px 8px",
+    width: "100%",
+  };
+
+  const tableCell = {
+    padding: "12px 8px",
+    borderBottom: "1px solid grey",
+  };
+
+  const tableCellStripe = {
+    ...tableCell,
+    backgroundColor: "red",
+  };
+
+  const citiesBtn = {
+    fontSize: "0.9rem",
+    background: "transparent",
+    color: "white",
+    textTransform: "uppercase",
+    border: "none",
+  };
+
+  const btnUnactive = {
+    ...citiesBtn,
+    backgroundImage: `linear-gradient(171deg, rgba(234, 17, 59, 1) 45%, rgba(202, 71, 130, 1) 89%)`,
+  };
+
+  const btnDescription = {
+    ...citiesBtn,
+    backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
+  };
+
+  const btnInfo = {
+    ...citiesBtn,
+    backgroundImage: `linear-gradient(171deg, rgba(34, 95, 165, 1) 45%, rgba(42, 51, 113, 1) 89%)`,
+  };
+
   return (
     <>
       {loading || loadingUpdate ? (
         <Loader />
       ) : (
         <div
-          className={
-            props.mainTable
-              ? "container bg-container"
-              : "container bg-container rounded"
-          }
+          style={{
+            margin: "1rem",
+            padding: "0.5rem",
+            backgroundColor: "#f0fcf0",
+          }}
         >
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
 
@@ -139,7 +186,7 @@ function CitiesList(props) {
                     type="radio"
                     variant={idx % 2 ? "outline-danger" : "outline-success"}
                     name="radio"
-                    style={{ fontSize: "0.8rem" }}
+                    style={{ fontSize: "0.9rem" }}
                     value={radio.value}
                     checked={radioValue === radio.value}
                     onChange={(e) => setRadioValue(e.currentTarget.value)}
@@ -148,88 +195,105 @@ function CitiesList(props) {
                   </ToggleButton>
                 ))}
               </ButtonGroup>
-              <table>
+              <table style={tableCustom}>
                 <thead>
                   <tr>
-                    <th className="w-100">{t("Table_head_name")}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th style={columnName}>{t("Table_head_name")}</th>
+                    <th style={columnName} />
+                    <th style={columnName}></th>
+                    <th style={columnName}></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {citiesList.map((i) => (
-                    <tr key={i.id} style={{ borderBottom: "solid 1px" }}>
-                      <>
-                        {(radioValue === "1") & i.is_active ? (
-                          <>
-                            <td style={{ fontSize: "0.8rem", padding: "1rem" }}>
-                              {i.name}
-                            </td>
-                            <td>
-                              <button
-                                style={{
-                                  fontSize: "0.8rem",
-                                  background: "transparent",
-                                  border: "solid red 3px",
-                                }}
-                                onClick={() => unActiveHandler(i.id)}
+                  {citiesList.length === 0 ? (
+                    <p
+                      style={{
+                        fontSize: "1.2rem",
+                        textAlign: "center",
+                        textTransform: "uppercase",
+                        fontWeight: "400",
+                      }}
+                    >
+                      empty list
+                    </p>
+                  ) : (
+                    citiesList.map((i, index) => (
+                      <tr key={i.id}>
+                        <>
+                          {(radioValue === "1") & i.is_active ? (
+                            <>
+                              <td
+                                style={
+                                  index % 2 == 0 ? tableCell : tableCellStripe
+                                }
                               >
-                                {t("btn_unactive")}
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                style={{
-                                  fontSize: "0.8rem",
-                                  background: "transparent",
-                                  border: "solid green 3px",
-                                }}
-                                onClick={() => descriptionHandler(i)}
+                                {i.name}
+                              </td>
+                              <td
+                                style={
+                                  index % 2 == 0 ? tableCell : tableCellStripe
+                                }
                               >
-                                {t("btn_description")}
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                style={{
-                                  fontSize: "0.8rem",
-                                  background: "transparent",
-                                  border: "solid #7070db 3px",
-                                }}
-                                onClick={() => infoHandler(i)}
+                                <button
+                                  style={btnUnactive}
+                                  onClick={() => unActiveHandler(i.id)}
+                                >
+                                  {t("btn_unactive")}
+                                </button>
+                              </td>
+                              <td
+                                style={
+                                  index % 2 == 0 ? tableCell : tableCellStripe
+                                }
                               >
-                                {t("btn_info")}
-                              </button>
-                            </td>
-                          </>
-                        ) : null}
-                        {(radioValue === "0") & (i.is_active === false) ? (
-                          <>
-                            <td>{i.name}</td>
-                            <td>
-                              <Button
-                                variant="danger"
-                                className="btn-sm d-flex"
-                                onClick={() => activeHandler(i.id)}
+                                <button
+                                  style={btnDescription}
+                                  onClick={() => descriptionHandler(i)}
+                                >
+                                  {t("btn_description")}
+                                </button>
+                              </td>
+                              <td
+                                style={
+                                  index % 2 == 0 ? tableCell : tableCellStripe
+                                }
                               >
-                                {t("btn_active")}
-                              </Button>
-                            </td>
-                            <td>
-                              <Button
-                                variant="info"
-                                className="btn-sm d-flex"
-                                onClick={() => infoHandler(i)}
-                              >
-                                {t("btn_info")}
-                              </Button>
-                            </td>
-                          </>
-                        ) : null}
-                      </>
-                    </tr>
-                  ))}
+                                <button
+                                  style={btnInfo}
+                                  onClick={() => infoHandler(i)}
+                                >
+                                  {t("btn_info")}
+                                </button>
+                              </td>
+                            </>
+                          ) : null}
+                          {(radioValue === "0") & (i.is_active === false) ? (
+                            <>
+                              <td>{i.name}</td>
+                              <td>
+                                <Button
+                                  variant="danger"
+                                  className="btn-sm d-flex"
+                                  onClick={() => activeHandler(i.id)}
+                                >
+                                  {t("btn_active")}
+                                </Button>
+                              </td>
+                              <td>
+                                <Button
+                                  variant="info"
+                                  className="btn-sm d-flex"
+                                  onClick={() => infoHandler(i)}
+                                >
+                                  {t("btn_info")}
+                                </Button>
+                              </td>
+                            </>
+                          ) : null}
+                        </>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </>
