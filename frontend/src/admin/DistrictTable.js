@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
@@ -6,12 +6,18 @@ import useResponsive from "../component/useResponsive";
 import { unOrActiveList } from "../actions/adminActions";
 import { useNavigate } from "react-router-dom";
 import CitiesList from "./CitiesList";
+import InfoAlertComponent from "../component/InfoAlertComponent";
 
 import {
   SET_FLAG_CITY_TRUE,
   GET_CITES_LIST_DELETE,
   DISCTRICT_DESCRIPTION,
   SET_FLAG_INFO_TRUE,
+  DISTRICT,
+  UNACTIVE,
+  ACTIVE,
+  ONE,
+  ZERO,
 } from "../constants/adminConstans";
 
 function DistrictTable({ radioValue }) {
@@ -26,6 +32,10 @@ function DistrictTable({ radioValue }) {
   const [cities, setCities] = useState(false);
   const [objInfo, setObjInfo] = useState({});
   const [info, setInfo] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [discObj, setDiscObj] = useState({});
+  const [updateStatus, setUpdateStatus] = useState("");
 
   // fech data from Redux
   const discrictListRedux = useSelector((state) => state.districts);
@@ -36,28 +46,52 @@ function DistrictTable({ radioValue }) {
 
   //functions
   const unActiveHandler = (id) => {
-    dispatch(
-      unOrActiveList({
-        Id: id,
-        active: false,
-        userId: userInfo.id,
-        objType: DISCTRICT_DESCRIPTION,
-        kind: "",
-      })
-    );
+    setShowAlert(true);
+    setDiscObj(id);
+    setUpdateStatus(UNACTIVE);
   };
 
   const activeHandler = (id) => {
-    dispatch(
-      unOrActiveList({
-        Id: id,
-        active: true,
-        userId: userInfo.id,
-        objType: DISCTRICT_DESCRIPTION,
-        kind: "",
-      })
-    );
+    setShowAlert(true);
+    setDiscObj(id);
+    setUpdateStatus(ACTIVE);
   };
+
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
+  };
+
+  useEffect(() => {
+    if (confirm && updateStatus === UNACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: discObj,
+          active: false,
+          userId: userInfo.id,
+          objType: DISCTRICT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+
+    if (confirm && updateStatus === ACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: discObj,
+          active: true,
+          userId: userInfo.id,
+          objType: DISCTRICT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+  }, [confirm, dispatch, updateStatus]);
 
   const infoHandler = (i) => {
     dispatch({ type: SET_FLAG_INFO_TRUE });
@@ -105,6 +139,7 @@ function DistrictTable({ radioValue }) {
     padding: "0.4rem",
     color: "white",
     fontWeight: "500",
+    textTransform: "uppercase",
     minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
   };
 
@@ -128,23 +163,75 @@ function DistrictTable({ radioValue }) {
     backgroundImage: `linear-gradient(171deg, rgba(34, 95, 165, 1) 45%, rgba(42, 51, 113, 1) 89%)`,
   };
 
-  return (
-    <table style={mainTableContainer}>
-      <thead>
-        <tr>
-          <th style={{ padding: "1rem", width: "2%" }} />
-          <th style={{ padding: "1rem", width: "98%" }}>
-            {t("Table_head_name")}
-          </th>
-        </tr>
-      </thead>
+  const titleCitiesList = {
+    textTransform: "capitalize",
+    marginTop: "1rem",
+    marginLeft: "1rem",
+    fontWeight: "500",
+    fontSize: `calc(1rem + 0.4vw)`,
+  };
 
-      <tbody>
-        {districtList.map((district) => (
-          <>
-            <tr key={district.id} className="tableHover">
-              {radioValue === "1" && district.is_active ? (
-                <>
+  const emptylistTitle = {
+    display: "flex",
+    justifyContent: "center",
+    textTransform: "uppercase",
+    fontSize: "2rem",
+    fontWeight: "500",
+  };
+
+  const emptyListIcon = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: `300px`,
+    width: "100%",
+    fontSize: `calc(15rem + 4vw)`,
+    color: "grey",
+    opacity: "0.4",
+  };
+
+  function StatusDistrictsTable({ active }) {
+    let currentDistrictsList = [];
+
+    if (active === true) {
+      currentDistrictsList = districtList.filter(
+        (disc) => disc.is_active == true
+      );
+    }
+
+    if (active === false) {
+      currentDistrictsList = districtList.filter(
+        (disc) => disc.is_active === false
+      );
+    }
+
+    if (currentDistrictsList.length === 0) {
+      return (
+        <>
+          <div style={emptylistTitle}>
+            <div style={{ marginTop: "3rem" }}>pusta lista</div>
+          </div>
+          <div style={emptyListIcon}>
+            <Icon icon="ic:outline-featured-play-list" />
+          </div>
+        </>
+      );
+    }
+    return (
+      <table style={mainTableContainer}>
+        <thead>
+          <tr>
+            <th style={{ padding: "1rem", width: "2%" }} />
+            <th style={{ padding: "1rem", width: "98%" }}>
+              {t("Table_head_name")}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentDistrictsList.map((district) => {
+            return (
+              <>
+                <tr>
                   <td
                     style={{
                       paddingLeft: "1rem",
@@ -181,35 +268,48 @@ function DistrictTable({ radioValue }) {
                       paddingRight: "0.5rem",
                     }}
                   >
-                    <button
-                      style={btnDistrictDanger}
-                      className="btnHover"
-                      onClick={() => unActiveHandler(district.id)}
-                    >
-                      {t("btn_unactive")}
-                    </button>
+                    {active ? (
+                      <button
+                        style={btnDistrictDanger}
+                        className="btnHover"
+                        onClick={() => unActiveHandler(district.id)}
+                      >
+                        {t("btn_unactive")}
+                      </button>
+                    ) : (
+                      <button
+                        style={btnDistrictSuccess}
+                        className="btnHover"
+                        onClick={() => activeHandler(district.id)}
+                      >
+                        {t("btn_active")}
+                      </button>
+                    )}
                   </td>
-                  <td
-                    style={{
-                      paddingRight: "0.5rem",
-                    }}
-                  >
-                    <button
-                      className="btnHover"
-                      style={btnDistrictEdit}
-                      onClick={() => editHandler(district)}
+                  {active ? (
+                    <td
+                      style={{
+                        paddingRight: "0.5rem",
+                      }}
                     >
-                      {windowWidth < 800 ? (
-                        <Icon
-                          icon="material-symbols:edit-outline-sharp"
-                          width="28"
-                          height="28"
-                        />
-                      ) : (
-                        t("btn_edit")
-                      )}
-                    </button>
-                  </td>
+                      <button
+                        className="btnHover"
+                        style={btnDistrictEdit}
+                        onClick={() => editHandler(district)}
+                      >
+                        {windowWidth < 800 ? (
+                          <Icon
+                            icon="material-symbols:edit-outline-sharp"
+                            width="28"
+                            height="28"
+                          />
+                        ) : (
+                          t("btn_edit")
+                        )}
+                      </button>
+                    </td>
+                  ) : null}
+
                   <td
                     style={{
                       paddingRight: "0.5rem",
@@ -232,105 +332,7 @@ function DistrictTable({ radioValue }) {
                       )}
                     </button>
                   </td>
-                </>
-              ) : null}
-            </tr>
-            {radioValue === "1" && district.is_active ? (
-              <tr
-                className="tableCollapse"
-                style={{
-                  height:
-                    shopName === district.name && isOpen ? "100px" : "0.5px",
-                  backgroundColor:
-                    shopName === district.name && isOpen
-                      ? "white"
-                      : "transparent",
-                  borderBottom: "solid 1px",
-                }}
-              >
-                <td></td>
-                <td>
-                  {shopName === district.name && isOpen ? (
-                    <div
-                      style={{
-                        width: `calc(100% + ${3 * btnMinWidth}px)`,
-                      }}
-                    >
-                      <h4>Miasta</h4>
-                      <CitiesList Id={shopId} mainTable={true} />
-                    </div>
-                  ) : null}
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            ) : null}
-          </>
-        ))}
-        {districtList.map((district) =>
-          (radioValue === "0") & (district.is_active === false) ? (
-            <>
-              <tr key={district.id} className="tableHover">
-                <td
-                  style={{
-                    paddingLeft: "1rem",
-                  }}
-                >
-                  <button
-                    onClick={() => showMoreHandler(district)}
-                    style={btnShowMore}
-                  >
-                    {shopName === district.name && isOpen ? (
-                      <Icon
-                        icon="ic:baseline-keyboard-arrow-down"
-                        width="24"
-                        height="24"
-                      />
-                    ) : (
-                      <Icon
-                        icon="ic:outline-keyboard-arrow-up"
-                        width="24"
-                        height="24"
-                      />
-                    )}
-                  </button>
-                </td>
-                <td
-                  style={{
-                    padding: "1rem",
-                  }}
-                >
-                  {district.name}
-                </td>
-                <td
-                  style={{
-                    paddingRight: "0.5rem",
-                  }}
-                >
-                  <button
-                    style={btnDistrictSuccess}
-                    className="btnHover"
-                    onClick={() => activeHandler(district.id)}
-                  >
-                    {t("btn_active")}
-                  </button>
-                </td>
-                <td
-                  style={{
-                    paddingRight: "0.5rem",
-                  }}
-                >
-                  <button
-                    className="btnHover"
-                    style={btnDistrictInfo}
-                    onClick={() => infoHandler(district)}
-                  >
-                    {t("btn_info")}
-                  </button>
-                </td>
-              </tr>
-              {(radioValue === "0") & (district.is_active === false) ? (
+                </tr>
                 <tr
                   className="tableCollapse"
                   style={{
@@ -348,10 +350,10 @@ function DistrictTable({ radioValue }) {
                     {shopName === district.name && isOpen ? (
                       <div
                         style={{
-                          width: `calc(100% + ${2 * btnMinWidth}px)`,
+                          width: `calc(100% + ${3 * btnMinWidth}px)`,
                         }}
                       >
-                        <h4>Miasta</h4>
+                        <div style={titleCitiesList}>{t("city")}</div>
                         <CitiesList Id={shopId} mainTable={true} />
                       </div>
                     ) : null}
@@ -360,12 +362,27 @@ function DistrictTable({ radioValue }) {
                   <td></td>
                   <td></td>
                 </tr>
-              ) : null}
-            </>
-          ) : null
-        )}
-      </tbody>
-    </table>
+              </>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
+
+  return (
+    <>
+      {showAlert && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          updateStatus={updateStatus}
+          geo={DISTRICT}
+        />
+      )}
+      {radioValue === ONE && <StatusDistrictsTable active={true} />}
+      {radioValue === ZERO && <StatusDistrictsTable active={false} />}
+    </>
   );
 }
 

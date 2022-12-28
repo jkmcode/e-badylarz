@@ -119,14 +119,25 @@ function AddDescription(props) {
     }
   }, [error]);
 
+  //styling
+
+  const mainContainer = {
+    backgroundColor: "#fff",
+    marginTop: "3rem",
+    padding: "1.5rem",
+    borderRadius: "0.25rem",
+    width: "100%",
+    margin: "auto",
+    backgroundColor: "#F0F0F0",
+  };
+
   return (
     <>
       <BackToLogin />
       {loading || addloading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
-          {/* <div> */}
+        <div style={mainContainer}>
           {error ? (
             <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
           ) : null}
@@ -165,6 +176,9 @@ function AddDescription(props) {
                       backgroundColor: "white",
                     }}
                   >
+                    <option value="" hidden selected>
+                      --Select an option--
+                    </option>
                     {language.map(({ code, name }) => (
                       <option key={code} value={code}>
                         {name}

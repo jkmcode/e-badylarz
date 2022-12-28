@@ -132,3 +132,17 @@ export const EDIT_SHOP_SPOT_DELETE = "EDIT_SHOP_SPOT_DELETE";
 
 export const HAMBURGER = "hamburger";
 export const LOGOUT = "Logout";
+
+// CitiesList
+
+export const EMPTY_LIST = "empty list";
+
+//
+export const DISTRICT = "district";
+export const CITY = "city";
+export const UNACTIVE = "unactive";
+export const ACTIVE = "active";
+export const ZERO = "0";
+export const ONE = "1";
+export const TWO = "2";
+export const THREE = "3";

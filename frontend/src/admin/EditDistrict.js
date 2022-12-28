@@ -86,7 +86,7 @@ function EditDistrict() {
             backgroundColor: "white",
             height: "auto",
             minHeight: "80vh",
-            padding: "3rem",
+            padding: "1rem",
             borderRadius: "0.5rem",
           }}
         >

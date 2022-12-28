@@ -445,16 +445,6 @@ input:focus {
   font-size: calc(1.2rem + 0.1vw) !important;
 }
 
-.formInvalid {
-  border-color: rgba(189, 51, 51, 1) !important;
-  box-shadow: 0px 0px 0px 1px rgba(174, 29, 29, 1) !important;
-  background: pink !important;
-}
-
-.formInvalid:focus {
-  background: white !important;
-}
-
 .card-shadow {
   box-shadow: -12px -9px 21px -16px rgba(66, 68, 90, 1);
 }
@@ -762,4 +752,43 @@ input:focus {
 
 .selectFrom:focus {
   outline: none;
+}
+
+.formInput {
+  background-color: transparent;
+  transition: 300ms;
+}
+
+.formInput:focus {
+  transform: scale(1.05);
+  border: 2px solid grey !important;
+}
+
+/* .formInvalid {
+  background-color: transparent;
+  transition: 300ms;
+}
+
+.formInvalid:focus {
+  transform: scale(1.05);
+  border: 2px solid red !important;
+} */
+
+.textAreaInput {
+  border: 2px solid grey !important;
+}
+
+.errorMessage {
+  font-size: 12px;
+  padding: 3px;
+  color: red;
+  display: none;
+}
+
+.formInput:invalid[focused="true"] ~ .errorMessage {
+  display: block;
+}
+
+.textAreaInput:invalid ~ .errorMessage {
+  display: block;
 }

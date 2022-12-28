@@ -20,9 +20,9 @@
   "btn-return": "Powrót",
   "btn-add": "Dodaj",
   "btn_add_shop": "Dodaj sklep",
-  "btn_add_areas": "Dodaj obszar sprzedaży",
+  "btn_add_areas": "Dodaj obszar",
   "btn_delete": "USUŃ",
-  "btn_close": "Zakończ",
+  "btn_close": "Zamknij",
   "btn_contact": "Kontakt",
   "btn_edit": "EDYCJA",
   "btn_info": "Info",
@@ -39,8 +39,8 @@
   "btn_no": "NIE",
   "btn_show_active_shops": "skley aktywne",
   "btn_show_inactive_shops": "sklepy nieaktywne",
-  "btn_show_active_areas": "Pokaż aktywne obszary sprzedaży",
-  "btn_show_inactive_areas": "Pokaż nieaktywne obszary sprzedaży",
+  "btn_show_active_areas": "Aktywne obszary",
+  "btn_show_inactive_areas": "Nieaktywne obszary",
   "btn-change": "Zmień",
   "cart_currently_empty": "jest obecnie pusty",
   "status_inactive": "Nieaktywny",
@@ -96,10 +96,22 @@
   "AdminScreen_district_btn": "Powiat",
   "AdminScreenDistrict_title_active": "Lista aktywnych powiatów",
   "AdminScreenDistrict_title_unactive": "Lista nieaktywnych powiatów",
+
+  "Confirmation_title": "Potwierdzenie",
+  "Confirmation_alert_unactive": "Czy jesteś pewny, że chcerz dezaktywować powiat?",
+  "Confirmation_alert_active": "Czy jesteś pewny, że chcerz aktywować powiat?",
+  "Confirmation_alert_active_city": "Czy jesteś pewny, że chcerz dezaktywować miasto?",
+  "Confirmation_alert_unactive_city": "Czy jesteś pewny, że chcerz aktywować miasto?",
+  "city": "miasta",
+
   "AddDiscrict_title": "Dodaj powiat",
   "AddDiscrict_success": "Powiat prawidłowo dodany",
   "AddDistrict_label_name": "Nazwa powiatu",
   "AddDistrict_name_placeholder": "Podaj nazwe powiatu ...",
+  "AddDistrict_name_error_message": "Nazwa dzielnicy powinna mieć od 3 do 16 znaków i nie powinna zawierać żadnych znaków specjalnych!",
+  "AddDistrict_latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
+  "AddDistrict_longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
+
   "LoginScreen_title": "Logowanie",
   "LoginScreen_label_username": "Nazwa użytkownika",
   "LoginScreen_username_placeholder": "Podaj nazwę użytkownika ...",
@@ -119,6 +131,9 @@
   "DistrictAddDescription_placeholder_desc": "Wpisz opis ...",
   "DistrictAddDescription_selected_lng": "Wybrany język",
   "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
+  "DistrictAddDescription_error_message_requred": "Pole wymagane",
+  "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 100",
+
   "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
   "AddCiti_subtitle": "Dla poprwanej walidacji kodu pocztowego zastosuj język właściwy dla dodawanej miejscowości",
   "AddCiti_label_name": "Nazwa miejscowości",
@@ -150,23 +165,45 @@
   "AddProductType_title": "Dodaj typ produktów",
   "AddProductType_label_name": "Nazwa typu produktu",
   "AddProductType_name_placeholder": "Wpisz nawę typu produktu ...",
+  "AddShops_success": "Sklep dodany prawidłowo",
+  "EditShops_success": "Dane sklepu zmienione prawidłowo",
   "AddShops_title": "Dodaj sklep",
   "EditShops_title": "Edycja skelpu",
   "AddShops_title_address": "Adres",
   "AddShops_label_nip": "NIP",
+
+  "AddShops_nip_error_message": "Poprawny format NIP: xxx-xxx-xx-xx",
+
   "AddShops_nip_placeholder": "Wpisz NIP ...",
   "AddShops_name_placeholder": "Wpisz nazwe sklepu ...",
   "AddShops_label_name": "Nazwa sklepu",
   "AddShops_label_city": "Miejscowość",
+
+  "AddShops_city_error_message": "Nazwa miasta powinna mieć od 3 do 16 znaków bez znaków specjalnych",
+
   "AddShops_city_placeholder": "Wpisz nazwe miejscowości ...",
   "AddShops_label_street": "Ulica",
   "AddShops_street_placeholder": "Wpisz nazwe ulicy ...",
+
+  "AddShops_street_error_message": "Nazwa ulicy powinna mieć od 3 do 16 znaków bez znaków specjalnychr",
+
+  "AddShops_shop_name_error_message": "Nazwa sklepu powinna mieć od 3 do 16 znaków bez znaków specjalnych",
+
   "AddShops_label_number": "Nr budynku",
   "AddShops_number_placeholder": "Wpisz numer budynku ...",
+
+  "AddShops_number_error_message": "Nieprawidłowy format numeru budynku",
+
   "AddShops_label_postCode": "Kod pocztowy",
   "AddShops_postCode_placeholder": "Wpisz kod pocztowy ...",
+
+  "AddShops_postCode_error_message": "Format kodu pocztowego: xx-xxx",
+
   "AddShops_label_post": "Poczta",
   "AddShops_post_placeholder": "Wpisz poczte ...",
+
+  "AddShops_post_error_message": "Nazwa poczty powinna mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+
   "AddShops_title_geolocation": "Współrzędne geograficzne",
   "AddShops_label_latitude": "Szerokość",
   "AddShops_latitude_placeholder": "Wpisz szerokość ...",
@@ -174,6 +211,9 @@
   "AddShops_longitude_placeholder": "Wpisz długość ...",
   "AddShops_label_bankAccound": "Konto bankowe",
   "AddShops_bankAccound_placeholder": "Wpisz konto bankowe ...",
+
+  "AddShops_bankAccound_error_message": "Niepoprawny format konta bankwego IBAN",
+
   "AddContact_title": "Formularz kontaktowy",
   "AddContact_contactList": "Lista kontaktów",
   "AddContact_label_name": "Imię",

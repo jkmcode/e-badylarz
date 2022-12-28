@@ -209,20 +209,49 @@ export const contactListReducer = (state = { ListOfContact: [] }, action) => {
 export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
   switch (action.type) {
     case GET_SHOPS_LIST_REQUEST:
-      return { loading: true, success: false, successAdd: false, shopSpotList: [] };
+      return {
+        loading: true,
+        success: false,
+        successAdd: false,
+        shopSpotList: [],
+      };
     case GET_SOPTS_LIST_SUCCESS:
-      return { loading: false, success: true, successAdd: false, shopSpotList: action.payload };
+      return {
+        loading: false,
+        success: true,
+        successAdd: false,
+        shopSpotList: action.payload,
+      };
     case ADD_SHOP_SPOT_REQUEST:
-      return { loading: true, successAdd: false, success: false, shopSpotList: [] };
+      return {
+        loading: true,
+        successAdd: false,
+        success: false,
+        shopSpotList: [],
+      };
     case ADD_SHOP_SPOT_SUCCESS:
-      return { loading: false, successAdd: true, success: false, shopSpotList: action.payload };
+      return {
+        loading: false,
+        successAdd: true,
+        success: false,
+        shopSpotList: action.payload,
+      };
     case ADD_SHOP_SPOT_DELETE:
       return { shopSpotList: [] };
     case ADD_SHOP_SPOT_FAIL:
-      return { loading: false, error: action.payload, successAdd: false, success: false, };
+      return {
+        loading: false,
+        error: action.payload,
+        successAdd: false,
+        success: false,
+      };
     case GET_SOPTS_LIST_FAIL:
       return {
-        loading: false, error: action.payload, success: false, successAdd: false, shopSpotList: [],
+        loading: false,
+        error: action.payload,
+        success: false,
+        successAdd: false,
+        shopSpotList: [],
       };
     case GET_SOPTS_LIST_DELETE:
       return { shopSpotList: [] };
@@ -230,7 +259,6 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
       return state;
   }
 };
-
 
 export const shopListReducer = (state = { shopList: [] }, action) => {
   switch (action.type) {
@@ -321,16 +349,21 @@ export const flagReducer = (state = {}, action) => {
   }
 };
 
-export const citesListReducer = (state = {}, action) => {
+export const citesListReducer = (state = { cityList: [] }, action) => {
   switch (action.type) {
     case GET_CITES_LIST_REQUEST:
-      return { loading: true, success: false };
+      return { loading: true, success: false, cityList: [] };
     case GET_CITES_LIST_SUCCESS:
-      return { loading: false, success: true, citiesList: action.payload };
+      return { loading: false, success: true, cityList: action.payload };
     case GET_CITES_LIST_FAIL:
-      return { loading: false, error: action.payload, success: false };
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        districtList: [],
+      };
     case GET_CITES_LIST_DELETE:
-      return {};
+      return { cityList: [] };
     default:
       return state;
   }

@@ -12,30 +12,22 @@ import useBackToLogin from "../component/useBackToLogin";
 
 import useResponsive from "../component/useResponsive";
 import DistrictTable from "./DistrictTable";
+import RadioButtons from "./RadioButtons";
 
 import {
   DISCTRICT_DESCRIPTION,
   DISTRICT_DELETE,
   SET_FLAG_INFO_FALSE,
+  ONE,
+  ZERO,
 } from "../constants/adminConstans";
 
 function AdminScreenDistrict() {
-  const { t } = useTranslation();
-  const { windowWidth } = useResponsive();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [radioValue, setRadioValue] = useState("1");
-  const radios = [
-    { id: 1, name: t("Radio_true"), value: "1" },
-    { id: 2, name: t("Radio_false"), value: "0" },
-  ];
-
   useBackToLogin();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("został uruchomiony AdminScreenDistrict");
-  });
+  const [radioValue, setRadioValue] = useState(ONE);
 
   // fech data from Redux
   const discrictListRedux = useSelector((state) => state.districts);
@@ -51,8 +43,8 @@ function AdminScreenDistrict() {
   const infoFlagRedux = useSelector((state) => state.flag);
   const { infoFlag } = infoFlagRedux;
 
-  const [info, setInfo] = useState(false);
-  const [objInfo, setObjInfo] = useState({});
+  const [info] = useState(false);
+  const [objInfo] = useState({});
 
   useEffect(() => {
     if (districtList.length === 0) {
@@ -70,39 +62,7 @@ function AdminScreenDistrict() {
     dispatch({ type: SET_FLAG_INFO_FALSE });
   }, []);
 
-  //styling
-
-  const btnMinWidth = 70;
-
-  const btnDistrict = {
-    fontSize: "0.8rem",
-    border: "none",
-    borderRadius: "0.25rem",
-    padding: "0.4rem",
-    color: "white",
-    fontWeight: "500",
-    minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
-  };
-
-  const btnOulineSuccess = {
-    ...btnDistrict,
-    color: "green",
-    border: "1px solid green ",
-    fontSize: "1rem",
-    margin: "0.4rem",
-    textTransform: "uppercase",
-  };
-
-  const btnOutlineDanger = {
-    ...btnDistrict,
-    color: "red",
-    border: "1px solid red ",
-    fontSize: "1rem",
-    margin: "0.4rem",
-    textTransform: "uppercase",
-  };
-
-  //function
+  //RadioButtons functions
   const [isOpen, setIsOpen] = useState(false);
 
   const handleBtnValue = (e) => {
@@ -110,51 +70,50 @@ function AdminScreenDistrict() {
     setIsOpen(false);
   };
 
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+  };
+
   return (
     <>
       {loading || loadingUnOrActive ? (
         <Loader />
       ) : (
-        <div className="bg-container mt-4 p-4 rounded">
+        <div
+          style={{
+            backgroundColor: "whitesmoke",
+            marginTop: "1rem",
+            padding: "2rem",
+            borderRadius: "0.5rem",
+          }}
+        >
           {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          <Row className="align-items-center">
-            {!error && (
-              <Col>
-                <Link
-                  to="add"
-                  className="text-secondary d-flex justify-content-end"
-                >
-                  {t("btn-add")}
-                </Link>
-              </Col>
-            )}
-          </Row>
+          {!error && (
+            <Link
+              to="add"
+              style={{
+                color: "grey",
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+            >
+              {t("btn-add")}
+            </Link>
+          )}
 
           <div className="d-flex justify-content-center display-6">
-            {radioValue === "1"
+            {radioValue === ONE
               ? t("AdminScreenDistrict_title_active")
               : t("AdminScreenDistrict_title_unactive")}
           </div>
-          {radios.map((radio) => {
-            const { id, name, value } = radio;
-            return (
-              <button
-                className={value === "1" ? "btnSuccessFocus" : "btnDangerFocus"}
-                key={id}
-                value={value}
-                style={value === "1" ? btnOulineSuccess : btnOutlineDanger}
-                onClick={(e) => handleBtnValue(e)}
-              >
-                {name}
-              </button>
-            );
-          })}
+          <RadioButtons handleBtnValue={handleBtnValue} />
 
-          {info & infoFlag ? (
+          {infoFlag ? (
             <InfoComponent
               title={t("InfoComponent_title")}
               obj={objInfo}
               typeObj={DISCTRICT_DESCRIPTION}
+              closeInfoHandler={closeInfoHandler}
             />
           ) : null}
 

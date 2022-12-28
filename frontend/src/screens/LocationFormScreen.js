@@ -36,14 +36,17 @@ function LocationFormScreen() {
   } = useForm();
 
   const onSubmit = (data) => {
-
     if (selectedDistrict === 0) {
-      setDistricRequired(true)
-    } else { setDistricRequired(false) }
+      setDistricRequired(true);
+    } else {
+      setDistricRequired(false);
+    }
 
     if (selectedCiti === 0) {
-      setCityRequired(true)
-    } else { setCityRequired(false) }
+      setCityRequired(true);
+    } else {
+      setCityRequired(false);
+    }
 
     if (selectedDistrict !== 0 && selectedCiti !== 0) {
       localStorage.setItem("selectedCity", JSON.stringify(selectedCiti));
@@ -53,9 +56,9 @@ function LocationFormScreen() {
 
   const selectDistrictHandler = (e) => {
     setDisabledField(false);
-    setDistricRequired(false)
+    setDistricRequired(false);
     setSelectedDistrict(e.target.value);
-    setCityFlag(false)
+    setCityFlag(false);
   };
 
   const selectCitiHandler = (e) => {
@@ -76,18 +79,17 @@ function LocationFormScreen() {
       dispatch(
         getCitiesList({
           Id: selectedDistrict,
-          param: "only true"
+          param: "only true",
         })
       );
     }
-
   }, [dispatch, selectedDistrict]);
 
   // uruchamiany gdy jest wybrany powiat i zwrócona lista miejscowosci
   // dla tego powiatu
   useEffect(() => {
     if (success) {
-      setCityFlag(true)
+      setCityFlag(true);
     }
   }, [success]);
 
@@ -126,8 +128,9 @@ function LocationFormScreen() {
 
   return (
     <>
-      {loading ? <Loader />
-        :
+      {loading ? (
+        <Loader />
+      ) : (
         <>
           {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
           <div
@@ -136,7 +139,6 @@ function LocationFormScreen() {
               justifyContent: "flex-end",
             }}
           >
-
             <button onClick={clearHandler} style={clearBtn}>
               {t("btn_clear")}
             </button>
@@ -162,7 +164,9 @@ function LocationFormScreen() {
                     ))}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
-                    {districRequired ? <div>{t("Form_field_required")}</div> : null}
+                    {districRequired ? (
+                      <div>{t("Form_field_required")}</div>
+                    ) : null}
                   </div>
                 </Col>
               </Row>
@@ -181,30 +185,34 @@ function LocationFormScreen() {
                     <option key="blankChoice" hidden value={zero}>
                       {t("FormAddressScreen__city_placeholder")}
                     </option>
-                    {cityFlag ?
-                      citiesList.map((city) => (
-                        <option key={city.id} value={city.id}>
-                          {city.name}
-                        </option>))
-                      : null
-                    }
+                    {cityFlag
+                      ? citiesList.map((city) => (
+                          <option key={city.id} value={city.id}>
+                            {city.name}
+                          </option>
+                        ))
+                      : null}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
-                    {cityRequired ? <div>{t("Form_field_required")}</div> : null}
+                    {cityRequired ? (
+                      <div>{t("Form_field_required")}</div>
+                    ) : null}
                   </div>
                 </Col>
               </Row>
               {locationMsg ? <p>{locationMsg}</p> : null}
             </Form.Group>
             <div className="d-flex justify-content-center">
-              <button className="w-90 w-md-50 my-1 py-3 h6" style={searchAreaBtn}>
+              <button
+                className="w-90 w-md-50 my-1 py-3 h6"
+                style={searchAreaBtn}
+              >
                 {t("FormAddressScreen__btn")}
               </button>
             </div>
           </Form>
         </>
-      }
-
+      )}
     </>
   );
 }

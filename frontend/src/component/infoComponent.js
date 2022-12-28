@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../component/Loader";
-import ErrorMessage from "../component/ErrorMessage";
-import { Button, Modal } from "react-bootstrap";
+import Divider from "../admin/Divider";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
@@ -22,12 +20,6 @@ function InfoComponent(props) {
 
   const [isDescription, setIsDescription] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-
-  const handleClose = () => {
-    setModalShow(false);
-    dispatch({ type: SET_FLAG_INFO_FALSE });
-    dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
-  };
 
   useEffect(() => {
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
@@ -48,39 +40,93 @@ function InfoComponent(props) {
     }
   }, [desc]);
 
+  //styling
+  const mainContainer = {
+    position: "relative",
+    backgroundColor: "whitesmoke",
+    width: "80%",
+    maxWidth: "600px",
+    height: "60vh",
+  };
+
+  const modalOverlay = {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    background: "rgba(0, 0, 0, 0.5)",
+    display: "grid",
+    placeItems: "center",
+    transition: `all 0.3s linear`,
+    visibility: "hidden",
+    zIndex: "-1",
+  };
+
+  const showModalOverlay = {
+    ...modalOverlay,
+    visibility: "visible",
+    zIndex: "10",
+  };
+
+  const title = {
+    color: "black",
+    fontSize: "1.5rem",
+    fontWeight: "500",
+    textAlign: "center",
+    marginTop: "1rem",
+  };
+
+  const body = {
+    textAlign: "left",
+    marginLeft: "3rem",
+    marginRight: "3rem",
+    fontWeight: "400",
+  };
+
+  const closeBtn = {
+    position: "absolute",
+    bottom: "5%",
+    left: "50%",
+    transform: `translatex(-50%)`,
+    backgroundImage: `linear-gradient(171deg, rgba(234, 17, 59, 1) 45%, rgba(202, 71, 130, 1) 89%)`,
+    border: "none",
+    padding: "0.7rem",
+    minWidth: "250px",
+    borderRadius: "1rem",
+    color: "white",
+    textTransform: "uppercase",
+    fontWeight: "500",
+  };
+
   return (
     <>
       {loading ? (
-        <Loader />
+        <div></div>
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          <Modal
-            show={modalShow}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {props.title} {props.obj.name}
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <div style={showModalOverlay}>
+          <div style={mainContainer}>
+            <div style={title}>
+              {props.title} {props.obj.name}
+            </div>
+            <Divider />
+            <div>
               {success ? (
                 isDescription ? (
-                  desc.map((i) => <p key={i.id}> {i.description}</p>)
+                  desc.map((i) => (
+                    <p style={body} key={i.id}>
+                      {i.description}
+                    </p>
+                  ))
                 ) : (
-                  <p>{t("No_data")}</p>
+                  <p style={body}>{t("No_data")}</p>
                 )
               ) : null}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+            </div>
+            <button style={closeBtn} onClick={(e) => props.closeInfoHandler(e)}>
               {t("btn_close")}
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            </button>
+          </div>
         </div>
       )}
     </>

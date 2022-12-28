@@ -110,10 +110,10 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd8hasou37umn7q',
-#         'USER': 'tztcdslsriewtm',
-#         'PASSWORD': '40ce7a1c04cfe5371146a2d132ee56edb5a13cc67924344fecdfdab0db30896d',
-#         'HOST': 'ec2-54-194-211-183.eu-west-1.compute.amazonaws.com',
+#         'NAME': 'kuba',
+#         'USER': 'kuba',
+#         'PASSWORD': 'kuba1024@',
+#         'HOST': '10.0.0.110',
 #         'PORT' : '5432',        
 #     }
 # }

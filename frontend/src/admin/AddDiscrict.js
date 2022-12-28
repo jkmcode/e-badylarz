@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -8,6 +7,8 @@ import { Link } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useBackToLogin from "../component/useBackToLogin";
+import { Icon } from "@iconify/react";
+import FormInput from "./FormInput";
 
 import { addDiscrict } from "../actions/discrictsActions";
 import AddDescription from "./AddDescription";
@@ -19,7 +20,10 @@ import {
   SET_FLAG_DESC_TRUE,
   SET_FLAG_ADD_DESC_FALSE,
   SET_FLAG_ADD_DESC_TRUE,
+  TWO,
 } from "../constants/adminConstans";
+
+import { FormLayout, submitBtn } from "./AdminCSS";
 
 import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
 
@@ -33,6 +37,14 @@ function AddDiscrict() {
 
   const [nextDesc, setNextDesc] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
+
+  const [disctrictName, setDisctrictName] = useState("");
+
+  const [values, setValues] = useState({
+    name: "",
+    latitude: "",
+    longitude: "",
+  });
 
   const {
     register,
@@ -91,6 +103,43 @@ function AddDiscrict() {
     }
   }, [addDescFlag]);
 
+  const inputs = [
+    {
+      id: "1",
+      name: "name",
+      type: "text",
+      placeholder: t("AddDistrict_name_placeholder"),
+      errorMessage: t("AddDistrict_name_error_message"),
+      label: t("AddDistrict_label_name"),
+      pattern: "^[A-Za-z]{3,16}$",
+      required: true,
+    },
+    {
+      id: "2",
+      name: "latitude",
+      type: "text",
+      placeholder: t("AddShops_latitude_placeholder"),
+      errorMessage: t("AddDistrict_longitude_error_message"),
+      label: t("AddDistrict_label_latitude"),
+      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      required: true,
+    },
+    {
+      id: "3",
+      name: "longitude",
+      type: "text",
+      placeholder: t("AddShops_longitude_placeholder"),
+      errorMessage: t("AddDistrict_longitude_error_message"),
+      label: t("AddDistrict_label_longitude"),
+      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      required: true,
+    },
+  ];
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
   return (
     <>
       {loading ? (
@@ -108,125 +157,61 @@ function AddDiscrict() {
               success={true}
             />
           ) : null}
-          <Row className="align-items-center">
-            <Col>
-              <Link to="/dashboard/district" className="text-secondary">
-                {t("btn-return")}
-              </Link>
-            </Col>
-          </Row>
+          <Link
+            to="/dashboard/district"
+            style={{ color: "grey", textTransform: "uppercase" }}
+          >
+            <Icon icon="material-symbols:arrow-back-ios" />
+            {t("btn-return")}
+          </Link>
           <div className="d-flex justify-content-center display-6">
             {t("AddDiscrict_title")}
           </div>
-          <Form onSubmit={addhandleSubmit(onSubmit)}>
-            <Form.Group controlId="name">
-              <Form.Label className="form-msg-style ms-2">
-                {t("AddDistrict_label_name")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                className={errors.name ? "formInvalid" : null}
-                placeholder={t("AddDistrict_name_placeholder")}
-                {...register("name", {
-                  required: t("Form_field_required"),
-                  pattern: {
-                    // value: /^[A-Za-z1-9ąćĆśŚęłŁńóżŻźŹ ]+$/,
-                    value: NUMBERS_AND_NATIONAL_LETTERS,
-                    message: t("Form_letters_pl_and_digits"),
-                  },
-                  minLength: {
-                    value: 3,
-                    message: t("Form_minLength_3"),
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: t("Form_maxLength_30"),
-                  },
-                })}
-                onKeyUp={() => {
-                  trigger("name");
-                }}
-                name="name"
-              ></Form.Control>
-              {errors.name && (
-                <div className="text-danger form-msg-style">
-                  {errors.name.message}
-                </div>
-              )}
-            </Form.Group>
-            <hr />
-            <h6>{t("AddShops_title_geolocation")}</h6>
-            <Row>
-              <Col md={6}>
-                <Form.Group controlId="latitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_latitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.latitude ? "formInvalid" : null}
-                    placeholder={t("AddShops_latitude_placeholder")}
-                    {...register("latitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("latitude");
-                    }}
-                    name="latitude"
-                  ></Form.Control>
-                  {errors.latitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.latitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="longitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_longitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.longitude ? "formInvalid" : null}
-                    placeholder={t("AddShops_longitude_placeholder")}
-                    {...register("longitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("longitude");
-                    }}
-                    name="longitude"
-                  ></Form.Control>
-                  {errors.longitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.longitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
+          <form onSubmit={addhandleSubmit(onSubmit)}>
+            {inputs.map((input, index) => {
+              if (index === 0) {
+                return (
+                  <FormInput
+                    key={input.id}
+                    {...input}
+                    onChange={onChange}
+                    value={values[input.name]}
+                  />
+                );
+              }
+            })}
+            <div
+              style={{
+                fontWeight: "500",
+                marginTop: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
+              {t("AddShops_title_geolocation")}
+            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index > 0) {
+                  return (
+                    <>
+                      <FormInput
+                        key={input.id}
+                        {...input}
+                        onChange={onChange}
+                        value={values[input.name]}
+                      />
+                    </>
+                  );
+                }
+              })}
+            </FormLayout>
 
-            <div className="d-flex justify-content-end">
+            <div style={{ display: "flex", justifyContent: "center" }}>
               {nextDesc ? null : (
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3 "
-                >
-                  {t("btn-add")}
-                </Button>
+                <button style={submitBtn}>{t("btn-add")}</button>
               )}
             </div>
-          </Form>
+          </form>
           {nextDesc & descFlag ? (
             <AddDescription
               objId={idNewDistrict}

@@ -9,6 +9,9 @@ import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
 import { getFullDiscricts } from "../actions/discrictsActions";
 import useBackToLogin from "../component/useBackToLogin";
+import useResponsive from "../component/useResponsive";
+import { Icon } from "@iconify/react";
+import Divider from "./Divider";
 
 import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
@@ -16,10 +19,10 @@ import {
   CITI_ADD_DELETE,
   CITY_DESCRIPTION,
   SET_FLAG_DESC_FALSE,
-  SET_FLAG_DESC_TRUE,
-  SET_FLAG_ADD_DESC_TRUE,
-  SET_WINDOW_FLAG_DELETE,
+  TWO,
 } from "../constants/adminConstans";
+
+import { formLabel, formInput, submitBtn, FormLayout } from "./AdminCSS";
 
 import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
 
@@ -27,6 +30,7 @@ import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddCity() {
   useBackToLogin();
+  const { windowWidth } = useResponsive();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,15 +81,6 @@ function AddCity() {
     dispatch(addCiti(insertData));
   };
 
-  // useEffect(() => {
-  //   if (success) {
-  //     setTimeout(() => {
-  //       setIdNewDistrict(result[0].id);
-  //       setAddDescription(true);
-  //     }, TIME_SET_TIMEOUT);
-  //   }
-  // }, [success]);
-
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: CITI_ADD_DELETE });
@@ -103,12 +98,40 @@ function AddCity() {
     }
   }, [addDescFlag]);
 
+  //styling
+
+  const mainContainer = {
+    width: "100%",
+    backgroundColor: "whitesmoke",
+    borderRadius: "0.5rem",
+    padding: "1.5rem",
+  };
+
+  const formLayout = {
+    display: "grid",
+    gridTemplateColumns:
+      windowWidth > 800 ? `repeat(2, 1fr)` : `repeat(1, 1fr)`,
+    gridColumnGap: "1rem",
+  };
+
+  const msgError = {
+    fontStyle: "italic",
+    fontSize: "0.75rem",
+    margin: "0",
+    color: "red",
+  };
+
+  const geolocationTitle = {
+    fontSize: "1rem",
+    fontWeight: "500",
+  };
+
   return (
     <>
       {loading || descLoading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div style={mainContainer}>
           {error ? (
             <ErrorMessage
               msg={error}
@@ -138,173 +161,165 @@ function AddCity() {
               body={t("AddCity_body_window")}
             />
           ) : null}
+          <Link
+            style={{
+              color: "grey",
+              textTransform: "uppercase",
+              verticalAlign: "top",
+            }}
+            to={`/dashboard/district/${dscrictId}/edit`}
+          >
+            <Icon icon="material-symbols:arrow-back-ios" />
+            {t("btn-return")}
+          </Link>
 
-          <Row className="align-items-center">
-            <Col>
-              <Link
-                to={`/dashboard/district/${dscrictId}/edit`}
-                className="text-secondary"
-              >
-                {t("btn-return")}
-              </Link>
-            </Col>
-          </Row>
           <div className="d-flex justify-content-center display-6">
             {t("AddCiti_title")}
             {districtList.length === 0
               ? null
               : districtList.filter((i) => i.id === dscrictId)[0].name}
           </div>
-          <hr />
+          <Divider />
           <div>{t("AddCiti_subtitle")}</div>
-          <Form onSubmit={addhandleSubmit(onSubmit)}>
-            <Row>
-              <Col>
-                <Form.Group controlId="name">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddCiti_label_name")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder={t("AddCiti_name_placeholder")}
-                    {...register("name", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: NUMBERS_AND_NATIONAL_LETTERS,
-                        message: t("Form_letters_pl_and_digits"),
-                      },
-                      minLength: {
-                        value: 3,
-                        message: t("Form_minLength_3"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("name");
-                    }}
-                    name="name"
-                  ></Form.Control>
-                  {errors.name && (
-                    <div className="text-danger form-msg-style">
-                      {errors.name.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="post">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddCiti_label_post_code")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder={t("AddCiti_post_code_placeholder")}
-                    {...register("post", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        // value: /^t("Post_code_validate")+$/,
-                        value: /^[0-9A-Z -]+$/,
-                        message: t("Form_post_code"),
-                      },
-                      minLength: {
-                        value: 5,
-                        message: t("Form_minLength_5"),
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: t("Form_maxLength_10"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("post");
-                    }}
-                    name="post"
-                  ></Form.Control>
-                  {errors.post && (
-                    <div className="text-danger form-msg-style">
-                      {errors.post.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
+          <form onSubmit={addhandleSubmit(onSubmit)}>
+            <div style={formLayout}>
+              <div controlId="name">
+                <label htmlFor="name" style={formLabel}>
+                  {t("AddCiti_label_name")}
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  style={formInput}
+                  className={"formInput"}
+                  placeholder={t("AddCiti_name_placeholder")}
+                  {...register("name", {
+                    required: t("Form_field_required"),
+                    pattern: {
+                      value: NUMBERS_AND_NATIONAL_LETTERS,
+                      message: t("Form_letters_pl_and_digits"),
+                    },
+                    minLength: {
+                      value: 3,
+                      message: t("Form_minLength_3"),
+                    },
+                    maxLength: {
+                      value: 30,
+                      message: t("Form_maxLength_30"),
+                    },
+                  })}
+                  onKeyUp={() => {
+                    trigger("name");
+                  }}
+                  name="name"
+                ></input>
+                {errors.name && (
+                  <div style={msgError}>{errors.name.message}</div>
+                )}
+              </div>
+              <div controlId="post">
+                <label htmlFor="post" style={formLabel}>
+                  {t("AddCiti_label_post_code")}
+                </label>
+                <input
+                  type="text"
+                  id="post"
+                  style={formInput}
+                  className={"formInput"}
+                  placeholder={t("AddCiti_post_code_placeholder")}
+                  {...register("post", {
+                    required: t("Form_field_required"),
+                    pattern: {
+                      value: /^[0-9A-Z -]+$/,
+                      message: t("Form_post_code"),
+                    },
+                    minLength: {
+                      value: 5,
+                      message: t("Form_minLength_5"),
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: t("Form_maxLength_10"),
+                    },
+                  })}
+                  onKeyUp={() => {
+                    trigger("post");
+                  }}
+                  name="post"
+                ></input>
+                {errors.post && (
+                  <div style={msgError}>{errors.post.message}</div>
+                )}
+              </div>
+            </div>
 
-            <hr />
-            <h6>{t("AddShops_title_geolocation")}</h6>
-            <Row>
-              <Col md={6}>
-                <Form.Group controlId="latitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_latitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.latitude ? "formInvalid" : null}
-                    placeholder={t("AddShops_latitude_placeholder")}
-                    {...register("latitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("latitude");
-                    }}
-                    name="latitude"
-                  ></Form.Control>
-                  {errors.latitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.latitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="longitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AddShops_label_longitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.longitude ? "formInvalid" : null}
-                    placeholder={t("AddShops_longitude_placeholder")}
-                    {...register("longitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: /^[0-9.]+$/,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("longitude");
-                    }}
-                    name="longitude"
-                  ></Form.Control>
-                  {errors.longitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.longitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
+            <Divider />
+            <div style={geolocationTitle}>
+              {t("AddShops_title_geolocation")}
+            </div>
+            <FormLayout col={TWO}>
+              <div controlId="latitude">
+                <label htmlFor="latitude" style={formLabel}>
+                  {t("AddShops_label_latitude")}
+                </label>
+                <input
+                  type="text"
+                  id="latitude"
+                  style={formInput}
+                  className={"formInput"}
+                  placeholder={t("AddShops_latitude_placeholder")}
+                  {...register("latitude", {
+                    required: t("Form_field_required"),
+                    pattern: {
+                      value: /^[0-9.]+$/,
+                      message: t("Form_only_digits_or_dot"),
+                    },
+                  })}
+                  onKeyUp={() => {
+                    trigger("latitude");
+                  }}
+                  name="latitude"
+                ></input>
+                {errors.latitude && (
+                  <div style={msgError}>{errors.latitude.message}</div>
+                )}
+              </div>
+              <div controlId="longitude">
+                <label htmlFor="longitude" style={formLabel}>
+                  {t("AddShops_label_longitude")}
+                </label>
+                <input
+                  type="text"
+                  id="longitude"
+                  style={formInput}
+                  className={"formInput"}
+                  placeholder={t("AddShops_longitude_placeholder")}
+                  {...register("longitude", {
+                    required: t("Form_field_required"),
+                    pattern: {
+                      value: /^[0-9.]+$/,
+                      message: t("Form_only_digits_or_dot"),
+                    },
+                  })}
+                  onKeyUp={() => {
+                    trigger("longitude");
+                  }}
+                  name="longitude"
+                ></input>
+                {errors.longitude && (
+                  <div style={msgError}>{errors.longitude.message}</div>
+                )}
+              </div>
+            </FormLayout>
 
-            <div className="d-flex justify-content-end">
+            <div style={{ display: "flex", justifyContent: "center" }}>
               {windowFlag ? null : (
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3 "
-                >
+                <button type="submit" style={submitBtn}>
                   {t("btn-add")}
-                </Button>
+                </button>
               )}
             </div>
-          </Form>
+          </form>
           {windowFlag ? (
             <AddDescription objId={idNewDistrict} descType={CITY_DESCRIPTION} />
           ) : null}

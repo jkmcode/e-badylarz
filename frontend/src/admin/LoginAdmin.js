@@ -147,7 +147,7 @@ function LoginAdmin() {
 
             <div className="card-body">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div controlid="userName" className="mb-3">
+                <div controlid="userName" style={{ marginBottom: "1rem" }}>
                   <label
                     htmlFor="username"
                     style={{ fontStyle: "italic", fontSize: "0.875rem" }}
