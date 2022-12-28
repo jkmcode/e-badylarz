@@ -8,6 +8,7 @@ import { getFullDiscricts } from "../actions/discrictsActions";
 import Loader from "../component/Loader";
 import InfoComponent from "../component/infoComponent";
 import ErrorMessage from "../component/ErrorMessage";
+import useBackToLogin from "../component/useBackToLogin";
 
 import useResponsive from "../component/useResponsive";
 import DistrictTable from "./DistrictTable";
@@ -29,6 +30,12 @@ function AdminScreenDistrict() {
     { id: 1, name: t("Radio_true"), value: "1" },
     { id: 2, name: t("Radio_false"), value: "0" },
   ];
+
+  useBackToLogin();
+
+  useEffect(() => {
+    console.log("został uruchomiony AdminScreenDistrict");
+  });
 
   // fech data from Redux
   const discrictListRedux = useSelector((state) => state.districts);

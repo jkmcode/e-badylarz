@@ -75,10 +75,36 @@ class ShopsContactSerializer(serializers.ModelSerializer):
         model = ShopsContact
         fields = '__all__'   
 
+class CitiesNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Citis
+        fields = ["name"]
+
 class ShopSpotsSerializer(serializers.ModelSerializer):
+
+    # type = serializers.SerializerMethodField(read_only=True)
+
+    city = CitiesNameSerializer(many=False)
+
     class Meta:
         model = ShopsSpot
-        fields = '__all__'
+        fields = [
+            "name", 
+            "street",
+            "no_building",
+            "city",
+            "id",
+            "is_active",
+            "post_code",
+            "post",
+            "latitude",
+            "longitude",
+            "photo",
+            "delivery",
+            "range"]
+
+    # def get_type(self, obj):
+    #     return "Taka proba"
 
 class AreasSerializer(serializers.ModelSerializer):
     class Meta:

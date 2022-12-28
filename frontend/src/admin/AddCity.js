@@ -8,6 +8,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
 import { getFullDiscricts } from "../actions/discrictsActions";
+import useBackToLogin from "../component/useBackToLogin";
 
 import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
@@ -20,11 +21,12 @@ import {
   SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
 
-import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans"
+import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddCity() {
+  useBackToLogin();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();

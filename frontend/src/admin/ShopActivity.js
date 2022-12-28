@@ -13,11 +13,14 @@ import {
   InsertImage,
 } from "../actions/adminActions";
 import UploadImage from "../component/UploadImage";
+import useBackToLogin from "../component/useBackToLogin";
 
 import {
   DELETE_IMAGE_REDUX,
   SET_FLAG_IMAGE_TRUE,
   GET_SHOPS_LIST_DELETE,
+  ADD_SHOP_DELETE_SUCCESS,
+  EDIT_SHOP_DELETE,
 } from "../constants/adminConstans";
 
 import {
@@ -35,6 +38,7 @@ import {
 import { Icon } from "@iconify/react";
 
 function AddShops() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },
@@ -199,21 +203,30 @@ function AddShops() {
 
   // navigate to ShopAdmin
   useEffect(() => {
-    if (successAdd && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successUpdateShop && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (
-      successUpdateShop &&
-      isImage &&
-      successInsertImage &&
-      shopImageFlag
-    ) {
-      navigate("/dashboard/shops/shops");
+    if (successAdd || successUpdateShop) {
+      dispatch({ type: ADD_SHOP_DELETE_SUCCESS })
+      dispatch({ type: EDIT_SHOP_DELETE })
+      dispatch({ type: GET_SHOPS_LIST_DELETE })
+      navigate("/dashboard/shops");
     }
-  }, [successAdd, isImage, successInsertImage, successUpdateShop]);
+
+    // if (successAdd && !isImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (successUpdateShop && !isImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (
+    //   successUpdateShop &&
+    //   isImage &&
+    //   successInsertImage &&
+    //   shopImageFlag
+    // ) {
+    //   navigate("/dashboard/shops/shops");
+    // }
+
+  }, [successAdd, successUpdateShop]);
+  //}, [successAdd, isImage, successInsertImage, successUpdateShop]);
 
   //style
 

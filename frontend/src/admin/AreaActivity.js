@@ -6,12 +6,13 @@ import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import { Row, Col, Button, Form } from "react-bootstrap";
+import useBackToLogin from "../component/useBackToLogin";
 
 import { addArea, getAreaToEdit } from "../actions/areaAction";
 
 import {
   ADD_AREA_DELETE,
-  GET_AREA_LIST_DELETE
+  TIME_AUT
 } from "../constants/areaConstans";
 
 import {
@@ -29,6 +30,7 @@ import {
 import { Icon } from "@iconify/react";
 
 function AddArea() {
+  useBackToLogin();
   const {
     register,
     formState: { errors },
@@ -42,10 +44,8 @@ function AddArea() {
   const params = useParams();
   const navigate = useNavigate();
 
+  const editAreaParam = params.edit;
   const addAreaParam = params.add;
-  const Id = params.id
-
-  //console.log('id------>', Id)
 
   const [successFlag, setSuccessFlag] = useState(false);
 
@@ -56,19 +56,11 @@ function AddArea() {
   const addArea12 = useSelector((state) => state.areaActivity);
   const { loading, success, error } = addArea12;
 
-  const getArea = useSelector((state) => state.areaToEdit);
-  const {
-    loading: loadingAreaToEdit,
-    success: successAreaToEdit,
-    error: errorAreaToEdit,
-    area
-  } = getArea;
-
 
   const onSubmit = (data) => {
     //console.log("działam ---->", addAreaParam)
-    if (addAreaParam === 'add') {
-      console.log("działam ---->", addAreaParam)
+    if (addAreaParam === "add") {
+      console.log("działam ---->", addAreaParam);
       // dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
         addArea({
@@ -86,25 +78,7 @@ function AddArea() {
           add: true,
         })
       );
-    } else {
-      console.log("działam ---->", addAreaParam)
-      dispatch(
-        addArea({
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
-          creator: userInfo.id,
-          bankAccount: data.bankAccount,
-          add: false,
-          id: Id,
-        }))
-    }
+    } else { console.log("działam ---->", addAreaParam) }
   }
 
 
@@ -123,58 +97,29 @@ function AddArea() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        setSuccessFlag(true)
+        setSuccessFlag(true);
         dispatch({ type: ADD_AREA_DELETE });
-      }, TIME_AUT_SUCCESS);
+      }, TIME_AUT);
     }
   }, [success]);
 
   useEffect(() => {
-    if ((addAreaParam === 'edit')) {
-      dispatch(
-        getAreaToEdit(Id)
-      );
-    }
-  }, []);
-
-  useEffect(() => {
     if (successFlag) {
-      dispatch({ type: GET_AREA_LIST_DELETE });
       navigate("/dashboard/areas");
     }
   }, [successFlag]);
 
-  //Reset Default data
-  useEffect(() => {
-    if (successAreaToEdit) {
-      reset({
-        name: area.name,
-        nip: area.nip,
-        city: area.city,
-        street: area.street,
-        number: area.no_building,
-        postCode: area.post_code,
-        post: area.post,
-        bankAccount: area.bank_account,
-        latitude: area.latitude,
-        longitude: area.longitude,
-      });
-    }
-  }, [successAreaToEdit]);
-
   return (
     <>
-      {loading || loadingAreaToEdit ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
-          {errorAreaToEdit ? <ErrorMessage msg={errorAreaToEdit} timeOut={TIME_AUT_ERROR} /> : null}
-
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT} /> : null}
           {success ? (
             <ErrorMessage
-              msg={addAreaParam === 'add' ? t("AddArea_success") : t("EditArea_success")}
-              timeOut={TIME_AUT_SUCCESS}
+              msg={t("AddArea_success")}
+              timeOut={TIME_AUT}
               variant="success"
               success={true}
             />
@@ -188,7 +133,7 @@ function AddArea() {
             </Col>
           </Row>
           <div className="d-flex justify-content-center display-6">
-            {addAreaParam === "edit"
+            {editAreaParam === "edit"
               ? t("AreaActivity_EditAreas_title")
               : t("AreaActivity_AddAreas_title")}
           </div>
@@ -561,7 +506,7 @@ function AddArea() {
                 : null}
             </Row> */}
             <div className="d-flex justify-content-end">
-              {addAreaParam === "edit" ? (
+              {editAreaParam === "edit" ? (
                 <Button
                   type="submit"
                   variant="warning"
@@ -580,10 +525,7 @@ function AddArea() {
               )}
             </div>
           </Form>
-
-
         </div>
-
       )}
     </>
   );

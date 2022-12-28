@@ -16,8 +16,10 @@ import {
 } from "../constants/adminConstans";
 import { Icon } from "@iconify/react";
 import useResponsive from "../component/useResponsive";
+import useBackToLogin from "../component/useBackToLogin";
 
 function AdminShops() {
+  useBackToLogin();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { windowWidth } = useResponsive();
@@ -27,7 +29,7 @@ function AdminShops() {
 
   // fech data from Redux
   const shopListRedux = useSelector((state) => state.shopList);
-  const { loading, shopList, error } = shopListRedux;
+  const { loading, shopList, error, success } = shopListRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -321,102 +323,104 @@ function AdminShops() {
                   </thead>
 
                   <tbody>
-                    {shopList.map((shop) => (
-                      <tr key={shop.id}>
-                        {activeShops & !shop.is_active ? (
-                          <>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.name}</p>
-                            </td>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.city}</p>
-                              <p style={tableContent}>
-                                {shop.street} {shop.no_building}
-                              </p>
-                            </td>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.nip}</p>
-                            </td>
-                            <td style={tableActiveLinkContainer}>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <span style={tableBadge}>
-                                  {t("status_inactive")}
-                                </span>
-                              </div>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <button
-                                style={btnSuccess}
-                                onClick={() => activeHandler(shop.id)}
-                              >
-                                {t("btn_active")}
-                              </button>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <Link to={`${shop.id}/edit`} style={btnWarning}>
-                                {t("btn_edit")}
-                              </Link>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <Link to={`${shop.id}/contact`} style={btnInfo}>
-                                {t("btn_contact")}
-                              </Link>
-                            </td>
-                          </>
-                        ) : null}
-                        {!activeShops & shop.is_active ? (
-                          <>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.name}</p>
-                            </td>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.city}</p>
-                              <p style={tableContent}>
-                                {shop.street} {shop.no_building}
-                              </p>
-                            </td>
-                            <td style={tableContentContainer}>
-                              <p style={tableContent}>{shop.nip}</p>
-                            </td>
-                            <td style={tableActiveLinkContainer}>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <span style={tableBadge}>
-                                  {t("status_inactive")}
-                                </span>
-                              </div>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <button
-                                style={btnDanger}
-                                onClick={() => unActiveHandler(shop.id)}
-                              >
-                                {t("btn_unactive")}
-                              </button>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <Link to={`${shop.id}/edit`} style={btnWarning}>
-                                {t("btn_edit")}
-                              </Link>
-                            </td>
-                            <td style={tableLinkContainer}>
-                              <Link to={`${shop.id}/contact`} style={btnInfo}>
-                                {t("btn_contact")}
-                              </Link>
-                            </td>
-                          </>
-                        ) : null}
-                      </tr>
-                    ))}
+                    {success ?
+                      shopList.map((shop) => (
+                        <tr key={shop.id}>
+                          {activeShops & !shop.is_active ? (
+                            <>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.name}</p>
+                              </td>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.city}</p>
+                                <p style={tableContent}>
+                                  {shop.street} {shop.no_building}
+                                </p>
+                              </td>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.nip}</p>
+                              </td>
+                              <td style={tableActiveLinkContainer}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <span style={tableBadge}>
+                                    {t("status_inactive")}
+                                  </span>
+                                </div>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <button
+                                  style={btnSuccess}
+                                  onClick={() => activeHandler(shop.id)}
+                                >
+                                  {t("btn_active")}
+                                </button>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <Link to={`${shop.id}/edit`} style={btnWarning}>
+                                  {t("btn_edit")}
+                                </Link>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <Link to={`${shop.id}/contact`} style={btnInfo}>
+                                  {t("btn_contact")}
+                                </Link>
+                              </td>
+                            </>
+                          ) : null}
+                          {!activeShops & shop.is_active ? (
+                            <>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.name}</p>
+                              </td>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.city}</p>
+                                <p style={tableContent}>
+                                  {shop.street} {shop.no_building}
+                                </p>
+                              </td>
+                              <td style={tableContentContainer}>
+                                <p style={tableContent}>{shop.nip}</p>
+                              </td>
+                              <td style={tableActiveLinkContainer}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <span style={tableBadge}>
+                                    {t("status_inactive")}
+                                  </span>
+                                </div>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <button
+                                  style={btnDanger}
+                                  onClick={() => unActiveHandler(shop.id)}
+                                >
+                                  {t("btn_unactive")}
+                                </button>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <Link to={`${shop.id}/edit`} style={btnWarning}>
+                                  {t("btn_edit")}
+                                </Link>
+                              </td>
+                              <td style={tableLinkContainer}>
+                                <Link to={`${shop.id}/contact`} style={btnInfo}>
+                                  {t("btn_more")}
+                                </Link>
+                              </td>
+                            </>
+                          ) : null}
+                        </tr>
+                      ))
+                      : null}
                   </tbody>
                 </table>
               </div>

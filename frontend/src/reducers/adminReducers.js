@@ -206,6 +206,22 @@ export const contactListReducer = (state = { ListOfContact: [] }, action) => {
   }
 };
 
+
+export const shopSpotUpdateListReducer = (state = { shopSpotList: [] }, action) => {
+  switch (action.type) {
+    case EDIT_SHOP_SPOT_REQUEST:
+      return { loading: true, success: false, shopSpotList: [] };
+    case EDIT_SHOP_SPOT_SUCCESS:
+      return { loading: false, success: true, shopSpotList: action.payload };
+    case EDIT_SHOP_SPOT_DELETE:
+      return { shopSpotList: [] };
+    case EDIT_SHOP_SPOT_FAIL:
+      return { loading: false, error: action.payload, success: false, };
+    default:
+      return state;
+  }
+};
+
 export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
   switch (action.type) {
     case GET_SHOPS_LIST_REQUEST:

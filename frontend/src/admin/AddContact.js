@@ -21,6 +21,12 @@ import {
   SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
 
+import {
+  NUMBERS_AND_NATIONAL_LETTERS,
+  ONLY_NUMBER,
+  EMAIL_FORMAT
+} from "../constants/formValueConstans"
+
 function AddContact() {
 
   const {
@@ -93,38 +99,35 @@ function AddContact() {
     setContactOrSpot(true)
   };
 
-  const activeSpotHandler = (id) =>{
+  const activeSpotHandler = (id) => {
     setInfoWindowFlag(true)
     setIdSpotActive(id)
     setContactOrSpot(false)
   }
 
-  const newHendler =() =>{
+  const newHendler = () => {
     setEditContact(false)
     setNewContact(!newContact)
     reset({})
   }
 
-  const newHendlerSpot =() =>{
-    // console.log("TEST !!!!!!!!!!  ----> drugi")
-    navigate(`/dashboard/shops/shops/spot/${shopId}/add`)
+  const newHendlerSpot = () => {
+    navigate(`/dashboard/shops/spot/${shopId}/add`)
   }
 
-  const editShopHandler =()=>{
-    // console.log("TEST !!!!!!!!!!")
-    navigate(`/dashboard/shops/shops/${shopId}/edit`)
+  const editShopHandler = () => {
+    navigate(`/dashboard/shops/${shopId}/edit`)
   }
 
-  const editSpotHandler =(id)=>{
-    // console.log("TEST !!!!!!!!!! - edycja punktu ",id)
-    navigate(`/dashboard/shops/shops/spot/${shopId}/edit/${id}`)
+  const editSpotHandler = (id) => {
+    navigate(`/dashboard/shops/spot/${shopId}/edit/${id}`)
   }
 
-  const editHandler =(id) =>{
+  const editHandler = (id) => {
     setNewContact(true)
     setEditContact(true)
-    ListOfContact.map((i) =>{
-      if (i.id ===id) {
+    ListOfContact.map((i) => {
+      if (i.id === id) {
         setIdContact(id)
         reset({
           firstName: i.name,
@@ -133,45 +136,45 @@ function AddContact() {
           phone: i.phone,
           description: i.description,
         });
-      }     
+      }
     })
   }
   // Change status contact & spot and close infoWindow
   useEffect(() => {
-    if(contactOrSpot){
-      if (windowFlag===true & activeContact) {  
-        console.log("windowFlag --> ",windowFlag,"activeContact-->",activeContact)  
+    if (contactOrSpot) {
+      if (windowFlag === true & activeContact) {
+        console.log("windowFlag --> ", windowFlag, "activeContact-->", activeContact)
         dispatch(
           unOrActiveList({
             Id: idContactActive,
-            shop_id:shopId,
+            shop_id: shopId,
             active: false,
             userId: userInfo.id,
             objType: SHOP_CONTACT_DESCRIPTION,
             kind: "Inactive contact",
-        }));
+          }));
       }
-     if (windowFlag===true & !activeContact) {  
-          console.log("windowFlag --> ",windowFlag,"activeContact-->",activeContact)
-          dispatch(
-            unOrActiveList({
-              Id: idContactActive,
-              shop_id:shopId,
-              active: true,
-              userId: userInfo.id,
-              objType: SHOP_CONTACT_DESCRIPTION,
-              kind: "Active contact",
-            })
-          );
+      if (windowFlag === true & !activeContact) {
+        console.log("windowFlag --> ", windowFlag, "activeContact-->", activeContact)
+        dispatch(
+          unOrActiveList({
+            Id: idContactActive,
+            shop_id: shopId,
+            active: true,
+            userId: userInfo.id,
+            objType: SHOP_CONTACT_DESCRIPTION,
+            kind: "Active contact",
+          })
+        );
       }
 
-    }else{
-      if (windowFlag===true & !activeSpot) {  
-        console.log("windowFlag --> ",windowFlag,"activeSpot-->",activeContact)
+    } else {
+      if (windowFlag === true & !activeSpot) {
+        console.log("windowFlag --> ", windowFlag, "activeSpot-->", activeContact)
         dispatch(
           unOrActiveList({
             Id: idSpotActive,
-            shop_id:shopId,
+            shop_id: shopId,
             active: true,
             userId: userInfo.id,
             objType: SHOP_SPOT_DESCRIPTION,
@@ -179,12 +182,12 @@ function AddContact() {
           })
         );
       }
-     if (windowFlag===true & activeSpot) {  
-        console.log("windowFlag --> ",windowFlag,"activeSpot-->",activeContact)
+      if (windowFlag === true & activeSpot) {
+        console.log("windowFlag --> ", windowFlag, "activeSpot-->", activeContact)
         dispatch(
           unOrActiveList({
             Id: idSpotActive,
-            shop_id:shopId,
+            shop_id: shopId,
             active: false,
             userId: userInfo.id,
             objType: SHOP_SPOT_DESCRIPTION,
@@ -194,8 +197,8 @@ function AddContact() {
       }
 
     }
-    
-   
+
+
     setInfoWindowFlag(false)
   }, [dispatch, windowFlag]);
 
@@ -210,9 +213,9 @@ function AddContact() {
 
   //   // Delete spots list after activation or deactivation
   // useEffect(() => {
-     
+
   //       dispatch({ type: GET_CONTACT_LIST_DELETE });
-      
+
   // }, []);
 
   // fetching list of contact & spots from DB
@@ -226,51 +229,51 @@ function AddContact() {
   }, [dispatch, ListOfContact.length, shopSpotList.length]);
 
   // fetching shop from DB 
-   useEffect(() => {
+  useEffect(() => {
     if (shopList.length === 0) {
       dispatch(getShops());
     }
-   }, [dispatch, shopList.length]);
+  }, [dispatch, shopList.length]);
 
-   useEffect(() => {
+  useEffect(() => {
     dispatch({ type: GET_SOPTS_LIST_DELETE });
     dispatch({ type: GET_CONTACT_LIST_DELETE });
-   }, []);
+  }, []);
 
   const onSubmit = (data) => {
-    if(editContact){
-        const insertData = {
-          shop_id: shopId,
-          Id: idContact,
-          editing:true, 
-          firstName: data.firstName,
-          surname: data.surname,
-          email: data.email,
-          phone: data.phone,
-          description:data.description,
-          creator: userInfo.id,
-          modifier: userInfo.id,
-        }
-        setEditContact(false)
-        setNewContact(false)
-        dispatch(addContact(insertData));
-      } 
-     else {
-        const insertData = {
-          shop_id: shopId,
-          editing:false, 
-          firstName: data.firstName,
-          surname: data.surname,
-          email: data.email,
-          phone: data.phone,
-          description:data.description,
-          creator: userInfo.id,
-          modifier: userInfo.id,
-        }
-        setNewContact(false)
-        setEditContact(false)
-        dispatch(addContact(insertData));
-      };
+    if (editContact) {
+      const insertData = {
+        shop_id: shopId,
+        Id: idContact,
+        editing: true,
+        firstName: data.firstName,
+        surname: data.surname,
+        email: data.email,
+        phone: data.phone,
+        description: data.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      }
+      setEditContact(false)
+      setNewContact(false)
+      dispatch(addContact(insertData));
+    }
+    else {
+      const insertData = {
+        shop_id: shopId,
+        editing: false,
+        firstName: data.firstName,
+        surname: data.surname,
+        email: data.email,
+        phone: data.phone,
+        description: data.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      }
+      setNewContact(false)
+      setEditContact(false)
+      dispatch(addContact(insertData));
+    };
   };
 
   // style
@@ -286,37 +289,37 @@ function AddContact() {
         <Loader />
       ) : (
         <Row className="gx-0 ">
-          {infoWindowFlag & contactOrSpot ? 
+          {infoWindowFlag & contactOrSpot ?
             <InfoWindow
-                title={t("Window_title")}
-                body={
-                  !activeContact
-                      ? t("AdminShops_activate_shop_InfoWindow_body")
-                      : t("AdminShops_inactivate_shop_InfoWindow_body")
-                  }
-              />  
-              :null       
+              title={t("Window_title")}
+              body={
+                !activeContact
+                  ? t("AdminShops_activate_shop_InfoWindow_body")
+                  : t("AdminShops_inactivate_shop_InfoWindow_body")
+              }
+            />
+            : null
           }
-          {infoWindowFlag & !contactOrSpot ? 
+          {infoWindowFlag & !contactOrSpot ?
             <InfoWindow
-                title={t("Window_title")}
-                body={
-                  !activeSpot
-                      ? t("AdminShops_activate_shop_InfoWindow_body")
-                      : t("AdminShops_inactivate_shop_InfoWindow_body")
-                  }
-              />  
-              :null       
+              title={t("Window_title")}
+              body={
+                !activeSpot
+                  ? t("AdminShops_activate_shop_InfoWindow_body")
+                  : t("AdminShops_inactivate_shop_InfoWindow_body")
+              }
+            />
+            : null
           }
           <Col lg={4}>
             <div className="mx-2 bg-container mt-5 p-4 rounded">
-              {error ? <ErrorMessage msg={error} timeOut={4000} />             
+              {error ? <ErrorMessage msg={error} timeOut={4000} />
                 : activeError ? <ErrorMessage msg={activeError} timeOut={4000} />
-                : shopListError ? <ErrorMessage msg={shopListError} timeOut={4000} />              
-                : spotListError ? <ErrorMessage msg={spotListError} timeOut={4000} />
-                :null}             
-              
-              <Link to="/dashboard/shops/shops" className="text-dark h6">
+                  : shopListError ? <ErrorMessage msg={shopListError} timeOut={4000} />
+                    : spotListError ? <ErrorMessage msg={spotListError} timeOut={4000} />
+                      : null}
+
+              <Link to="/dashboard/shops/" className="text-dark h6">
                 <Icon icon="ion:arrow-back" />
                 {t("btn-return")}
               </Link>
@@ -325,60 +328,60 @@ function AddContact() {
               </div>
 
 
-                     {/* Main data   */}
+              {/* Main data   */}
               {/* Name */}
               {shopList.length === 0 ? null
-              :
-              <>
-                <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
-                      {t("AddContact_name")}:
-                  <div className="text-dark h5">                 
-                    {shopList.filter((shop) => shop.id === shopId)[0].name}
+                :
+                <>
+                  <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
+                    {t("AddContact_name")}:
+                    <div className="text-dark h5">
+                      {shopList.filter((shop) => shop.id === shopId)[0].name}
+                    </div>
                   </div>
-                </div>
-                {/* NIP */}
-                <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
-                      {t("AddContact_nip")}:
-                  <div className="text-dark h5">
-                    {shopList.filter((shop) => shop.id === shopId)[0].nip}
+                  {/* NIP */}
+                  <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
+                    {t("AddContact_nip")}:
+                    <div className="text-dark h5">
+                      {shopList.filter((shop) => shop.id === shopId)[0].nip}
+                    </div>
                   </div>
-                </div>
-                {/* Address */}
-                <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
-                      {t("AddContact_address")}:
-                  <div className="text-dark h6">
-                    {shopList.filter((shop) => shop.id === shopId)[0].city}, { space }
-                    {shopList.filter((shop) => shop.id === shopId)[0].street} { space }
-                    {shopList.filter((shop) => shop.id === shopId)[0].no_building}, { space }
-                    {shopList.filter((shop) => shop.id === shopId)[0].post_code} { space }
-                    {shopList.filter((shop) => shop.id === shopId)[0].post} 
+                  {/* Address */}
+                  <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
+                    {t("AddContact_address")}:
+                    <div className="text-dark h6">
+                      {shopList.filter((shop) => shop.id === shopId)[0].city}, {space}
+                      {shopList.filter((shop) => shop.id === shopId)[0].street} {space}
+                      {shopList.filter((shop) => shop.id === shopId)[0].no_building}, {space}
+                      {shopList.filter((shop) => shop.id === shopId)[0].post_code} {space}
+                      {shopList.filter((shop) => shop.id === shopId)[0].post}
+                    </div>
                   </div>
-                </div>                                 
-                {/* GPS */}
-                <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
-                      {t("AddContact_GPS")}:
-                  <div className="text-dark h6">
-                    {shopList.filter((shop) => shop.id === shopId)[0].latitude}, { space }
-                    {shopList.filter((shop) => shop.id === shopId)[0].longitude}
+                  {/* GPS */}
+                  <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
+                    {t("AddContact_GPS")}:
+                    <div className="text-dark h6">
+                      {shopList.filter((shop) => shop.id === shopId)[0].latitude}, {space}
+                      {shopList.filter((shop) => shop.id === shopId)[0].longitude}
+                    </div>
                   </div>
-                </div> 
-                {/* Bank account*/}
-                <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
-                      {t("AddContact_bank")}:
-                  <div className="text-dark h6">
-                    {shopList.filter((shop) => shop.id === shopId)[0].bank_account}
+                  {/* Bank account*/}
+                  <div className=" text-secondary text-xxs font-weight-bolder opacity-7">
+                    {t("AddContact_bank")}:
+                    <div className="text-dark h6">
+                      {shopList.filter((shop) => shop.id === shopId)[0].bank_account}
+                    </div>
                   </div>
-                </div> 
-                <Button
-                                    variant="success"
-                                    className="rounded my-3"
-                                    onClick={() => editShopHandler()}
-                                    
-                        >
-                         {t("btn-change")}
-                </Button>
-                <img className="img-contact" src={Rocket}></img>
-              </>
+                  <Button
+                    variant="success"
+                    className="rounded my-3"
+                    onClick={() => editShopHandler()}
+
+                  >
+                    {t("btn-change")}
+                  </Button>
+                  <img className="img-contact" src={Rocket}></img>
+                </>
               }
             </div>
           </Col>
@@ -388,26 +391,26 @@ function AddContact() {
                 <div className="px-3">{t("AddContact_contactList")}</div>
               </div>
               <div className="d-flex justify-content-between">
-                                  <button
-                                    className="text-xs text-success"
-                                    onClick={() => newHendler()}
-                                    >
-                                    {!newContact ?
-                                    t("AddContact_btn_add")
-                                    : editContact ? 
-                                        t("AddContact_btn_close_edit")
-                                      : t("AddContact_btn_close")}
-                                </button>
-                                                     
-                                <button
-                                    className="text-xs text-danger"
-                                    onClick={() => setActiveContact(!activeContact)}
-                                    >
-                                    {activeContact ? 
-                                    t("AddContact_show_unactive") 
-                                    : t("AddContact_show_active")}
-                                </button>
-                               
+                <button
+                  className="text-xs text-success"
+                  onClick={() => newHendler()}
+                >
+                  {!newContact ?
+                    t("AddContact_btn_add")
+                    : editContact ?
+                      t("AddContact_btn_close_edit")
+                      : t("AddContact_btn_close")}
+                </button>
+
+                <button
+                  className="text-xs text-danger"
+                  onClick={() => setActiveContact(!activeContact)}
+                >
+                  {activeContact ?
+                    t("AddContact_show_unactive")
+                    : t("AddContact_show_active")}
+                </button>
+
 
               </div>
 
@@ -429,10 +432,10 @@ function AddContact() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ListOfContact.length !==0 ? 
-                      ListOfContact.map((contact) => (
-                        <tr key={contact.id}>
-                          {contact.is_active & activeContact ? 
+                  {ListOfContact.length !== 0 ?
+                    ListOfContact.map((contact) => (
+                      <tr key={contact.id}>
+                        {contact.is_active & activeContact ?
                           <>
                             <td>{contact.name} {contact.surname}</td>
                             <td>{contact.phone}</td>
@@ -443,26 +446,26 @@ function AddContact() {
                               </span>
                             </td>
                             <td className="align-middle">
-                                    <button
-                                      style={btnDelete}
-                                      className="text-xs text-danger"
-                                      onClick={() => unActiveHandler(contact.id)}
-                                    >
-                                      {t("btn_unactive")}
-                                    </button>
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-danger"
+                                onClick={() => unActiveHandler(contact.id)}
+                              >
+                                {t("btn_unactive")}
+                              </button>
                             </td>
                             <td className="align-middle">
-                                    <button
-                                      style={btnDelete}
-                                      className="text-xs text-worning"
-                                      onClick={() => editHandler(contact.id)}
-                                    >
-                                      {t("btn_edit")}
-                                    </button>
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-worning"
+                                onClick={() => editHandler(contact.id)}
+                              >
+                                {t("btn_edit")}
+                              </button>
                             </td>
-                          </>    
+                          </>
                           : null}
-                          {!contact.is_active & !activeContact ? 
+                        {!contact.is_active & !activeContact ?
                           <>
                             <td>{contact.name} {contact.surname}</td>
                             <td>{contact.phone}</td>
@@ -473,260 +476,260 @@ function AddContact() {
                               </span>
                             </td>
                             <td className="align-middle">
-                                    <button
-                                      style={btnDelete}
-                                      className="text-xs text-danger"
-                                      onClick={() => activeHandler(contact.id)}
-                                    >
-                                      {t("btn_active")}
-                                    </button>
-                              </td>
-                          </>    
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-danger"
+                                onClick={() => activeHandler(contact.id)}
+                              >
+                                {t("btn_active")}
+                              </button>
+                            </td>
+                          </>
                           : null}
-                        </tr>
-                      ))                 
-                
-                  :t("No_data") }
+                      </tr>
+                    ))
+
+                    : t("No_data")}
 
                 </tbody>
               </Table>
-              {newContact ? 
-                            <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
-                            <button
-                                className="text-xs text-success"
-                                onClick={() => setNewContact(!newContact)}
-                                  >
-                                      {editContact ? 
-                                      t("AddContact_btn_close_edit") 
-                                      : t("AddContact_btn_close")}
-                              </button>
-                            <div className="d-flex justify-content-center h4">
-                                <div className="px-3">
-                                  {editContact ? 
-                                  t("AddContact_edit_title")
-                                  :t("AddContact_new_title")}
-                                </div>
-                            </div>
-                              <Col md={12} lg={3}>
-                                <Form.Group controlId="firstName">
-                                  <Form.Label className="form-msg-style ms-2">
-                                    {t("AddContact_label_name")}
-                                  </Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    className={errors.firstName ? "formInvalid" : null}
-                                    placeholder={t("AddContact_name_placeholder")}
-                                    {...register("firstName", {
-                                      required: t("Form_field_required"),
-                                      pattern: {
-                                        value: /^[A-Za-z0-9ąśŚćĆęłŁńóżŻźŹ ]+$/,
-                                        message: t("Form_letters_pl_and_digits"),
-                                      },
-                                      minLength: {
-                                        value: 3,
-                                        message: t("Form_minLength_3"),
-                                      },
-                                      maxLength: {
-                                        value: 14,
-                                        message: t("Form_maxLength_14"),
-                                      },
-                                    })}
-                                    onKeyUp={() => {
-                                      trigger("firstName");
-                                    }}
-                                    name="firstName"
-                                  ></Form.Control>
-                                  {errors.firstName && (
-                                    <div className="text-danger form-msg-style">
-                                      {errors.firstName.message}
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                              <Col md={12} lg={3}>
-                                <Form.Group controlId="surname">
-                                  <Form.Label className="form-msg-style ms-2">
-                                    {t("AddContact_label_surname")}
-                                  </Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    className={errors.surname ? "formInvalid" : null}
-                                    placeholder={t("AddContact_surname_placeholder")}
-                                    {...register("surname", {
-                                      required: t("Form_field_required"),
-                                      pattern: {
-                                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
-                                        message: t("Form_letters_pl_and_digits"),
-                                      },
-                                      minLength: {
-                                        value: 3,
-                                        message: t("Form_minLength_3"),
-                                      },
-                                      maxLength: {
-                                        value: 30,
-                                        message: t("Form_maxLength_30"),
-                                      },
-                                    })}
-                                    onKeyUp={() => {
-                                      trigger("surname");
-                                    }}
-                                    name="surname"
-                                  ></Form.Control>
-                                  {errors.surname && (
-                                    <div className="text-danger form-msg-style">
-                                      {errors.surname.message}
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                              <Col md={12} lg={3}>
-                                <Form.Group controlId="email">
-                                  <Form.Label className="form-msg-style ms-2">
-                                    {t("AddContact_label_email")}
-                                  </Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    className={errors.email ? "formInvalid" : null}
-                                    placeholder={t("AddContact_email_placeholder")}
-                                    {...register("email", {
-                                      required: t("Form_field_required"),
-                                      pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: t("Form_inproper_pattern_email"),
-                                      },
-                                    })}
-                                    onKeyUp={() => {
-                                      trigger("email");
-                                    }}
-                                    name="email"
-                                  ></Form.Control>
-                                  {errors.email && (
-                                    <div className="text-danger form-msg-style">
-                                      {errors.email.message}
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                              <Col md={12} lg={3}>
-                                <Form.Group controlId="phone">
-                                  <Form.Label className="form-msg-style ms-2">
-                                    {t("AddContact_label_phone")}
-                                  </Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    className={errors.phone ? "formInvalid" : null}
-                                    placeholder={t("AddContact_phone_placeholder")}
-                                    {...register("phone", {
-                                      required: t("Form_field_required"),
-                                      pattern: {
-                                        value: /^[0-9+]+$/,
-                                        message: t("Form_phone_number"),
-                                      },
-                                      minLength: {
-                                        value: 9,
-                                        message: t("Form_minLength_9"),
-                                      },
-                                      maxLength: {
-                                        value: 14,
-                                        message: t("Form_maxLength_14"),
-                                      },
-                                    })}
-                                    onKeyUp={() => {
-                                      trigger("phone");
-                                    }}
-                                    name="phone"
-                                  ></Form.Control>
-                                  {errors.phone && (
-                                    <div className="text-danger form-msg-style">
-                                      {errors.phone.message}
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                              
-                            </Row>
-                            <Row>
+              {newContact ?
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                  <Row>
+                    <button
+                      className="text-xs text-success"
+                      onClick={() => setNewContact(!newContact)}
+                    >
+                      {editContact ?
+                        t("AddContact_btn_close_edit")
+                        : t("AddContact_btn_close")}
+                    </button>
+                    <div className="d-flex justify-content-center h4">
+                      <div className="px-3">
+                        {editContact ?
+                          t("AddContact_edit_title")
+                          : t("AddContact_new_title")}
+                      </div>
+                    </div>
+                    <Col md={12} lg={3}>
+                      <Form.Group controlId="firstName">
+                        <Form.Label className="form-msg-style ms-2">
+                          {t("AddContact_label_name")}
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          className={errors.firstName ? "formInvalid" : null}
+                          placeholder={t("AddContact_name_placeholder")}
+                          {...register("firstName", {
+                            required: t("Form_field_required"),
+                            pattern: {
+                              value: NUMBERS_AND_NATIONAL_LETTERS,
+                              message: t("Form_letters_pl_and_digits"),
+                            },
+                            minLength: {
+                              value: 3,
+                              message: t("Form_minLength_3"),
+                            },
+                            maxLength: {
+                              value: 14,
+                              message: t("Form_maxLength_14"),
+                            },
+                          })}
+                          onKeyUp={() => {
+                            trigger("firstName");
+                          }}
+                          name="firstName"
+                        ></Form.Control>
+                        {errors.firstName && (
+                          <div className="text-danger form-msg-style">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col md={12} lg={3}>
+                      <Form.Group controlId="surname">
+                        <Form.Label className="form-msg-style ms-2">
+                          {t("AddContact_label_surname")}
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          className={errors.surname ? "formInvalid" : null}
+                          placeholder={t("AddContact_surname_placeholder")}
+                          {...register("surname", {
+                            required: t("Form_field_required"),
+                            pattern: {
+                              value: NUMBERS_AND_NATIONAL_LETTERS,
+                              message: t("Form_letters_pl_and_digits"),
+                            },
+                            minLength: {
+                              value: 3,
+                              message: t("Form_minLength_3"),
+                            },
+                            maxLength: {
+                              value: 30,
+                              message: t("Form_maxLength_30"),
+                            },
+                          })}
+                          onKeyUp={() => {
+                            trigger("surname");
+                          }}
+                          name="surname"
+                        ></Form.Control>
+                        {errors.surname && (
+                          <div className="text-danger form-msg-style">
+                            {errors.surname.message}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col md={12} lg={3}>
+                      <Form.Group controlId="email">
+                        <Form.Label className="form-msg-style ms-2">
+                          {t("AddContact_label_email")}
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          className={errors.email ? "formInvalid" : null}
+                          placeholder={t("AddContact_email_placeholder")}
+                          {...register("email", {
+                            required: t("Form_field_required"),
+                            pattern: {
+                              value: EMAIL_FORMAT,
+                              message: t("Form_inproper_pattern_email"),
+                            },
+                          })}
+                          onKeyUp={() => {
+                            trigger("email");
+                          }}
+                          name="email"
+                        ></Form.Control>
+                        {errors.email && (
+                          <div className="text-danger form-msg-style">
+                            {errors.email.message}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col md={12} lg={3}>
+                      <Form.Group controlId="phone">
+                        <Form.Label className="form-msg-style ms-2">
+                          {t("AddContact_label_phone")}
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          className={errors.phone ? "formInvalid" : null}
+                          placeholder={t("AddContact_phone_placeholder")}
+                          {...register("phone", {
+                            required: t("Form_field_required"),
+                            pattern: {
+                              value: ONLY_NUMBER,
+                              message: t("Form_phone_number"),
+                            },
+                            minLength: {
+                              value: 9,
+                              message: t("Form_minLength_9"),
+                            },
+                            maxLength: {
+                              value: 14,
+                              message: t("Form_maxLength_14"),
+                            },
+                          })}
+                          onKeyUp={() => {
+                            trigger("phone");
+                          }}
+                          name="phone"
+                        ></Form.Control>
+                        {errors.phone && (
+                          <div className="text-danger form-msg-style">
+                            {errors.phone.message}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
 
-                              <Col md={12} lg={12}>
-                                <Form.Group controlId="description">
-                                  <Form.Label className="form-msg-style ms-2">
-                                    {t("AddContact_description")}
-                                  </Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    className={errors.description ? "formInvalid" : null}
-                                    placeholder={t("AddContact_description_placeholder")}
-                                    {...register("description", {
-                                      pattern: {
-                                        value: /^[A-Za-z0-9ąśŚćĆęłŁńóżŻźŹ ]+$/,
-                                        message: t("Form_letters_pl_and_digits"),
-                                      },
-                                      maxLength: {
-                                        value: 250,
-                                        message: t("Form_maxLength_250"),
-                                      },
-                                    })}
-                                    onKeyUp={() => {
-                                      trigger("description");
-                                    }}
-                                    name="description"
-                                  ></Form.Control>
-                                  {errors.description && (
-                                    <div className="text-danger form-msg-style">
-                                      {errors.description.message}
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <div className="d-flex justify-content-end">
-                              {editContact ? (
-                                    <Button
-                                    type="submit"
-                                    variant="success"
-                                    className="rounded my-3"
-                                  >
-                                    {t("btn-change")}
-                                  </Button>
-                              ):(
-                                    <Button
-                                    type="submit"
-                                    variant="success"
-                                    className="rounded my-3"
-                                  >
-                                    {t("btn-add")}
-                                  </Button>
-                              )
-                              }
+                  </Row>
+                  <Row>
 
-                            </div>
-                          </Form>
-              : null}
+                    <Col md={12} lg={12}>
+                      <Form.Group controlId="description">
+                        <Form.Label className="form-msg-style ms-2">
+                          {t("AddContact_description")}
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          className={errors.description ? "formInvalid" : null}
+                          placeholder={t("AddContact_description_placeholder")}
+                          {...register("description", {
+                            pattern: {
+                              value: /^[A-Za-z0-9ąśŚćĆęłŁńóżŻźŹ ]+$/,
+                              message: t("Form_letters_pl_and_digits"),
+                            },
+                            maxLength: {
+                              value: 250,
+                              message: t("Form_maxLength_250"),
+                            },
+                          })}
+                          onKeyUp={() => {
+                            trigger("description");
+                          }}
+                          name="description"
+                        ></Form.Control>
+                        {errors.description && (
+                          <div className="text-danger form-msg-style">
+                            {errors.description.message}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <div className="d-flex justify-content-end">
+                    {editContact ? (
+                      <Button
+                        type="submit"
+                        variant="success"
+                        className="rounded my-3"
+                      >
+                        {t("btn-change")}
+                      </Button>
+                    ) : (
+                      <Button
+                        type="submit"
+                        variant="success"
+                        className="rounded my-3"
+                      >
+                        {t("btn-add")}
+                      </Button>
+                    )
+                    }
+
+                  </div>
+                </Form>
+                : null}
               <div className="d-flex justify-content-center h4">
                 <div className="px-3">{t("AddContact_spots_title")}</div>
               </div>
               <div className="d-flex justify-content-between">
-                                  <button
-                                    className="text-xs text-success"
-                                    onClick={() => newHendlerSpot()}
-                                    >
-                                    {!newSpot ?
-                                    t("AddContact_btn_add_spot")
-                                    : editSpot ? 
-                                        t("AddContact_btn_close_edit_spot")
-                                      : t("AddContact_btn_close_spot")}
-                                </button>
-                                                     
-                                <button
-                                    className="text-xs text-danger"
-                                    onClick={() => setActiveSpot(!activeSpot)}
-                                    >
-                                    {activeSpot ? 
-                                    t("AddContact_show_unactive_spot") 
-                                    : t("AddContact_show_active_spot")}
-                                </button>
-                               
+                <button
+                  className="text-xs text-success"
+                  onClick={() => newHendlerSpot()}
+                >
+                  {!newSpot ?
+                    t("AddContact_btn_add_spot")
+                    : editSpot ?
+                      t("AddContact_btn_close_edit_spot")
+                      : t("AddContact_btn_close_spot")}
+                </button>
+
+                <button
+                  className="text-xs text-danger"
+                  onClick={() => setActiveSpot(!activeSpot)}
+                >
+                  {activeSpot ?
+                    t("AddContact_show_unactive_spot")
+                    : t("AddContact_show_active_spot")}
+                </button>
+
 
               </div>
               <Table striped hover responsive className="table-sm mt-2">
@@ -747,13 +750,13 @@ function AddContact() {
                   {shopSpotList.length !== 0 ?
                     shopSpotList.map((spot) => (
                       <tr key={spot.id}>
-                        {spot.is_active & activeSpot ? 
-                        <>
+                        {spot.is_active & activeSpot ?
+                          <>
                             <td>
                               {spot.name}
                             </td>
                             <td>
-                              {spot.city},{space}
+                              {spot.city.name},{space}
                               {spot.street}{space}
                               {spot.no_building}
                             </td>
@@ -763,33 +766,33 @@ function AddContact() {
                               </span>
                             </td>
                             <td className="align-middle">
-                                  <button
-                                    style={btnDelete}
-                                    className="text-xs text-danger"
-                                    onClick={() => unActiveSpotHandler(spot.id)}
-                                  >
-                                    {t("btn_unactive")}
-                                  </button>
-                          </td>
-                          <td className="align-middle">
-                                  <button
-                                    style={btnDelete}
-                                    className="text-xs text-worning"
-                                    onClick={() => editSpotHandler(spot.id)}
-                                  >
-                                    {t("btn_edit")}
-                                  </button>
-                          </td>
-                        </>                      
-                        : null}
-                        {!spot.is_active & !activeSpot ? 
-                        <>
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-danger"
+                                onClick={() => unActiveSpotHandler(spot.id)}
+                              >
+                                {t("btn_unactive")}
+                              </button>
+                            </td>
+                            <td className="align-middle">
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-worning"
+                                onClick={() => editSpotHandler(spot.id)}
+                              >
+                                {t("btn_edit")}
+                              </button>
+                            </td>
+                          </>
+                          : null}
+                        {!spot.is_active & !activeSpot ?
+                          <>
 
                             <td>
                               {spot.name}
                             </td>
                             <td>
-                              {spot.city},{space}
+                              {spot.city.name},{space}
                               {spot.street}{space}
                               {spot.no_building}
                             </td>
@@ -799,22 +802,22 @@ function AddContact() {
                               </span>
                             </td>
                             <td className="align-middle">
-                                    <button
-                                      style={btnDelete}
-                                      className="text-xs text-danger"
-                                      onClick={() => activeSpotHandler(spot.id)}
-                                    >
-                                      {t("btn_active")}
-                                    </button>
-                              </td>
+                              <button
+                                style={btnDelete}
+                                className="text-xs text-danger"
+                                onClick={() => activeSpotHandler(spot.id)}
+                              >
+                                {t("btn_active")}
+                              </button>
+                            </td>
 
-                        </>                    
-                        :null}
+                          </>
+                          : null}
 
 
                       </tr>
                     ))
-                  :t("No_data")}
+                    : t("No_data")}
                   {/* {ListOfContact.map((contact) => (
                     <tr key={contact.id}>
                       {contact.is_active & activeContact ? 
@@ -876,7 +879,7 @@ function AddContact() {
           </Col>
         </Row>
       )}
-      
+
     </div>
   );
 }

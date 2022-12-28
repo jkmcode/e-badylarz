@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { login } from "../actions/userAction";
-import useResponsive from "../component/useResponsive";
 
 import { NO_PERMISSION } from "../constants/errorsConstants";
 
@@ -14,7 +13,7 @@ function LoginAdmin() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { windowWidth } = useResponsive();
+
   const {
     register,
     formState: { errors },
@@ -29,6 +28,10 @@ function LoginAdmin() {
   const [permission, setPermission] = useState("");
   const [isHover, setIsHover] = useState(false);
 
+  let userLoginTest = localStorage.getItem("userInfo");
+
+  let userLoginTestParse = JSON.parse(userLoginTest);
+
   const onSubmit = (data) => {
     const credentials = {
       username: data.userName,
@@ -40,7 +43,7 @@ function LoginAdmin() {
 
   useEffect(() => {
     if (success) {
-      if (userInfo.IsAdmin) {
+      if (userInfo.IsAdmin && userLoginTestParse) {
         navigate("/dashboard");
       } else {
         setPermission(NO_PERMISSION);

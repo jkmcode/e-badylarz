@@ -398,13 +398,15 @@ def getShops(request):
 def addShopSpot(request):
     data = request.data
 
+    cit_obj = Citis.objects.get(id=data['city'])
+
     if data['add']:
         shop = Shops.objects.get(id=data['id_shops'])
 
         spot=ShopsSpot.objects.create(
             id_shops=shop,
             name=data['name'],
-            city=data['city'],
+            city=cit_obj,
             street=data['street'],
             no_building=data['no_building'],
             post_code=data['postCode'],
@@ -444,7 +446,7 @@ def addShopSpot(request):
         )
         # change data
         spot.name = data['name']
-        spot.city = data['city']
+        spot.city=cit_obj,
         spot.street = data['street']
         spot.no_building = data['no_building']
         spot.post_code = data['postCode']
@@ -460,7 +462,7 @@ def addShopSpot(request):
         spot.save()
 
     spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
-    seriaziler = ShopSpotsSerializer(spots, many=True)
+    seriaziler = ShopSpotsSerializer(spots, many=True) 
     return Response(seriaziler.data)
 
 @api_view(['POST'])

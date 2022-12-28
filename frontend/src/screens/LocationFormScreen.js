@@ -8,6 +8,10 @@ import { getCitiesList } from "../actions/adminActions";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 
+import {
+  TIME_AUT_ERROR,
+} from "../constants/environmentConstans"
+
 function LocationFormScreen() {
   const navigate = useNavigate();
   const zero = "0";
@@ -129,7 +133,7 @@ function LocationFormScreen() {
       {loading ? <Loader />
         :
         <>
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
           <div
             style={{
               display: "flex",

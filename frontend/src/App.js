@@ -70,6 +70,9 @@ function App() {
           <Route path="shops" element={<AdminShops />} />
           <Route path="shops/:add" element={<ShopActivity />} />
           <Route path="shops/:id/:edit" element={<ShopActivity />} />
+          <Route path="shops/:id/contact" element={<AddContact />} />
+          <Route path="shops/spot/:id/:add" element={<ShopSpotActivity />} />
+          <Route path="shops/spot/:id/:add/:idSpot" element={<ShopSpotActivity />} />
           <Route path="areas" element={<AdminAreas />} />
           <Route path="areas/:add" element={<AreaActivity />} />
           <Route path="areas/:add/:id" element={<AreaActivity />} />
@@ -79,6 +82,7 @@ function App() {
           <Route path="cities" element={<AdminCities />} />
           <Route path="products" element={<AdminAddProducts />} />
         </Route>
+
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>
       <Routes>
