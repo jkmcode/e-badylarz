@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
+import { getFullDiscricts } from "../actions/discrictsActions";
 import ErrorMessage from "../component/ErrorMessage";
+import { getCitiesList } from "../actions/adminActions";
 import {
   Row,
   Col,
@@ -20,6 +22,7 @@ import {
   updateShopSpot,
   InsertImage,
 } from "../actions/adminActions";
+
 import UploadImage from "../component/UploadImage";
 
 import {
@@ -28,6 +31,17 @@ import {
   GET_SHOPS_LIST_DELETE,
   ADD_SHOP_SPOT_DELETE,
 } from "../constants/adminConstans";
+
+import {
+  TIME_AUT_ERROR,
+  TIME_AUT_SUCCESS,
+} from "../constants/environmentConstans";
+
+import {
+  NUMBERS_AND_NATIONAL_LETTERS,
+  ONLY_NUMBER,
+  GPS_FORMAT,
+} from "../constants/formValueConstans";
 
 import { Icon } from "@iconify/react";
 
@@ -52,12 +66,14 @@ function AddShopsSpot() {
   const [showShop, setShowShop] = useState(false);
   const [space, setSpace] = useState("  ");
 
+  const zero = "0";
+  const [selectedDistrict, setSelectedDistrict] = useState(0);
+  const [selectedCity, setSelectedCity] = useState(0);
+
   const SpotParam = params.add;
   const editShopParam = params.edit;
   const shopId = params.id;
   const spotId = params.idSpot;
-
-  // console.log('SpotParam-->',SpotParam)
 
   const [radioValue, setRadioValue] = useState("1");
   const radios = [
@@ -70,7 +86,12 @@ function AddShopsSpot() {
   const { userInfo } = userLogin;
 
   const shopListRedux = useSelector((state) => state.shopList);
-  const { loading, error, successAdd, shopList } = shopListRedux;
+  const {
+    loading: loadingShopList,
+    error: errorShopList,
+    successAdd,
+    shopList,
+  } = shopListRedux;
 
   const spotRedux = useSelector((state) => state.getShopSpot);
   const {
@@ -107,7 +128,57 @@ function AddShopsSpot() {
     success: successGetShop,
   } = getShopRedux;
 
-  //console.log('spotDetails-->',spotDetails)
+  // **********************************************************
+  const discrictListRedux = useSelector((state) => state.districts);
+  const {
+    loading: loadingDisctrict,
+    districtList,
+    error: errorDisctrict,
+    success: successDisctric,
+  } = discrictListRedux;
+
+  const shopSpotUpdateRedux = useSelector((state) => state.shopSpotUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = shopSpotUpdateRedux;
+
+  const dataRedux = useSelector((state) => state.citesList);
+  const {
+    loading: loadingCity,
+    cityList,
+    success,
+    error: errorCity,
+  } = dataRedux;
+
+  const selectDistrictHandler = (e) => {
+    //console.log('Jestem-->')
+    setSelectedDistrict(e.target.value);
+  };
+  const selectCityHandler = (e) => {
+    //console.log('Jestem-->')
+    setSelectedCity(e.target.value);
+  };
+
+  useEffect(() => {
+    if (districtList.length === 0) {
+      dispatch(getFullDiscricts("only active"));
+    }
+  }, [dispatch, districtList.length]);
+
+  // uruchamiany gdy jest wybrany powiat
+  useEffect(() => {
+    if (selectedDistrict) {
+      dispatch(
+        getCitiesList({
+          Id: selectedDistrict,
+          param: "only true",
+        })
+      );
+    }
+  }, [dispatch, selectedDistrict]);
+  // *********************************************************
 
   // Handlers
   const onSubmit = (data) => {
@@ -161,7 +232,7 @@ function AddShopsSpot() {
           id_spot: spotId,
           id_shops: shopId,
           name: data.name,
-          city: data.city,
+          city: data.city, /// To jest źle
           street: data.street,
           no_building: data.number,
           postCode: data.postCode,
@@ -180,7 +251,7 @@ function AddShopsSpot() {
           id_spot: spotId,
           id_shops: shopId,
           name: data.name,
-          city: data.city,
+          city: data.city, /// To jest źle
           street: data.street,
           no_building: data.number,
           postCode: data.postCode,
@@ -213,7 +284,7 @@ function AddShopsSpot() {
   //Reset Default data
   useEffect(() => {
     if (successGetSpot) {
-      setShowShop(true);
+      setShowShop(true); /// to do sprawdzenia nie wiem czy to potrzebne ?
       if (SpotParam === "edit") {
         if (spotDetails.delivery) {
           setRadioValue("0");
@@ -223,7 +294,7 @@ function AddShopsSpot() {
         reset({
           name: spotDetails.name,
           nip: spotDetails.nip,
-          city: spotDetails.city,
+          city: spotDetails.city.name,
           street: spotDetails.street,
           number: spotDetails.no_building,
           postCode: spotDetails.post_code,
@@ -259,7 +330,7 @@ function AddShopsSpot() {
   useEffect(() => {
     if (successAddSpot) {
       dispatch({ type: ADD_SHOP_SPOT_DELETE });
-      navigate(`/dashboard/shops/shops/${shopId}/contact`);
+      navigate(`/dashboard/shops/${shopId}/contact`);
     }
   }, [dispatch, successAddSpot]);
 
@@ -296,7 +367,10 @@ function AddShopsSpot() {
 
   return (
     <>
-      {loading ||
+      {loadingDisctrict ||
+      loadingCity ||
+      loadingShopList ||
+      // nie sprawdzone
       loadingInsertImage ||
       loadingGetShop ||
       loadingUpdateShop ||
@@ -305,11 +379,28 @@ function AddShopsSpot() {
         <Loader />
       ) : (
         <div className="container mt-5 p-4 rounded" style={background}>
-          {error ? <ErrorMessage msg={error} timeOut={4000} /> : null}
+          {errorShopList ? (
+            <ErrorMessage msg={errorShopList} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {errorDisctrict ? (
+            <ErrorMessage msg={errorDisctrict} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {errorCity ? (
+            <ErrorMessage msg={errorCity} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {spotError ? (
+            <ErrorMessage msg={spotError} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {addSpotError ? (
+            <ErrorMessage msg={addSpotError} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {errorUpdate ? (
+            <ErrorMessage msg={errorUpdate} timeOut={TIME_AUT_ERROR} />
+          ) : null}
           <Row className="align-items-center ">
             <Col>
               <Link
-                to={{ pathname: `/dashboard/shops/shops/${shopId}/contact` }}
+                to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
                 className="text-dark h6"
               >
                 <Icon icon="ion:arrow-back" />
@@ -320,8 +411,7 @@ function AddShopsSpot() {
           {showShop ? (
             <div className="d-flex justify-content-center display-8">
               {shopDetails.name},{space}
-              {shopDetails.city}
-              {space}
+              {shopDetails.city},{space}
               {shopDetails.street}
               {space}
               {shopDetails.no_building}
@@ -348,12 +438,12 @@ function AddShopsSpot() {
                     {...register("name", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ.@ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
-                        value: 3,
-                        message: t("Form_minLength_3"),
+                        value: 5,
+                        message: t("Form_minLength_5"),
                       },
                       maxLength: {
                         value: 30,
@@ -404,7 +494,7 @@ function AddShopsSpot() {
                       {...register("range", {
                         required: t("Form_field_required"),
                         pattern: {
-                          value: /^[0-9]+$/,
+                          value: ONLY_NUMBER,
                           message: t("Form_only_letters"),
                         },
                         maxLength: {
@@ -429,7 +519,49 @@ function AddShopsSpot() {
             <hr />
             <h6>{t("ShopsSpot_title_address")}</h6>
             <Row className="mb-3">
-              <Col md={6}>
+              <Col mg={4}>
+                <Form.Label className="form-msg-style ms-2">
+                  {t("ShopsSpot_label_district")}
+                </Form.Label>
+                <Form.Select
+                  name="district"
+                  {...register("district")}
+                  onChange={selectDistrictHandler}
+                  value={selectedDistrict}
+                >
+                  <option key="blankChoice" hidden value={zero}>
+                    {t("ShopSpot_district_placeholder")}
+                  </option>
+                  {districtList.map((district) => (
+                    <option key={district.id} value={district.id}>
+                      {district.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col mg={4}>
+                <Form.Label className="form-msg-style ms-2">
+                  {t("ShopsSpot_label_city")}
+                </Form.Label>
+                <Form.Select
+                  name="city"
+                  {...register("city")}
+                  onChange={selectCityHandler}
+                  value={selectedCity}
+                >
+                  <option key="blankChoice" hidden value={zero}>
+                    {t("ShopSpot_city_placeholder")}
+                  </option>
+                  {success
+                    ? cityList.map((city) => (
+                        <option key={city.id} value={city.id}>
+                          {city.name}
+                        </option>
+                      ))
+                    : null}
+                </Form.Select>
+              </Col>
+              {/* <Col md={6}>
                 <Form.Group controlId="city">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_city")}
@@ -441,7 +573,7 @@ function AddShopsSpot() {
                     {...register("city", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -464,8 +596,8 @@ function AddShopsSpot() {
                     </div>
                   )}
                 </Form.Group>
-              </Col>
-              <Col md={6}>
+              </Col> */}
+              <Col md={4}>
                 <Form.Group controlId="street">
                   <Form.Label className="form-msg-style ms-2">
                     {t("AddShops_label_street")}
@@ -476,7 +608,7 @@ function AddShopsSpot() {
                     placeholder={t("AddShops_street_placeholder")}
                     {...register("street", {
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -514,7 +646,7 @@ function AddShopsSpot() {
                     {...register("number", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       maxLength: {
@@ -582,7 +714,7 @@ function AddShopsSpot() {
                     {...register("post", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[A-Za-z0-9ąćĆęłŁńóżŻźŹ/ ]+$/,
+                        value: NUMBERS_AND_NATIONAL_LETTERS,
                         message: t("Form_letters_pl_and_digits"),
                       },
                       minLength: {
@@ -622,7 +754,7 @@ function AddShopsSpot() {
                     {...register("latitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
@@ -650,7 +782,7 @@ function AddShopsSpot() {
                     {...register("longitude", {
                       required: t("Form_field_required"),
                       pattern: {
-                        value: /^[0-9.]+$/,
+                        value: GPS_FORMAT,
                         message: t("Form_only_digits_or_dot"),
                       },
                     })}
@@ -681,7 +813,7 @@ function AddShopsSpot() {
                 : null}
             </Row>
             <div className="d-flex justify-content-end">
-              {editShopParam === "edit" ? (
+              {SpotParam === "edit" ? (
                 <Button
                   type="submit"
                   variant="warning"

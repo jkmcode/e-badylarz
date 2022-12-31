@@ -7,12 +7,9 @@ import ErrorMessage from "../component/ErrorMessage";
 import { getDiscrict } from "../actions/discrictsActions";
 import AddDescription from "./AddDescription";
 
-import {
-  CITY_DESCRIPTION,
-} from "../constants/adminConstans";
+import { CITY_DESCRIPTION } from "../constants/adminConstans";
 
 function CityDescription() {
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
@@ -23,7 +20,7 @@ function CityDescription() {
 
   const districtId = Number(params.id);
   const cityName = params.name;
-  const cityId= params.cityId;
+  const cityId = params.cityId;
 
   useEffect(() => {
     if (districtList.length === 0) {
@@ -38,23 +35,19 @@ function CityDescription() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
-          <Link to={`/dashboard/district/district/${districtId}/edit`} className="text-secondary">
-            {t("btn-return")}
-          </Link>
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
-          <div className=" d-flex justify-content-center display-6">
-            <div className="px-3">{t("CityDistrict_title_1")} {cityName} {t("CityDistrict_title_2")}</div>
-            {districtList.length === 0
-              ? null
-              : districtList.filter((i) => i.id === districtId)[0].name}
-          </div>
+        <div
+          style={{
+            backgroundColor: "red",
+            padding: "1rem",
+            width: "calc(100% + 30px)",
+          }}
+        >
           <AddDescription
-              objId={cityId}
-              descType={CITY_DESCRIPTION}
-              return={true}
-              path={`/dashboard/district/district/${districtId}/edit`}
-            />
+            objId={cityId}
+            descType={CITY_DESCRIPTION}
+            return={true}
+            path={`/dashboard/district/district/${districtId}/edit`}
+          />
         </div>
       )}
     </>

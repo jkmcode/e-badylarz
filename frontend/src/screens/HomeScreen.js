@@ -13,18 +13,22 @@ import ErrorMessage from "../component/ErrorMessage";
 import LocationFormScreen from "./LocationFormScreen";
 import useGeoLocation from "../component/useGeoLocation";
 
+import {
+  TIME_AUT_ERROR,
+} from "../constants/environmentConstans"
+
 //https://react-select.com/advanced
 
 function FormAddressScreen() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  //const { coordinates, code } = useGeoLocation();
+  const { coordinates, code } = useGeoLocation();
 
   // const code = 1;
   // const coordinates = { lat: "", lng: "" };
 
-  const code = 2;
-  const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" };
+  // const code = 2;
+  // const coordinates = { lat: "52.542854113375455", lng: "17.598564855916656" };
 
   // console.log("coordinates", coordinates, 'code', code);
 
@@ -132,7 +136,7 @@ function FormAddressScreen() {
         {loading ? (
           <Loader />
         ) : error ? (
-          <ErrorMessage msg={error} timeOut={4000} />
+          <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} />
         ) : (
           <div
             style={centerForm}

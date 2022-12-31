@@ -106,16 +106,16 @@ def getAreas(request):
 
     areas = Areas.objects.all().order_by('name')
 
-    for i in areas : 
-        i.name = cleanStr(i.name)
-        i.nip = cleanStr(i.nip)
-        i.city = cleanStr(i.city)
-        i.street = cleanStr(i.street)
-        i.no_building = cleanStr(i.no_building)
-        i.post_code = cleanStr(i.post_code)
-        i.post = cleanStr(i.post)
-        i.latitude = cleanStr(i.latitude)
-        i.longitude = cleanStr(i.longitude) 
+    # for i in areas : 
+    #     i.name = cleanStr(i.name)
+    #     i.nip = cleanStr(i.nip)
+    #     i.city = cleanStr(i.city)
+    #     i.street = cleanStr(i.street)
+    #     i.no_building = cleanStr(i.no_building)
+    #     i.post_code = cleanStr(i.post_code)
+    #     i.post = cleanStr(i.post)
+    #     i.latitude = cleanStr(i.latitude)
+    #     i.longitude = cleanStr(i.longitude) 
 
     seriaziler = AreasSerializer(areas, many=True)
     return Response(seriaziler.data)
@@ -126,15 +126,15 @@ def getAreaToEdit(request, Id):
 
     area = Areas.objects.get(id=Id)
 
-    area.name = cleanStr(area.name)
-    area.nip = cleanStr(area.nip)
-    area.city = cleanStr(area.city)
-    area.street = cleanStr(area.street)
-    area.no_building = cleanStr(area.no_building)
-    area.post_code = cleanStr(area.post_code)
-    area.post = cleanStr(area.post)
-    area.latitude = cleanStr(area.latitude)
-    area.longitude = cleanStr(area.longitude)
+    # area.name = cleanStr(area.name)
+    # area.nip = cleanStr(area.nip)
+    # area.city = cleanStr(area.city)
+    # area.street = cleanStr(area.street)
+    # area.no_building = cleanStr(area.no_building)
+    # area.post_code = cleanStr(area.post_code)
+    # area.post = cleanStr(area.post)
+    # area.latitude = cleanStr(area.latitude)
+    # area.longitude = cleanStr(area.longitude)
 
     seriaziler = AreasSerializer(area, many=False)
     return Response(seriaziler.data)
@@ -277,17 +277,6 @@ def updateShop(request, Id):
 @permission_classes([IsAdminUser])
 def getShop(request, Id):
     shop = Shops.objects.get(id = Id) 
-
-    shop.name = cleanStr(shop.name)
-    shop.nip = cleanStr(shop.nip)
-    shop.city = cleanStr(shop.city)
-    shop.street = cleanStr(shop.street)
-    shop.no_building = cleanStr(shop.no_building)
-    shop.post_code = cleanStr(shop.post_code)
-    shop.post = cleanStr(shop.post)
-    shop.latitude = cleanStr(shop.latitude)
-    shop.longitude = cleanStr(shop.longitude)
-
     seriaziler = ShopsSerializer(shop, many=False)
     return Response(seriaziler.data)
 
@@ -376,18 +365,6 @@ def addShopContacts(request):
 @permission_classes([IsAdminUser])
 def getShops(request):
     shops = Shops.objects.all().order_by('name') 
-    for i in shops:
-        i.name=cleanStr(i.name)
-        i.city=cleanStr(i.city)
-        i.street=cleanStr(i.street)
-        i.no_building=cleanStr(i.no_building)
-        i.nip=cleanStr(i.nip)
-        i.post=cleanStr(i.post)
-        i.post_code=cleanStr(i.post_code)
-        i.latitude=cleanStr(i.latitude)
-        i.longitude=cleanStr(i.longitude)
-        # i.bank_account=cleanStr(i.bank_account)
-
     seriaziler = ShopsSerializer(shops, many=True)
 
     return Response(seriaziler.data)
@@ -398,13 +375,15 @@ def getShops(request):
 def addShopSpot(request):
     data = request.data
 
+    cit_obj = Citis.objects.get(id=data['city'])
+
     if data['add']:
         shop = Shops.objects.get(id=data['id_shops'])
 
         spot=ShopsSpot.objects.create(
             id_shops=shop,
             name=data['name'],
-            city=data['city'],
+            city=cit_obj,
             street=data['street'],
             no_building=data['no_building'],
             post_code=data['postCode'],
@@ -444,7 +423,7 @@ def addShopSpot(request):
         )
         # change data
         spot.name = data['name']
-        spot.city = data['city']
+        spot.city=cit_obj,
         spot.street = data['street']
         spot.no_building = data['no_building']
         spot.post_code = data['postCode']
@@ -460,7 +439,7 @@ def addShopSpot(request):
         spot.save()
 
     spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
-    seriaziler = ShopSpotsSerializer(spots, many=True)
+    seriaziler = ShopSpotsSerializer(spots, many=True) 
     return Response(seriaziler.data)
 
 @api_view(['POST'])

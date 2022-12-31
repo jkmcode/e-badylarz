@@ -14,6 +14,15 @@
   "ErrorMessage_no_type_object": "Changing the active flag - no object type",
   "ErrorMessage_product_type_already_exist": "Product type already exist",
   "ErrorMessage_area_already_exist": "Sales area with this name already exist",
+
+  "latitude_placeholder": "Enter latitude ...",
+  "latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
+  "label_latitude": "Latitude",
+
+  "longitude_placeholder": "Enter longitude ...",
+  "longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
+  "label_longitude": "Longitude",
+
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",
@@ -47,6 +56,7 @@
   "btn_clear": "clear",
   "btn_products_category": "Shop categories",
   "btn_buy": "buy",
+  "btn_more": "Show more",
   "cart_currently_empty": "is currently empty",
   "price": "price",
   "promotion": "promotion",
@@ -138,11 +148,15 @@
   "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 100",
 
   "AddCiti_title": "Add city for districts : ",
-  "AddCiti_subtitle": "For the correct validation of the postal code, use the language appropriate for the added city",
   "AddCiti_label_name": "City name",
   "AddCiti_name_placeholder": "Enter city name ...",
+  "AddCiti_name_error_message": "City name should be 3-50 characters and shouldn't include any special character!",
+
   "AddCiti_label_post_code": "Post code",
-  "AddCiti_post_code_placeholder": "Enter main post code ...",
+  "AddCiti_post_code_placeholder": "Enter post code ...",
+
+  "AddCiti_post_code_error_message": "Post code fromat: xx-xxx",
+
   "AddCity_success": "City correctly added",
   "AddCity_body_window": "Add description ?",
   "InfoComponent_title": "Description of district:",
@@ -222,12 +236,24 @@
   "AddContact_contactList": "Conatct list",
   "AddContact_label_name": "First name",
   "AddContact_name_placeholder": "Enter first name ...",
+
+  "AddContact_name_error_message": "First name should be 3-20 characters without any special character",
+
   "AddContact_label_surname": "Surname",
   "AddContact_surname_placeholder": "Enter surname ...",
+
+  "AddContact_surname_error_message": "Surname name should be 3-20 characters without any special character",
+
   "AddContact_label_email": "email",
   "AddContact_email_placeholder": "Enter email ...",
+
+  "AddContact_email_error_message": "invalid email format",
+
   "AddContact_label_phone": "phone no",
   "AddContact_phone_placeholder": "Enter phone no ...",
+
+  "AddContact_phone_error_message": "Invalid phone format",
+
   "AddContact_main_data": "Main data",
   "AddContact_name": "Name",
   "AddContact_nip": "Tax number",
@@ -238,6 +264,9 @@
   "AddContact_email": "Email",
   "AddContact_description": "Description",
   "AddContact_description_placeholder": "Enter description ...",
+
+  "AddContact_description_error_message": "Maximum number of characters is 200",
+
   "AddContact_btn_add": "New contact",
   "AddContact_btn_close": "Close new contact",
   "AddContact_btn_close_edit": "Close editing contact",
@@ -260,6 +289,10 @@
   "ShopsSpot_title_geolocation": "Spots geolocation",
   "ShopsSpot_label_range": "Range delivery",
   "ShopsSpot_range_placeholder": "Enter range delivery ...",
+  "ShopSpot_district_placeholder": "Select district ...",
+  "ShopsSpot_label_district": "Disctrict",
+  "ShopsSpot_label_city": "City",
+  "ShopSpot_city_placeholder": "Select city ...",
   "PrivatePolicy_title": "THE PRIVACY POLICY DESCRIBES THE RULES FOR THE PROCESSING OF INFORMATION ABOUT YOU, INCLUDING PERSONAL DATA AND COOKIES, i.e. COOKIES.",
   "PrivatePolicy_1_General_Information": "1. General information",
   "PrivatePolicy_1.1_General_Information": "This policy applies to the Website, operating at the url: jkmcode.eu.",
@@ -360,5 +393,7 @@
   "AreaActivity_label_longitude": "longitude",
   "AreaActivity_longitude_placeholder": "Enter longitude ...",
   "AddArea_success": "Sales area added correctly",
-  "EditArea_success": "Sales area editing correctly"
+  "EditArea_success": "Sales area editing correctly",
+
+  "Pattern_nip": "[A-Z]"
 }

@@ -34,8 +34,10 @@ function InfoComponent(props) {
   useEffect(() => {
     if (success) {
       setModalShow(true);
-      if (desc.length > 0) {
+      if (desc.length !== 0) {
         setIsDescription(true);
+      } else {
+        setIsDescription(false);
       }
     }
   }, [desc]);

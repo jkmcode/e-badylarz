@@ -2,3 +2,7 @@ export const TIME_AUT_ERROR = 4000;
 export const TIME_AUT_SUCCESS = 6000;
 
 export const EDIT = "edit";
+export const ONE = "1";
+export const ZERO = "0";
+export const TWO = "2";
+export const ONE_TO_TWO = "1/2";

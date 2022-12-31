@@ -42,6 +42,7 @@ function AddArea() {
   const params = useParams();
   const navigate = useNavigate();
 
+  const editAreaParam = params.edit;
   const addAreaParam = params.add;
   const Id = params.id;
 
@@ -124,7 +125,7 @@ function AddArea() {
       setTimeout(() => {
         setSuccessFlag(true);
         dispatch({ type: ADD_AREA_DELETE });
-      }, TIME_AUT_SUCCESS);
+      }, TIME_AUT);
     }
   }, [success]);
 
@@ -136,32 +137,13 @@ function AddArea() {
 
   useEffect(() => {
     if (successFlag) {
-      dispatch({ type: GET_AREA_LIST_DELETE });
       navigate("/dashboard/areas");
     }
   }, [successFlag]);
 
-  //Reset Default data
-  useEffect(() => {
-    if (successAreaToEdit) {
-      reset({
-        name: area.name,
-        nip: area.nip,
-        city: area.city,
-        street: area.street,
-        number: area.no_building,
-        postCode: area.post_code,
-        post: area.post,
-        bankAccount: area.bank_account,
-        latitude: area.latitude,
-        longitude: area.longitude,
-      });
-    }
-  }, [successAreaToEdit]);
-
   return (
     <>
-      {loading || loadingAreaToEdit ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
@@ -191,7 +173,7 @@ function AddArea() {
             </Col>
           </Row>
           <div className="d-flex justify-content-center display-6">
-            {addAreaParam === "edit"
+            {editAreaParam === "edit"
               ? t("AreaActivity_EditAreas_title")
               : t("AreaActivity_AddAreas_title")}
           </div>
@@ -564,7 +546,7 @@ function AddArea() {
                 : null}
             </Row> */}
             <div className="d-flex justify-content-end">
-              {addAreaParam === "edit" ? (
+              {editAreaParam === "edit" ? (
                 <Button
                   type="submit"
                   variant="warning"

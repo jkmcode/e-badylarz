@@ -7,17 +7,18 @@ import Loader from "../component/Loader";
 import language from "../language";
 import { getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
+import { Icon } from "@iconify/react";
 import {
   DISTRICT_ADD_DESC_DELETE,
   ADD_DESC_DELETE,
   SET_FLAG_DESC_FALSE,
   SET_FLAG_ADD_DESC_TRUE,
+  SET_CITY_FLAG_DESC_FALSE,
 } from "../constants/adminConstans";
+import useResponsive from "../component/useResponsive";
 
 import { USER_LOGOUT } from "../constants/userConstans";
-import { Icon } from "@iconify/react";
 import ErrorMessage from "../component/ErrorMessage";
-
 import {
   CREDENTIALS_WERE_NOT_PROVIDED,
   NO_PERMISSION,
@@ -31,7 +32,7 @@ function AddDescription(props) {
     register,
     formState: { errors },
   } = useForm();
-
+  const { windowWidth } = useResponsive();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
@@ -124,11 +125,17 @@ function AddDescription(props) {
   const mainContainer = {
     backgroundColor: "#fff",
     marginTop: "3rem",
-    padding: "1.5rem",
+    padding: windowWidth > 800 ? "1.5rem" : ".5rem",
     borderRadius: "0.25rem",
     width: "100%",
     margin: "auto",
     backgroundColor: "#F0F0F0",
+  };
+
+  //functions
+
+  const handleCloseDesc = () => {
+    dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
   };
 
   return (
@@ -152,6 +159,18 @@ function AddDescription(props) {
               success={true}
             />
           ) : null}
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <button
+              style={{
+                padding: "0",
+                border: "none",
+                backgroundColor: "transparent",
+              }}
+              onClick={handleCloseDesc}
+            >
+              <Icon icon="mdi:close-thick" width="32" height="32" color="red" />
+            </button>
+          </div>
 
           <form>
             {!activeDesc ? (

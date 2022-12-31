@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,6 +10,9 @@ import RadioButtons from "./RadioButtons";
 import useResponsive from "../component/useResponsive";
 import Divider from "./Divider";
 import InfoAlertComponent from "../component/InfoAlertComponent";
+import AddDescription from "./AddDescription";
+import { emptylistTitle, emptyListIcon } from "./AdminCSS";
+import { Icon } from "@iconify/react";
 
 import {
   SET_FLAG_INFO_TRUE,
@@ -18,7 +21,10 @@ import {
   UNACTIVE,
   ACTIVE,
   CITY,
+  SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
+
+import { ONE, ZERO } from "../constants/environmentConstans";
 
 function CitiesList(props) {
   const { t } = useTranslation();
@@ -27,12 +33,16 @@ function CitiesList(props) {
   const navigate = useNavigate();
   const { windowWidth } = useResponsive();
 
+  const tableRef = useRef(null);
+
+  const btnMinWidth = 70;
+
   // data from redux
   const dataRedux = useSelector((state) => state.citesList);
   const { loading, cityList, error, success } = dataRedux;
 
   const infoFlagRedux = useSelector((state) => state.flag);
-  const { infoFlag, cityFlag } = infoFlagRedux;
+  const { infoFlag, cityFlag, descFlag, cityDescFlag } = infoFlagRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -51,6 +61,8 @@ function CitiesList(props) {
   const [confirm, setConfirm] = useState(false);
   const [discObj, setDiscObj] = useState({});
   const [updateStatus, setUpdateStatus] = useState("");
+  const [helper, setHelper] = useState("");
+  const [objId, setObjId] = useState("");
   ///
 
   const handleBtnValue = (e) => {
@@ -68,7 +80,9 @@ function CitiesList(props) {
   };
 
   const descriptionHandler = (i) => {
-    navigate(`/add-description/${i.name}/${i.id_district}/${i.id}/add`);
+    dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
+    setHelper(i.name);
+    setObjId(i.id);
   };
 
   // run if citiesList is empty
@@ -164,8 +178,6 @@ function CitiesList(props) {
     borderBottom: "1px solid grey",
   };
 
-  const btnMinWidth = 70;
-
   const citiesBtn = {
     fontSize: "0.7rem",
     fontWeight: "700",
@@ -204,6 +216,100 @@ function CitiesList(props) {
     fontWeight: "400",
   };
 
+  function StatusDistrictsTable({ active }) {
+    let currentDistrictsList = [];
+    if (active === true) {
+      currentDistrictsList = cityList.filter((disc) => disc.is_active == true);
+    }
+
+    if (active === false) {
+      currentDistrictsList = cityList.filter(
+        (disc) => disc.is_active === false
+      );
+    }
+
+    console.log("currentDistrictsList", currentDistrictsList);
+    if (currentDistrictsList.length === 0) {
+      return (
+        <>
+          <div style={emptylistTitle}>
+            <div style={{ marginTop: "3rem" }}>pusta lista</div>
+          </div>
+          <div style={emptyListIcon}>
+            <Icon icon="ic:outline-featured-play-list" />
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <table style={tableCustom} ref={tableRef}>
+        <thead>
+          <tr>
+            <th style={columnName}>{t("Table_head_name")}</th>
+            <th style={columnName} />
+            <th style={columnName}></th>
+            <th style={columnName}></th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentDistrictsList.map((i) => (
+            <>
+              <tr key={i.id}>
+                <td style={tableCell}>{i.name}</td>
+                <td style={tableCell}>
+                  <button
+                    style={btnUnactive}
+                    onClick={() => unActiveHandler(i.id)}
+                  >
+                    {t("btn_unactive")}
+                  </button>
+                </td>
+                <td style={tableCell}>
+                  <button
+                    style={btnDescription}
+                    onClick={() => descriptionHandler(i)}
+                  >
+                    {t("btn_description")}
+                  </button>
+                </td>
+                <td style={tableCell}>
+                  <button style={btnInfo} onClick={() => infoHandler(i)}>
+                    {t("btn_info")}
+                  </button>
+                </td>
+              </tr>
+              {helper === i.name && cityDescFlag && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: `calc(0.00001% + ${tableRef.current.offsetWidth}px)`,
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "#4d4d4d",
+                      padding: "1rem",
+                      width: "80%",
+                      margin: "1rem",
+                    }}
+                  >
+                    <AddDescription
+                      objId={objId}
+                      descType={CITY_DESCRIPTION}
+                      return={true}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
+
   return (
     <>
       {loading || loadingUpdate ? (
@@ -234,89 +340,8 @@ function CitiesList(props) {
           {citiesData & cityFlag ? (
             <>
               <RadioButtons handleBtnValue={handleBtnValue} />
-              <table style={tableCustom}>
-                <thead>
-                  <tr>
-                    <th style={columnName}>{t("Table_head_name")}</th>
-                    <th style={columnName} />
-                    <th style={columnName}></th>
-                    <th style={columnName}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cityList.map((i) => (
-                    <tr key={i.id}>
-                      <>
-                        {(radioValue === "1") & i.is_active ? (
-                          <>
-                            <td style={tableCell}>{i.name}</td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnUnactive}
-                                onClick={() => unActiveHandler(i.id)}
-                              >
-                                {t("btn_unactive")}
-                              </button>
-                            </td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnDescription}
-                                onClick={() => descriptionHandler(i)}
-                              >
-                                {t("btn_description")}
-                              </button>
-                            </td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnInfo}
-                                onClick={() => infoHandler(i)}
-                              >
-                                {t("btn_info")}
-                              </button>
-                            </td>
-                          </>
-                        ) : null}
-                      </>
-                    </tr>
-                  ))}
-                  {cityList.map((i) => (
-                    <tr key={i.id}>
-                      <>
-                        {(radioValue === "0") & !i.is_active ? (
-                          <>
-                            <td style={tableCell}>{i.name}</td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnActive}
-                                onClick={() => activeHandler(i.id)}
-                              >
-                                {t("btn_active")}
-                              </button>
-                            </td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnDescription}
-                                onClick={() => descriptionHandler(i)}
-                              >
-                                {t("btn_description")}
-                              </button>
-                            </td>
-                            <td style={tableCell}>
-                              <button
-                                style={btnInfo}
-                                onClick={() => infoHandler(i)}
-                              >
-                                {t("btn_info")}
-                              </button>
-                            </td>
-                          </>
-                        ) : null}
-                      </>
-                    </tr>
-                  ))}
-                  {/* )} */}
-                </tbody>
-              </table>
+              {radioValue === ONE && <StatusDistrictsTable active={true} />}
+              {radioValue === ZERO && <StatusDistrictsTable active={false} />}
             </>
           ) : null}
         </div>

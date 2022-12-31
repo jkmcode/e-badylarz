@@ -14,6 +14,15 @@
   "ErrorMessage_store_already_exist": "Sklep z taką nazwą już istneje",
   "ErrorMessage_nip_already_exist": "Podany NIP juz istnieje",
   "ErrorMessage_area_already_exist": "Obszar sprzedaży o podanej nazwie już istneje",
+
+  "latitude_placeholder": "Wprowadź warotść ...",
+  "latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
+  "label_latitude": "Szerokość geograficzna",
+
+  "longitude_placeholder": "Wprowadź wartość ...",
+  "longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
+  "label_longitude": "Długość geograficzna",
+
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",
@@ -48,6 +57,7 @@
   "btn_clear": "wyczyść",
   "btn_products_category": "Kategorie Sklepu",
   "btn_buy": "kup",
+  "btn_more": "Więcej",
   "price": "cena",
   "promotion": "promocja",
   "my_cart": "Mój koszyk",
@@ -135,10 +145,13 @@
   "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 100",
 
   "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
-  "AddCiti_subtitle": "Dla poprwanej walidacji kodu pocztowego zastosuj język właściwy dla dodawanej miejscowości",
   "AddCiti_label_name": "Nazwa miejscowości",
   "AddCiti_name_placeholder": "Podaj nazwę miejscowosci ...",
   "AddCiti_label_post_code": "Kod pocztowy",
+  "AddCiti_post_code_error_message": "Format kodu pocztowego: xx-xxx",
+
+  "AddCiti_name_error_message": "Nazwa Miasta powinna mieć od 3 do 50 znaków bez znaków specjalnych!",
+
   "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
   "AddCity_success": "Miejscowość prawidłowo dodana",
   "AddCity_body_window": "Dodać opis ?",
@@ -218,12 +231,24 @@
   "AddContact_contactList": "Lista kontaktów",
   "AddContact_label_name": "Imię",
   "AddContact_name_placeholder": "Wpisz imię ...",
+
+  "AddContact_name_error_message": "Imię powinno mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+
   "AddContact_label_surname": "Nazwisko",
   "AddContact_surname_placeholder": "Wpisz nazwisko ...",
+
+  "AddContact_surname_error_message": "Nazwisko powinno mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+
   "AddContact_label_email": "email",
   "AddContact_email_placeholder": "Wpisz emial ...",
+
+  "AddContact_email_error_message": "Niepoprawny format email",
+
   "AddContact_label_phone": "Numer telefonu",
   "AddContact_phone_placeholder": "Wpisz numer kontaktowy ...",
+
+  "AddContact_phone_error_message": "niepoprawny format numeru telefonu",
+
   "PrivatePolicy_title": "Polityka prywatności opisuje zasady przetwarzania przez nas informacji na Twój temat,w tym danych osobowych oraz ciasteczek, czyli tzw. cookies.",
   "PrivatePolicy_1_General_Information": "1. Informacje ogólne",
   "PrivatePolicy_1.1_General_Information": "Niniejsza polityka dotyczy Serwisu www, funkcjonującego pod adresem url: jkmcode.eu.",
@@ -244,6 +269,9 @@
   "AddContact_email": "e-mail",
   "AddContact_description": "Opis",
   "AddContact_description_placeholder": "Wpisz opis ...",
+
+  "AddContact_description_error_message": "Maksymalna ilość znaków wynosi 200",
+
   "AddContact_btn_add": "Nowy kontakt",
   "AddContact_btn_close": "Zamknij nowy kontakt",
   "AddContact_btn_close_edit": "Zamknij edytowany kontakt",
@@ -266,6 +294,10 @@
   "ShopsSpot_title_geolocation": "Współrzędne geograficzne punktu sprzedaży",
   "ShopsSpot_label_range": "Zasięg dostawy",
   "ShopsSpot_range_placeholder": "Wpisz zasięg dostawy ...",
+  "ShopSpot_district_placeholder": "Wybierz powiat ...",
+  "ShopsSpot_label_district": "Powiat",
+  "ShopsSpot_label_city": "Miejscowość",
+  "ShopSpot_city_placeholder": "Wybierz miejscowość ...",
   "PrivatePolicy_2_Selected_data_protection": "2. Wybrane metody ochrony danych stosowane przez Operatora",
   "PrivatePolicy_2.1_Selected_data_protection": "Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji (certyfikat SSL). Dzięki temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą być odczytane jedynie na docelowym serwerze.",
   "PrivatePolicy_2.2_Selected_data_protection": "Operator okresowo zmienia swoje hasła administracyjne.",
@@ -356,5 +388,7 @@
   "AreaActivity_label_longitude": "Długość",
   "AreaActivity_longitude_placeholder": "Wprowadź długość ...",
   "AddArea_success": "Obszar sprzedaży dodany poprawnie",
-  "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie"
+  "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie",
+
+  "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$"
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +8,9 @@ import ErrorMessage from "../component/ErrorMessage";
 import InfoWindow from "../component/infoWindow";
 import { getFullDiscricts } from "../actions/discrictsActions";
 import useBackToLogin from "../component/useBackToLogin";
-import useResponsive from "../component/useResponsive";
 import { Icon } from "@iconify/react";
 import Divider from "./Divider";
+import FormInput from "./FormInput";
 
 import { addCiti } from "../actions/adminActions";
 import AddDescription from "./AddDescription";
@@ -22,15 +21,11 @@ import {
   TWO,
 } from "../constants/adminConstans";
 
-import { formLabel, formInput, submitBtn, FormLayout } from "./AdminCSS";
-
-import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
-
+import { submitBtn, FormLayout } from "./AdminCSS";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddCity() {
   useBackToLogin();
-  const { windowWidth } = useResponsive();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,6 +33,12 @@ function AddCity() {
 
   const dscrictId = Number(params.id);
 
+  const [values, setValues] = useState({
+    cityName: "",
+    postCode: "",
+    latitude: "",
+    longitude: "",
+  });
   const [addDescription, setAddDescription] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
 
@@ -69,13 +70,13 @@ function AddCity() {
     error: descError,
   } = discrictListRedux;
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     const insertData = {
-      name: data.name,
+      name: values.cityName,
       creator: userInfo.id,
-      post: data.post,
-      lat: data.latitude,
-      lng: data.longitude,
+      post: values.postCode,
+      lat: values.latitude,
+      lng: values.longitude,
       desc_id: dscrictId,
     };
     dispatch(addCiti(insertData));
@@ -107,24 +108,66 @@ function AddCity() {
     padding: "1.5rem",
   };
 
-  const formLayout = {
-    display: "grid",
-    gridTemplateColumns:
-      windowWidth > 800 ? `repeat(2, 1fr)` : `repeat(1, 1fr)`,
-    gridColumnGap: "1rem",
-  };
-
-  const msgError = {
-    fontStyle: "italic",
-    fontSize: "0.75rem",
-    margin: "0",
-    color: "red",
-  };
-
   const geolocationTitle = {
     fontSize: "1rem",
     fontWeight: "500",
   };
+
+  const title = {
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "calc(1.2rem + 1vw)",
+    marginBottom: "1rem",
+    marginTop: "1rem",
+    textAlign: "center",
+  };
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const inputs = [
+    {
+      id: "1",
+      name: "cityName",
+      type: "text",
+      placeholder: t("AddCiti_name_placeholder"),
+      errorMessage: t("AddCiti_name_error_message"),
+      label: t("AddCiti_label_name"),
+      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
+      required: true,
+    },
+    {
+      id: "2",
+      name: "postCode",
+      type: "text",
+      placeholder: t("AddCiti_post_code_placeholder"),
+      errorMessage: t("AddCiti_post_code_error_message"),
+      label: t("AddCiti_label_post_code"),
+      pattern: "^[0-9]{2}-[0-9]{3}$",
+      required: true,
+    },
+    {
+      id: "3",
+      name: "latitude",
+      type: "text",
+      placeholder: t("latitude_placeholder"),
+      errorMessage: t("latitude_error_message"),
+      label: t("label_latitude"),
+      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      required: true,
+    },
+    {
+      id: "4",
+      name: "longitude",
+      type: "text",
+      placeholder: t("longitude_placeholder"),
+      errorMessage: t("longitude_error_message"),
+      label: t("label_longitude"),
+      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      required: true,
+    },
+  ];
 
   return (
     <>
@@ -173,143 +216,35 @@ function AddCity() {
             {t("btn-return")}
           </Link>
 
-          <div className="d-flex justify-content-center display-6">
+          <div style={title}>
             {t("AddCiti_title")}
             {districtList.length === 0
               ? null
               : districtList.filter((i) => i.id === dscrictId)[0].name}
           </div>
-          <Divider />
-          <div>{t("AddCiti_subtitle")}</div>
           <form onSubmit={addhandleSubmit(onSubmit)}>
-            <div style={formLayout}>
-              <div controlId="name">
-                <label htmlFor="name" style={formLabel}>
-                  {t("AddCiti_label_name")}
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  style={formInput}
-                  className={"formInput"}
-                  placeholder={t("AddCiti_name_placeholder")}
-                  {...register("name", {
-                    required: t("Form_field_required"),
-                    pattern: {
-                      value: NUMBERS_AND_NATIONAL_LETTERS,
-                      message: t("Form_letters_pl_and_digits"),
-                    },
-                    minLength: {
-                      value: 3,
-                      message: t("Form_minLength_3"),
-                    },
-                    maxLength: {
-                      value: 30,
-                      message: t("Form_maxLength_30"),
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("name");
-                  }}
-                  name="name"
-                ></input>
-                {errors.name && (
-                  <div style={msgError}>{errors.name.message}</div>
-                )}
-              </div>
-              <div controlId="post">
-                <label htmlFor="post" style={formLabel}>
-                  {t("AddCiti_label_post_code")}
-                </label>
-                <input
-                  type="text"
-                  id="post"
-                  style={formInput}
-                  className={"formInput"}
-                  placeholder={t("AddCiti_post_code_placeholder")}
-                  {...register("post", {
-                    required: t("Form_field_required"),
-                    pattern: {
-                      value: /^[0-9A-Z -]+$/,
-                      message: t("Form_post_code"),
-                    },
-                    minLength: {
-                      value: 5,
-                      message: t("Form_minLength_5"),
-                    },
-                    maxLength: {
-                      value: 10,
-                      message: t("Form_maxLength_10"),
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("post");
-                  }}
-                  name="post"
-                ></input>
-                {errors.post && (
-                  <div style={msgError}>{errors.post.message}</div>
-                )}
-              </div>
-            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index <= 1) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
 
-            <Divider />
+            <Divider backgroundColor="gray" />
             <div style={geolocationTitle}>
               {t("AddShops_title_geolocation")}
             </div>
             <FormLayout col={TWO}>
-              <div controlId="latitude">
-                <label htmlFor="latitude" style={formLabel}>
-                  {t("AddShops_label_latitude")}
-                </label>
-                <input
-                  type="text"
-                  id="latitude"
-                  style={formInput}
-                  className={"formInput"}
-                  placeholder={t("AddShops_latitude_placeholder")}
-                  {...register("latitude", {
-                    required: t("Form_field_required"),
-                    pattern: {
-                      value: /^[0-9.]+$/,
-                      message: t("Form_only_digits_or_dot"),
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("latitude");
-                  }}
-                  name="latitude"
-                ></input>
-                {errors.latitude && (
-                  <div style={msgError}>{errors.latitude.message}</div>
-                )}
-              </div>
-              <div controlId="longitude">
-                <label htmlFor="longitude" style={formLabel}>
-                  {t("AddShops_label_longitude")}
-                </label>
-                <input
-                  type="text"
-                  id="longitude"
-                  style={formInput}
-                  className={"formInput"}
-                  placeholder={t("AddShops_longitude_placeholder")}
-                  {...register("longitude", {
-                    required: t("Form_field_required"),
-                    pattern: {
-                      value: /^[0-9.]+$/,
-                      message: t("Form_only_digits_or_dot"),
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("longitude");
-                  }}
-                  name="longitude"
-                ></input>
-                {errors.longitude && (
-                  <div style={msgError}>{errors.longitude.message}</div>
-                )}
-              </div>
+              {inputs.map((input, index) => {
+                if (index === 2 || index === 3) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
             </FormLayout>
 
             <div style={{ display: "flex", justifyContent: "center" }}>

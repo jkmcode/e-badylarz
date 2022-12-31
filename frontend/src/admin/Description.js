@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { addDesc } from "../actions/adminActions";
+import { formLabel } from "./AdminCSS";
 
 import { DISTRICT_ADD_DESC_DELETE } from "../constants/adminConstans";
 
@@ -12,7 +13,15 @@ function Description(props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState("");
+  const [currentDesc, setCurrentDesc] = useState(() => {
+    if (props.getDesc) {
+      if (props.getDesc.length !== 0) {
+        return props.getDesc[0].description;
+      }
+    }
+  });
+
+  const [value, setValue] = useState(currentDesc);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
@@ -20,7 +29,7 @@ function Description(props) {
 
     if (value.length === 0) {
       setErrorMessage(t("DistrictAddDescription_error_message_requred"));
-    } else if (value.length > 10) {
+    } else if (value.length > 100) {
       setErrorMessage(t("DistrictAddDescription_error_message_too_long"));
     } else {
       dispatch({ type: DISTRICT_ADD_DESC_DELETE });
@@ -74,7 +83,7 @@ function Description(props) {
   return (
     <form onSubmit={handleSubmit}>
       <div controlId="desc">
-        <label htmlFor="descDistrict" className="form-msg-style ms-2">
+        <label htmlFor="descDistrict" style={formLabel}>
           {t("DistrictAddDescription_label_desc")}
         </label>
         <textarea
@@ -84,6 +93,7 @@ function Description(props) {
           name="description"
           style={textArea}
           onChange={(e) => setValue(e.target.value)}
+          defaultValue={currentDesc}
         />
         <span
           style={{ color: "red", fontSize: "0.85rem", fontStyle: "italic" }}

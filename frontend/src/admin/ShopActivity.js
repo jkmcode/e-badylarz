@@ -25,6 +25,8 @@ import {
   GET_SHOPS_LIST_DELETE,
   TWO,
   THREE,
+  ADD_SHOP_DELETE_SUCCESS,
+  EDIT_SHOP_DELETE,
 } from "../constants/adminConstans";
 
 import {
@@ -90,6 +92,8 @@ function AddShops() {
   } = getShopRedux;
 
   // normalize function
+  const [bankAccount, setBankAccount] = useState("");
+
   const normalizeCardNumber = (value) => {
     return (
       value
@@ -102,24 +106,24 @@ function AddShops() {
   };
 
   // Handlers
-  const onSubmit = (data) => {
-    setCurrentTaxNo(data.nip);
+  const onSubmit = () => {
+    //setCurrentTaxNo(data.nip);
     if (addShopParam) {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
         addShop({
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          photo: data.photo,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
+          city: values.city,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          name: values.shopName,
+          nip: values.nip,
+          number: values.number,
+          //photo: values.photo,
+          post: values.post,
+          postCode: values.postCode,
+          street: values.street,
           creator: userInfo.id,
-          bankAccount: data.bankAccount,
+          bankAccount: !bankAccount ? shopDetails.bank_account : bankAccount,
         })
       );
     } else {
@@ -128,26 +132,28 @@ function AddShops() {
       dispatch(
         updateShop({
           id: shopId,
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          photo: data.photo,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
+          city: !values.city ? shopDetails.city : values.city,
+          latitude: !values.latitude ? shopDetails.latitude : values.latitude,
+          longitude: !values.longitude
+            ? shopDetails.longitude
+            : values.longitude,
+          name: !values.shopName ? shopDetails.name : values.shopName,
+          nip: !values.nip ? shopDetails.nip : values.nip,
+          number: !values.number ? shopDetails.no_building : values.number,
+          //photo: values.photo,
+          post: !values.post ? shopDetails.post : values.post,
+          postCode: !values.postCode ? shopDetails.post_code : values.postCode,
+          street: !values.street ? shopDetails.street : values.street,
           creator: userInfo.id,
-          bankAccount: data.bankAccount,
+          bankAccount: !bankAccount ? shopDetails.bank_account : bankAccount,
           typeOfChnage: "Edit date",
         })
       );
-      if (isImage) {
-        dispatch(
-          InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
-        );
-      }
+      // if (isImage) {
+      //   dispatch(
+      //     InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+      //   );
+      // }
     }
   };
 
@@ -200,21 +206,29 @@ function AddShops() {
 
   // navigate to ShopAdmin
   useEffect(() => {
-    if (successAdd && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (successUpdateShop && !isImage && shopImageFlag) {
-      navigate("/dashboard/shops/shops");
-    } else if (
-      successUpdateShop &&
-      isImage &&
-      successInsertImage &&
-      shopImageFlag
-    ) {
-      navigate("/dashboard/shops/shops");
+    if (successAdd || successUpdateShop) {
+      dispatch({ type: ADD_SHOP_DELETE_SUCCESS });
+      dispatch({ type: EDIT_SHOP_DELETE });
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      navigate("/dashboard/shops");
     }
-  }, [successAdd, isImage, successInsertImage, successUpdateShop]);
+
+    // if (successAdd && !isImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (successUpdateShop && !isImage && shopImageFlag) {
+    //   navigate("/dashboard/shops/shops");
+    // } else if (
+    //   successUpdateShop &&
+    //   isImage &&
+    //   successInsertImage &&
+    //   shopImageFlag
+    // ) {
+    //   navigate("/dashboard/shops/shops");
+    // }
+  }, [successAdd, successUpdateShop]);
+  //}, [successAdd, isImage, successInsertImage, successUpdateShop]);
 
   //style
 
@@ -275,7 +289,6 @@ function AddShops() {
     number: "",
     postCode: "",
     post: "",
-    bankAccount: "",
     latitude: "",
     longitude: "",
   });
@@ -300,7 +313,8 @@ function AddShops() {
       placeholder: t("AddShops_nip_placeholder"),
       errorMessage: t("AddShops_nip_error_message"),
       label: t("AddShops_label_nip"),
-      pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+      //pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+      pattern: t("Pattern_nip"),
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.nip,
       required: true,
@@ -491,6 +505,7 @@ function AddShops() {
                     key={input.id}
                     {...input}
                     onChange={(event) => {
+                      setBankAccount(event.target.value);
                       const { value } = event.target;
                       event.target.value = normalizeCardNumber(value);
                     }}

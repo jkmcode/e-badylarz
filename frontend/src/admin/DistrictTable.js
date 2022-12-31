@@ -7,6 +7,8 @@ import { unOrActiveList } from "../actions/adminActions";
 import { useNavigate } from "react-router-dom";
 import CitiesList from "./CitiesList";
 import InfoAlertComponent from "../component/InfoAlertComponent";
+import InfoComponent from "../component/infoComponent";
+import { emptylistTitle, emptyListIcon } from "./AdminCSS";
 
 import {
   SET_FLAG_CITY_TRUE,
@@ -18,6 +20,7 @@ import {
   ACTIVE,
   ONE,
   ZERO,
+  SET_FLAG_INFO_FALSE,
 } from "../constants/adminConstans";
 
 function DistrictTable({ radioValue }) {
@@ -40,6 +43,9 @@ function DistrictTable({ radioValue }) {
   // fech data from Redux
   const discrictListRedux = useSelector((state) => state.districts);
   const { districtList } = discrictListRedux;
+
+  const infoFlagRedux = useSelector((state) => state.flag);
+  const { infoFlag } = infoFlagRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -171,23 +177,8 @@ function DistrictTable({ radioValue }) {
     fontSize: `calc(1rem + 0.4vw)`,
   };
 
-  const emptylistTitle = {
-    display: "flex",
-    justifyContent: "center",
-    textTransform: "uppercase",
-    fontSize: "2rem",
-    fontWeight: "500",
-  };
-
-  const emptyListIcon = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: `300px`,
-    width: "100%",
-    fontSize: `calc(15rem + 4vw)`,
-    color: "grey",
-    opacity: "0.4",
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
   };
 
   function StatusDistrictsTable({ active }) {
@@ -372,6 +363,15 @@ function DistrictTable({ radioValue }) {
 
   return (
     <>
+      {infoFlag ? (
+        <InfoComponent
+          title={t("InfoComponent_title")}
+          obj={objInfo}
+          typeObj={DISCTRICT_DESCRIPTION}
+          closeInfoHandler={closeInfoHandler}
+        />
+      ) : null}
+
       {showAlert && (
         <InfoAlertComponent
           confirmYes={confirmYes}

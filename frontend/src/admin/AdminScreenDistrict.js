@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getFullDiscricts } from "../actions/discrictsActions";
 import Loader from "../component/Loader";
-import InfoComponent from "../component/infoComponent";
 import ErrorMessage from "../component/ErrorMessage";
 import useBackToLogin from "../component/useBackToLogin";
-
-import useResponsive from "../component/useResponsive";
 import DistrictTable from "./DistrictTable";
 import RadioButtons from "./RadioButtons";
 
 import {
-  DISCTRICT_DESCRIPTION,
   DISTRICT_DELETE,
   SET_FLAG_INFO_FALSE,
   ONE,
-  ZERO,
 } from "../constants/adminConstans";
 
 function AdminScreenDistrict() {
@@ -39,12 +32,6 @@ function AdminScreenDistrict() {
     success,
     error: errorUnOrActive,
   } = unOrActive;
-
-  const infoFlagRedux = useSelector((state) => state.flag);
-  const { infoFlag } = infoFlagRedux;
-
-  const [info] = useState(false);
-  const [objInfo] = useState({});
 
   useEffect(() => {
     if (districtList.length === 0) {
@@ -70,8 +57,13 @@ function AdminScreenDistrict() {
     setIsOpen(false);
   };
 
-  const closeInfoHandler = () => {
-    dispatch({ type: SET_FLAG_INFO_FALSE });
+  const title = {
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "calc(1.2rem + 1vw)",
+    marginBottom: "1rem",
+    marginTop: "1rem",
+    textAlign: "center",
   };
 
   return (
@@ -101,21 +93,12 @@ function AdminScreenDistrict() {
             </Link>
           )}
 
-          <div className="d-flex justify-content-center display-6">
+          <div style={title}>
             {radioValue === ONE
               ? t("AdminScreenDistrict_title_active")
               : t("AdminScreenDistrict_title_unactive")}
           </div>
           <RadioButtons handleBtnValue={handleBtnValue} />
-
-          {infoFlag ? (
-            <InfoComponent
-              title={t("InfoComponent_title")}
-              obj={objInfo}
-              typeObj={DISCTRICT_DESCRIPTION}
-              closeInfoHandler={closeInfoHandler}
-            />
-          ) : null}
 
           {error ? (
             <p>{t("No_data")}</p>

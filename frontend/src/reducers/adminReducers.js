@@ -37,6 +37,8 @@ import {
   SET_FLAG_CITY_FALSE,
   SET_FLAG_SHOP_TRUE,
   SET_FLAG_SHOP_FALSE,
+  SET_CITY_FLAG_DESC_TRUE,
+  SET_CITY_FLAG_DESC_FALSE,
   SET_WINDOW_FLAG_FALSE,
   SET_WINDOW_FLAG_TRUE,
   SET_WINDOW_FLAG_DELETE,
@@ -206,6 +208,24 @@ export const contactListReducer = (state = { ListOfContact: [] }, action) => {
   }
 };
 
+export const shopSpotUpdateListReducer = (
+  state = { shopSpotList: [] },
+  action
+) => {
+  switch (action.type) {
+    case EDIT_SHOP_SPOT_REQUEST:
+      return { loading: true, success: false, shopSpotList: [] };
+    case EDIT_SHOP_SPOT_SUCCESS:
+      return { loading: false, success: true, shopSpotList: action.payload };
+    case EDIT_SHOP_SPOT_DELETE:
+      return { shopSpotList: [] };
+    case EDIT_SHOP_SPOT_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    default:
+      return state;
+  }
+};
+
 export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
   switch (action.type) {
     case GET_SHOPS_LIST_REQUEST:
@@ -344,6 +364,10 @@ export const flagReducer = (state = {}, action) => {
       return { shopImageFlag: true };
     case SET_FLAG_IMAGE_FALSE:
       return { shopImageFlag: false };
+    case SET_CITY_FLAG_DESC_TRUE:
+      return { cityDescFlag: true, cityFlag: true };
+    case SET_CITY_FLAG_DESC_FALSE:
+      return { cityDescFlag: false, cityFlag: true };
     default:
       return state;
   }

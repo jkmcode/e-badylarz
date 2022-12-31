@@ -64,12 +64,12 @@ function AddDiscrict() {
   const newDistrict = useSelector((state) => state.addDistrict);
   const { loading, error, success, district } = newDistrict;
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     const insertData = {
-      name: data.name,
+      name: values.name,
       creator: userInfo.id,
-      lat: data.latitude,
-      lng: data.longitude,
+      lat: values.latitude,
+      lng: values.longitude,
     };
     dispatch(addDiscrict(insertData));
   };
