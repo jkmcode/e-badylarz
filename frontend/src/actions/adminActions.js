@@ -19,6 +19,9 @@ import {
   GET_CITES_LIST_REQUEST,
   GET_CITES_LIST_SUCCESS,
   GET_CITES_LIST_FAIL,
+  GET_ALL_CITIES_REQUEST,
+  GET_ALL_CITIES_SUCCESS,
+  GET_ALL_CITIES_FAIL,
   PRODUCT_TYPE_ADD_REQUEST,
   PRODUCT_TYPE_ADD_SUCCESS,
   PRODUCT_TYPE_ADD_FAIL,
@@ -104,8 +107,6 @@ export const saveImage = (imageToSave) => (dispatch) => {
     payload: imageToSave,
   });
 };
-
-
 
 // Shops
 export const updateShop = (insertData) => async (dispatch, getState) => {
@@ -529,6 +530,36 @@ export const getCitiesList = (insertData) => async (dispatch, getState) => {
   }
 };
 
+export const getAllCities = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_ALL_CITIES_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/get-cites/all/list`, config);
+
+    dispatch({
+      type: GET_ALL_CITIES_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_CITIES_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
 export const addCiti = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({ type: CITI_ADD_REQUEST });
@@ -697,5 +728,3 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
     });
   }
 };
-
-

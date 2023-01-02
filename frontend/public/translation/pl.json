@@ -290,14 +290,40 @@
   "ShopsSpot_Add_title": "Dodaj punkt sprzedaży",
   "ShopsSpot_label_name": "Nazwa punktu sprzedaży",
   "ShopsSpot_name_placeholder": "Wpisz nazwę punktu sprzedaży ...",
+
+  "ShopsSpot_name_error_message": "Punkt sprzedaży powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+
   "ShopsSpot_title_address": "Adres punktu sprzedaży",
   "ShopsSpot_title_geolocation": "Współrzędne geograficzne punktu sprzedaży",
   "ShopsSpot_label_range": "Zasięg dostawy",
   "ShopsSpot_range_placeholder": "Wpisz zasięg dostawy ...",
+
+  "ShopsSpot_range_error_message": "Możesz wpisać tylko liczby",
+
+  "ShopsSpot_label_districtList": "Lista powiatów",
+
   "ShopSpot_district_placeholder": "Wybierz powiat ...",
   "ShopsSpot_label_district": "Powiat",
   "ShopsSpot_label_city": "Miejscowość",
+
   "ShopSpot_city_placeholder": "Wybierz miejscowość ...",
+
+  "ShopsSpot_street_placeholder": "Wpisz nazwe ulicy ...",
+  "ShopsSpot_street_error_message": "Nazwa ulicy powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+  "ShopsSpot_street_label": "Ulica",
+
+  "ShopsSpot_number_placeholder": "Wpisz numer budynku ...",
+  "ShopsSpot_number_error_message": "Nieprawidłowy format",
+  "ShopsSpot_number_label": "Numer budynku",
+
+  "ShopsSpot_postCode_placeholder": "Wpisz kod pocztowy ...",
+  "ShopsSpot_postCode_error_message": "Format kodu pocztowego: xx-xxx",
+  "ShopsSpot_postCode_label": "Kody pocztowy",
+
+  "ShopsSpot_post_placeholder": "Wpisz nazwe poczty...",
+  "ShopsSpot_post_error_message": "Nazwa poczty powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+  "ShopsSpot_post_label": "Poczta",
+
   "PrivatePolicy_2_Selected_data_protection": "2. Wybrane metody ochrony danych stosowane przez Operatora",
   "PrivatePolicy_2.1_Selected_data_protection": "Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji (certyfikat SSL). Dzięki temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą być odczytane jedynie na docelowym serwerze.",
   "PrivatePolicy_2.2_Selected_data_protection": "Operator okresowo zmienia swoje hasła administracyjne.",

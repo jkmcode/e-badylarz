@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useResponsive from "../component/useResponsive";
 
-function RadioButtons({ handleBtnValue }) {
+function RadioButtons({ handleBtnValue, radios }) {
   const { t } = useTranslation();
   const { windowWidth } = useResponsive();
-  const radios = [
-    { id: 1, name: t("Radio_true"), value: "1" },
-    { id: 2, name: t("Radio_false"), value: "0" },
-  ];
 
   //styling
 

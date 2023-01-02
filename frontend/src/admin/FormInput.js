@@ -18,10 +18,12 @@ function FormInput(props) {
       </label>
       <input
         id={label}
+        title="Please enter your name"
         style={formInput}
         className="formInput"
         type={type}
         {...inputProps}
+        autocomplete="off"
         onChange={onChange}
         onBlur={handleFocus}
         focused={focused.toString()}

@@ -95,3 +95,25 @@ export const activeBadge = {
   backgroundImage: "linear-gradient(to right, #28a745, #20c997)",
   color: "#fff",
 };
+
+export const BTN = {
+  borderRadius: "0.25rem",
+  padding: "0.5rem",
+  minWidth: "100px",
+  border: "none",
+
+  color: "white",
+  fontWeight: "500",
+};
+
+export const changeBtn = {
+  ...BTN,
+  backgroundImage:
+    "linear-gradient(183deg, rgba(236, 181, 26, 1) 0%, rgba(217, 196, 33, 1) 100%)",
+};
+
+export const addBtn = {
+  ...BTN,
+  backgroundImage:
+    "linear-gradient(183deg, rgba(72, 236, 26, 1) 0%, rgba(83, 155, 41, 1) 100%)",
+};

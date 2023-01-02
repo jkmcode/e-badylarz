@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { formInput, formLabel } from "./AdminCSS";
 
 function TextareaWithValidation(props) {
-  const { label, defaultValue, placeholder, errorMessage } = props;
+  const {
+    label,
+    defaultValue,
+    placeholder,
+    errorMessage,
+    onChange,
+    ...inputProps
+  } = props;
   // Declare a state variable for the input value
   const [value, setValue] = useState(defaultValue || "");
   // Declare a state variable for the error message
   const [error, setError] = useState("");
 
   // Define the regular expression for validation
-  const regex = /^.{0,10}$/;
+  const regex = /^.{0,200}$/;
 
   // Define a function to handle input changes
   const handleChange = (event) => {
@@ -25,8 +32,11 @@ function TextareaWithValidation(props) {
       setValue(currentValue);
       setError(errorMessage);
     }
-    console.log("działa handleChange");
   };
+
+  useEffect(() => {
+    onChange(value);
+  }, [value]);
 
   return (
     <div style={{ marginTop: "1rem" }}>
@@ -34,6 +44,7 @@ function TextareaWithValidation(props) {
         {label}
       </label>
       <textarea
+        {...inputProps}
         id={label}
         style={formInput}
         value={value}

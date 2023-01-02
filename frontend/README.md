@@ -52,4 +52,13 @@ Front 5. SVG na logo (zamienić PNG na SVG) 6. Poprawić politykę prywatności 
 
 ///
 
-1. nie działa ibjInfo w komponencie CitiesList co powoduje przeniesienie pistego obiektu do InfoComponent. (ta sama sytuacja dla AdminScreenDistrict)
+Addcontact do zrobienia:
+
+1. nie moge wyśrodkować napisu "Brak danych" w tabeli contact List (nornalnie uzywam do tego useFefa zeby odczytać jego szerokość).
+2. usunąć zbędne pola infromacyjne w inputach.
+3. nie mogę stworzyć nową osobę do kontaktu (problem z useEffectem)
+
+ShopSpotActivity:
+
+1. przy ponownym wyborze districtu musimy kasowac liste z miejscowościami. Inaczej możemy zaciągnąć złą miejscowość do backendu.
+2. Ustawić wartości defaultowe w przypdaku editu.

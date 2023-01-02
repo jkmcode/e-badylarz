@@ -16,9 +16,11 @@ urlpatterns = [
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
-    path('api/get-cites/<str:Id>/<str:param>/list', getCites),
+    
 
     #shop
+    path('api/get-cites/<str:Id>/<str:param>/list', getCites),
+    path('api/get-cites/all/list', getAllCities),
     path('api/get-shops/', getShops),
     path('api/<str:Id>/get-shop/', getShop),
     path('api/shop/<str:Id>/update/', updateShop),

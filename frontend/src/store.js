@@ -7,8 +7,8 @@ import { cartReducer } from "./reducers/cartReducer";
 import {
   areaActivityReducer,
   areaListReducer,
-  areaReducer
-} from "./reducers/areaReducer"
+  areaReducer,
+} from "./reducers/areaReducer";
 import {
   addDistrictReducer,
   addDistrictDescReducer,
@@ -28,7 +28,8 @@ import {
   insertImageReducer,
   shopSpotListReducer,
   getShopSpotReducer,
-  shopSpotUpdateListReducer
+  shopSpotUpdateListReducer,
+  citesListAllReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -45,6 +46,7 @@ const reducer = combineReducers({
   unOrActiveDescription: unOrActiveDescriptionReducer,
   addCity: addCitiReducer,
   citesList: citesListReducer,
+  citesListAll: citesListAllReducer,
   addProductType: addProductTypeReducer,
   shopList: shopListReducer,
   contactList: contactListReducer,
@@ -58,7 +60,7 @@ const reducer = combineReducers({
   cartReducer: cartReducer,
   areaActivity: areaActivityReducer,
   areaToEdit: areaReducer,
-  shopSpotUpdate: shopSpotUpdateListReducer
+  shopSpotUpdate: shopSpotUpdateListReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

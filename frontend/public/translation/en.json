@@ -285,14 +285,39 @@
   "ShopsSpot_Add_title": "Add spot",
   "ShopsSpot_label_name": "Spots name",
   "ShopsSpot_name_placeholder": "Enter spots name ...",
+
+  "ShopsSpot_name_error_message": "Spot name should be 3-20 characters without any special character",
+
   "ShopsSpot_title_address": "Spots address",
   "ShopsSpot_title_geolocation": "Spots geolocation",
   "ShopsSpot_label_range": "Range delivery",
   "ShopsSpot_range_placeholder": "Enter range delivery ...",
+
+  "ShopsSpot_range_error_message": "Only letters",
+
+  "ShopsSpot_label_districtList": "Districts list",
+
   "ShopSpot_district_placeholder": "Select district ...",
   "ShopsSpot_label_district": "Disctrict",
   "ShopsSpot_label_city": "City",
   "ShopSpot_city_placeholder": "Select city ...",
+
+  "ShopsSpot_street_placeholder": "Enter street name ...",
+  "ShopsSpot_street_error_message": "Street name should be 3-50 characters without any special character",
+  "ShopsSpot_street_label": "Street",
+
+  "ShopsSpot_number_placeholder": "Enter building number ...",
+  "ShopsSpot_number_error_message": "Invalid format",
+  "ShopsSpot_number_label": "No building",
+
+  "ShopsSpot_postCode_placeholder": "Enter post code ...",
+  "ShopsSpot_postCode_error_message": "Post code format: xx-xxx",
+  "ShopsSpot_postCode_label": "Post code",
+
+  "ShopsSpot_post_placeholder": "Enter post name...",
+  "ShopsSpot_post_error_message": "Post name should be 3-50 characters without any special character",
+  "ShopsSpot_post_label": "Post",
+
   "PrivatePolicy_title": "THE PRIVACY POLICY DESCRIBES THE RULES FOR THE PROCESSING OF INFORMATION ABOUT YOU, INCLUDING PERSONAL DATA AND COOKIES, i.e. COOKIES.",
   "PrivatePolicy_1_General_Information": "1. General information",
   "PrivatePolicy_1.1_General_Information": "This policy applies to the Website, operating at the url: jkmcode.eu.",

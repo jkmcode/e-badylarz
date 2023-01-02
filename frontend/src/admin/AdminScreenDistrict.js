@@ -20,6 +20,11 @@ function AdminScreenDistrict() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const radios = [
+    { id: 1, name: t("Radio_true"), value: "1" },
+    { id: 2, name: t("Radio_false"), value: "0" },
+  ];
+
   const [radioValue, setRadioValue] = useState(ONE);
 
   // fech data from Redux
@@ -98,7 +103,7 @@ function AdminScreenDistrict() {
               ? t("AdminScreenDistrict_title_active")
               : t("AdminScreenDistrict_title_unactive")}
           </div>
-          <RadioButtons handleBtnValue={handleBtnValue} />
+          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
 
           {error ? (
             <p>{t("No_data")}</p>

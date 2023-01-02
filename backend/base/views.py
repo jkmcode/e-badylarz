@@ -369,7 +369,6 @@ def getShops(request):
 
     return Response(seriaziler.data)
 
-
 @api_view(['POST', 'PUT'])
 @permission_classes([IsAdminUser])
 def addShopSpot(request):
@@ -510,6 +509,13 @@ def getCites(request, Id, param):
     seriaziler = CitiesSerializer(cities, many=True)
     return Response(seriaziler.data)
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllCities(request):
+    cities = Citis.objects.all().order_by('name') 
+    seriaziler = CitiesSerializer(cities, many=True)
+
+    return Response(seriaziler.data)    
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])

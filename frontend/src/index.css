@@ -786,3 +786,7 @@ input:focus {
 .textAreaInput:invalid ~ .errorMessage {
   display: block;
 }
+
+input:invalid {
+  display: none;
+}

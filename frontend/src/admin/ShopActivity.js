@@ -7,7 +7,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useResponsive from "../component/useResponsive";
 import Divider from "./Divider";
-import { FormLayout } from "./AdminCSS";
+import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
 import { Icon } from "@iconify/react";
 import {
   addShop,
@@ -258,28 +258,6 @@ function AddShops() {
     color: "black",
   };
 
-  const BTN = {
-    borderRadius: "0.25rem",
-    padding: "0.5rem",
-    minWidth: "100px",
-    border: "none",
-
-    color: "white",
-    fontWeight: "500",
-  };
-
-  const changeBtn = {
-    ...BTN,
-    backgroundImage:
-      "linear-gradient(183deg, rgba(236, 181, 26, 1) 0%, rgba(217, 196, 33, 1) 100%)",
-  };
-
-  const addBtn = {
-    ...BTN,
-    backgroundImage:
-      "linear-gradient(183deg, rgba(72, 236, 26, 1) 0%, rgba(83, 155, 41, 1) 100%)",
-  };
-
   /// UPDATE FORM
   const [values, setValues] = useState({
     shopName: "",
@@ -527,14 +505,10 @@ function AddShops() {
               })}
             </FormLayout>
             <UploadImage nip={currentTaxNo} />
-            {/* {imageRender
+            {imageRender
               ? editShopParam === "edit" &&
-                shopDetails.photo !== null && (
-                  <Col>
-                    <img src={shopDetails.photo} />
-                  </Col>
-                )
-              : null} */}
+                shopDetails.photo !== null && <img src={shopDetails.photo} />
+              : null}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {editShopParam === "edit" ? (
                 <button type="submit" style={changeBtn}>

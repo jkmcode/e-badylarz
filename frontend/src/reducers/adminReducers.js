@@ -33,6 +33,10 @@ import {
   GET_CITES_LIST_SUCCESS,
   GET_CITES_LIST_FAIL,
   GET_CITES_LIST_DELETE,
+  GET_ALL_CITIES_REQUEST,
+  GET_ALL_CITIES_SUCCESS,
+  GET_ALL_CITIES_FAIL,
+  GET_ALL_CITIES_DELETE,
   SET_FLAG_CITY_TRUE,
   SET_FLAG_CITY_FALSE,
   SET_FLAG_SHOP_TRUE,
@@ -388,6 +392,26 @@ export const citesListReducer = (state = { cityList: [] }, action) => {
       };
     case GET_CITES_LIST_DELETE:
       return { cityList: [] };
+    default:
+      return state;
+  }
+};
+
+export const citesListAllReducer = (state = { cityListAll: [] }, action) => {
+  switch (action.type) {
+    case GET_ALL_CITIES_REQUEST:
+      return { loading: true, success: false, cityListAll: [] };
+    case GET_ALL_CITIES_SUCCESS:
+      return { loading: false, success: true, cityListAll: action.payload };
+    case GET_ALL_CITIES_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        districtList: [],
+      };
+    case GET_ALL_CITIES_DELETE:
+      return { cityListAll: [] };
     default:
       return state;
   }
