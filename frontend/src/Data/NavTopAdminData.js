@@ -149,3 +149,66 @@ export const navLinksSettings = [
     goToMenu: "",
   },
 ];
+
+export const navLinksAdminPanel = [
+  {
+    id: 1,
+    icon: (
+      <Icon
+        icon="material-symbols:keyboard-double-arrow-left-rounded"
+        color="white"
+        width="32"
+        height="32"
+      />
+    ),
+    path: "",
+    name: "",
+    goToMenu: "main",
+  },
+  {
+    id: 2,
+    icon: (
+      <Icon icon="carbon:zoom-in-area" color="white" width="32" height="32" />
+    ),
+    path: "district",
+    name: "District",
+    goToMenu: "",
+  },
+  {
+    id: 3,
+    icon: (
+      <Icon
+        icon="icon-park-outline:shop"
+        color="white"
+        width="32"
+        height="32"
+      />
+    ),
+    path: "shops",
+    name: "Shops",
+    goToMenu: "",
+  },
+  {
+    id: 4,
+    icon: (
+      <Icon icon="mdi:map-marker-circle" color="white" width="32" height="32" />
+    ),
+    path: "areas",
+    name: "Areas",
+    goToMenu: "",
+  },
+  {
+    id: 5,
+    icon: (
+      <Icon
+        icon="fluent-mdl2:product-variant"
+        color="white"
+        width="32"
+        height="32"
+      />
+    ),
+    path: "products",
+    name: "Products",
+    goToMenu: "",
+  },
+];

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { formLabel, formInput } from "./AdminCSS";
 
-function FormInput(props) {
+function FormInputIBAN(props) {
   const {
     label,
     errorMessage,
@@ -18,13 +18,24 @@ function FormInput(props) {
   const [focused, setFocused] = useState(false);
   const [value, setValue] = useState(defaultValue || "");
 
+  const normalizeCardNumber = (value) => {
+    return (
+      value
+        .replace(/\s/g, "")
+        .match(/.{1,4}/g)
+        ?.join(" ")
+        .substr(0, 39)
+        .toUpperCase() || ""
+    );
+  };
+
   const handleFocus = () => {
     setFocused(true);
   };
 
   const handleChange = (event) => {
     const currentValue = event.target.value;
-    setValue(currentValue);
+    setValue(normalizeCardNumber(currentValue));
   };
 
   useEffect(() => {
@@ -57,10 +68,10 @@ function FormInput(props) {
   );
 }
 
-FormInput.propTypes = {
+FormInputIBAN.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(["tel"]).isRequired,
   placeholder: PropTypes.string.isRequired,
   errorMessage: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -71,10 +82,10 @@ FormInput.propTypes = {
 
 //This will set the default values for pattern, defaultValue, and required to an empty string, '',
 //and false, respectively, if these props are not provide
-FormInput.defaultProps = {
+FormInputIBAN.defaultProps = {
   pattern: "",
   defaultValue: "",
   required: false,
 };
 
-export default FormInput;
+export default FormInputIBAN;

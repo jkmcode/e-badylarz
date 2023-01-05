@@ -30,12 +30,12 @@ export const adminCategory = [
       <Icon icon="mdi:map-marker-circle" color="white" width="32" height="32" />
     ),
   },
-  {
-    id: 4,
-    path: "cities",
-    name: "Cities",
-    icon: <Icon icon="iconoir:city" color="white" width="32" height="32" />,
-  },
+  // {
+  //   id: 4,
+  //   path: "cities",
+  //   name: "Cities",
+  //   icon: <Icon icon="iconoir:city" color="white" width="32" height="32" />,
+  // },
   {
     id: 5,
     path: "products",

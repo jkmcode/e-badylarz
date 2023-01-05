@@ -2,15 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Table } from "react-bootstrap";
+import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
 import { FormLayout, activeBadge, submitBtn, editBtn } from "./AdminCSS";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
-import useResponsive from "../component/useResponsive";
+import InfoAlertComponent from "../component/InfoAlertComponent";
 import Divider from "./Divider";
 import {
   getShopContacts,
@@ -19,45 +18,26 @@ import {
 } from "../actions/adminActions";
 import { unOrActiveList } from "../actions/adminActions";
 import { Icon } from "@iconify/react";
-import InfoWindow from "../component/infoWindow";
 import rocket from "../images/rocket.png";
 import {
   SHOP_CONTACT_DESCRIPTION,
   SHOP_SPOT_DESCRIPTION,
   GET_CONTACT_LIST_DELETE,
   GET_SOPTS_LIST_DELETE,
-  GET_SHOP_DELETE,
   SET_WINDOW_FLAG_DELETE,
 } from "../constants/adminConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
 
-import {
-  NUMBERS_AND_NATIONAL_LETTERS,
-  ONLY_NUMBER,
-  EMAIL_FORMAT,
-} from "../constants/formValueConstans";
-
 function AddContact() {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
-
   const containerRef = useRef(null);
 
   const { t } = useTranslation();
-  const { windowWidth } = useResponsive();
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
 
   const shopId = Number(params.id);
-
-  const [space, setSpace] = useState("  ");
 
   const [newContact, setNewContact] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -65,13 +45,17 @@ function AddContact() {
   const [idContactActive, setIdContactActive] = useState();
   const [activeContact, setActiveContact] = useState(true);
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
   const [idSpot, setIdSpot] = useState();
   const [idSpotActive, setIdSpotActive] = useState();
   const [activeSpot, setActiveSpot] = useState(true);
+  const [editContactObj, setEditContactObj] = useState({});
+  const [editContactObjSuccess, setEditContactObjSuccess] = useState(false);
 
-  const [infoWindowFlag, setInfoWindowFlag] = useState(false);
   // if contactOrSpot is true -> contact else - spot
   const [contactOrSpot, setContactOrSpot] = useState(true);
 
@@ -107,34 +91,36 @@ function AddContact() {
   const shopFlagVar = useSelector((state) => state.windowFlag);
   const { windowFlag } = shopFlagVar;
 
+  //Handlers
+
   const unActiveHandler = (id) => {
-    setInfoWindowFlag(true);
+    setShowAlert(true);
+    setIdContactActive(id);
+    setContactOrSpot(true);
+  };
+
+  const activeHandler = (id) => {
+    setShowAlert(true);
     setIdContactActive(id);
     setContactOrSpot(true);
   };
 
   const unActiveSpotHandler = (id) => {
-    setInfoWindowFlag(true);
+    setShowAlert(true);
     setIdSpotActive(id);
     setContactOrSpot(false);
   };
 
-  const activeHandler = (id) => {
-    setInfoWindowFlag(true);
-    setIdContactActive(id);
-    setContactOrSpot(true);
-  };
-
   const activeSpotHandler = (id) => {
-    setInfoWindowFlag(true);
+    setShowAlert(true);
     setIdSpotActive(id);
     setContactOrSpot(false);
   };
 
   const newHendler = () => {
+    setEditContactObj({});
     setEditContact(false);
     setNewContact(!newContact);
-    reset({});
   };
 
   const newHendlerSpot = () => {
@@ -152,99 +138,101 @@ function AddContact() {
   const editHandler = (id) => {
     setNewContact(true);
     setEditContact(true);
+
     ListOfContact.map((i) => {
       if (i.id === id) {
-        setIdContact(id);
-        reset({
-          firstName: i.name,
-          surname: i.surname,
-          email: i.email,
-          phone: i.phone,
-          description: i.description,
-        });
+        setEditContactObj(i);
       }
     });
   };
+
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (editContact) {
+      const insertData = {
+        shop_id: shopId,
+        Id: idContact,
+        editing: true,
+        firstName: values.firstName,
+        surname: values.surname,
+        email: values.email,
+        phone: values.phone,
+        description: values.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      };
+      setEditContact(false);
+      setNewContact(false);
+      dispatch(addContact(insertData));
+    } else {
+      const insertData = {
+        shop_id: shopId,
+        editing: false,
+        firstName: values.firstName,
+        surname: values.surname,
+        email: values.email,
+        phone: values.phone,
+        description: values.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      };
+      setNewContact(false);
+      setEditContact(false);
+      dispatch(addContact(insertData));
+    }
+  };
+
+  // Ensure that useState editContactObj assign edit object in Time.
+  // UseSate is async which means is possible that condition in Inputs array will be executed elier than useState editContactObj
+  useEffect(() => {
+    setEditContactObjSuccess(true);
+    return () => {
+      setEditContactObjSuccess(false);
+    };
+  }, [editContactObj, editContactObj]);
+
   // Change status contact & spot and close infoWindow
   useEffect(() => {
     if (contactOrSpot) {
-      if ((windowFlag === true) & activeContact) {
-        console.log(
-          "windowFlag --> ",
-          windowFlag,
-          "activeContact-->",
-          activeContact
-        );
+      if (confirm) {
         dispatch(
           unOrActiveList({
             Id: idContactActive,
             shop_id: shopId,
-            active: false,
+            active: activeContact ? false : true,
             userId: userInfo.id,
             objType: SHOP_CONTACT_DESCRIPTION,
-            kind: "Inactive contact",
-          })
-        );
-      }
-      if ((windowFlag === true) & !activeContact) {
-        console.log(
-          "windowFlag --> ",
-          windowFlag,
-          "activeContact-->",
-          activeContact
-        );
-        dispatch(
-          unOrActiveList({
-            Id: idContactActive,
-            shop_id: shopId,
-            active: true,
-            userId: userInfo.id,
-            objType: SHOP_CONTACT_DESCRIPTION,
-            kind: "Active contact",
+            kind: activeContact ? "Inactive contact" : "Inactive contact",
           })
         );
       }
     } else {
-      if ((windowFlag === true) & !activeSpot) {
-        console.log(
-          "windowFlag --> ",
-          windowFlag,
-          "activeSpot-->",
-          activeContact
-        );
+      if (confirm) {
         dispatch(
           unOrActiveList({
             Id: idSpotActive,
             shop_id: shopId,
-            active: true,
+            active: activeSpot ? false : true,
             userId: userInfo.id,
             objType: SHOP_SPOT_DESCRIPTION,
-            kind: "Active spot",
-          })
-        );
-      }
-      if ((windowFlag === true) & activeSpot) {
-        console.log(
-          "windowFlag --> ",
-          windowFlag,
-          "activeSpot-->",
-          activeContact
-        );
-        dispatch(
-          unOrActiveList({
-            Id: idSpotActive,
-            shop_id: shopId,
-            active: false,
-            userId: userInfo.id,
-            objType: SHOP_SPOT_DESCRIPTION,
-            kind: "Inactive spot",
+            kind: activeSpot ? "Inactive spot" : "Active spot",
           })
         );
       }
     }
 
-    setInfoWindowFlag(false);
-  }, [dispatch, windowFlag]);
+    setConfirm(false);
+  }, [dispatch, windowFlag, confirm]);
 
   // Delete contact list after activation or deactivation
   useEffect(() => {
@@ -254,13 +242,6 @@ function AddContact() {
       dispatch({ type: GET_SOPTS_LIST_DELETE });
     }
   }, [dispatch, success]);
-
-  //   // Delete spots list after activation or deactivation
-  // useEffect(() => {
-
-  //       dispatch({ type: GET_CONTACT_LIST_DELETE });
-
-  // }, []);
 
   // fetching list of contact & spots from DB
   useEffect(() => {
@@ -284,42 +265,7 @@ function AddContact() {
     dispatch({ type: GET_CONTACT_LIST_DELETE });
   }, []);
 
-  const onSubmit = (data) => {
-    if (editContact) {
-      const insertData = {
-        shop_id: shopId,
-        Id: idContact,
-        editing: true,
-        firstName: values.firstName,
-        surname: values.surname,
-        email: values.email,
-        phone: values.phone,
-        description: values.description,
-        creator: userInfo.id,
-        modifier: userInfo.id,
-      };
-      setEditContact(false);
-      setNewContact(false);
-      dispatch(addContact(insertData));
-    } else {
-      const insertData = {
-        shop_id: shopId,
-        editing: false,
-        firstName: data.firstName,
-        surname: data.surname,
-        email: data.email,
-        phone: data.phone,
-        description: data.description,
-        creator: userInfo.id,
-        modifier: userInfo.id,
-      };
-      setNewContact(false);
-      setEditContact(false);
-      dispatch(addContact(insertData));
-    }
-  };
-
-  // style
+  /************************STYLE*****************************/
 
   const mainContainer = {
     backgroundImage: `linear-gradient(145deg, rgba(219, 219, 219, 1) 0%, rgba(149, 149, 149, 1) 100%)`,
@@ -381,29 +327,6 @@ function AddContact() {
     color: "red",
   };
 
-  const table = {
-    width: "100%",
-    backgroundImage: `linear-gradient(183deg, rgb(236, 181, 26) 0%, rgb(217, 196, 33) 100%)`,
-    borderCollapse: `collapse`,
-  };
-
-  const tableHeader = {
-    borderBottom: `3px solid rgb(219, 219, 219)`,
-    padding: "1rem",
-  };
-
-  const tableCell = {
-    padding: "0.75rem",
-    verticalAlign: "middle",
-    borderTop: "2px solid rgb(219, 219, 219)",
-    borderRight: "2px solid rgb(219, 219, 219)",
-  };
-
-  const tableCellNoBorderRight = {
-    ...tableCell,
-    borderRight: "none",
-  };
-
   const btnTable = {
     backgroundColor: "white",
     border: "none",
@@ -427,6 +350,7 @@ function AddContact() {
     color: "green",
   };
 
+  /************************FORM*****************************/
   const [values, setValues] = useState({
     firstName: "",
     surname: "",
@@ -444,6 +368,8 @@ function AddContact() {
       errorMessage: t("AddContact_name_error_message"),
       label: t("AddContact_label_name"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.name,
       required: true,
     },
     {
@@ -454,6 +380,8 @@ function AddContact() {
       errorMessage: t("AddContact_surname_error_message"),
       label: t("AddContact_label_surname"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.surname,
       required: true,
     },
     {
@@ -465,6 +393,8 @@ function AddContact() {
       label: t("AddContact_label_email"),
       pattern:
         "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+[.][a-zA-Z]{2,3}",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.email,
       required: true,
     },
     {
@@ -475,6 +405,8 @@ function AddContact() {
       errorMessage: t("AddContact_phone_error_message"),
       label: t("AddContact_label_phone"),
       pattern: "^(?:(\\+\\d{2})\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.phone,
       required: true,
     },
     {
@@ -483,17 +415,212 @@ function AddContact() {
       placeholder: t("AddContact_description_placeholder"),
       errorMessage: t("AddContact_description_error_message"),
       label: t("AddContact_description"),
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.description,
       required: true,
     },
   ];
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
 
   const onChangeTextArea = (descValue) => {
     setValues({ ...values, description: descValue });
   };
+
+  /************************TABLE STYLE *****************************/
+  const mainTableContainer = {
+    overflowY: "auto",
+    height: "200px",
+    marginTop: "1rem",
+  };
+
+  const tableStyle = {
+    width: "100%",
+    color: "white",
+    backgroundImage: `linear-gradient(178deg, rgba(89, 131, 252, 1) 35%, rgba(41, 53, 86, 1) 100%)`,
+    marginTop: "1rem",
+  };
+
+  const styleHeader = {
+    borderBottom: `3px solid rgb(219, 219, 219)`,
+    padding: "1rem",
+  };
+
+  const tableCell = {
+    padding: "0.75rem",
+    verticalAlign: "middle",
+    borderTop: "2px solid rgb(219, 219, 219)",
+    borderRight: "2px solid rgb(219, 219, 219)",
+  };
+
+  const tableCellNoBorderRight = {
+    ...tableCell,
+    borderRight: "none",
+  };
+
+  /************************TABLE PROPS - SPOT *****************************/
+
+  const tableSpotStyle = {
+    ...tableStyle,
+    color: "white",
+    backgroundImage: `linear-gradient(178deg, rgba(89, 131, 252, 1) 35%, rgba(41, 53, 86, 1) 100%)`,
+  };
+
+  let currentStatusSpotList = [];
+
+  const activeSpotList = shopSpotList.filter((item) => item.is_active === true);
+  const unactiveSpotList = shopSpotList.filter(
+    (item) => item.is_active === false
+  );
+
+  if (activeSpot) {
+    currentStatusSpotList = activeSpotList;
+  } else {
+    currentStatusSpotList = unactiveSpotList;
+  }
+
+  const tableSpotscolumns = [
+    {
+      key: "name",
+      label: t("AddContact_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "adress",
+      label: t("AddContact_spots_address"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "status",
+      label: t("AdminShops_status"),
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnStatusChanger",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnEdit",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+  ];
+
+  const dataSpotsTable = currentStatusSpotList.map((item) => ({
+    id: item.id,
+    name: item.name,
+    adress: `${item.city.name}, ${item.street} ${item.no_building}`,
+    status: <span style={activeBadge}>{t("status_active")}</span>,
+    btnStatusChanger: activeSpot ? (
+      <button style={btnUnactive} onClick={() => unActiveSpotHandler(item.id)}>
+        {t("btn_unactive")}
+      </button>
+    ) : (
+      <button style={btnActive} onClick={() => activeSpotHandler(item.id)}>
+        {t("btn_active")}
+      </button>
+    ),
+    btnEdit: activeSpot && (
+      <button style={btnEdit} onClick={() => editSpotHandler(item.id)}>
+        {t("btn_edit")}
+      </button>
+    ),
+  }));
+
+  /************************TABLE PROPS - CONTACT *****************************/
+
+  const tableContactStyle = {
+    ...tableStyle,
+    color: "black",
+    backgroundImage: `linear-gradient(183deg, rgb(236, 181, 26) 0%, rgb(217, 196, 33) 100%)`,
+  };
+
+  let currentStatusContactList = [];
+
+  const activeContactList = ListOfContact.filter(
+    (item) => item.is_active === true
+  );
+
+  const unactiveContactList = ListOfContact.filter(
+    (item) => item.is_active === false
+  );
+
+  if (activeContact) {
+    currentStatusContactList = activeContactList;
+  } else {
+    currentStatusContactList = unactiveContactList;
+  }
+
+  const tableConatctcolumns = [
+    {
+      key: "name",
+      label: t("AddContact_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "phone",
+      label: t("AddContact_phone"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "email",
+      label: t("AddContact_email"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "status",
+      label: t("AdminShops_status"),
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnStatusChanger",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnEdit",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+  ];
+
+  const dataContactTable = currentStatusContactList.map((item) => ({
+    id: item.id,
+    name: item.name,
+    phone: item.phone,
+    email: item.email,
+    status: <span style={activeBadge}>{t("status_active")}</span>,
+    btnStatusChanger: activeContact ? (
+      <button style={btnUnactive} onClick={() => unActiveHandler(item.id)}>
+        {t("btn_unactive")}
+      </button>
+    ) : (
+      <button style={btnActive} onClick={() => activeHandler(item.id)}>
+        {t("btn_active")}
+      </button>
+    ),
+    btnEdit: activeContact && (
+      <button style={btnEdit} onClick={() => editHandler(item.id)}>
+        {t("btn_edit")}
+      </button>
+    ),
+  }));
+
+  /*****************************************************/
 
   return (
     <div
@@ -510,20 +637,23 @@ function AddContact() {
         <Loader />
       ) : (
         <>
-          {infoWindowFlag & contactOrSpot ? (
-            <InfoWindow
-              title={t("Window_title")}
-              body={
+          {showAlert && contactOrSpot && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={
                 !activeContact
                   ? t("AdminShops_activate_shop_InfoWindow_body")
                   : t("AdminShops_inactivate_shop_InfoWindow_body")
               }
             />
-          ) : null}
-          {infoWindowFlag & !contactOrSpot ? (
-            <InfoWindow
-              title={t("Window_title")}
-              body={
+          )}
+
+          {showAlert && !contactOrSpot ? (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={
                 !activeSpot
                   ? t("AdminShops_activate_shop_InfoWindow_body")
                   : t("AdminShops_inactivate_shop_InfoWindow_body")
@@ -560,7 +690,7 @@ function AddContact() {
                   shopList.map((shop) => {
                     if (shop.id === shopId) {
                       return (
-                        <div>
+                        <div key={shop.id}>
                           <div style={subtitle}>
                             {t("AddContact_name")}:
                             <div style={mainDataSection}>{shop.name}</div>
@@ -641,103 +771,19 @@ function AddContact() {
                       : t("AddContact_show_active")}
                   </button>
                 </div>
-                <div
-                  style={{
-                    overflowY: "auto",
-                    height: "200px",
-                    marginTop: "1rem",
-                  }}
-                >
-                  <table style={table}>
-                    <thead>
-                      <tr>
-                        <th style={tableHeader}>{t("AddContact_name")}</th>
-                        <th style={tableHeader}>{t("AddContact_phone")}</th>
-                        <th style={tableHeader}>{t("AddContact_email")}</th>
-                        <th style={tableHeader}>{t("AdminShops_status")}</th>
-                        <th style={tableHeader}></th>
-                        <th style={tableHeader}></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {ListOfContact.length !== 0 ? (
-                        ListOfContact.map((contact) => (
-                          <tr key={contact.id}>
-                            {contact.is_active & activeContact ? (
-                              <>
-                                <td style={tableCell}>
-                                  {contact.name} {contact.surname}
-                                </td>
-                                <td style={tableCell}>{contact.phone}</td>
-                                <td style={tableCell}>{contact.email}</td>
-                                <td style={tableCellNoBorderRight}>
-                                  <span style={activeBadge}>
-                                    {t("status_active")}
-                                  </span>
-                                </td>
-                                <td style={tableCellNoBorderRight}>
-                                  <button
-                                    style={btnUnactive}
-                                    onClick={() => unActiveHandler(contact.id)}
-                                  >
-                                    {t("btn_unactive")}
-                                  </button>
-                                </td>
-                                <td style={tableCellNoBorderRight}>
-                                  <button
-                                    style={btnEdit}
-                                    onClick={() => editHandler(contact.id)}
-                                  >
-                                    {t("btn_edit")}
-                                  </button>
-                                </td>
-                              </>
-                            ) : null}
-                            {!contact.is_active & !activeContact ? (
-                              <>
-                                <td style={tableCell}>
-                                  {contact.name} {contact.surname}
-                                </td>
-                                <td style={tableCell}>{contact.phone}</td>
-                                <td style={tableCell}>{contact.email}</td>
-                                <td style={tableCellNoBorderRight}>
-                                  <span style={activeBadge}>
-                                    {t("status_inactive")}
-                                  </span>
-                                </td>
-                                <td style={tableCellNoBorderRight}>
-                                  <button
-                                    style={btnActive}
-                                    onClick={() => activeHandler(contact.id)}
-                                  >
-                                    {t("btn_active")}
-                                  </button>
-                                </td>
-                              </>
-                            ) : null}
-                          </tr>
-                        ))
-                      ) : (
-                        <tr
-                          style={{
-                            margin: "1rem",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {t("No_data")}
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                <TableComponent
+                  data={dataContactTable}
+                  columns={tableConatctcolumns}
+                  tabletyle={tableContactStyle}
+                  mainTableContainer={mainTableContainer}
+                />
               </>
 
               {/* Contact form */}
               {newContact ? (
                 <>
                   <Divider backgroundColor="grey" />
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit}>
                     <div
                       style={{
                         display: "flex",
@@ -765,7 +811,7 @@ function AddContact() {
                         fontSize: "1.5rem",
                       }}
                     >
-                      <div className="px-3">
+                      <div>
                         {editContact
                           ? t("AddContact_edit_title")
                           : t("AddContact_new_title")}
@@ -811,9 +857,10 @@ function AddContact() {
                   </form>
                 </>
               ) : null}
+
               <Divider backgroundColor="grey" />
 
-              {/* Spot List */}
+              {/* Spot Table */}
               <>
                 <div
                   style={{
@@ -846,101 +893,13 @@ function AddContact() {
                       : t("AddContact_show_active_spot")}
                   </button>
                 </div>
-                <div
-                  style={{
-                    overflowY: "auto",
-                    height: "200px",
-                    marginTop: "1rem",
-                  }}
-                >
-                  <table
-                    style={{
-                      width: "100%",
-                      color: "white",
-                      backgroundImage: `linear-gradient(178deg, rgba(19, 19, 19, 1) 0%, rgba(105, 105, 106, 1) 89%)`,
-                      marginTop: "1rem",
-                    }}
-                  >
-                    <thead>
-                      <tr>
-                        <th style={tableHeader}>{t("AddContact_name")}</th>
-                        <th style={tableHeader}>
-                          {t("AddContact_spots_address")}
-                        </th>
-                        <th style={tableHeader}>{t("AdminShops_status")}</th>
-                        <th style={tableHeader}></th>
-                        <th style={tableHeader}></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {shopSpotList.length !== 0
-                        ? shopSpotList.map((spot) => (
-                            <tr key={spot.id}>
-                              {spot.is_active & activeSpot ? (
-                                <>
-                                  <td style={tableCell}>{spot.name}</td>
-                                  <td style={tableCell}>
-                                    <span>
-                                      {spot.city.name}, {spot.street}{" "}
-                                      {spot.no_building}
-                                    </span>
-                                  </td>
-                                  <td style={tableCellNoBorderRight}>
-                                    <span style={activeBadge}>
-                                      {t("status_active")}
-                                    </span>
-                                  </td>
-                                  <td style={tableCellNoBorderRight}>
-                                    <button
-                                      style={btnUnactive}
-                                      onClick={() =>
-                                        unActiveSpotHandler(spot.id)
-                                      }
-                                    >
-                                      {t("btn_unactive")}
-                                    </button>
-                                  </td>
-                                  <td style={tableCellNoBorderRight}>
-                                    <button
-                                      style={btnEdit}
-                                      onClick={() => editSpotHandler(spot.id)}
-                                    >
-                                      {t("btn_edit")}
-                                    </button>
-                                  </td>
-                                </>
-                              ) : null}
-                              {!spot.is_active & !activeSpot ? (
-                                <>
-                                  <td>{spot.name}</td>
-                                  <td>
-                                    {spot.city.name},{space}
-                                    {spot.street}
-                                    {space}
-                                    {spot.no_building}
-                                  </td>
-                                  <td className="align-middle text-center text-sm">
-                                    <span className="badge badge-sm bg-gradient-success">
-                                      {t("status_inactive")}
-                                    </span>
-                                  </td>
-                                  <td className="align-middle">
-                                    <button
-                                      style={btnActive}
-                                      className="text-xs text-danger"
-                                      onClick={() => activeSpotHandler(spot.id)}
-                                    >
-                                      {t("btn_active")}
-                                    </button>
-                                  </td>
-                                </>
-                              ) : null}
-                            </tr>
-                          ))
-                        : t("No_data")}
-                    </tbody>
-                  </table>
-                </div>
+                <TableComponent
+                  data={dataSpotsTable}
+                  columns={tableSpotscolumns}
+                  activeTable={false}
+                  tabletyle={tableSpotStyle}
+                  mainTableContainer={mainTableContainer}
+                />
               </>
             </div>
           </FormLayout>

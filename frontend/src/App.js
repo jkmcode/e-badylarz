@@ -63,6 +63,7 @@ function App() {
           {/* <Route path="*" element={<NotFoundScreen />} /> */}
         </Route>
         <Route path="dashboard" element={<ShareLayoutsAdmin />}>
+          <Route index element={<AdminScreenDistrict />} />
           <Route path="district" element={<AdminScreenDistrict />} />
           <Route path="district/add" element={<AddDiscrict />} />
           <Route path="district/:id/edit" element={<EditDistrict />} />

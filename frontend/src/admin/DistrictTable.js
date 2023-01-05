@@ -222,7 +222,7 @@ function DistrictTable({ radioValue }) {
           {currentDistrictsList.map((district) => {
             return (
               <>
-                <tr>
+                <tr key={district.id}>
                   <td
                     style={{
                       paddingLeft: "1rem",
@@ -372,12 +372,18 @@ function DistrictTable({ radioValue }) {
         />
       ) : null}
 
-      {showAlert && (
+      {showAlert && updateStatus === ACTIVE && (
         <InfoAlertComponent
           confirmYes={confirmYes}
           confirmNo={confirmNo}
-          updateStatus={updateStatus}
-          geo={DISTRICT}
+          context={t("Confirmation_alert_active")}
+        />
+      )}
+      {showAlert && updateStatus === UNACTIVE && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={t("Confirmation_alert_unactive")}
         />
       )}
       {radioValue === ONE && <StatusDistrictsTable active={true} />}

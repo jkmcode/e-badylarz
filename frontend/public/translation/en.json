@@ -111,8 +111,8 @@
   "Confirmation_title": "Confirmation",
   "Confirmation_alert_unactive": "Are you sure you want to unactive district?",
   "Confirmation_alert_active": "Are you sure you want to active district?",
-  "Confirmation_alert_active_city": "Are you sure you want to active city?",
-  "Confirmation_alert_unactive_city": "Are you sure you want to unactive city?",
+  "Confirmation_alert_active_city": "Are you sure you want to unactive city?",
+  "Confirmation_alert_unactive_city": "Are you sure you want to active city?",
   "city": "cities",
 
   "AddDiscrict_title": "Add district",

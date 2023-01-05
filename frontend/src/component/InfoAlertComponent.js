@@ -1,9 +1,8 @@
 import React from "react";
 import Divider from "../admin/Divider";
 import { useTranslation } from "react-i18next";
-import { DISTRICT, UNACTIVE, ACTIVE, CITY } from "../constants/adminConstans";
 
-function InfoAlertComponent({ confirmYes, confirmNo, updateStatus, geo }) {
+function InfoAlertComponent({ confirmYes, confirmNo, context }) {
   const { t } = useTranslation();
   //styling
   const mainContainer = {
@@ -81,20 +80,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, updateStatus, geo }) {
       <div style={mainContainer}>
         <div style={title}>{t("Confirmation_title")}</div>
         <Divider />
-        <div style={body}>
-          {updateStatus === UNACTIVE &&
-            geo === DISTRICT &&
-            t("Confirmation_alert_unactive")}
-          {updateStatus === ACTIVE &&
-            geo === DISTRICT &&
-            t("Confirmation_alert_active")}
-          {updateStatus === UNACTIVE &&
-            geo === CITY &&
-            t("Confirmation_alert_active_city")}
-          {updateStatus === ACTIVE &&
-            geo === CITY &&
-            t("Confirmation_alert_unactive_city")}
-        </div>
+        <div style={body}>{context}</div>
         <button style={yesBtn} onClick={(e) => confirmYes(e)}>
           {t("btn_yes")}
         </button>

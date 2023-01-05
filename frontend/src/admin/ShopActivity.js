@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useResponsive from "../component/useResponsive";
@@ -18,7 +17,7 @@ import {
 import UploadImage from "../component/UploadImage";
 import useBackToLogin from "../component/useBackToLogin";
 import FormInput from "./FormInput";
-
+import FormInputIBAN from "./FormInputIBAN";
 import {
   DELETE_IMAGE_REDUX,
   SET_FLAG_IMAGE_TRUE,
@@ -38,13 +37,6 @@ import {
 function AddShops() {
   const { windowWidth } = useResponsive();
   useBackToLogin();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -54,6 +46,17 @@ function AddShops() {
   const [uploading, setUploading] = useState(false);
   const [imageRender, setImageRender] = useState(false);
   const [currentTaxNo, setCurrentTaxNo] = useState("");
+  const [values, setValues] = useState({
+    shopName: "",
+    nip: "",
+    city: "",
+    street: "",
+    number: "",
+    postCode: "",
+    post: "",
+    latitude: "",
+    longitude: "",
+  });
 
   const editShopParam = params.edit;
   const addShopParam = params.add;
@@ -91,22 +94,9 @@ function AddShops() {
     error: errorGetShop,
   } = getShopRedux;
 
-  // normalize function
-  const [bankAccount, setBankAccount] = useState("");
-
-  const normalizeCardNumber = (value) => {
-    return (
-      value
-        .replace(/\s/g, "")
-        .match(/.{1,4}/g)
-        ?.join(" ")
-        .substr(0, 39)
-        .toUpperCase() || ""
-    );
-  };
-
   // Handlers
-  const onSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     //setCurrentTaxNo(data.nip);
     if (addShopParam) {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
@@ -123,7 +113,7 @@ function AddShops() {
           postCode: values.postCode,
           street: values.street,
           creator: userInfo.id,
-          bankAccount: !bankAccount ? shopDetails.bank_account : bankAccount,
+          bankAccount: values.bankAccount,
         })
       );
     } else {
@@ -145,7 +135,9 @@ function AddShops() {
           postCode: !values.postCode ? shopDetails.post_code : values.postCode,
           street: !values.street ? shopDetails.street : values.street,
           creator: userInfo.id,
-          bankAccount: !bankAccount ? shopDetails.bank_account : bankAccount,
+          bankAccount: !values.bankAccount
+            ? shopDetails.bank_account
+            : values.bankAccount,
           typeOfChnage: "Edit date",
         })
       );
@@ -155,6 +147,14 @@ function AddShops() {
       //   );
       // }
     }
+  };
+
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
+  };
+
+  const onChangeIBANHandler = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
 
   // fetch data from DB -- shop to edit
@@ -170,24 +170,6 @@ function AddShops() {
       setImageRender(true);
     }
   }, []);
-
-  //Reset Default data
-  useEffect(() => {
-    if (successGetShop) {
-      reset({
-        name: shopDetails.name,
-        nip: shopDetails.nip,
-        city: shopDetails.city,
-        street: shopDetails.street,
-        number: shopDetails.no_building,
-        postCode: shopDetails.post_code,
-        post: shopDetails.post,
-        bankAccount: shopDetails.bank_account,
-        latitude: shopDetails.latitude,
-        longitude: shopDetails.longitude,
-      });
-    }
-  }, [successGetShop]);
 
   // set current Tax Number
   useEffect(() => {
@@ -258,19 +240,6 @@ function AddShops() {
     color: "black",
   };
 
-  /// UPDATE FORM
-  const [values, setValues] = useState({
-    shopName: "",
-    nip: "",
-    city: "",
-    street: "",
-    number: "",
-    postCode: "",
-    post: "",
-    latitude: "",
-    longitude: "",
-  });
-
   const inputs = [
     {
       id: "1",
@@ -291,8 +260,8 @@ function AddShops() {
       placeholder: t("AddShops_nip_placeholder"),
       errorMessage: t("AddShops_nip_error_message"),
       label: t("AddShops_label_nip"),
-      //pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
-      pattern: t("Pattern_nip"),
+      pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+      //pattern: t("Pattern_nip"),
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.nip,
       required: true,
@@ -396,10 +365,6 @@ function AddShops() {
     },
   ];
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
   return (
     <>
       {loading || loadingInsertImage || loadingGetShop || loadingUpdateShop ? (
@@ -441,7 +406,7 @@ function AddShops() {
               ? t("EditShops_title")
               : t("AddShops_title")}
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <FormLayout col={TWO}>
               {inputs.map((input, index) => {
                 if (index <= 1) {
@@ -474,19 +439,14 @@ function AddShops() {
                 }
               })}
             </FormLayout>
-
             <Divider backgroundColor="grey" />
             {inputs.map((input, index) => {
               if (index === 7) {
                 return (
-                  <FormInput
+                  <FormInputIBAN
                     key={input.id}
                     {...input}
-                    onChange={(event) => {
-                      setBankAccount(event.target.value);
-                      const { value } = event.target;
-                      event.target.value = normalizeCardNumber(value);
-                    }}
+                    onChange={onChangeIBANHandler}
                   />
                 );
               }

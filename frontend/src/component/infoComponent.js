@@ -5,10 +5,7 @@ import Divider from "../admin/Divider";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
-import {
-  GET_FULL_DESCRIPTION_DELETE,
-  SET_FLAG_INFO_FALSE,
-} from "../constants/adminConstans";
+import { GET_FULL_DESCRIPTION_DELETE } from "../constants/adminConstans";
 
 function InfoComponent(props) {
   const { t } = useTranslation();

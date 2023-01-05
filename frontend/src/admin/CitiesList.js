@@ -37,6 +37,11 @@ function CitiesList(props) {
 
   const btnMinWidth = 70;
 
+  const radios = [
+    { id: 1, name: t("Radio_true"), value: "1" },
+    { id: 2, name: t("Radio_false"), value: "0" },
+  ];
+
   // data from redux
   const dataRedux = useSelector((state) => state.citesList);
   const { loading, cityList, error, success } = dataRedux;
@@ -228,7 +233,6 @@ function CitiesList(props) {
       );
     }
 
-    console.log("currentDistrictsList", currentDistrictsList);
     if (currentDistrictsList.length === 0) {
       return (
         <>
@@ -327,19 +331,26 @@ function CitiesList(props) {
             />
           )}
 
-          {showAlert && (
+          {showAlert && updateStatus === ACTIVE && (
             <InfoAlertComponent
               confirmYes={confirmYes}
               confirmNo={confirmNo}
-              updateStatus={updateStatus}
-              geo={CITY}
+              context={t("Confirmation_alert_unactive_city")}
+            />
+          )}
+
+          {showAlert && updateStatus === UNACTIVE && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={t("Confirmation_alert_active_city")}
             />
           )}
 
           <Divider />
           {citiesData & cityFlag ? (
             <>
-              <RadioButtons handleBtnValue={handleBtnValue} />
+              <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
               {radioValue === ONE && <StatusDistrictsTable active={true} />}
               {radioValue === ZERO && <StatusDistrictsTable active={false} />}
             </>

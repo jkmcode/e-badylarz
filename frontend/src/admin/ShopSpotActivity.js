@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { getFullDiscricts } from "../actions/discrictsActions";
 import { getAllCities } from "../actions/adminActions";
 import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
 import { TWO, THREE } from "../constants/environmentConstans";
+import useResponsive from "../component/useResponsive";
 import FormInput from "./FormInput";
 import Divider from "./Divider";
 import Loader from "../component/Loader";
@@ -14,7 +14,6 @@ import SelectOption from "./SelectOption";
 import ErrorMessage from "../component/ErrorMessage";
 import UploadImage from "../component/UploadImage";
 import RadioButtons from "./RadioButtons";
-import { Row, Col } from "react-bootstrap";
 import {
   addShopSpot,
   getShop,
@@ -38,26 +37,20 @@ import {
 import { Icon } from "@iconify/react";
 
 function AddShopsSpot() {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
+  const { windowWidth } = useResponsive();
 
   const [uploading, setUploading] = useState(false);
   const [imageRender, setImageRender] = useState(false);
   const [currentTaxNo, setCurrentTaxNo] = useState("");
   const [showShop, setShowShop] = useState(false);
-  const zero = "0";
   const [selectedDistrict, setSelectedDistrict] = useState(0);
   const [selectedCity, setSelectedCity] = useState(0);
+  const [emptyValueError, setEmptyValueError] = useState(false);
+  const [radioValue, setRadioValue] = useState("1");
   const [values, setValues] = useState({
     spotName: "",
     range: "",
@@ -75,7 +68,6 @@ function AddShopsSpot() {
   const shopId = params.id;
   const spotId = params.idSpot;
 
-  const [radioValue, setRadioValue] = useState("1");
   const radios = [
     { name: t("Radio_own_collection"), value: "1" },
     { name: t("Radio_delivery"), value: "0" },
@@ -159,18 +151,104 @@ function AddShopsSpot() {
     error: errorGetAllCities,
   } = dataReduxCitiesListAll;
 
+  // Handlers
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
   const selectDistrictHandler = (option) => {
     setSelectedDistrict(Number(option));
+    setEmptyValueError(false);
   };
 
   const selectCityHandler = (option) => {
-    setSelectedCity(option);
+    setSelectedCity(Number(option));
     setValues({ ...values, cityList: option });
+    setEmptyValueError(false);
   };
 
   const handleBtnValue = (e) => {
     setRadioValue(e.target.value);
   };
+
+  const handleSubmit = (event) => {
+    //setCurrentTaxNo(data.nip);
+    event.preventDefault();
+
+    if (SpotParam === "add") {
+      //dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      if (selectedDistrict !== 0 && selectedCity !== 0) {
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: values.spotName,
+          city: values.cityList,
+          street: values.street,
+          no_building: values.number,
+          postCode: values.postCode,
+          post: values.post,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: radioValue === "1" ? "False" : "True",
+          range: radioValue === "1" ? "0" : values.range,
+        };
+        dispatch(addShopSpot(insertData));
+      } else {
+        setEmptyValueError(true);
+      }
+    }
+    // else {
+    //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
+    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
+    //   if (radioValue === "1") {
+    //     const insertData = {S
+    //       add: false,
+    //       id_spot: spotId,
+    //       id_shops: shopId,
+    //       name: !values.spotName ? shopDetails.name : values.spotName,
+    //       city: values.cityList, /// To jest źle
+    //       street: !values.street ? spotDetails.street : values.street,
+    //       no_building: !values.number ? spotDetails.no_building : values.number,
+    //       postCode: !values.postCode ? spotDetails.post_code : values.postCode,
+    //       post: !values.post ? spotDetails.post : values.post,
+    //       latitude: !values.latitude ? spotDetails.latitude : values.latitude,
+    //       longitude: !values.longitude
+    //         ? spotDetails.longitude
+    //         : values.longitude,
+    //       creator: userInfo.id,
+    //       is_active: "True",
+    //       delivery: "False",
+    //       range: "0",
+    //     };
+    //     dispatch(updateShopSpot(insertData));
+    //   }
+    //   else {
+    //     const insertData = {
+    //       add: false,
+    //       id_spot: spotId,
+    //       id_shops: shopId,
+    //       name: data.name,
+    //       city: data.city, /// To jest źle
+    //       street: data.street,
+    //       no_building: data.number,
+    //       postCode: data.postCode,
+    //       post: data.post,
+    //       latitude: data.latitude,
+    //       longitude: data.longitude,
+    //       creator: userInfo.id,
+    //       is_active: "True",
+    //       delivery: "True",
+    //       range: data.range,
+    //     };
+    //     dispatch(updateShopSpot(insertData));
+    //   }
+    //}
+  };
+
+  ///USEEFFECT
 
   // uruchamiane na samym początku
   useEffect(() => {
@@ -196,100 +274,6 @@ function AddShopsSpot() {
 
   // *********************************************************
 
-  // Handlers
-
-  const handleSubmitTest = (event) => {
-    //setCurrentTaxNo(data.nip);
-
-    event.preventDefault();
-
-    if (SpotParam === "add") {
-      //dispatch({ type: SET_FLAG_IMAGE_TRUE });
-      //if radioValue = 1 //without range - not delivery
-      if (radioValue === "1") {
-        const insertData = {
-          add: true,
-          id_shops: shopId,
-          name: values.spotName,
-          city: values.cityList,
-          street: values.street,
-          no_building: values.number,
-          postCode: values.postCode,
-          post: values.post,
-          latitude: values.latitude,
-          longitude: values.longitude,
-          creator: userInfo.id,
-          is_active: "True",
-          delivery: "False",
-          range: "0",
-        };
-        dispatch(addShopSpot(insertData));
-      } else {
-        const insertData = {
-          add: true,
-          id_shops: shopId,
-          name: values.spotName,
-          city: values.city,
-          street: values.street,
-          no_building: values.number,
-          postCode: values.postCode,
-          post: values.post,
-          latitude: values.latitude,
-          longitude: values.longitude,
-          creator: userInfo.id,
-          is_active: "True",
-          delivery: "True",
-          range: values.range,
-        };
-        dispatch(addShopSpot(insertData));
-      }
-    }
-
-    //else {
-    //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
-    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-    //   if (radioValue === "1") {
-    //     const insertData = {
-    //       add: false,
-    //       id_spot: spotId,
-    //       id_shops: shopId,
-    //       name: data.name,
-    //       city: data.city, /// To jest źle
-    //       street: data.street,
-    //       no_building: data.number,
-    //       postCode: data.postCode,
-    //       post: data.post,
-    //       latitude: data.latitude,
-    //       longitude: data.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: "False",
-    //       range: "0",
-    //     };
-    //     dispatch(updateShopSpot(insertData));
-    //   } else {
-    //     const insertData = {
-    //       add: false,
-    //       id_spot: spotId,
-    //       id_shops: shopId,
-    //       name: data.name,
-    //       city: data.city, /// To jest źle
-    //       street: data.street,
-    //       no_building: data.number,
-    //       postCode: data.postCode,
-    //       post: data.post,
-    //       latitude: data.latitude,
-    //       longitude: data.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: "True",
-    //       range: data.range,
-    //     };
-    //     dispatch(updateShopSpot(insertData));
-    //   }
-    // }
-  };
-
   // fetch data from DB -- shop & spot to edit
   // remove old image
   useEffect(() => {
@@ -302,34 +286,6 @@ function AddShopsSpot() {
       dispatch(getSpot({ Id: spotId }));
     }
   }, []);
-
-  //Reset Default data
-  useEffect(() => {
-    if (successGetSpot) {
-      setShowShop(true); /// to do sprawdzenia nie wiem czy to potrzebne ?
-      if (SpotParam === "edit") {
-        if (spotDetails.delivery) {
-          setRadioValue("0");
-        } else {
-          setRadioValue("1");
-        }
-        reset({
-          name: spotDetails.name,
-          nip: spotDetails.nip,
-          city: spotDetails.city.name,
-          street: spotDetails.street,
-          number: spotDetails.no_building,
-          postCode: spotDetails.post_code,
-          post: spotDetails.post,
-          range: spotDetails.range,
-          latitude: spotDetails.latitude,
-          longitude: spotDetails.longitude,
-        });
-      } else {
-        reset({});
-      }
-    }
-  }, [successGetSpot]);
 
   // set current Tax Number
   useEffect(() => {
@@ -346,8 +302,6 @@ function AddShopsSpot() {
     }
   }, [successAdd]);
 
-  // NIE WIEM CZY TO POTRZEBNE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   // navigate to ShopAdmin
   useEffect(() => {
     if (successAddSpot) {
@@ -359,20 +313,18 @@ function AddShopsSpot() {
   //style
 
   const background = {
-    backgroundColor: "rgba(231, 231, 235, 1)",
     backgroundImage:
-      "linear-gradient(322deg, rgba(233, 243, 250, 1) 35%, rgba(161, 174, 205, 1) 100%)",
+      SpotParam === "edit"
+        ? "linear-gradient(179deg, rgba(217, 195, 19, 1) 64%, rgba(188, 169, 34, 1) 100%"
+        : "linear-gradient(179deg, rgba(255, 255, 255, 1) 64%, rgba(124, 178, 80, 1) 100%)",
     boxShadow: "-9px 8px 34px -13px rgba(66, 68, 90, 1)",
+    borderRadius: ".25rem",
+    padding: "2rem",
+    width: windowWidth > 800 ? "80%" : "100%",
+    margin: "auto",
   };
 
-  const formInvalid = {
-    borderColor: "red",
-  };
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
+  //List of inputs
   const inputs = [
     {
       id: "1",
@@ -382,6 +334,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_name_error_message"),
       label: t("ShopsSpot_label_name"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.name,
       required: true,
     },
     {
@@ -392,6 +348,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_range_error_message"),
       label: t("ShopsSpot_label_range"),
       pattern: "^[0-9]$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.range,
       required: true,
     },
     {
@@ -405,8 +365,11 @@ function AddShopsSpot() {
       id: "4",
       name: "cityList",
       label: t("ShopsSpot_label_city"),
-      defaultValue: "Select option",
       optionsList: newListCities,
+      defaultValue:
+        SpotParam === "add"
+          ? "Select option"
+          : successGetSpot && SpotParam === "edit" && spotDetails.city.name,
     },
     {
       id: "5",
@@ -416,6 +379,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_street_error_message"),
       label: t("ShopsSpot_street_label"),
       pattern: "^[A-Za-ząćęłńóśźżs]{3,50}$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.street,
       required: true,
     },
     {
@@ -426,6 +393,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_number_error_message"),
       label: t("ShopsSpot_number_label"),
       pattern: "^(?!/|-|,)[0-9A-Za-z/,-]+(?<!/|,|-)$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.no_building,
       required: true,
     },
     {
@@ -436,6 +407,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_postCode_error_message"),
       label: t("ShopsSpot_postCode_label"),
       pattern: "^[0-9]{2}-[0-9]{3}$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.post_code,
       required: true,
     },
     {
@@ -446,6 +421,10 @@ function AddShopsSpot() {
       errorMessage: t("ShopsSpot_post_error_message"),
       label: t("ShopsSpot_post_label"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.post,
       required: true,
     },
     {
@@ -456,6 +435,10 @@ function AddShopsSpot() {
       errorMessage: t("latitude_error_message"),
       label: t("label_latitude"),
       pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.latitude,
       required: true,
     },
     {
@@ -466,6 +449,10 @@ function AddShopsSpot() {
       errorMessage: t("longitude_error_message"),
       label: t("label_longitude"),
       pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      defaultValue:
+        SpotParam === "add"
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.longitude,
       required: true,
     },
   ];
@@ -483,7 +470,7 @@ function AddShopsSpot() {
       addSpotLoading ? (
         <Loader />
       ) : (
-        <div className="container mt-5 p-4 rounded" style={background}>
+        <div style={background}>
           {errorShopList ? (
             <ErrorMessage msg={errorShopList} timeOut={TIME_AUT_ERROR} />
           ) : null}
@@ -502,33 +489,28 @@ function AddShopsSpot() {
           {errorUpdate ? (
             <ErrorMessage msg={errorUpdate} timeOut={TIME_AUT_ERROR} />
           ) : null}
-          <Row className="align-items-center ">
-            <Col>
-              <Link
-                to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
-                className="text-dark h6"
-              >
-                <Icon icon="ion:arrow-back" />
-                {t("btn-return")}
-              </Link>
-            </Col>
-          </Row>
-          {SpotParam === "edit" && (
-            <div className="d-flex justify-content-center display-8">
+          <Link
+            to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
+            style={{ color: "black" }}
+          >
+            <Icon icon="ion:arrow-back" />
+            {t("btn-return")}
+          </Link>
+          {SpotParam === "edit" && successGetSpot && (
+            <div style={{ textAlign: "center" }}>
               {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
               {shopDetails.no_building}
             </div>
           )}
-
-          <div className="d-flex justify-content-center display-6">
+          <div
+            style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}
+          >
             {SpotParam === "edit"
               ? t("ShopsSpot_Edit_title")
               : t("ShopsSpot_Add_title")}
           </div>
-
           <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-
-          <form onSubmit={handleSubmitTest}>
+          <form onSubmit={handleSubmit}>
             <FormLayout col={TWO}>
               {inputs.map((input, index) => {
                 if (index === 0) {
@@ -558,6 +540,7 @@ function AddShopsSpot() {
                       optionsList={districtList}
                       label={input.label}
                       defaultValue={input.defaultValue}
+                      emptyValueError={emptyValueError}
                       onChange={
                         index === 2 ? selectDistrictHandler : selectCityHandler
                       }

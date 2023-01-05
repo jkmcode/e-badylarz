@@ -5,6 +5,7 @@ function SelectOption({
   optionsList,
   defaultValue,
   label,
+  emptyValueError,
   ...inputProps
 }) {
   const [selectedValue, setSelectedValue] = useState("");
@@ -31,11 +32,16 @@ function SelectOption({
       <div>
         <select
           className="selectFrom"
-          style={formInput}
+          style={
+            emptyValueError
+              ? { ...formInput, borderColor: "red" }
+              : { ...formInput }
+          }
           value={selectedValue}
           onChange={handleChange}
           onBlur={handleBlur}
           {...inputProps}
+          disabled={optionsList.length === 0 ? true : false}
         >
           <option value={defaultValue} hidden>
             {defaultValue}

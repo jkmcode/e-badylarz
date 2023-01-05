@@ -60,5 +60,6 @@ Addcontact do zrobienia:
 
 ShopSpotActivity:
 
-1. przy ponownym wyborze districtu musimy kasowac liste z miejscowościami. Inaczej możemy zaciągnąć złą miejscowość do backendu.
-2. Ustawić wartości defaultowe w przypdaku editu.
+1. Zadanie na Backend (nie mamy pobranego districtu w rduserze getShopSpot ---- spotDetails). Musimy mieć tą informację żeby ustawić wartość defaultową dla districtu
+2. Przy edycji: Cannot assign "(<Citis: Zaczarnie>,)": "ShopsSpot.city" must be a "Citis" instance.
+3. nie mogę edytować osoby do kontaktu (problem z useEffectem) --- data na backendzie nie zawiera wszystkich danych.

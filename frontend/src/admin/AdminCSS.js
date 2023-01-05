@@ -96,12 +96,22 @@ export const activeBadge = {
   color: "#fff",
 };
 
+export const inactiveBadge = {
+  padding: "0.25em 0.4em",
+  fontSize: "0.85rem",
+  fontWeight: 500,
+  textAlign: "center",
+  borderRadius: "0.25rem",
+  backgroundImage:
+    "linear-gradient(179deg, rgba(237, 12, 12, 1) 64%, rgba(188, 39, 34, 1) 100%)",
+  color: "#fff",
+};
+
 export const BTN = {
   borderRadius: "0.25rem",
   padding: "0.5rem",
   minWidth: "100px",
   border: "none",
-
   color: "white",
   fontWeight: "500",
 };

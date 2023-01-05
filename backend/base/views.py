@@ -310,7 +310,7 @@ def getSpot(request, Id):
 @permission_classes([IsAdminUser])
 def addShopContacts(request):
     data = request.data
-
+    print('data---------------------', data)
     shop = Shops.objects.get(id=data['shop_id'])
     
     if data['editing']:
