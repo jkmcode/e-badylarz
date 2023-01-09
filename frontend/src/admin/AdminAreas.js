@@ -10,6 +10,9 @@ import useBackToLogin from "../component/useBackToLogin";
 import { getAreas } from "../actions/areaAction";
 import useResponsive from "../component/useResponsive";
 import { Icon } from "@iconify/react";
+import { activeBadge, inactiveBadge } from "./AdminCSS";
+import TableComponent from "./TableComponent";
+import InfoAlertComponent from "../component/InfoAlertComponent";
 
 import {
   TIME_AUT_ERROR,
@@ -20,6 +23,8 @@ import {
   ADD_AREA_DELETE,
   GET_AREA_LIST_DELETE,
 } from "../constants/areaConstans";
+
+import { UNACTIVE, ACTIVE } from "../constants/adminConstans";
 
 function AdminAreas() {
   useBackToLogin();
@@ -38,6 +43,10 @@ function AdminAreas() {
   const navigate = useNavigate();
 
   const [activeAreas, setActiveAreas] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [areaId, setAreaId] = useState();
+  const [updateStatus, setUpdateStatus] = useState("");
 
   // fech data from Redux
   const areaListRedux = useSelector((state) => state.areaList);
@@ -56,36 +65,59 @@ function AdminAreas() {
   //  handle function
 
   const editHandler = (id) => {
-    console.log("jestem--/.", id);
     navigate(`/dashboard/areas/edit/${id}`);
   };
 
   const activeHandler = (id) => {
-    console.log("Test-->", id);
-    dispatch(
-      unOrActiveList({
-        Id: id,
-        active: true,
-        userId: userInfo.id,
-        objType: "AREA",
-        kind: "Active area",
-      })
-    );
-    //setActive(true);
+    setShowAlert(true);
+    setAreaId(id);
+    setUpdateStatus(ACTIVE);
   };
 
   const unActiveHandler = (id) => {
-    //setActiveAreas(false);
-    dispatch(
-      unOrActiveList({
-        Id: id,
-        active: false,
-        userId: userInfo.id,
-        objType: "AREA",
-        kind: "Inactive area",
-      })
-    );
+    setShowAlert(true);
+    setAreaId(id);
+    setUpdateStatus(UNACTIVE);
   };
+
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
+  };
+
+  //USEEFFECT
+
+  //status changer
+  useEffect(() => {
+    if (confirm && updateStatus === UNACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: areaId,
+          active: false,
+          userId: userInfo.id,
+          objType: "AREA",
+          kind: "Inactive area",
+        })
+      );
+    }
+
+    if (confirm && updateStatus === ACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: areaId,
+          active: true,
+          userId: userInfo.id,
+          objType: "AREA",
+          kind: "Active area",
+        })
+      );
+    }
+  }, [confirm, dispatch, updateStatus]);
 
   // reset list of area
   useEffect(() => {
@@ -111,11 +143,14 @@ function AdminAreas() {
     justifyContent: "center",
   };
 
-  const cellColor = `	#D3D3D3`;
-
   const tableCell = {
-    backgroundColor: cellColor,
-    borderRadius: "1rem",
+    borderBottom: "1.5px solid rgba(89, 131, 252, 1)",
+    padding: "1rem",
+  };
+
+  const tableCellNoBorderRight = {
+    ...tableCell,
+    borderRight: "none",
   };
 
   const tableCellBtn = {
@@ -161,6 +196,100 @@ function AdminAreas() {
     justifyContent: "flex-end",
   };
 
+  /************************ TABLE STYLE *****************************/
+
+  const mainTableContainer = {
+    overflowY: "auto",
+    height: "500px",
+    marginTop: "1rem",
+  };
+
+  const tableStyle = {
+    width: "100%",
+    color: "rgba(89, 131, 252, 1)",
+    backgroundImage: `linear-gradient(134deg, rgba(255, 255, 255, 1) 0%, rgba(209, 209, 209, 1) 100%)`,
+    marginTop: "1rem",
+  };
+
+  const styleHeader = {
+    borderBottom: `3px solid rgba(89, 131, 252, 1)`,
+    padding: "1rem",
+  };
+
+  /************************ TABLE PROPS *****************************/
+
+  let currentStatusContactList = [];
+
+  const activeAreaList = areaList.filter((item) => item.is_active === true);
+
+  const unactiveAreaList = areaList.filter((item) => item.is_active === false);
+
+  if (activeAreas) {
+    currentStatusContactList = activeAreaList;
+  } else {
+    currentStatusContactList = unactiveAreaList;
+  }
+
+  const tableAreacolumns = [
+    {
+      key: "name",
+      label: t("AdminAreas_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "status",
+      label: t("AdminAreas_status"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnStatusChanger",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnEdit",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnShowMore",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+  ];
+
+  const dataAreaTable = currentStatusContactList.map((item) => ({
+    id: item.id,
+    name: `${item.name} ${item.city}, ${item.street} ${item.no_building}`,
+    status: activeAreas ? (
+      <span style={activeBadge}>{t("status_active")}</span>
+    ) : (
+      <span style={inactiveBadge}>{t("status_inactive")}</span>
+    ),
+    btnStatusChanger: activeAreas ? (
+      <button onClick={() => unActiveHandler(item.id)}>
+        {t("btn_unactive")}
+      </button>
+    ) : (
+      <button onClick={() => activeHandler(item.id)}>{t("btn_active")}</button>
+    ),
+    btnEdit: activeAreas && (
+      <button style={btnEdit} onClick={() => editHandler(item.id)}>
+        {t("btn_edit")}
+      </button>
+    ),
+    btnShowMore: activeAreas && (
+      <Link to={`${item.id}/details`}>{t("btn_more")}</Link>
+    ),
+  }));
+
+  //*****************************
+
   return (
     <>
       {loading || loadingActive ? (
@@ -171,6 +300,23 @@ function AdminAreas() {
           {errorActive ? (
             <ErrorMessage msg={errorActive} timeOut={TIME_AUT_ERROR} />
           ) : null}
+
+          {showAlert && updateStatus === UNACTIVE && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={t("Confirmation_alert_unactive_area")}
+            />
+          )}
+
+          {showAlert && updateStatus === ACTIVE && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={t("Confirmation_alert_active_area")}
+            />
+          )}
+
           <div style={{ position: "relative", marginTop: "3rem" }}>
             <div style={headerContainer}>
               <div
@@ -210,152 +356,12 @@ function AdminAreas() {
               </div>
             </div>
 
-            <div
-              style={{
-                overflowY: "auto",
-                height: "500px",
-                backgroundColor: "whitesmoke",
-                padding: "2rem",
-              }}
-            >
-              <table
-                style={{
-                  margin: "0",
-                  width: "100%",
-                  borderCollapse: "collapse",
-                }}
-              >
-                <thead>
-                  <tr>
-                    <th style={{ paddingLeft: "1rem" }}>
-                      {t("AdminAreas_name")}
-                    </th>
-                    <th style={{ textAlign: "center" }}>
-                      {t("AdminAreas_status")}
-                    </th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {success
-                    ? areaList.map((area) => (
-                        <tr key={area.id}>
-                          <>
-                            {area.is_active && activeAreas ? (
-                              <td style={cellFirstColumn}>
-                                <div
-                                  style={{
-                                    fontWeight: "500",
-                                    fontSize: "0.9rem",
-                                  }}
-                                >
-                                  {area.name}
-                                </div>
-                                <div
-                                  style={{
-                                    fontSize: "0.85rem",
-                                    fontWeight: "400",
-                                  }}
-                                >
-                                  {area.city}, {area.street} {area.no_building}
-                                </div>
-                              </td>
-                            ) : null}
-                            {!area.is_active && !activeAreas ? (
-                              <td style={tableCell}>
-                                <div
-                                  style={{
-                                    fontWeight: "500",
-                                    fontSize: "0.9rem",
-                                  }}
-                                >
-                                  {area.name}
-                                </div>
-                                <div
-                                  style={{
-                                    fontSize: "0.85rem",
-                                    fontWeight: "400",
-                                  }}
-                                >
-                                  {area.city}, {area.street} {area.no_building}
-                                </div>
-                              </td>
-                            ) : null}
-                            {area.is_active && activeAreas ? (
-                              <td style={tableCellBtn}>
-                                <span
-                                  style={{
-                                    color: "green",
-                                    fontWeight: "500",
-                                    textTransform: "uppercase",
-                                    fontSize: "0.85rem",
-                                  }}
-                                >
-                                  <Icon
-                                    icon="mdi:check-circle-outline"
-                                    color="#093"
-                                    width="24"
-                                    height="24"
-                                  />
-                                </span>
-                              </td>
-                            ) : null}
-                            {!area.is_active && !activeAreas ? (
-                              <td style={tableCellBtn}>
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "700",
-                                    textTransform: "uppercase",
-                                    fontSize: "0.85rem",
-                                  }}
-                                >
-                                  <Icon
-                                    icon="ph:x-circle-bold"
-                                    color="red"
-                                    width="24"
-                                    height="24"
-                                  />
-                                </span>
-                              </td>
-                            ) : null}
-                            {activeAreas && area.is_active ? (
-                              <>
-                                <td style={tableCellBtn}>
-                                  <button
-                                    style={btnDelete}
-                                    onClick={() => unActiveHandler(area.id)}
-                                  >
-                                    {t("btn_unactive")}
-                                  </button>
-                                </td>
-                                <td style={tableCellBtn}>
-                                  <button
-                                    style={btnEdit}
-                                    onClick={() => editHandler(area.id)}
-                                  >
-                                    {t("btn_edit")}
-                                  </button>
-                                </td>
-                              </>
-                            ) : null}
-                            {!activeAreas && !area.is_active ? (
-                              <td style={tableCellBtn}>
-                                <button
-                                  style={btnDelete}
-                                  onClick={() => activeHandler(area.id)}
-                                >
-                                  {t("btn_active")}
-                                </button>
-                              </td>
-                            ) : null}
-                          </>
-                        </tr>
-                      ))
-                    : null}
-                </tbody>
-              </table>
-            </div>
+            <TableComponent
+              data={dataAreaTable}
+              columns={tableAreacolumns}
+              tableStyle={tableStyle}
+              mainTableContainer={mainTableContainer}
+            />
           </div>
         </>
       )}

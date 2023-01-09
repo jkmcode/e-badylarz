@@ -8,6 +8,7 @@ import {
   areaActivityReducer,
   areaListReducer,
   areaReducer,
+  contactAreaListReducer,
 } from "./reducers/areaReducer";
 import {
   addDistrictReducer,
@@ -50,6 +51,7 @@ const reducer = combineReducers({
   addProductType: addProductTypeReducer,
   shopList: shopListReducer,
   contactList: contactListReducer,
+  contactAreaList: contactAreaListReducer,
   getShop: getShopReducer,
   updateShop: updateShopReducer,
   areaList: areaListReducer,

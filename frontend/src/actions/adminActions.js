@@ -212,7 +212,6 @@ export const getShopContacts = (insertData) => async (dispatch, getState) => {
           ? error.response.data.detail
           : error.message,
     });
-    console.log(error);
   }
 };
 

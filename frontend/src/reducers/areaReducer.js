@@ -10,7 +10,11 @@ import {
   GET_AREA_REQUEST,
   GET_AREA_SUCCESS,
   GET_AREA_FAIL,
-  GET_AREA_DELETE
+  GET_AREA_DELETE,
+  GET_AREA_CONTACT_LIST_REQUEST,
+  GET_AREA_CONTACT_LIST_SUCCESS,
+  GET_AREA_CONTACT_LIST_FAIL,
+  GET_AREA_CONTACT_LIST_DELETE,
 } from "../constants/areaConstans";
 
 export const areaActivityReducer = (state = {}, action) => {
@@ -58,6 +62,33 @@ export const areaListReducer = (state = { areaList: [] }, action) => {
       };
     case GET_AREA_LIST_DELETE:
       return { areaList: [] };
+    default:
+      return state;
+  }
+};
+
+export const contactAreaListReducer = (
+  state = { areaListOfContact: [] },
+  action
+) => {
+  switch (action.type) {
+    case GET_AREA_CONTACT_LIST_REQUEST:
+      return { loading: true, success: false, areaListOfContact: [] };
+    case GET_AREA_CONTACT_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        areaListOfContact: action.payload,
+      };
+    case GET_AREA_CONTACT_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        areaListOfContact: [],
+      };
+    case GET_AREA_CONTACT_LIST_DELETE:
+      return { areaListOfContact: [] };
     default:
       return state;
   }

@@ -11,6 +11,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
     width: "80%",
     maxWidth: "600px",
     height: "40vh",
+    textAlign: "center",
   };
 
   const modalOverlay = {
@@ -37,7 +38,6 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
     color: "black",
     fontSize: "1.5rem",
     fontWeight: "500",
-    textAlign: "center",
     marginTop: "1rem",
   };
 

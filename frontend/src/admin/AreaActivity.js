@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import useResponsive from "../component/useResponsive";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
-import { Row, Col, Button, Form } from "react-bootstrap";
 import useBackToLogin from "../component/useBackToLogin";
-import { FormLayout } from "./AdminCSS";
+import { FormLayout, changeBtn, addBtn, returnBtn } from "./AdminCSS";
 import FormInput from "./FormInput";
-
+import FormInputIBAN from "./FormInputIBAN";
+import Divider from "./Divider";
 import { addArea, getAreaToEdit } from "../actions/areaAction";
-
 import { ADD_AREA_DELETE, TIME_AUT } from "../constants/areaConstans";
 import { GET_AREA_LIST_DELETE } from "../constants/areaConstans";
 
@@ -32,26 +31,19 @@ import { Icon } from "@iconify/react";
 
 function AddArea() {
   useBackToLogin();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
+  const { windowWidth } = useResponsive();
 
-  const editAreaParam = params.edit;
-  const addAreaParam = params.add;
+  const activityAreaParam = params.add;
   const Id = params.id;
 
   const [successFlag, setSuccessFlag] = useState(false);
   const [values, setValues] = useState({
-    shopArea: "",
+    areaName: "",
     nip: "",
     city: "",
     street: "",
@@ -60,6 +52,7 @@ function AddArea() {
     post: "",
     latitude: "",
     longitude: "",
+    bankAccount: "",
   });
 
   // data from redux
@@ -77,38 +70,42 @@ function AddArea() {
     area,
   } = getArea;
 
-  const onSubmit = (data) => {
-    if (addAreaParam === "add") {
+  // Handlers
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (activityAreaParam === "add") {
       dispatch(
         addArea({
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
+          city: values.city,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          name: values.areaName,
+          nip: values.nip,
+          number: values.number,
+          post: values.post,
+          postCode: values.postCode,
+          street: values.street,
           creator: userInfo.id,
-          bankAccount: data.bankAccount,
+          bankAccount: values.bankAccount,
           add: true,
         })
       );
     } else {
       dispatch(
         addArea({
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          name: data.name,
-          nip: data.nip,
-          number: data.number,
-          post: data.post,
-          postCode: data.postCode,
-          street: data.street,
+          city: !values.city ? area.name : values.city,
+          latitude: !values.latitude ? area.latitude : values.latitude,
+          longitude: !values.longitude ? area.longitude : values.longitude,
+          name: !values.areaName ? area.name : values.areaName,
+          nip: !values.nip ? area.nip : values.nip,
+          number: !values.number ? area.no_building : values.number,
+          post: !values.post ? area.post : values.post,
+          postCode: !values.postCode ? area.post_code : values.postCode,
+          street: !values.street ? area.street : values.street,
           creator: userInfo.id,
-          bankAccount: data.bankAccount,
+          bankAccount: !values.bankAccount
+            ? area.bank_account
+            : values.bankAccount,
           add: false,
           id: Id,
         })
@@ -120,16 +117,8 @@ function AddArea() {
     setValues({ ...values, [name]: value });
   };
 
-  // normalize function
-  const normalizeCardNumber = (value) => {
-    return (
-      value
-        .replace(/\s/g, "")
-        .match(/.{1,4}/g)
-        ?.join(" ")
-        .substr(0, 39)
-        .toUpperCase() || ""
-    );
+  const onChangeIBANHandler = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
 
   useEffect(() => {
@@ -142,7 +131,7 @@ function AddArea() {
   }, [success]);
 
   useEffect(() => {
-    if (addAreaParam === "edit") {
+    if (activityAreaParam === "edit") {
       dispatch(getAreaToEdit(Id));
     }
   }, []);
@@ -153,19 +142,31 @@ function AddArea() {
     }
   }, [successFlag]);
 
+  //style
+  const mainContainer = {
+    backgroundImage:
+      "linear-gradient(160deg, rgba(209, 207, 207, 1) 38%, rgba(144, 146, 151, 1) 100%)",
+    boxShadow: "-9px 8px 34px -13px rgba(66, 68, 90, 1)",
+    borderRadius: ".25rem",
+    padding: "2rem",
+    width: windowWidth > 800 ? "80%" : "100%",
+    margin: "auto",
+  };
+
+  //form data
   const inputs = [
     {
       id: "1",
-      name: "AreaName",
+      name: "areaName",
       type: "text",
       placeholder: t("AreaActivity_name_placeholder"),
       errorMessage: t("AreaActivity_name_error_message"),
       label: t("AreaActivity_label_name"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
       defaultValue:
-        addAreaParam === "add"
+        activityAreaParam === "add"
           ? ""
-          : successAreaToEdit && addAreaParam === "edit" && area.name,
+          : successAreaToEdit && activityAreaParam === "edit" && area.name,
       required: true,
     },
     {
@@ -177,9 +178,9 @@ function AddArea() {
       label: t("nip_label"),
       pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
       defaultValue:
-        addAreaParam === "add"
+        activityAreaParam === "add"
           ? ""
-          : successAreaToEdit && addAreaParam === "edit" && area.nip,
+          : successAreaToEdit && activityAreaParam === "edit" && area.nip,
       required: true,
     },
     {
@@ -190,7 +191,10 @@ function AddArea() {
       errorMessage: t("city_error_message"),
       label: t("city_label"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,16}$",
-      defaultValue: successAreaToEdit && addAreaParam === "edit" && area.city,
+      defaultValue:
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.city,
       required: true,
     },
     {
@@ -201,7 +205,10 @@ function AddArea() {
       errorMessage: t("street_error_message"),
       label: t("street_label"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
-      defaultValue: successAreaToEdit && addAreaParam === "edit" && area.street,
+      defaultValue:
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.street,
       required: true,
     },
     {
@@ -213,7 +220,11 @@ function AddArea() {
       label: t("number_label"),
       pattern: "^[0-9A-Z]+(-[0-9]+)?(/[0-9]+(-[0-9]+)?)*$",
       defaultValue:
-        successAreaToEdit && addAreaParam === "edit" && area.no_building,
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit &&
+            activityAreaParam === "edit" &&
+            area.no_building,
       required: true,
     },
     {
@@ -225,7 +236,9 @@ function AddArea() {
       label: t("postCode_label"),
       pattern: "^[0-9]{2}-[0-9]{3}$",
       defaultValue:
-        successAreaToEdit && addAreaParam === "edit" && area.post_code,
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.post_code,
       required: true,
     },
     {
@@ -236,7 +249,10 @@ function AddArea() {
       errorMessage: t("AddShops_post_error_message"),
       label: t("AddShops_label_post"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
-      defaultValue: successAreaToEdit && addAreaParam === "edit" && area.post,
+      defaultValue:
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.post,
       required: true,
     },
     {
@@ -249,7 +265,11 @@ function AddArea() {
       pattern:
         "^PL[0-9]{2} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$",
       defaultValue:
-        successAreaToEdit && addAreaParam === "edit" && area.bank_account,
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit &&
+            activityAreaParam === "edit" &&
+            area.bank_account,
       required: true,
     },
     {
@@ -261,7 +281,9 @@ function AddArea() {
       label: t("label_latitude"),
       pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
       defaultValue:
-        successAreaToEdit && addAreaParam === "edit" && area.latitude,
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.latitude,
       required: true,
     },
     {
@@ -273,7 +295,9 @@ function AddArea() {
       label: t("label_longitude"),
       pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
       defaultValue:
-        successAreaToEdit && addAreaParam === "edit" && area.longitude,
+        activityAreaParam === "add"
+          ? ""
+          : successAreaToEdit && activityAreaParam === "edit" && area.longitude,
       required: true,
     },
   ];
@@ -283,7 +307,7 @@ function AddArea() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container bg-container mt-5 p-4 rounded">
+        <div style={mainContainer}>
           {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
           {errorAreaToEdit ? (
             <ErrorMessage msg={errorAreaToEdit} timeOut={TIME_AUT_ERROR} />
@@ -292,7 +316,7 @@ function AddArea() {
           {success ? (
             <ErrorMessage
               msg={
-                addAreaParam === "add"
+                activityAreaParam === "add"
                   ? t("AddArea_success")
                   : t("EditArea_success")
               }
@@ -301,20 +325,16 @@ function AddArea() {
               success={true}
             />
           ) : null}
-          <Row className="align-items-center ">
-            <Col>
-              <Link to="/dashboard/areas" className="text-dark h6">
-                <Icon icon="ion:arrow-back" />
-                {t("btn-return")}
-              </Link>
-            </Col>
-          </Row>
+          <Link to="/dashboard/areas" style={returnBtn}>
+            <Icon icon="ion:arrow-back" />
+            {t("btn-return")}
+          </Link>
           <div className="d-flex justify-content-center display-6">
-            {editAreaParam === "edit"
+            {activityAreaParam === "edit"
               ? t("AreaActivity_EditAreas_title")
               : t("AreaActivity_AddAreas_title")}
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <FormLayout col={TWO}>
               {inputs.map((input, index) => {
                 if (index <= 1) {
@@ -324,308 +344,69 @@ function AddArea() {
                 }
               })}
             </FormLayout>
-            <hr />
-            <h6>{t("AreaActivity_title_address")}</h6>
-            <Row className="mb-3">
-              <Col md={6}>
-                <Form.Group controlId="city">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_city")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.city ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_city_placeholder")}
-                    {...register("city", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: NUMBERS_AND_NATIONAL_LETTERS,
-                        message: t("Form_letters_pl_and_digits"),
-                      },
-                      minLength: {
-                        value: 3,
-                        message: t("Form_minLength_3"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("city");
-                    }}
-                    name="city"
-                  ></Form.Control>
-                  {errors.city && (
-                    <div className="text-danger form-msg-style">
-                      {errors.city.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="street">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_street")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.street ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_street_placeholder")}
-                    {...register("street", {
-                      pattern: {
-                        value: NUMBERS_AND_NATIONAL_LETTERS,
-                        message: t("Form_letters_pl_and_digits"),
-                      },
-                      minLength: {
-                        value: 3,
-                        message: t("Form_minLength_3"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("street");
-                    }}
-                    name="street"
-                  ></Form.Control>
-                  {errors.street && (
-                    <div className="text-danger form-msg-style">
-                      {errors.street.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col xs={6} md={4}>
-                <Form.Group controlId="number">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_number")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.number ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_number_placeholder")}
-                    {...register("number", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: NUMBERS_AND_NATIONAL_LETTERS,
-                        message: t("Form_letters_pl_and_digits"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("number");
-                    }}
-                    name="number"
-                  ></Form.Control>
-                  {errors.number && (
-                    <div className="text-danger form-msg-style">
-                      {errors.number.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col xs={6} md={4}>
-                <Form.Group controlId="postCode">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_postCode")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.postCode ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_postCode_placeholder")}
-                    {...register("postCode", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: t("Post_code_validate"),
-                        message: t("Form_post_code"),
-                      },
-                      minLength: {
-                        value: 5,
-                        message: t("Form_minLength_5"),
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: t("Form_maxLength_10"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("postCode");
-                    }}
-                    name="postCode"
-                  ></Form.Control>
-                  {errors.postCode && (
-                    <div className="text-danger form-msg-style">
-                      {errors.postCode.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="post">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_post")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.post ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_post_placeholder")}
-                    {...register("post", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: NUMBERS_AND_NATIONAL_LETTERS,
-                        message: t("Form_letters_pl_and_digits"),
-                      },
-                      minLength: {
-                        value: 3,
-                        message: t("Form_minLength_3"),
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: t("Form_maxLength_30"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("post");
-                    }}
-                    name="post"
-                  ></Form.Control>
-                  {errors.post && (
-                    <div className="text-danger form-msg-style">
-                      {errors.post.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col>
-                <Form.Group controlId="bankAccount">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_bankAccound")}
-                  </Form.Label>
-                  <Form.Control
-                    type="tel"
-                    className={errors.bankAccount ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_bankAccound_placeholder")}
-                    ref={register}
-                    {...register("bankAccount", {
-                      onChange: (event) => {
-                        const { value } = event.target;
-                        event.target.value = normalizeCardNumber(value);
-                      },
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: BANK_ACCOUNT_FORMAT,
-                        message: t("Form_IBAN"),
-                      },
-                      minLength: {
-                        value: 21,
-                        message: t("Form_minLength_15"),
-                      },
-                      maxLength: {
-                        value: 40,
-                        message: t("Form_maxLength_34"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("bankAccount");
-                    }}
-                    name="bankAccount"
-                  ></Form.Control>
-                  {errors.bankAccount && (
-                    <div className="text-danger form-msg-style">
-                      {errors.bankAccount.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
-            <hr />
-            <h6>{t("AreaActivity_title_geolocation")}</h6>
-            <Row>
-              <Col md={6}>
-                <Form.Group controlId="latitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_latitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.latitude ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_latitude_placeholder")}
-                    {...register("latitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: GPS_FORMAT,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("latitude");
-                    }}
-                    name="latitude"
-                  ></Form.Control>
-                  {errors.latitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.latitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="longitude">
-                  <Form.Label className="form-msg-style ms-2">
-                    {t("AreaActivity_label_longitude")}
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={errors.longitude ? "formInvalid" : null}
-                    placeholder={t("AreaActivity_longitude_placeholder")}
-                    {...register("longitude", {
-                      required: t("Form_field_required"),
-                      pattern: {
-                        value: GPS_FORMAT,
-                        message: t("Form_only_digits_or_dot"),
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("longitude");
-                    }}
-                    name="longitude"
-                  ></Form.Control>
-                  {errors.longitude && (
-                    <div className="text-danger form-msg-style">
-                      {errors.longitude.message}
-                    </div>
-                  )}
-                </Form.Group>
-              </Col>
-            </Row>
-            <div className="d-flex justify-content-end">
-              {editAreaParam === "edit" ? (
-                <Button
-                  type="submit"
-                  variant="warning"
-                  className="rounded my-3 "
-                >
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>
+              {t("AreaActivity_title_address")}
+            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 2 || index === 3) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <FormLayout col={THREE}>
+              {inputs.map((input, index) => {
+                if (index === 4 || index === 5 || index === 6) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <Divider backgroundColor="grey" />
+            {inputs.map((input, index) => {
+              if (index === 7) {
+                return (
+                  <FormInputIBAN
+                    key={input.id}
+                    {...input}
+                    onChange={onChangeIBANHandler}
+                  />
+                );
+              }
+            })}
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>
+              {t("AreaActivity_title_geolocation")}
+            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 8 || index === 9) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "1rem",
+              }}
+            >
+              {activityAreaParam === "edit" ? (
+                <button type="submit" style={changeBtn}>
                   {t("btn-change")}
-                </Button>
+                </button>
               ) : (
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="rounded my-3 "
-                >
+                <button type="submit" style={addBtn}>
                   {t("btn-add")}
-                </Button>
+                </button>
               )}
             </div>
           </form>

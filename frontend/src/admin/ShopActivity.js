@@ -6,7 +6,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useResponsive from "../component/useResponsive";
 import Divider from "./Divider";
-import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
+import { FormLayout, changeBtn, addBtn, returnBtn } from "./AdminCSS";
 import { Icon } from "@iconify/react";
 import {
   addShop,
@@ -56,6 +56,7 @@ function AddShops() {
     post: "",
     latitude: "",
     longitude: "",
+    bankAccount: "",
   });
 
   const editShopParam = params.edit;
@@ -230,14 +231,7 @@ function AddShops() {
     lineHeight: 1.2,
   };
 
-  const returnBtn = {
-    color: "#212529",
-    fontSize: ".975rem",
-    fontWeight: 500,
-    lineHeight: 1.5,
-    color: "black",
-  };
-
+  //Form data
   const inputs = [
     {
       id: "1",

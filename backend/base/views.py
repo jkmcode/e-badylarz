@@ -291,6 +291,14 @@ def getContacts(request, Id):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+def getAreaContacts(request, Id):
+    contacts = AreaContact.objects.filter(id_area=Id).order_by('name')
+    seriaziler = ShopsContactSerializer(contacts, many=True)
+
+    return Response(seriaziler.data)    
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getSpots(request, Id):
     spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
     seriaziler = ShopSpotsSerializer(spots, many=True)

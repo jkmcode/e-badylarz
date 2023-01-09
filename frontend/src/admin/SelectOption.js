@@ -41,7 +41,6 @@ function SelectOption({
           onChange={handleChange}
           onBlur={handleBlur}
           {...inputProps}
-          disabled={optionsList.length === 0 ? true : false}
         >
           <option value={defaultValue} hidden>
             {defaultValue}

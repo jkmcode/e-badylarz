@@ -197,7 +197,6 @@ function AddContact() {
 
   // Ensure that useState editContactObj assign edit object in Time.
   // UseSate is async which means is possible that condition in Inputs array will be executed elier than useState editContactObj
-
   useEffect(() => {
     setEditContactObjSuccess(true);
     return () => {
@@ -900,7 +899,6 @@ function AddContact() {
                 <TableComponent
                   data={dataSpotsTable}
                   columns={tableSpotscolumns}
-                  activeTable={false}
                   tableStyle={tableSpotStyle}
                   mainTableContainer={mainTableContainer}
                 />

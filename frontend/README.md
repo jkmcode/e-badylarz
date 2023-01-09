@@ -56,10 +56,3 @@ Addcontact do zrobienia:
 
 1. nie moge wyśrodkować napisu "Brak danych" w tabeli contact List (nornalnie uzywam do tego useFefa zeby odczytać jego szerokość).
 2. usunąć zbędne pola infromacyjne w inputach.
-
-ShopSpotActivity:
-
-1. Musimy zrobić Update Select Option (przy zmianie powiatu musi zostać skasowane aktualne miasto).
-   --- zastanowić się czy przy zmianie spotu można edytować powiat i miasto
-2. Przy edycji: Cannot assign "(<Citis: Zaczarnie>,)": "ShopsSpot.city" must be a "Citis" instance.
-3. nie mogę edytować osoby do kontaktu (problem z useEffectem) --- data na backendzie nie zawiera wszystkich danych.

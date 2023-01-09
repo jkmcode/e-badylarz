@@ -95,6 +95,39 @@ class AreasARC(models.Model):
     def __str__(self):
          return self.name
 
+#Area_contact
+class AreaContact(models.Model):
+    id_area = models.ForeignKey(Areas, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=40)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    description = models.CharField(max_length=255)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)    
+
+#Area_contact ARC
+class AreaContactARC(models.Model):
+    id_area = models.IntegerField()
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=40)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    description = models.CharField(max_length=255)
+    date_of_entry = models.DateTimeField( null=True,blank=True)   
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    id_contact = models.IntegerField()
+    archiver = models.CharField(max_length=20, null=True, blank=True)
+
 
 ##################### Shops ######################################
 

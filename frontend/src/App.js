@@ -27,6 +27,7 @@ import ShopSpotActivity from "./admin/ShopSpotActivity";
 import AddContact from "./admin/AddContact";
 import AdminAreas from "./admin/AdminAreas";
 import AreaActivity from "./admin/AreaActivity";
+import AreaShowMore from "./admin/AreaShowMore";
 import SearchBox from "./component/SearchBox";
 import BookData from "./Data/data.json";
 import LoginScreen from "./screens/LoginScreen";
@@ -80,12 +81,12 @@ function App() {
           <Route path="areas" element={<AdminAreas />} />
           <Route path="areas/:add" element={<AreaActivity />} />
           <Route path="areas/:add/:id" element={<AreaActivity />} />
-
           <Route path="shops/:id/:edit" element={<AreaActivity />} />
+          <Route path="areas/:id/details" element={<AreaShowMore />} />
+
           <Route path="cities" element={<AdminCities />} />
           <Route path="products" element={<AdminAddProducts />} />
         </Route>
-
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>
       <Routes>

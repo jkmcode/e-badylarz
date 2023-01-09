@@ -75,6 +75,11 @@ class ShopsContactSerializer(serializers.ModelSerializer):
         model = ShopsContact
         fields = '__all__'   
 
+class AreaContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AreaContact
+        fields = '__all__'
+
 
 
 class CitiesNameSerializer(serializers.ModelSerializer):

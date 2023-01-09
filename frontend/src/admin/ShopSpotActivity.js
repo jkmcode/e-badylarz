@@ -364,6 +364,7 @@ function AddShopsSpot() {
           : successGetSpot &&
             SpotParam === "edit" &&
             spotDetails.city.id_district.name,
+      disabled: SpotParam === "edit" ? true : false,
     },
     {
       id: "4",
@@ -374,6 +375,8 @@ function AddShopsSpot() {
         SpotParam === "add"
           ? "Select option"
           : successGetSpot && SpotParam === "edit" && spotDetails.city.name,
+      disabled:
+        SpotParam === "edit" ? true : newListCities.length === 0 ? true : false,
     },
     {
       id: "5",
@@ -500,7 +503,7 @@ function AddShopsSpot() {
             <Icon icon="ion:arrow-back" />
             {t("btn-return")}
           </Link>
-          {SpotParam === "edit" && successGetSpot && (
+          {SpotParam === "edit" && successGetSpot && successGetShop && (
             <div style={{ textAlign: "center" }}>
               {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
               {shopDetails.no_building}

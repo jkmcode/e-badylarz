@@ -127,3 +127,11 @@ export const addBtn = {
   backgroundImage:
     "linear-gradient(183deg, rgba(72, 236, 26, 1) 0%, rgba(83, 155, 41, 1) 100%)",
 };
+
+export const returnBtn = {
+  color: "#212529",
+  fontSize: ".975rem",
+  fontWeight: 500,
+  lineHeight: 1.5,
+  color: "black",
+};

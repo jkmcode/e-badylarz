@@ -122,8 +122,8 @@ function AddCity() {
     textAlign: "center",
   };
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
 
   const inputs = [

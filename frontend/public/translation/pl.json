@@ -51,6 +51,11 @@
   "bankAccound_error_message": "Niepoprawny format konta bankwego IBAN",
   "bankAccound_label": "Konto bankowe",
 
+  "Confirmation_alert_unactive_area": "Czy jesteś pewny, że chcerz dezaktywować obszar zakupu?",
+  "Confirmation_alert_active_area": "Czy jesteś pewny, że chcerz aktywować obszar zakupu?",
+
+  "main_data_title": "Dane główne",
+
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",
@@ -78,6 +83,7 @@
   "btn_show_inactive_shops": "sklepy nieaktywne",
   "btn_show_active_areas": "Aktywne obszary",
   "btn_show_inactive_areas": "Nieaktywne obszary",
+  "btn_show_more": "Więcej",
   "btn-change": "Zmień",
   "cart_currently_empty": "jest obecnie pusty",
   "status_inactive": "Nieaktywny",
