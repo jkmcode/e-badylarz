@@ -142,6 +142,7 @@ function AddContact() {
     ListOfContact.map((i) => {
       if (i.id === id) {
         setEditContactObj(i);
+        setIdContact(i.id);
       }
     });
   };
@@ -163,11 +164,13 @@ function AddContact() {
         shop_id: shopId,
         Id: idContact,
         editing: true,
-        firstName: values.firstName,
-        surname: values.surname,
-        email: values.email,
-        phone: values.phone,
-        description: values.description,
+        firstName: !values.firstName ? editContactObj.name : values.firstName,
+        surname: !values.surname ? editContactObj.surname : values.surname,
+        email: !values.email ? editContactObj.email : values.email,
+        phone: !values.phone ? editContactObj.phone : values.phone,
+        description: !values.description
+          ? editContactObj.description
+          : values.description,
         creator: userInfo.id,
         modifier: userInfo.id,
       };
@@ -194,12 +197,13 @@ function AddContact() {
 
   // Ensure that useState editContactObj assign edit object in Time.
   // UseSate is async which means is possible that condition in Inputs array will be executed elier than useState editContactObj
+
   useEffect(() => {
     setEditContactObjSuccess(true);
     return () => {
       setEditContactObjSuccess(false);
     };
-  }, [editContactObj, editContactObj]);
+  }, [editContactObj]);
 
   // Change status contact & spot and close infoWindow
   useEffect(() => {
@@ -212,7 +216,7 @@ function AddContact() {
             active: activeContact ? false : true,
             userId: userInfo.id,
             objType: SHOP_CONTACT_DESCRIPTION,
-            kind: activeContact ? "Inactive contact" : "Inactive contact",
+            kind: activeContact ? "Inactive contact" : "Active contact",
           })
         );
       }
@@ -417,7 +421,7 @@ function AddContact() {
       label: t("AddContact_description"),
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.description,
-      required: true,
+      required: false,
     },
   ];
 
@@ -774,7 +778,7 @@ function AddContact() {
                 <TableComponent
                   data={dataContactTable}
                   columns={tableConatctcolumns}
-                  tabletyle={tableContactStyle}
+                  tableStyle={tableContactStyle}
                   mainTableContainer={mainTableContainer}
                 />
               </>
@@ -836,7 +840,7 @@ function AddContact() {
                           <TextareaWithValidation
                             key={input.id}
                             {...input}
-                            defaultValue=""
+                            defaultValue={input.defaultValue}
                             onChange={onChangeTextArea}
                           />
                         );
@@ -897,7 +901,7 @@ function AddContact() {
                   data={dataSpotsTable}
                   columns={tableSpotscolumns}
                   activeTable={false}
-                  tabletyle={tableSpotStyle}
+                  tableStyle={tableSpotStyle}
                   mainTableContainer={mainTableContainer}
                 />
               </>

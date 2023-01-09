@@ -153,8 +153,8 @@ function AddShopsSpot() {
 
   // Handlers
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
 
   const selectDistrictHandler = (option) => {
@@ -199,53 +199,52 @@ function AddShopsSpot() {
       } else {
         setEmptyValueError(true);
       }
+    } else {
+      dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      if (radioValue === "1") {
+        const insertData = {
+          add: false,
+          id_spot: spotId,
+          id_shops: shopId,
+          name: !values.spotName ? shopDetails.name : values.spotName,
+          city: values.cityList, /// To jest źle
+          street: !values.street ? spotDetails.street : values.street,
+          no_building: !values.number ? spotDetails.no_building : values.number,
+          postCode: !values.postCode ? spotDetails.post_code : values.postCode,
+          post: !values.post ? spotDetails.post : values.post,
+          latitude: !values.latitude ? spotDetails.latitude : values.latitude,
+          longitude: !values.longitude
+            ? spotDetails.longitude
+            : values.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "False",
+          range: "0",
+        };
+        dispatch(updateShopSpot(insertData));
+      }
+      // else {
+      //   const insertData = {
+      //     add: false,
+      //     id_spot: spotId,
+      //     id_shops: shopId,
+      //     name: data.name,
+      //     city: data.city, /// To jest źle
+      //     street: data.street,
+      //     no_building: data.number,
+      //     postCode: data.postCode,
+      //     post: data.post,
+      //     latitude: data.latitude,
+      //     longitude: data.longitude,
+      //     creator: userInfo.id,
+      //     is_active: "True",
+      //     delivery: "True",
+      //     range: data.range,
+      //   };
+      //   dispatch(updateShopSpot(insertData));
+      // }
     }
-    // else {
-    //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
-    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-    //   if (radioValue === "1") {
-    //     const insertData = {S
-    //       add: false,
-    //       id_spot: spotId,
-    //       id_shops: shopId,
-    //       name: !values.spotName ? shopDetails.name : values.spotName,
-    //       city: values.cityList, /// To jest źle
-    //       street: !values.street ? spotDetails.street : values.street,
-    //       no_building: !values.number ? spotDetails.no_building : values.number,
-    //       postCode: !values.postCode ? spotDetails.post_code : values.postCode,
-    //       post: !values.post ? spotDetails.post : values.post,
-    //       latitude: !values.latitude ? spotDetails.latitude : values.latitude,
-    //       longitude: !values.longitude
-    //         ? spotDetails.longitude
-    //         : values.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: "False",
-    //       range: "0",
-    //     };
-    //     dispatch(updateShopSpot(insertData));
-    //   }
-    //   else {
-    //     const insertData = {
-    //       add: false,
-    //       id_spot: spotId,
-    //       id_shops: shopId,
-    //       name: data.name,
-    //       city: data.city, /// To jest źle
-    //       street: data.street,
-    //       no_building: data.number,
-    //       postCode: data.postCode,
-    //       post: data.post,
-    //       latitude: data.latitude,
-    //       longitude: data.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: "True",
-    //       range: data.range,
-    //     };
-    //     dispatch(updateShopSpot(insertData));
-    //   }
-    //}
   };
 
   ///USEEFFECT
@@ -358,8 +357,13 @@ function AddShopsSpot() {
       id: "3",
       name: "districtList",
       label: t("ShopsSpot_label_districtList"),
-      defaultValue: "Select option",
       optionsList: districtList,
+      defaultValue:
+        SpotParam === "add"
+          ? "Select option"
+          : successGetSpot &&
+            SpotParam === "edit" &&
+            spotDetails.city.id_district.name,
     },
     {
       id: "4",

@@ -149,14 +149,12 @@ function AddShops() {
     }
   };
 
-  const onChange = (name, value) => {
-    setValues({ ...values, [name]: value });
-  };
-
   const onChangeIBANHandler = (name, value) => {
     setValues({ ...values, [name]: value });
   };
-
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
+  };
   // fetch data from DB -- shop to edit
   // remove old image
   useEffect(() => {

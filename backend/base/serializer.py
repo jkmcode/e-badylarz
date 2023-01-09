@@ -75,10 +75,15 @@ class ShopsContactSerializer(serializers.ModelSerializer):
         model = ShopsContact
         fields = '__all__'   
 
+
+
 class CitiesNameSerializer(serializers.ModelSerializer):
+
+    id_district = DistrictsSerializer(many=False)
+
     class Meta:
         model = Citis
-        fields = ["name"]
+        fields = ["name", "id_district"]
 
 class ShopSpotsSerializer(serializers.ModelSerializer):
 

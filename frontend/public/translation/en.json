@@ -23,6 +23,34 @@
   "longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
   "label_longitude": "Longitude",
 
+  "nip_error_message": "NIP format: xxx-xxx-xx-xx",
+  "nip_label": "Tax number",
+  "nip_placeholder": "Enter tax number ...",
+
+  "city_error_message": "city name should be 3-16 characters without any special character",
+  "city_label": "City",
+  "city_placeholder": "Enter city name ...",
+
+  "street_placeholder": "Enter street name ...",
+  "street_error_message": "Street name should be 3-50 characters without any special character",
+  "street_label": "Street",
+
+  "number_placeholder": "Enter building number ...",
+  "number_error_message": "invalid number",
+  "number_label": "No building",
+
+  "postCode_placeholder": "Enter post code ...",
+  "postCode_error_message": "Post code fromat: xx-xxx",
+  "postCode_label": "Post code",
+
+  "post_placeholder": "Enter post ...",
+  "post_error_message": "Post name should be 3-50 characters without any special character",
+  "post_label": "Post",
+
+  "bankAccound_placeholder": "Enter bank account ...",
+  "bankAccound_error_message": "Invalid bank account IBAN format",
+  "bankAccound_label": "Bank account",
+
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",
@@ -397,8 +425,12 @@
   "AreaActivity_AddAreas_title": "Add Areas",
   "AreaActivity_label_name": "Sales Area Name",
   "AreaActivity_name_placeholder": "Enter Sales Area Name ...",
+
+  "AreaActivity_name_error_message": "Area name should be 3-50 characters without any special character",
+
   "AreaActivity_label_nip": "Tax number",
   "AreaActivity_nip_placeholder": "Enter tax number ...",
+
   "AreaActivity_title_address": "Address",
   "AreaActivity_label_city": "City",
   "AreaActivity_city_placeholder": "Enter city ...",

@@ -107,16 +107,30 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'kuba',
+#         'USER': 'kuba',
+#         'PASSWORD': 'kuba1024@',
+#         'HOST': '192.168.5.28',
+#         'PORT' : '5432',        
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kuba',
-        'USER': 'kuba',
-        'PASSWORD': 'kuba1024@',
-        'HOST': '192.168.5.28',
+        'NAME': '36831876_f',
+        'HOST': 'serwer2250365.home.pl',
+        'USER': '36831876_f',
+        'PASSWORD': 'Labocha12345l@',
         'PORT' : '5432',        
     }
 }
+
+# Home.pl 
+# https://pomoc.home.pl/baza-wiedzy/polaczenie-z-baza-danych-mysql-na-serwerze-w-home-pl
 
 
 # Password validation

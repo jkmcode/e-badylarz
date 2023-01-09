@@ -23,6 +23,34 @@
   "longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
   "label_longitude": "Długość geograficzna",
 
+  "nip_error_message": "Poprawny format NIP: xxx-xxx-xx-xx",
+  "nip_label": "NIP",
+  "nip_placeholder": "Wpisz NIP ...",
+
+  "city_error_message": "Nazwa miasta powinna mieć od 3 do 16 znaków bez znaków specjalnych",
+  "city_label": "Miasto",
+  "city_placeholder": "Wpisz nazwe miasta ...",
+
+  "street_placeholder": "Wpisz nazwe ulicy ...",
+  "street_error_message": "Nazwa ulicy powinna mieć od 3 do 16 znaków bez znaków specjalnychr",
+  "street_label": "Ulica",
+
+  "number_placeholder": "Wpisz numer budynku ...",
+  "number_error_message": "Niepoprawny format",
+  "number_label": "Nr budynku",
+
+  "postCode_placeholder": "Wpisz kod pocztowy ...",
+  "postCode_error_message": "Format kodu pocztowego: xx-xxx",
+  "postCode_label": "Kod pocztowy",
+
+  "post_placeholder": "Wpisz poczte ...",
+  "post_error_message": "Nazwa poczty powinna mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+  "post_label": "Poczta",
+
+  "bankAccound_placeholder": "Wpisz konto bankowe ...",
+  "bankAccound_error_message": "Niepoprawny format konta bankwego IBAN",
+  "bankAccound_label": "Konto bankowe",
+
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",
@@ -393,6 +421,9 @@
   "AreaActivity_AddAreas_title": "Dodaj obszar sprzedaży",
   "AreaActivity_label_name": "Nazwa obszaru sprzedaży",
   "AreaActivity_name_placeholder": "Wprowadź nazwę obszaru sprzedaży ...",
+
+  "AreaActivity_name_error_message": "Nazwa obszaru powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
+
   "AreaActivity_label_nip": "NIP",
   "AreaActivity_nip_placeholder": "Wprowadź NIP ...",
   "AreaActivity_title_address": "Adres",

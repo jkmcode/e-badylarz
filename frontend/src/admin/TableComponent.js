@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TableComponent = ({ data, columns, tabletyle, mainTableContainer }) => {
+const TableComponent = ({ data, columns, tableStyle, mainTableContainer }) => {
   return (
     <div style={mainTableContainer}>
-      <table style={tabletyle}>
+      <table style={tableStyle}>
         <thead>
           <tr>
             {columns.map((column) => {
@@ -44,7 +44,7 @@ TableComponent.propTypes = {
   ).isRequired,
 
   mainTableContainer: PropTypes.object.isRequired,
-  tabletyle: PropTypes.object.isRequired,
+  tableStyle: PropTypes.object.isRequired,
 };
 
 export default TableComponent;
