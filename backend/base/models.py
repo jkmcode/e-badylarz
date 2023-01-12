@@ -7,12 +7,12 @@ from django.db import connection
 ## ##################### Districts ######################################
 
 class Districts(models.Model):
-    name = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
+    name = models.CharField(max_length=50, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
     latitude = models.CharField(max_length=25, null=True, blank=True)
     longitude = models.CharField(max_length=25, null=True, blank=True)
 
@@ -21,12 +21,13 @@ class Districts(models.Model):
 
 # Descriptions Districts
 class Descriptions(models.Model):
+    id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
-    obj_type = models.CharField(max_length=50, null=True, blank=True)
-    obj_id = models.CharField(max_length=10, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
+    # obj_type = models.CharField(max_length=50, null=True, blank=True)
+    # obj_id = models.CharField(max_length=10, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
@@ -36,16 +37,28 @@ class Citis(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, null=True, blank=True)
     post_code = models.CharField(max_length=10, null=True, blank=True)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
     latitude = models.CharField(max_length=25, null=True, blank=True)
     longitude = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
          return self.name
+
+# Descriptions Cities
+class CitiesDescriptions(models.Model):
+    id_city = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+## ---------  END  LOCATION  ------------ ##
 
 
 ##################### Areas ######################################
@@ -135,55 +148,66 @@ class AreaContactARC(models.Model):
 #Shops HQ place - miejsce prowadzenia działalnosci
 class Shops(models.Model):
     name = models.CharField(max_length=50)
-    nip = models.CharField(max_length=20)
+    nip = models.CharField(max_length=20,null=True,blank=True)
     city = models.CharField(max_length=40)
-    street = models.CharField(max_length=50)
-    no_building = models.CharField(max_length=30)
-    post_code = models.CharField(max_length=20)
-    post = models.CharField(max_length=30)
+    street = models.CharField(max_length=50,null=True,blank=True)
+    no_building = models.CharField(max_length=30,null=True,blank=True)
+    post_code = models.CharField(max_length=20,null=True,blank=True)
+    post = models.CharField(max_length=30,null=True,blank=True)
     latitude = models.CharField(max_length=25)
     longitude = models.CharField(max_length=25)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)    
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)    
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     bank_account = models.CharField(max_length=40, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
          return self.name
+
 
 class ShopsARC(models.Model):
     id_shops = models.IntegerField()
     name = models.CharField(max_length=50)
-    nip = models.CharField(max_length=20)
+    nip = models.CharField(max_length=20,null=True,blank=True)
     city = models.CharField(max_length=40)
-    street = models.CharField(max_length=50)
-    no_building = models.CharField(max_length=30)
-    post_code = models.CharField(max_length=20)
-    post = models.CharField(max_length=30)
+    street = models.CharField(max_length=50,null=True,blank=True)
+    no_building = models.CharField(max_length=30,null=True,blank=True)
+    post_code = models.CharField(max_length=20,null=True,blank=True)
+    post = models.CharField(max_length=30,null=True,blank=True)
     latitude = models.CharField(max_length=25)
     longitude = models.CharField(max_length=25)
     date_of_entry = models.DateTimeField( null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     bank_account = models.CharField(max_length=40, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
     type_of_change = models.CharField(max_length=50)
-    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
-    archiver = models.CharField(max_length=20, null=True, blank=True)
+    date_of_archiv = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    archiver = models.CharField(max_length=5, null=True, blank=True)
 
     def __str__(self):
          return self.name
+
+#Shops_description
+class ShopsDescriptions(models.Model):
+    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
 
 #Shops spot - miejsce sprzedaży, wydania towaru
 class ShopsSpot(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
-    # city = models.CharField(max_length=40)
     city = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)
@@ -191,10 +215,10 @@ class ShopsSpot(models.Model):
     post = models.CharField(max_length=30)
     latitude = models.CharField(max_length=25)
     longitude = models.CharField(max_length=25)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)    
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)    
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     photo = models.ImageField(null=True, blank=True)
     delivery = models.BooleanField(null=True,blank=True)
@@ -206,36 +230,35 @@ class ShopsSpotARC(models.Model):
     id_shops = models.IntegerField()
     id_spot = models.IntegerField()
     name = models.CharField(max_length=50)
-    city = models.CharField(max_length=40)
+    city = models.IntegerField()
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)
     post_code = models.CharField(max_length=20)
     post = models.CharField(max_length=30)
     latitude = models.CharField(max_length=25)
     longitude = models.CharField(max_length=25)
-    date_of_entry = models.DateTimeField( null=True,blank=True)
+    date_of_entry = models.DateTimeField(null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)    
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)    
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     photo = models.ImageField(null=True, blank=True)
     delivery = models.BooleanField(null=True,blank=True)
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50)
-    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
-    archiver = models.CharField(max_length=20, null=True, blank=True)
+    date_of_archiv = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    archiver = models.CharField(max_length=5, null=True, blank=True)
 
-#Shops_description
-class ShopsDescription(models.Model):
-    id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
-    description = models.CharField(max_length=255)
-    language = models.CharField(max_length=5)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    creator = models.CharField(max_length=20, null=True, blank=True)
-    is_active = models.BooleanField(null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)
-    type_of_change = models.CharField(max_length=50)
+#Shops Spot description
+class ShopsSpotDescriptions(models.Model):
+    id_shops_spot = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
 
 #Shops_contact
 class ShopsContact(models.Model):
@@ -245,11 +268,11 @@ class ShopsContact(models.Model):
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     description = models.CharField(max_length=255)
-    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)   
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)   
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
     type_of_change = models.CharField(max_length=50)    
 
 #Shops_contact ARC
@@ -261,31 +284,91 @@ class ShopsContactARC(models.Model):
     phone = models.CharField(max_length=20)
     description = models.CharField(max_length=255)
     date_of_entry = models.DateTimeField( null=True,blank=True)   
-    creator = models.CharField(max_length=20, null=True, blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField(null=True,blank=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
-    modifier = models.CharField(max_length=20, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
     type_of_change = models.CharField(max_length=50)
-    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_archiv = models.DateTimeField(auto_now_add=True, null=True,blank=True)
     id_contact = models.IntegerField()
     archiver = models.CharField(max_length=20, null=True, blank=True)
 
-## Products 
+## ------------  PRODUCT  ------------ ##
 
 # Product type
-class ProductType(models.Model):
+class ProductTypes(models.Model):
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
-    date_of_change= models.DateTimeField(null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
-    creator = models.CharField(max_length=50, null=True, blank=True)
-    modifier = models.CharField(max_length=50, null=True, blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
 
     def __str__(self):
          return self.name
 
+#Product types description
+class ProductTypesDescriptions(models.Model):
+    id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
 
-   
+
+# Product Species
+class ProductSpecies(models.Model):
+    id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+
+#Product Species description
+class ProductSpeciesDescriptions(models.Model):
+    id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+####
+# Product Genera
+class ProductGenera(models.Model):
+    id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+         return self.name
+
+#Product Genera description
+class ProductGeneraDescriptions(models.Model):
+    id_product_genera = models.ForeignKey(ProductGenera, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
+    date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
+    creator = models.CharField(max_length=5, null=True, blank=True)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+## ------------END  PRODUCT  ------------ ##  
 
 # To change
 class Place_of_pickups(models.Model):
