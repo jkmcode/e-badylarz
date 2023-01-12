@@ -62,7 +62,7 @@ class DistrictsDescSerializer(serializers.ModelSerializer):
 
 class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductType
+        model = ProductTypes
         fields = '__all__'     
 
 class ShopsSerializer(serializers.ModelSerializer):
