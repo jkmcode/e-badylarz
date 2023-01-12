@@ -59,6 +59,13 @@
 
   "main_data_title": "Dane główne",
 
+  "spots_title": "Lista punktów sprzedaży towaru",
+  "btn_add_spot": "Nowy punkt",
+  "btn_close_edit_spot": "Zamknij edytowany punkt",
+  "btn_close_spot": "Zamknij nowy punkt",
+  "show_unactive_spot": "Pokaż nieaktywne punkty",
+  "show_active_spot": "Pokaż aktywne punkty",
+
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",

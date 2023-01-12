@@ -57,4 +57,9 @@ Addcontact do zrobienia:
 1. nie moge wyśrodkować napisu "Brak danych" w tabeli contact List (nornalnie uzywam do tego useFefa zeby odczytać jego szerokość).
 2. usunąć zbędne pola infromacyjne w inputach.
 
-3. poprawić action getAreas na nowy bo chcemy sciągać contacty dla konkretnej area (getAreas ściąga wszytskie area)
+3. Czy tworzenie jednego Reducera i Actiona dla kontaku użytego w wielu miejscach ma senes??
+   Jeżeli tak to musimy stworzyc parament na podstawie którego będziemy zmieniać atrybuty we views oraz reducerze.
+4. W archiwalnych recordach mamy nową nazwe osoby kontaktowej. Czy to tak ma byc czy nie?
+5. dlaczego nie ma relacji w AreasSpotARC i ShopsSpotARC???
+
+Trzeba stworzyć funkcje w action, która będzie pobierać wszystkie spot dla danej area

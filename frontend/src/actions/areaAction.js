@@ -16,6 +16,12 @@ import {
   GET_AREA_CONTACT_LIST_REQUEST,
   GET_AREA_CONTACT_LIST_SUCCESS,
   GET_AREA_CONTACT_LIST_FAIL,
+  ADD_AREA_CONTACT_REQUEST,
+  ADD_AREA_CONTACT_SUCCESS,
+  ADD_AREA_CONTACT_FAIL,
+  ADD_AREA_SPOT_REQUEST,
+  ADD_AREA_SPOT_SUCCESS,
+  ADD_AREA_SPOT_FAIL,
 } from "../constants/areaConstans";
 
 // Areas
@@ -37,8 +43,6 @@ export const editArea = (insertData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(`/api/edit-area/`, insertData, config);
-
-    console.log("data--->", data);
 
     dispatch({
       type: EDIT_AREA_SUCCESS,
@@ -105,8 +109,6 @@ export const getAreaToEdit = (id) => async (dispatch, getState) => {
 
     const { data } = await axios.get(`/api/get-area/${id}`, config);
 
-    //console.log("data--->", data)
-
     dispatch({
       type: GET_AREA_SUCCESS,
       payload: data,
@@ -139,8 +141,6 @@ export const addArea = (insertData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(`/api/add-area/`, insertData, config);
-
-    console.log("data--->", data);
 
     dispatch({
       type: ADD_AREA_SUCCESS,
@@ -184,6 +184,77 @@ export const getAreaContacts = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_AREA_CONTACT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const addAreaContact = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_AREA_CONTACT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `/api/add-area-contact/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: ADD_AREA_CONTACT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_AREA_CONTACT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const addAreaSpot = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_AREA_SPOT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/add-area-spot/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: ADD_AREA_SPOT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_AREA_SPOT_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

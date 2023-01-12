@@ -323,7 +323,6 @@ def getSpot(request, Id):
 @permission_classes([IsAdminUser])
 def addShopContacts(request):
     data = request.data
-    print('data---------------------', data)
     shop = Shops.objects.get(id=data['shop_id'])
     
     if data['editing']:
@@ -373,6 +372,62 @@ def addShopContacts(request):
     shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
     seriaziler = ShopsContactSerializer(shop_contacts, many=True)
     return Response(seriaziler.data)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addAreaContacts(request):
+    data = request.data
+    area = Areas.objects.get(id=data['area_id'])
+    
+    if data['editing']:
+        area_contact_editing = AreaContact.objects.get(id=data['Id'])
+        
+        # Saving archive data
+        AreaContactARC.objects.create(
+            id_area = data['area_id'],
+            name = data['firstName'],
+            surname = data['surname'],
+            email = data['email'],
+            phone = data['phone'],
+            description = data['description'],
+            date_of_entry = area_contact_editing.date_of_entry,
+            creator = area_contact_editing.creator,
+            is_active = area_contact_editing.is_active,
+            date_of_change = area_contact_editing.date_of_change,
+            type_of_change = area_contact_editing.type_of_change,
+            modifier = area_contact_editing.modifier,
+            id_contact = data['Id'],
+            archiver = data['creator']
+        )    
+
+        # Data change
+        area_contact_editing.name = data['firstName']
+        area_contact_editing.surname = data['surname']
+        area_contact_editing.email = data['email']
+        area_contact_editing.phone = data['phone']
+        area_contact_editing.description = data['description']
+        area_contact_editing.date_of_change = datetime.now()
+        area_contact_editing.modifier = data['creator']
+        area_contact_editing.type_of_change = "Data change"
+
+        area_contact_editing.save()            
+    else:
+        # create arear contact
+        area_contact = AreaContact.objects.create(
+            id_area = area,
+            name=data['firstName'],
+            surname = data['surname'],
+            email = data['email'],
+            phone = data['phone'],
+            creator = data['creator'],
+            description =data['description'],
+            is_active=True            
+        )
+
+    area_contacts=AreaContact.objects.filter(id_area=data['area_id'])    
+    seriaziler = AreaContactSerializer(area_contacts, many=True)
+    return Response(seriaziler.data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -452,6 +507,43 @@ def addShopSpot(request):
 
     spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
     seriaziler = ShopSpotsSerializer(spots, many=True) 
+    return Response(seriaziler.data)
+
+@api_view(['POST', 'PUT'])
+@permission_classes([IsAdminUser])
+def addAreaSpot(request):
+    data = request.data
+    cit_obj = Citis.objects.get(id=data['city'])
+
+    if data['add']:
+        area = Areas.objects.get(id=data['id_area'])
+
+        spot=AreasSpot.objects.create(
+            id_area=area,
+            name=data['name'],
+            city=cit_obj,
+            street=data['street'],
+            no_building=data['no_building'],
+            post_code=data['postCode'],
+            post=data['post'],
+            latitude=data['latitude'],
+            longitude=data['longitude'],
+            creator=data['creator'],
+            is_active=data['is_active'],
+            delivery=data['delivery'],
+            range=data['range']
+        )
+
+    spots=AreasSpot.objects.filter(id_area=data['id_area']).order_by('name')
+    seriaziler = ShopSpotsSerializer(spots, many=True) 
+    return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getShops(request):
+    shops = Shops.objects.all().order_by('name') 
+    seriaziler = AreaSpotsSerializer(shops, many=True)
+
     return Response(seriaziler.data)
 
 @api_view(['POST'])

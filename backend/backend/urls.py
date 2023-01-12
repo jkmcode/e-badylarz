@@ -37,6 +37,8 @@ urlpatterns = [
     path('api/get-areas/', getAreas),
     path('api/add-area/', addArea),
     path('api/get-area/<str:Id>', getAreaToEdit),
+    path('api/add-area-contact/', addAreaContacts),
+    path('api/add-area-spot/', addAreaSpot),
    
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),
