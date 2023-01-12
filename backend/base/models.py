@@ -129,6 +129,50 @@ class AreaContactARC(models.Model):
     id_contact = models.IntegerField()
     archiver = models.CharField(max_length=20, null=True, blank=True)
 
+#Shops spot - miejsce sprzedaży, wydania towaru
+class AreasSpot(models.Model):
+    id_area = models.ForeignKey(Areas, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=50)
+    city = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    delivery = models.BooleanField(null=True,blank=True)
+    range = models.IntegerField(default=0)
+    type_of_change = models.CharField(max_length=50)
+
+#Shops spot ARC
+class AreasSpotARC(models.Model):
+    id_area = models.IntegerField()
+    id_spot = models.IntegerField()
+    name = models.CharField(max_length=50)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=50)
+    no_building = models.CharField(max_length=30)
+    post_code = models.CharField(max_length=20)
+    post = models.CharField(max_length=30)
+    latitude = models.CharField(max_length=25)
+    longitude = models.CharField(max_length=25)
+    date_of_entry = models.DateTimeField( null=True,blank=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    modifier = models.CharField(max_length=20, null=True, blank=True)    
+    creator = models.CharField(max_length=20, null=True, blank=True)
+    is_active = models.BooleanField(null=True,blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    delivery = models.BooleanField(null=True,blank=True)
+    range = models.IntegerField(default=0)
+    type_of_change = models.CharField(max_length=50)
+    date_of_archiv = models.DateTimeField(auto_now=True, null=True,blank=True)
+    archiver = models.CharField(max_length=20, null=True, blank=True)
 
 ##################### Shops ######################################
 

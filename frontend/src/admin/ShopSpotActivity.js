@@ -224,26 +224,6 @@ function AddShopsSpot() {
         };
         dispatch(updateShopSpot(insertData));
       }
-      // else {
-      //   const insertData = {
-      //     add: false,
-      //     id_spot: spotId,
-      //     id_shops: shopId,
-      //     name: data.name,
-      //     city: data.city, /// To jest źle
-      //     street: data.street,
-      //     no_building: data.number,
-      //     postCode: data.postCode,
-      //     post: data.post,
-      //     latitude: data.latitude,
-      //     longitude: data.longitude,
-      //     creator: userInfo.id,
-      //     is_active: "True",
-      //     delivery: "True",
-      //     range: data.range,
-      //   };
-      //   dispatch(updateShopSpot(insertData));
-      // }
     }
   };
 

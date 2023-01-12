@@ -59,6 +59,13 @@
   "activate_staus_InfoWindow_body": "Are you sure you want to change status on active?",
   "inactivate_status_InfoWindow_body": "Are you sure you want to change status on inactive?",
 
+  "spots_table_title": "Spots list",
+  "btn_add_spot": "New spot",
+  "btn_close_edit_spot": "Close editing spot",
+  "btn_close_spot": "Close new spot",
+  "show_unactive_spot": "Show inactive spots",
+  "show_active_spot": "Show active spots",
+
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",

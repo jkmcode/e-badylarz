@@ -7,6 +7,10 @@ import { getAreas, getAreaContacts } from "../actions/areaAction";
 import { unOrActiveList } from "../actions/adminActions";
 import TableComponent from "./TableComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
+import Divider from "./Divider";
+import FormInput from "./FormInput";
+import TextareaWithValidation from "./TextareaWithValidation";
+import { addAreaContact } from "../actions/areaAction";
 import {
   FormLayout,
   activeBadge,
@@ -39,6 +43,11 @@ function AreaShowMore() {
   const [idContactActive, setIdContactActive] = useState();
   const [typeTable, setTypeTable] = useState("");
   const [confirm, setConfirm] = useState(false);
+  const [idContact, setIdContact] = useState();
+  const [editContactObjSuccess, setEditContactObjSuccess] = useState(false);
+  const [newSpot, setNewSpot] = useState(false);
+  const [editSpot, setEditSpot] = useState(false);
+  const [activeSpot, setActiveSpot] = useState(true);
 
   // fech data from Redux
   const areaListRedux = useSelector((state) => state.areaList);
@@ -50,7 +59,26 @@ function AreaShowMore() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const contactActivRedux = useSelector((state) => state.unOrActiveDescription);
+  const {
+    loading: activeLoading,
+    error: activeError,
+    success: activeSuccess,
+  } = contactActivRedux;
+
   //Handlers
+  const editHandler = (id) => {
+    setNewContact(true);
+    setEditContact(true);
+
+    areaListOfContact.map((i) => {
+      if (i.id === id) {
+        setEditContactObj(i);
+        setIdContact(i.id);
+      }
+    });
+  };
+
   const editAreaHandler = () => {
     navigate(`/dashboard/areas/edit/${areaId}`);
   };
@@ -73,6 +101,10 @@ function AreaShowMore() {
     setTypeTable(TABLE_TYPE_CONTACT);
   };
 
+  const newHendlerSpot = () => {
+    navigate(`/dashboard/areas/spot/${areaId}/add`);
+  };
+
   const confirmYes = () => {
     setShowAlert(false);
     setConfirm(true);
@@ -81,6 +113,44 @@ function AreaShowMore() {
   const confirmNo = () => {
     setShowAlert(false);
     setConfirm(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (editContact) {
+      const insertData = {
+        area_id: areaId,
+        Id: idContact,
+        editing: true,
+        firstName: !values.firstName ? editContactObj.name : values.firstName,
+        surname: !values.surname ? editContactObj.surname : values.surname,
+        email: !values.email ? editContactObj.email : values.email,
+        phone: !values.phone ? editContactObj.phone : values.phone,
+        description: !values.description
+          ? editContactObj.description
+          : values.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      };
+      setEditContact(false);
+      setNewContact(false);
+      dispatch(addAreaContact(insertData));
+    } else {
+      const insertData = {
+        area_id: areaId,
+        editing: false,
+        firstName: values.firstName,
+        surname: values.surname,
+        email: values.email,
+        phone: values.phone,
+        description: values.description,
+        creator: userInfo.id,
+        modifier: userInfo.id,
+      };
+      setNewContact(false);
+      setEditContact(false);
+      dispatch(addAreaContact(insertData));
+    }
   };
 
   //USEEFFECT
@@ -102,6 +172,13 @@ function AreaShowMore() {
     dispatch({ type: GET_AREA_CONTACT_LIST_DELETE });
   }, []);
 
+  // Delete contact list after activation or deactivation
+  useEffect(() => {
+    if (activeSuccess) {
+      dispatch({ type: GET_AREA_CONTACT_LIST_DELETE });
+    }
+  }, [dispatch, activeSuccess]);
+
   // Change status contact & spot
   useEffect(() => {
     if (typeTable === TABLE_TYPE_CONTACT) {
@@ -121,6 +198,92 @@ function AreaShowMore() {
 
     setConfirm(false);
   }, [dispatch, confirm, typeTable]);
+
+  // Ensure that useState editContactObj assign edit object in Time.
+  // UseSate is async which means is possible that condition in Inputs array will be executed elier than useState editContactObj
+  useEffect(() => {
+    setEditContactObjSuccess(true);
+  }, [editContactObj]);
+
+  /************************FORM*****************************/
+
+  const [values, setValues] = useState({
+    firstName: "",
+    surname: "",
+    email: "",
+    phone: "",
+    description: "",
+  });
+
+  const inputs = [
+    {
+      id: "1",
+      name: "firstName",
+      type: "text",
+      placeholder: t("AddContact_name_placeholder"),
+      errorMessage: t("AddContact_name_error_message"),
+      label: t("AddContact_label_name"),
+      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.name,
+      required: true,
+    },
+    {
+      id: "2",
+      name: "surname",
+      type: "text",
+      placeholder: t("AddContact_surname_placeholder"),
+      errorMessage: t("AddContact_surname_error_message"),
+      label: t("AddContact_label_surname"),
+      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.surname,
+      required: true,
+    },
+    {
+      id: "3",
+      name: "email",
+      type: "text",
+      placeholder: t("AddContact_email_placeholder"),
+      errorMessage: t("AddContact_email_error_message"),
+      label: t("AddContact_label_email"),
+      pattern:
+        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+[.][a-zA-Z]{2,3}",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.email,
+      required: true,
+    },
+    {
+      id: "4",
+      name: "phone",
+      type: "tel",
+      placeholder: t("AddContact_phone_placeholder"),
+      errorMessage: t("AddContact_phone_error_message"),
+      label: t("AddContact_label_phone"),
+      pattern: "^(?:(\\+\\d{2})\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$",
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.phone,
+      required: true,
+    },
+    {
+      id: "5",
+      name: "description",
+      placeholder: t("AddContact_description_placeholder"),
+      errorMessage: t("AddContact_description_error_message"),
+      label: t("AddContact_description"),
+      defaultValue:
+        editContactObjSuccess && editContactObj && editContactObj.description,
+      required: false,
+    },
+  ];
+
+  const onChange = (name, value) => {
+    setValues({ ...values, [name]: value });
+  };
+
+  const onChangeTextArea = (descValue) => {
+    setValues({ ...values, description: descValue });
+  };
 
   /************************STYLE*****************************/
 
@@ -224,7 +387,7 @@ function AreaShowMore() {
     ...btnTable,
     color: "green",
   };
-  /************************TABLE PROPS - AREAS *****************************/
+  /************************TABLE PROPS - AREA CONTACTS *****************************/
 
   let currentStatusContactList = [];
 
@@ -297,10 +460,7 @@ function AreaShowMore() {
       </button>
     ),
     btnEdit: activeAreas && (
-      <button
-        style={btnEdit}
-        //onClick={() => editHandler(item.id)}
-      >
+      <button style={btnEdit} onClick={() => editHandler(item.id)}>
         {t("btn_edit")}
       </button>
     ),
@@ -327,6 +487,7 @@ function AreaShowMore() {
           }
         />
       )}
+
       <FormLayout col={TWO} ratio={ONE_TO_TWO}>
         {/* Main Data */}
         <div style={contactContainer}>
@@ -393,6 +554,7 @@ function AreaShowMore() {
         </div>
 
         <div style={listContainer}>
+          {/* Contact Table */}
           <>
             <div
               style={{
@@ -428,6 +590,109 @@ function AreaShowMore() {
               tableStyle={tableAreaStyle}
               mainTableContainer={mainTableContainer}
             />
+          </>
+          {/* Contact form */}
+          {newContact && (
+            <>
+              <Divider backgroundColor="grey" />
+              <form onSubmit={handleSubmit}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "end",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <button
+                    style={{ border: "none", borderRadius: "0.25rem" }}
+                    onClick={() => setNewContact(!newContact)}
+                  >
+                    <Icon
+                      icon="mdi:close-thick"
+                      width="32"
+                      height="32"
+                      color="red"
+                    />
+                  </button>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  <div>
+                    {editContact
+                      ? t("AddContact_edit_title")
+                      : t("AddContact_new_title")}
+                  </div>
+                </div>
+                <FormLayout col={TWO}>
+                  {inputs.map((input, index) => {
+                    if (index <= 3) {
+                      return (
+                        <FormInput
+                          key={input.id}
+                          {...input}
+                          onChange={onChange}
+                        />
+                      );
+                    }
+                  })}
+                </FormLayout>
+                {inputs.map((input, index) => {
+                  if (index === 4) {
+                    return (
+                      <TextareaWithValidation
+                        key={input.id}
+                        {...input}
+                        defaultValue={input.defaultValue}
+                        onChange={onChangeTextArea}
+                      />
+                    );
+                  }
+                })}
+
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  {editContact ? (
+                    <button style={editBtn} type="submit">
+                      {t("btn-change")}
+                    </button>
+                  ) : (
+                    <button style={submitBtn} type="submit">
+                      {t("btn-add")}
+                    </button>
+                  )}
+                </div>
+              </form>
+            </>
+          )}
+
+          {/* Spot Table */}
+          <>
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: `calc(1.2rem + 0.7vw)`,
+                marginTop: "1rem",
+              }}
+            >
+              <div>{t("spots_table_title")}</div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <button style={btnNewContact} onClick={() => newHendlerSpot()}>
+                  {t("btn_add_spot")}
+                </button>
+
+                <button
+                  style={btnShowUnactive}
+                  onClick={() => setActiveSpot(!activeSpot)}
+                >
+                  {activeSpot ? t("show_unactive_spot") : t("show_active_spot")}
+                </button>
+              </div>
+            </div>
           </>
         </div>
       </FormLayout>

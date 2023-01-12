@@ -9,6 +9,7 @@ import {
   areaListReducer,
   areaReducer,
   contactAreaListReducer,
+  areaSpotReducer,
 } from "./reducers/areaReducer";
 import {
   addDistrictReducer,
@@ -63,6 +64,7 @@ const reducer = combineReducers({
   areaActivity: areaActivityReducer,
   areaToEdit: areaReducer,
   shopSpotUpdate: shopSpotUpdateListReducer,
+  areaSpot: areaSpotReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")
