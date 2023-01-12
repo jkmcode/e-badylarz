@@ -23,6 +23,18 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from  math import sin, cos, acos, pi
 
+# czyszczenie danych z bazy z nawiasów ('',)
+def cleanStr(obj):
+    if not obj:
+        return obj
+
+    if obj[0] == "(":
+        return obj[2:len(obj)-3]
+    else:
+        return obj
+
+
+
 # odliczanie odległości pomiedzy punktami geograficznymi w kilometrach
 # z uwzględnieniem krzywizny ziemi - dokładność 10 metrów
 
@@ -63,13 +75,6 @@ def correctLng(lng):
     else:
         return False
 
-# czyszczenie danych z bazy z nawiasów ('',)
-def cleanStr(cleanedData):
-    if cleanedData != None:
-        if cleanedData[0] == '(' :
-            return cleanedData[2:len(cleanedData)-3]
-    return cleanedData
-
 #create user
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -106,16 +111,16 @@ def getAreas(request):
 
     areas = Areas.objects.all().order_by('name')
 
-    # for i in areas : 
-    #     i.name = cleanStr(i.name)
-    #     i.nip = cleanStr(i.nip)
-    #     i.city = cleanStr(i.city)
-    #     i.street = cleanStr(i.street)
-    #     i.no_building = cleanStr(i.no_building)
-    #     i.post_code = cleanStr(i.post_code)
-    #     i.post = cleanStr(i.post)
-    #     i.latitude = cleanStr(i.latitude)
-    #     i.longitude = cleanStr(i.longitude) 
+    for i in areas : 
+        i.name = cleanStr(i.name)
+        i.nip = cleanStr(i.nip)
+        i.city = cleanStr(i.city)
+        i.street = cleanStr(i.street)
+        i.no_building = cleanStr(i.no_building)
+        i.post_code = cleanStr(i.post_code)
+        i.post = cleanStr(i.post)
+        i.latitude = cleanStr(i.latitude)
+        i.longitude = cleanStr(i.longitude) 
 
     seriaziler = AreasSerializer(areas, many=True)
     return Response(seriaziler.data)
@@ -126,15 +131,15 @@ def getAreaToEdit(request, Id):
 
     area = Areas.objects.get(id=Id)
 
-    # area.name = cleanStr(area.name)
-    # area.nip = cleanStr(area.nip)
-    # area.city = cleanStr(area.city)
-    # area.street = cleanStr(area.street)
-    # area.no_building = cleanStr(area.no_building)
-    # area.post_code = cleanStr(area.post_code)
-    # area.post = cleanStr(area.post)
-    # area.latitude = cleanStr(area.latitude)
-    # area.longitude = cleanStr(area.longitude)
+    area.name = cleanStr(area.name)
+    area.nip = cleanStr(area.nip)
+    area.city = cleanStr(area.city)
+    area.street = cleanStr(area.street)
+    area.no_building = cleanStr(area.no_building)
+    area.post_code = cleanStr(area.post_code)
+    area.post = cleanStr(area.post)
+    area.latitude = cleanStr(area.latitude)
+    area.longitude = cleanStr(area.longitude)
 
     seriaziler = AreasSerializer(area, many=False)
     return Response(seriaziler.data)
@@ -635,6 +640,9 @@ def activeList(request):
             type_of_change = descrip.type_of_change,
             archiver = data['userId']
         )
+    elif data['objType'] == "AREA_CONTACT":
+        descrip = AreaContact.objects.get(id=data['Id'])
+
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -644,10 +652,7 @@ def activeList(request):
     else:
         descrip.is_active=False
 
-    # rozwiazanie tymczasowe bo nie wiem czy to nie bedzie sie srało dla innych typów
-    # rozchodzi się o rodzaj - kind
     descrip.type_of_change = data['kind']
-    descrip.date_of_change=datetime.now()
     descrip.modifier=data['userId']
 
     descrip.save()

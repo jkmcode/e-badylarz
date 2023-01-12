@@ -56,3 +56,5 @@ Addcontact do zrobienia:
 
 1. nie moge wyśrodkować napisu "Brak danych" w tabeli contact List (nornalnie uzywam do tego useFefa zeby odczytać jego szerokość).
 2. usunąć zbędne pola infromacyjne w inputach.
+
+3. poprawić action getAreas na nowy bo chcemy sciągać contacty dla konkretnej area (getAreas ściąga wszytskie area)

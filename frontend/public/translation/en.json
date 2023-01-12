@@ -56,6 +56,9 @@
 
   "main_data_title": "Main data",
 
+  "activate_staus_InfoWindow_body": "Are you sure you want to change status on active?",
+  "inactivate_status_InfoWindow_body": "Are you sure you want to change status on inactive?",
+
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",

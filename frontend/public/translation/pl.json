@@ -54,6 +54,9 @@
   "Confirmation_alert_unactive_area": "Czy jesteś pewny, że chcerz dezaktywować obszar zakupu?",
   "Confirmation_alert_active_area": "Czy jesteś pewny, że chcerz aktywować obszar zakupu?",
 
+  "activate_staus_InfoWindow_body": "Czy na pewno chcesz zmienić status na aktywny?",
+  "inactivate_status_InfoWindow_body": "Czy na pewno chcesz zmienić status na nieaktywny?",
+
   "main_data_title": "Dane główne",
 
   "Wrong_lat": "Błędna wartość szerokości geograficznej",

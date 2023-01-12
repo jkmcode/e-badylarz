@@ -7,3 +7,5 @@ export const ZERO = "0";
 export const TWO = "2";
 export const THREE = "3";
 export const ONE_TO_TWO = "1/2";
+
+export const TABLE_TYPE_CONTACT = "contact";

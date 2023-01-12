@@ -93,7 +93,7 @@ function AddArea() {
     } else {
       dispatch(
         addArea({
-          city: !values.city ? area.name : values.city,
+          city: !values.city ? area.city : values.city,
           latitude: !values.latitude ? area.latitude : values.latitude,
           longitude: !values.longitude ? area.longitude : values.longitude,
           name: !values.areaName ? area.name : values.areaName,
