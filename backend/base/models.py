@@ -343,6 +343,7 @@ class ShopsContactARC(models.Model):
 class ProductTypes(models.Model):
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
@@ -368,6 +369,7 @@ class ProductSpecies(models.Model):
     id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
@@ -393,6 +395,7 @@ class ProductGenera(models.Model):
     id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
     is_active = models.BooleanField(null=True,blank=True)
