@@ -61,5 +61,3 @@ Addcontact do zrobienia:
    Jeżeli tak to musimy stworzyc parament na podstawie którego będziemy zmieniać atrybuty we views oraz reducerze.
 4. W archiwalnych recordach mamy nową nazwe osoby kontaktowej. Czy to tak ma byc czy nie?
 5. dlaczego nie ma relacji w AreasSpotARC i ShopsSpotARC???
-
-Trzeba stworzyć funkcje w action, która będzie pobierać wszystkie spot dla danej area

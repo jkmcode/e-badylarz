@@ -256,7 +256,7 @@ function AddContact() {
     }
   }, [dispatch, ListOfContact.length, shopSpotList.length]);
 
-  // fetching shop from DB
+  //fetching shop from DB
   useEffect(() => {
     if (shopList.length === 0) {
       dispatch(getShops());

@@ -22,6 +22,10 @@ import {
   ADD_AREA_SPOT_SUCCESS,
   ADD_AREA_SPOT_FAIL,
   ADD_AREA_SPOT_DELETE,
+  GET_AREA_SOPTS_LIST_REQUEST,
+  GET_AREA_SOPTS_LIST_SUCCESS,
+  GET_AREA_SOPTS_LIST_FAIL,
+  GET_AREA_SOPTS_LIST_DELETE,
 } from "../constants/areaConstans";
 
 export const areaActivityReducer = (state = {}, action) => {
@@ -69,30 +73,6 @@ export const areaListReducer = (state = { areaList: [] }, action) => {
       };
     case GET_AREA_LIST_DELETE:
       return { areaList: [] };
-    case ADD_AREA_SPOT_REQUEST:
-      return {
-        loading: true,
-        successAdd: false,
-        success: false,
-        shopSpotList: [],
-      };
-    case ADD_AREA_SPOT_SUCCESS:
-      return {
-        loading: false,
-        successAdd: true,
-        success: false,
-        shopSpotList: action.payload,
-      };
-    case ADD_AREA_SPOT_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-        successAdd: false,
-        success: false,
-      };
-    case ADD_AREA_SPOT_DELETE:
-      return { shopSpotList: [] };
-
     default:
       return state;
   }
@@ -122,6 +102,30 @@ export const areaSpotReducer = (state = { areaSpotList: [] }, action) => {
         success: false,
       };
     case ADD_AREA_SPOT_DELETE:
+      return { areaSpotList: [] };
+
+    case GET_AREA_SOPTS_LIST_REQUEST:
+      return {
+        loading: true,
+        successAdd: false,
+        success: false,
+        areaSpotList: [],
+      };
+    case GET_AREA_SOPTS_LIST_SUCCESS:
+      return {
+        loading: false,
+        successAdd: true,
+        success: false,
+        areaSpotList: action.payload,
+      };
+    case GET_AREA_SOPTS_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        successAdd: false,
+        success: false,
+      };
+    case GET_AREA_SOPTS_LIST_DELETE:
       return { areaSpotList: [] };
 
     default:

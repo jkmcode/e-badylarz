@@ -535,14 +535,14 @@ def addAreaSpot(request):
         )
 
     spots=AreasSpot.objects.filter(id_area=data['id_area']).order_by('name')
-    seriaziler = ShopSpotsSerializer(spots, many=True) 
+    seriaziler = AreaSpotsSerializer(spots, many=True) 
     return Response(seriaziler.data)
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getShops(request):
     shops = Shops.objects.all().order_by('name') 
-    seriaziler = AreaSpotsSerializer(shops, many=True)
+    seriaziler = ShopsSerializer(shops, many=True)
 
     return Response(seriaziler.data)
 

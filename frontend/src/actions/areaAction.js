@@ -22,6 +22,9 @@ import {
   ADD_AREA_SPOT_REQUEST,
   ADD_AREA_SPOT_SUCCESS,
   ADD_AREA_SPOT_FAIL,
+  GET_AREA_SOPTS_LIST_REQUEST,
+  GET_AREA_SOPTS_LIST_SUCCESS,
+  GET_AREA_SOPTS_LIST_FAIL,
 } from "../constants/areaConstans";
 
 // Areas
@@ -260,5 +263,41 @@ export const addAreaSpot = (insertData) => async (dispatch, getState) => {
           ? error.response.data.detail
           : error.message,
     });
+  }
+};
+
+export const getAreaSpots = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_AREA_SOPTS_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/get-spot-areas/`,
+      config
+    );
+
+    dispatch({
+      type: GET_AREA_SOPTS_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_AREA_SOPTS_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
   }
 };
