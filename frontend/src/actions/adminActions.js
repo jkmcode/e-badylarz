@@ -102,13 +102,13 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
 };
 
 export const saveImage = (imageToSave) => (dispatch) => {
+  console.log("imageToSave", imageToSave);
   dispatch({
     type: SAVE_IMAGE_REDUX,
     payload: imageToSave,
   });
 };
 
-// Shops
 export const updateShop = (insertData) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -229,7 +229,7 @@ export const getSpot = (insertData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `/api/${insertData.Id}/get-spot`,
+      `/api/${insertData.Id}/${insertData.type}/get-spot`,
       config,
       insertData
     );

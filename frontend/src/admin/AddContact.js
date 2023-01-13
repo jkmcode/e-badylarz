@@ -6,7 +6,13 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
-import { FormLayout, activeBadge, submitBtn, editBtn } from "./AdminCSS";
+import {
+  FormLayout,
+  activeBadge,
+  inactiveBadge,
+  submitBtn,
+  editBtn,
+} from "./AdminCSS";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
 import InfoAlertComponent from "../component/InfoAlertComponent";
@@ -204,7 +210,7 @@ function AddContact() {
     };
   }, [editContactObj]);
 
-  // Change status contact & spot and close infoWindow
+  // Change status contact & spot
   useEffect(() => {
     if (contactOrSpot) {
       if (confirm) {
@@ -235,13 +241,13 @@ function AddContact() {
     }
 
     setConfirm(false);
-  }, [dispatch, windowFlag, confirm]);
+  }, [dispatch, confirm]);
 
   // Delete contact list after activation or deactivation
   useEffect(() => {
     if (success) {
       dispatch({ type: GET_CONTACT_LIST_DELETE });
-      dispatch({ type: SET_WINDOW_FLAG_DELETE });
+      //dispatch({ type: SET_WINDOW_FLAG_DELETE });
       dispatch({ type: GET_SOPTS_LIST_DELETE });
     }
   }, [dispatch, success]);
@@ -521,7 +527,11 @@ function AddContact() {
     id: item.id,
     name: item.name,
     adress: `${item.city.name}, ${item.street} ${item.no_building}`,
-    status: <span style={activeBadge}>{t("status_active")}</span>,
+    status: activeSpot ? (
+      <span style={activeBadge}>{t("status_active")}</span>
+    ) : (
+      <span style={inactiveBadge}>{t("status_inactive")}</span>
+    ),
     btnStatusChanger: activeSpot ? (
       <button style={btnUnactive} onClick={() => unActiveSpotHandler(item.id)}>
         {t("btn_unactive")}
@@ -606,7 +616,11 @@ function AddContact() {
     name: item.name,
     phone: item.phone,
     email: item.email,
-    status: <span style={activeBadge}>{t("status_active")}</span>,
+    status: activeContact ? (
+      <span style={activeBadge}>{t("status_active")}</span>
+    ) : (
+      <span style={inactiveBadge}>{t("status_inactive")}</span>
+    ),
     btnStatusChanger: activeContact ? (
       <button style={btnUnactive} onClick={() => unActiveHandler(item.id)}>
         {t("btn_unactive")}

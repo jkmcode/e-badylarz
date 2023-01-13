@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { getAreas, getAreaContacts } from "../actions/areaAction";
+import { getAreas, getAreaContacts, getAreaSpots } from "../actions/areaAction";
 import { unOrActiveList } from "../actions/adminActions";
 import TableComponent from "./TableComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
@@ -14,6 +14,7 @@ import { addAreaContact } from "../actions/areaAction";
 import {
   FormLayout,
   activeBadge,
+  inactiveBadge,
   submitBtn,
   editBtn,
   changeBtn,
@@ -23,9 +24,16 @@ import {
   TWO,
   ONE_TO_TWO,
   TABLE_TYPE_CONTACT,
+  TABLE_TYPE_SPOT,
 } from "../constants/environmentConstans";
-import { AREA_CONTACT_DESCRIPTION } from "../constants/adminConstans";
-import { GET_AREA_CONTACT_LIST_DELETE } from "../constants/areaConstans";
+import {
+  AREA_CONTACT_DESCRIPTION,
+  AREA_SPOT_DESCRIPTION,
+} from "../constants/adminConstans";
+import {
+  GET_AREA_CONTACT_LIST_DELETE,
+  GET_AREA_SOPTS_LIST_DELETE,
+} from "../constants/areaConstans";
 
 function AreaShowMore() {
   const { t } = useTranslation();
@@ -48,10 +56,14 @@ function AreaShowMore() {
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
   const [activeSpot, setActiveSpot] = useState(true);
+  const [idSpotActive, setIdSpotActive] = useState();
 
   // fech data from Redux
   const areaListRedux = useSelector((state) => state.areaList);
   const { loading, areaList, error, success } = areaListRedux;
+
+  const areaSpotListRedux = useSelector((state) => state.areaSpot);
+  const { areaSpotList } = areaSpotListRedux;
 
   const areaListOfContactRedux = useSelector((state) => state.contactAreaList);
   const { areaListOfContact } = areaListOfContactRedux;
@@ -64,6 +76,7 @@ function AreaShowMore() {
     loading: activeLoading,
     error: activeError,
     success: activeSuccess,
+    result: satusChangeResult,
   } = contactActivRedux;
 
   //Handlers
@@ -99,6 +112,22 @@ function AreaShowMore() {
     setShowAlert(true);
     setIdContactActive(id);
     setTypeTable(TABLE_TYPE_CONTACT);
+  };
+
+  const unActiveSpotHandler = (id) => {
+    setShowAlert(true);
+    setIdSpotActive(id);
+    setTypeTable(TABLE_TYPE_SPOT);
+  };
+
+  const activeSpotHandler = (id) => {
+    setShowAlert(true);
+    setIdSpotActive(id);
+    setTypeTable(TABLE_TYPE_SPOT);
+  };
+
+  const editSpotHandler = (id) => {
+    navigate(`/dashboard/areas/spot/${areaId}/edit/${id}`);
   };
 
   const newHendlerSpot = () => {
@@ -161,11 +190,16 @@ function AreaShowMore() {
     }
   }, [dispatch, areaList.length]);
 
+  // fetching spot and contact of area
   useEffect(() => {
     if (areaListOfContact.length === 0) {
       dispatch(getAreaContacts({ Id: areaId }));
     }
-  }, [dispatch, areaListOfContact.length]);
+
+    if (areaSpotList.length === 0) {
+      dispatch(getAreaSpots({ Id: areaId }));
+    }
+  }, [dispatch, areaListOfContact.length, areaSpotList.length]);
 
   //reset areaListOfContact
   useEffect(() => {
@@ -174,10 +208,14 @@ function AreaShowMore() {
 
   // Delete contact list after activation or deactivation
   useEffect(() => {
-    if (activeSuccess) {
+    if (activeSuccess && satusChangeResult === AREA_CONTACT_DESCRIPTION) {
       dispatch({ type: GET_AREA_CONTACT_LIST_DELETE });
     }
-  }, [dispatch, activeSuccess]);
+
+    if (activeSuccess && satusChangeResult === AREA_SPOT_DESCRIPTION) {
+      dispatch({ type: GET_AREA_SOPTS_LIST_DELETE });
+    }
+  }, [dispatch, activeSuccess, satusChangeResult]);
 
   // Change status contact & spot
   useEffect(() => {
@@ -191,6 +229,19 @@ function AreaShowMore() {
             userId: userInfo.id,
             objType: AREA_CONTACT_DESCRIPTION,
             kind: activeAreas ? "Inactive contact" : "Active contact",
+          })
+        );
+      }
+    } else {
+      if (confirm) {
+        dispatch(
+          unOrActiveList({
+            Id: idSpotActive,
+            shop_id: areaId,
+            active: activeSpot ? false : true,
+            userId: userInfo.id,
+            objType: AREA_SPOT_DESCRIPTION,
+            kind: activeSpot ? "Inactive spot" : "Active spot",
           })
         );
       }
@@ -387,6 +438,83 @@ function AreaShowMore() {
     ...btnTable,
     color: "green",
   };
+
+  /************************TABLE PROPS - SPOT *****************************/
+
+  let currentStatusSpotList = [];
+
+  const activeSpotAreasList = areaSpotList.filter(
+    (item) => item.is_active === true
+  );
+
+  const unactiveSpotAreasList = areaSpotList.filter(
+    (item) => item.is_active === false
+  );
+
+  if (activeSpot) {
+    currentStatusSpotList = activeSpotAreasList;
+  } else {
+    currentStatusSpotList = unactiveSpotAreasList;
+  }
+
+  const tableSpotscolumns = [
+    {
+      key: "name",
+      label: t("AddContact_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "adress",
+      label: t("AddContact_spots_address"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "status",
+      label: t("AdminShops_status"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnStatusChanger",
+      label: "",
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnEdit",
+      label: "",
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+  ];
+
+  const dataSpotsTable = currentStatusSpotList.map((item) => ({
+    id: item.id,
+    name: item.name,
+    adress: `${item.city.name}, ${item.street} ${item.no_building}`,
+    status: activeSpot ? (
+      <span style={activeBadge}>{t("status_active")}</span>
+    ) : (
+      <span style={inactiveBadge}>{t("status_inactive")}</span>
+    ),
+    btnStatusChanger: activeSpot ? (
+      <button style={btnUnactive} onClick={() => unActiveSpotHandler(item.id)}>
+        {t("btn_unactive")}
+      </button>
+    ) : (
+      <button style={btnActive} onClick={() => activeSpotHandler(item.id)}>
+        {t("btn_active")}
+      </button>
+    ),
+    btnEdit: activeSpot && (
+      <button style={btnEdit} onClick={() => editSpotHandler(item.id)}>
+        {t("btn_edit")}
+      </button>
+    ),
+  }));
+
   /************************TABLE PROPS - AREA CONTACTS *****************************/
 
   let currentStatusContactList = [];
@@ -449,7 +577,11 @@ function AreaShowMore() {
     name: item.name,
     phone: item.phone,
     email: item.email,
-    status: <span style={activeBadge}>{t("status_active")}</span>,
+    status: activeAreas ? (
+      <span style={activeBadge}>{t("status_active")}</span>
+    ) : (
+      <span style={inactiveBadge}>{t("status_inactive")}</span>
+    ),
     btnStatusChanger: activeAreas ? (
       <button style={btnUnactive} onClick={() => unActiveHandler(item.id)}>
         {t("btn_unactive")}
@@ -477,6 +609,18 @@ function AreaShowMore() {
       }}
     >
       {showAlert && typeTable === TABLE_TYPE_CONTACT && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={
+            !activeAreas
+              ? t("activate_staus_InfoWindow_body")
+              : t("inactivate_status_InfoWindow_body")
+          }
+        />
+      )}
+
+      {showAlert && typeTable === TABLE_TYPE_SPOT && (
         <InfoAlertComponent
           confirmYes={confirmYes}
           confirmNo={confirmNo}
@@ -693,6 +837,12 @@ function AreaShowMore() {
                 </button>
               </div>
             </div>
+            <TableComponent
+              data={dataSpotsTable}
+              columns={tableSpotscolumns}
+              tableStyle={tableAreaStyle}
+              mainTableContainer={mainTableContainer}
+            />
           </>
         </div>
       </FormLayout>

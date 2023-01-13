@@ -61,3 +61,25 @@ Addcontact do zrobienia:
    Jeżeli tak to musimy stworzyc parament na podstawie którego będziemy zmieniać atrybuty we views oraz reducerze.
 4. W archiwalnych recordach mamy nową nazwe osoby kontaktowej. Czy to tak ma byc czy nie?
 5. dlaczego nie ma relacji w AreasSpotARC i ShopsSpotARC???
+
+6. Należy poprawić w edit Spot dla shop i area (city jest przekazywane do viewsa jako pusty string)
+   Może przeba dodać do serializacji Spota ID który ma zagnieżdzony city (jest uruchamiany poprzez getSpot)
+
+7. GET_SHOPS_LIST_DELETE blokuje wywolanie actiona do zapisywania image (ścieżki URL). Ponieważ nie wykonuje
+   się warunek w ShpoActivity.js :
+
+useEffect(() => {
+if (successAdd) {
+shopList.map((value) => {
+if (value.nip === currentTaxNo) {
+if (isImage) {
+dispatch(
+InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+);
+}
+}
+});
+}
+}, [successAdd]);
+
+successAdd jest niezdefiniowane

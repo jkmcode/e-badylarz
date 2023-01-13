@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveImage } from "../actions/adminActions";
 import { Layout, Container, BoxUpload, ImagePreview } from "./StyleComponent";
 
-function UploadImage(params) {
+function UploadImage() {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
@@ -16,19 +16,19 @@ function UploadImage(params) {
   const { imageUpload } = imageRedux;
 
   const handleImageChange = async (e) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files[0]) {
       setTypeFile(e.target.files[0].type);
       let reader = new FileReader();
 
-      reader.onload = function (e) {
-        setImage(e.target.result);
+      reader.onload = function () {
+        setImage(reader.result);
         setIsUploaded(true);
       };
 
       reader.readAsDataURL(e.target.files[0]);
     }
 
-    // save image in Redux
+    //save image in Redux
     const file = e.target.files[0];
 
     dispatch(saveImage(file));
@@ -69,23 +69,12 @@ function UploadImage(params) {
                     setImage(null);
                   }}
                 />
-                {typeFile.includes("video") ? (
-                  <video
-                    id="uploaded-image"
-                    src={image}
-                    draggable={false}
-                    controls
-                    autoPlay
-                    alt="uploaded-img"
-                  />
-                ) : (
-                  <img
-                    id="uploaded-image"
-                    src={image}
-                    draggable={false}
-                    alt="uploaded-img"
-                  />
-                )}
+                <img
+                  id="uploaded-image"
+                  src={image}
+                  draggable={false}
+                  alt="uploaded-img"
+                />
               </ImagePreview>
             )}
           </div>

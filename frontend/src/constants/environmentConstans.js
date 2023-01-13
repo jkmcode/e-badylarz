@@ -9,3 +9,4 @@ export const THREE = "3";
 export const ONE_TO_TWO = "1/2";
 
 export const TABLE_TYPE_CONTACT = "contact";
+export const TABLE_TYPE_SPOT = "spot";

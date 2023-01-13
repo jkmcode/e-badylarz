@@ -198,6 +198,19 @@ export const navLinksAdminPanel = [
     goToMenu: "",
   },
   {
+    id: 6,
+    path: "product_category",
+    name: "Product Category",
+    icon: (
+      <Icon
+        icon="material-symbols:category-rounded"
+        color="white"
+        width="32"
+        height="32"
+      />
+    ),
+  },
+  {
     id: 5,
     icon: (
       <Icon

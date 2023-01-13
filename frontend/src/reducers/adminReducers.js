@@ -111,7 +111,10 @@ export const insertImageReducer = (state = {}, action) => {
     case ADD_IMAGE_REQUEST:
       return { loadingInsertImage: true, successInsertImage: false };
     case ADD_IMAGE_SUCCESS:
-      return { loadingInsertImage: false, successInsertImage: true };
+      return {
+        loadingInsertImage: false,
+        successInsertImage: true,
+      };
     case ADD_IMAGE_FAIL:
       return {
         loadingInsertImage: false,
@@ -128,7 +131,10 @@ export const insertImageReducer = (state = {}, action) => {
 export const saveImageReducer = (state = {}, action) => {
   switch (action.type) {
     case SAVE_IMAGE_REDUX:
-      return { isImage: true, imageUpload: action.payload };
+      return {
+        isImage: true,
+        imageUpload: action.payload,
+      };
     case DELETE_IMAGE_REDUX:
       return { isImage: false, imageUpload: {} };
     default:
@@ -171,7 +177,7 @@ export const getShopReducer = (state = {}, action) => {
   }
 };
 
-export const getShopSpotReducer = (state = {}, action) => {
+export const getSpotReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SPOT_REQUEST:
       return { loading: true, success: false, spotDetails: {} };
@@ -243,9 +249,20 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
       return {
         loading: false,
         success: true,
-        successAdd: false,
+        successAdd: true,
         shopSpotList: action.payload,
       };
+    case GET_SOPTS_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        successAdd: false,
+        shopSpotList: [],
+      };
+    case GET_SOPTS_LIST_DELETE:
+      return { shopSpotList: [] };
+
     case ADD_SHOP_SPOT_REQUEST:
       return {
         loading: true,
@@ -269,16 +286,6 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
         successAdd: false,
         success: false,
       };
-    case GET_SOPTS_LIST_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-        success: false,
-        successAdd: false,
-        shopSpotList: [],
-      };
-    case GET_SOPTS_LIST_DELETE:
-      return { shopSpotList: [] };
     default:
       return state;
   }
@@ -437,7 +444,11 @@ export const unOrActiveDescriptionReducer = (state = {}, action) => {
     case ACTIVE_DESCRIPTION_REQUEST:
       return { loading: true, success: false };
     case ACTIVE_DESCRIPTION_SUCCESS:
-      return { loading: false, success: true, result: action.payload };
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
     case ACTIVE_DESCRIPTION_FAIL:
       return { loading: false, error: action.payload, success: false };
     case ACTIVE_DESCRIPTION_DELETE:

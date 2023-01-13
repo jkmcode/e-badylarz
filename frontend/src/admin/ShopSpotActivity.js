@@ -85,7 +85,7 @@ function AddShopsSpot() {
     shopList,
   } = shopListRedux;
 
-  const spotRedux = useSelector((state) => state.getShopSpot);
+  const spotRedux = useSelector((state) => state.getSpot);
   const {
     spotDetails,
     success: successGetSpot,
@@ -262,7 +262,7 @@ function AddShopsSpot() {
       setImageRender(true);
     }
     if (spotId) {
-      dispatch(getSpot({ Id: spotId }));
+      dispatch(getSpot({ Id: spotId, type: "shop" }));
     }
   }, []);
 
@@ -290,7 +290,6 @@ function AddShopsSpot() {
   }, [dispatch, successAddSpot]);
 
   //style
-
   const background = {
     backgroundImage:
       SpotParam === "edit"

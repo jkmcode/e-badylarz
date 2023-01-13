@@ -114,8 +114,7 @@ export const areaSpotReducer = (state = { areaSpotList: [] }, action) => {
     case GET_AREA_SOPTS_LIST_SUCCESS:
       return {
         loading: false,
-        successAdd: true,
-        success: false,
+        success: true,
         areaSpotList: action.payload,
       };
     case GET_AREA_SOPTS_LIST_FAIL:

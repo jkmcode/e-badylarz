@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/<str:Id>/get-contacts/', getContacts),
     path('api/<str:Id>/get-area-contacts/', getAreaContacts),
     path('api/<str:Id>/get-spots/', getSpots),
-    path('api/<str:Id>/get-spot/', getSpot),
+    path('api/<str:Id>/<str:typeSpot>/get-spot/', getSpot),
     path('api/add-shop/', addShop),
     path('api/add-shop-contact/', addShopContacts),
     path('api/add-shop-spot/', addShopSpot),
@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/get-area/<str:Id>', getAreaToEdit),
     path('api/add-area-contact/', addAreaContacts),
     path('api/add-area-spot/', addAreaSpot),
+    path('api/<str:Id>/get-spot-areas/', getAreaSpots),
    
     path('api/users/login/', MyTokenObtainPairView.as_view(), name="token_refresh"),
     path('api/users/login/', MyTokenObtainPairView.as_view()),

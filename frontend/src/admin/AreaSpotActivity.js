@@ -6,7 +6,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
 import { getFullDiscricts } from "../actions/discrictsActions";
-import { getAllCities } from "../actions/adminActions";
+import { getAllCities, getSpot } from "../actions/adminActions";
 import { addAreaSpot } from "../actions/areaAction";
 import RadioButtons from "./RadioButtons";
 import FormInput from "./FormInput";
@@ -15,6 +15,10 @@ import SelectOption from "./SelectOption";
 import UploadImage from "../component/UploadImage";
 
 import { TWO, THREE } from "../constants/environmentConstans";
+import {
+  SET_FLAG_IMAGE_TRUE,
+  GET_SHOPS_LIST_DELETE,
+} from "../constants/adminConstans";
 
 function AreaSpotActivity() {
   const { t } = useTranslation();
@@ -24,7 +28,8 @@ function AreaSpotActivity() {
 
   const areaParam = params.add;
   const editShopParam = params.edit;
-  const areaId = params.id;
+  const areaId = Number(params.id);
+  const spotId = params.idSpot;
   const radios = [
     { name: t("Radio_own_collection"), value: "1" },
     { name: t("Radio_delivery"), value: "0" },
@@ -79,10 +84,15 @@ function AreaSpotActivity() {
     error: errorGetAllCities,
   } = dataReduxCitiesListAll;
 
-  const areaListRedux = useSelector((state) => state.areaList);
-  const { areaList } = areaListRedux;
+  const spotRedux = useSelector((state) => state.getSpot);
+  const {
+    spotDetails,
+    success: successGetSpot,
+    loading: spotLoading,
+    error: spotError,
+  } = spotRedux;
 
-  //handlers
+  //Handlers
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
@@ -126,6 +136,31 @@ function AreaSpotActivity() {
       } else {
         setEmptyValueError(true);
       }
+    } else {
+      dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      //dispatch({ type: GET_SHOPS_LIST_DELETE });
+      if (radioValue === "1") {
+        const insertData = {
+          add: false,
+          id_spot: spotId,
+          id_shops: areaId,
+          name: !values.spotName ? spotDetails.name : values.spotName,
+          //city: spotDetails.city., /// To jest źle
+          street: !values.street ? spotDetails.street : values.street,
+          no_building: !values.number ? spotDetails.no_building : values.number,
+          postCode: !values.postCode ? spotDetails.post_code : values.postCode,
+          post: !values.post ? spotDetails.post : values.post,
+          latitude: !values.latitude ? spotDetails.latitude : values.latitude,
+          longitude: !values.longitude
+            ? spotDetails.longitude
+            : values.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "False",
+          range: "0",
+        };
+        dispatch(addAreaSpot(insertData));
+      }
     }
   };
 
@@ -142,13 +177,6 @@ function AreaSpotActivity() {
     }
   }, [dispatch, districtList.length, cityListAll.length]);
 
-  // fetching list of area spot from DB
-  // useEffect(() => {
-  //   if (areaSpotList.length === 0) {
-  //     dispatch(getAreas());
-  //   }
-  // }, [dispatch, areaSpotList.length]);
-
   // uruchamiany gdy jest wybrany powiat
   useEffect(() => {
     setNewListCities(
@@ -156,16 +184,13 @@ function AreaSpotActivity() {
     );
   }, [dispatch, selectedDistrict]);
 
-  // select areaDetails;
+  // fetch data from DB -- shop & spot to edit
+  // remove old image
   useEffect(() => {
-    if (areaList) {
-      areaList.map((obj) => {
-        if (obj.id === areaId) {
-          console.log("jest takie obiekt area----", obj);
-        }
-      });
+    if (areaId) {
+      dispatch(getSpot({ Id: areaId, type: "area" }));
     }
-  }, [areaList]);
+  }, []);
 
   //style
   const background = {
@@ -190,10 +215,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_name_error_message"),
       label: t("ShopsSpot_label_name"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
-      //defaultValue:
-      // SpotParam === "add"
-      //   ? ""
-      //   : successGetSpot && SpotParam === "edit" && spotDetails.name,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.name,
       required: true,
     },
     {
@@ -204,10 +229,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_range_error_message"),
       label: t("ShopsSpot_label_range"),
       pattern: "^[0-9]$",
-      //defaultValue:
-      // SpotParam === "add"
-      //   ? ""
-      //   : successGetSpot && SpotParam === "edit" && spotDetails.range,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.range,
       required: true,
     },
     {
@@ -215,25 +240,25 @@ function AreaSpotActivity() {
       name: "districtList",
       label: t("ShopsSpot_label_districtList"),
       optionsList: districtList,
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? "Select option"
-      //       : successGetSpot &&
-      //         SpotParam === "edit" &&
-      //         spotDetails.city.id_district.name,
-      //   disabled: SpotParam === "edit" ? true : false,
+      defaultValue:
+        areaParam === "add"
+          ? "Select option"
+          : successGetSpot &&
+            areaParam === "edit" &&
+            spotDetails.city.id_district.name,
+      disabled: areaParam === "edit" ? true : false,
     },
     {
       id: "4",
       name: "cityList",
       label: t("ShopsSpot_label_city"),
       optionsList: newListCities,
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? "Select option"
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.city.name,
-      //   disabled:
-      //     SpotParam === "edit" ? true : newListCities.length === 0 ? true : false,
+      defaultValue:
+        areaParam === "add"
+          ? "Select option"
+          : successGetSpot && areaParam === "edit" && spotDetails.city.name,
+      disabled:
+        areaParam === "edit" ? true : newListCities.length === 0 ? true : false,
     },
     {
       id: "5",
@@ -243,10 +268,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_street_error_message"),
       label: t("ShopsSpot_street_label"),
       pattern: "^[A-Za-ząćęłńóśźżs]{3,50}$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.street,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.street,
       required: true,
     },
     {
@@ -257,10 +282,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_number_error_message"),
       label: t("ShopsSpot_number_label"),
       pattern: "^(?!/|-|,)[0-9A-Za-z/,-]+(?<!/|,|-)$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.no_building,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.no_building,
       required: true,
     },
     {
@@ -271,10 +296,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_postCode_error_message"),
       label: t("ShopsSpot_postCode_label"),
       pattern: "^[0-9]{2}-[0-9]{3}$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.post_code,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.post_code,
       required: true,
     },
     {
@@ -285,10 +310,10 @@ function AreaSpotActivity() {
       errorMessage: t("ShopsSpot_post_error_message"),
       label: t("ShopsSpot_post_label"),
       pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.post,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.post,
       required: true,
     },
     {
@@ -299,10 +324,10 @@ function AreaSpotActivity() {
       errorMessage: t("latitude_error_message"),
       label: t("label_latitude"),
       pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.latitude,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.latitude,
       required: true,
     },
     {
@@ -313,10 +338,10 @@ function AreaSpotActivity() {
       errorMessage: t("longitude_error_message"),
       label: t("label_longitude"),
       pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
-      //   defaultValue:
-      //     SpotParam === "add"
-      //       ? ""
-      //       : successGetSpot && SpotParam === "edit" && spotDetails.longitude,
+      defaultValue:
+        areaParam === "add"
+          ? ""
+          : successGetSpot && areaParam === "edit" && spotDetails.longitude,
       required: true,
     },
   ];

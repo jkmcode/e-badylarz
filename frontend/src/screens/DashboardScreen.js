@@ -8,6 +8,8 @@ import useBackToLogin from "../component/useBackToLogin";
 import ContentContainer from "../component/ContentContainer";
 import AdminScreenDistrict from "../admin/AdminScreenDistrict";
 
+import { navLinksAdminPanel } from "../Data/NavTopAdminData";
+
 function DashboardScreen() {
   const { t } = useTranslation();
   const { windowWidth } = useResponsive();
@@ -76,30 +78,32 @@ function DashboardScreen() {
           </div>
           <div style={divider} />
           <ul>
-            {adminCategory.map((category) => {
+            {navLinksAdminPanel.map((category) => {
               const { id, path, name, icon } = category;
-              return (
-                <li key={id}>
-                  <NavLink
-                    to={path}
-                    style={({ isActive }) => {
-                      return {
-                        backgroundColor: isActive ? "#D81B60" : "transparent",
-                        color: "white",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        textAlign: "center",
-                        padding: "12px 16px",
-                        margin: "0 16px 1.5px",
-                        borderRadius: "0.375rem",
-                      };
-                    }}
-                  >
-                    {icon}
-                    <span style={textCenter}>{name}</span>
-                  </NavLink>
-                </li>
-              );
+              if (name !== "") {
+                return (
+                  <li key={id}>
+                    <NavLink
+                      to={path}
+                      style={({ isActive }) => {
+                        return {
+                          backgroundColor: isActive ? "#D81B60" : "transparent",
+                          color: "white",
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          textAlign: "center",
+                          padding: "12px 16px",
+                          margin: "0 16px 1.5px",
+                          borderRadius: "0.375rem",
+                        };
+                      }}
+                    >
+                      {icon}
+                      <span style={textCenter}>{name}</span>
+                    </NavLink>
+                  </li>
+                );
+              }
             })}
           </ul>
         </aside>

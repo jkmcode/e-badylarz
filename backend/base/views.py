@@ -308,13 +308,19 @@ def getSpots(request, Id):
     spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
     seriaziler = ShopSpotsSerializer(spots, many=True)
 
-    return Response(seriaziler.data)
+    return Response(seriaziler.data)  
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getSpot(request, Id):
-    spot = ShopsSpot.objects.get(id=Id)
-    seriaziler = ShopSpotsSerializer(spot, many=False)
+def getSpot(request, Id, typeSpot):
+
+    if typeSpot == "shop":
+        spot = ShopsSpot.objects.get(id=Id)
+        seriaziler = ShopSpotsSerializer(spot, many=False)
+
+    if typeSpot == "area":
+        spot = AreasSpot.objects.get(id=Id)
+        seriaziler = AreaSpotsSerializer(spot, many=False)
 
     return Response(seriaziler.data)
 
@@ -513,6 +519,7 @@ def addShopSpot(request):
 @permission_classes([IsAdminUser])
 def addAreaSpot(request):
     data = request.data
+    print('data---------', data)
     cit_obj = Citis.objects.get(id=data['city'])
 
     if data['add']:
@@ -533,10 +540,60 @@ def addAreaSpot(request):
             delivery=data['delivery'],
             range=data['range']
         )
+    else:
+        spot = AreasSpot.objects.get(id=data['id_area'])
+    
+         # add to archiv
+        spotARC = AreasSpotARC.objects.create(
+        id_shops = data['id_area'],
+        id_spot = data['id_spot'],
+        name = spot.name,
+        city = spot.city,
+        street = spot.street,
+        no_building = spot.no_building,
+        post_code = spot.post_code,
+        post = spot.post,
+        latitude = spot.latitude,
+        longitude = spot.longitude,
+        date_of_entry = spot.date_of_entry,
+        date_of_change = spot.date_of_change,
+        modifier = spot.modifier,
+        creator = spot.creator,
+        is_active = spot.is_active,
+        photo = spot.photo,
+        delivery = spot.delivery,
+        range = spot.range,
+        type_of_change = spot.type_of_change,
+        archiver = data['creator']
+        )
+        # change data
+        spot.name = data['name']
+        spot.city=cit_obj,
+        spot.street = data['street']
+        spot.no_building = data['no_building']
+        spot.post_code = data['postCode']
+        spot.post = data['post']
+        spot.latitude = data['latitude']
+        spot.longitude = data['longitude']
+        spot.date_of_change = datetime.now()
+        spot.modifier = data['creator']
+        spot.delivery = data['delivery']
+        spot.range = data['range']
+        spot.type_of_change = 'Edit - change data'
+
+        spot.save()
 
     spots=AreasSpot.objects.filter(id_area=data['id_area']).order_by('name')
     seriaziler = AreaSpotsSerializer(spots, many=True) 
     return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAreaSpots(request, Id):
+    spots = AreasSpot.objects.filter(id_area=Id).order_by('name')
+    seriaziler = AreaSpotsSerializer(spots, many=True)
+
+    return Response(seriaziler.data)  
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -735,6 +792,9 @@ def activeList(request):
     elif data['objType'] == "AREA_CONTACT":
         descrip = AreaContact.objects.get(id=data['Id'])
 
+    elif data['objType'] == "AREA_SPOT":
+        descrip = AreasSpot.objects.get(id=data['Id'])
+
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -749,7 +809,7 @@ def activeList(request):
 
     descrip.save()
 
-    return Response("OK")
+    return Response(data['objType'])
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])

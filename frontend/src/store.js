@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { testListReducer } from "./reducers/testReducer";
 import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
 import { cartReducer } from "./reducers/cartReducer";
+import { uploadImageReducers } from "./reducers/imageActivityReducer";
 import {
   areaActivityReducer,
   areaListReducer,
@@ -29,7 +30,7 @@ import {
   saveImageReducer,
   insertImageReducer,
   shopSpotListReducer,
-  getShopSpotReducer,
+  getSpotReducer,
   shopSpotUpdateListReducer,
   citesListAllReducer,
 } from "./reducers/adminReducers";
@@ -59,12 +60,13 @@ const reducer = combineReducers({
   saveImage: saveImageReducer,
   insertImage: insertImageReducer,
   shopSpotsList: shopSpotListReducer,
-  getShopSpot: getShopSpotReducer,
+  getSpot: getSpotReducer,
   cartReducer: cartReducer,
   areaActivity: areaActivityReducer,
   areaToEdit: areaReducer,
   shopSpotUpdate: shopSpotUpdateListReducer,
   areaSpot: areaSpotReducer,
+  uploadImage: uploadImageReducers,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

@@ -84,6 +84,10 @@ function App() {
           <Route path="areas/:add/:id" element={<AreaActivity />} />
           <Route path="shops/:id/:edit" element={<AreaActivity />} />
           <Route path="areas/spot/:id/:add" element={<AreaSpotActivity />} />
+          <Route
+            path="areas/spot/:id/:add/:idArea"
+            element={<AreaSpotActivity />}
+          />
           <Route path="areas/:id/details" element={<AreaShowMore />} />
 
           <Route path="cities" element={<AdminCities />} />
