@@ -102,7 +102,6 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
 };
 
 export const saveImage = (imageToSave) => (dispatch) => {
-  console.log("imageToSave", imageToSave);
   dispatch({
     type: SAVE_IMAGE_REDUX,
     payload: imageToSave,

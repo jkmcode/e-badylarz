@@ -94,7 +94,9 @@ def uploadMultiImages(request):
 
     data = request.data
     taxNo = data["taxNo"]
-    images_upload = request.FILES.get("image")
+
+    #need to check if this var is important 
+    #images_upload = request.FILES.get('image')
 
     shop = Shops.objects.get(nip=taxNo)
 

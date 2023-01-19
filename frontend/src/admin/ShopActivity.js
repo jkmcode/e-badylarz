@@ -98,7 +98,7 @@ function AddShops() {
   // Handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    //setCurrentTaxNo(data.nip);
+    setCurrentTaxNo(values.nip);
     if (addShopParam) {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
@@ -109,7 +109,6 @@ function AddShops() {
           name: values.shopName,
           nip: values.nip,
           number: values.number,
-          //photo: values.photo,
           post: values.post,
           postCode: values.postCode,
           street: values.street,
@@ -131,7 +130,6 @@ function AddShops() {
           name: !values.shopName ? shopDetails.name : values.shopName,
           nip: !values.nip ? shopDetails.nip : values.nip,
           number: !values.number ? shopDetails.no_building : values.number,
-          //photo: values.photo,
           post: !values.post ? shopDetails.post : values.post,
           postCode: !values.postCode ? shopDetails.post_code : values.postCode,
           street: !values.street ? shopDetails.street : values.street,
@@ -156,6 +154,7 @@ function AddShops() {
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
+
   // fetch data from DB -- shop to edit
   // remove old image
   useEffect(() => {
@@ -170,20 +169,20 @@ function AddShops() {
     }
   }, []);
 
-  // set current Tax Number
+  // add photo for new Shop
   useEffect(() => {
     if (successAdd) {
-      shopList.map((value) => {
-        if (value.nip === currentTaxNo) {
-          if (isImage) {
-            dispatch(
-              InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
-            );
-          }
-        }
-      });
+      //shopList.map((value) => {
+      //if (value.nip === currentTaxNo) {
+      if (isImage) {
+        dispatch(
+          InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+        );
+        //}
+      }
+      //});
     }
-  }, [successAdd]);
+  }, [successAdd, isImage]);
 
   // navigate to ShopAdmin
   useEffect(() => {
@@ -456,10 +455,30 @@ function AddShops() {
                 }
               })}
             </FormLayout>
-            <UploadImage nip={currentTaxNo} />
+            <UploadImage />
+            <div
+              style={{
+                textTransform: "uppercase",
+                marginTop: "1.5rem",
+                textAlign: "center",
+              }}
+            >
+              {t("current_image")}
+            </div>
             {imageRender
               ? editShopParam === "edit" &&
-                shopDetails.photo !== null && <img src={shopDetails.photo} />
+                shopDetails.photo !== null && (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <img
+                      style={{
+                        maxWidth: "400px",
+                        minWidth: "280px",
+                        margin: "1rem",
+                      }}
+                      src={shopDetails.photo}
+                    />
+                  </div>
+                )
               : null}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {editShopParam === "edit" ? (

@@ -68,18 +68,7 @@ Addcontact do zrobienia:
 7. GET_SHOPS_LIST_DELETE blokuje wywolanie actiona do zapisywania image (ścieżki URL). Ponieważ nie wykonuje
    się warunek w ShpoActivity.js :
 
-useEffect(() => {
-if (successAdd) {
-shopList.map((value) => {
-if (value.nip === currentTaxNo) {
-if (isImage) {
-dispatch(
-InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
-);
-}
-}
-});
-}
-}, [successAdd]);
+   Problem występuje tylko przy edicie ponieważ należy znaleść odpowiedni sklep z konkretnym nipem.
+   Dlatego musimy puścić pętle po "shopList". W momencie naciśnięcia guzika "EDIT" zmienna "successUpdateShop" zmienia swoja wartość na True co pozwala na wykonanie warunek w UseEffecie odpowiedzialnego za nawigowanie do głownego menu oraz uruchomienie GET_SHOPS_LIST_DELETE (czyli reducera kasującego liste sklepów).
 
-successAdd jest niezdefiniowane
+   Powoduje to problem w przypadku gdy będziemy zmieniać NIP (musimy rozważyć czy nip może być edytowany)

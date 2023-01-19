@@ -66,6 +66,8 @@
   "show_unactive_spot": "Pokaż nieaktywne punkty",
   "show_active_spot": "Pokaż aktywne punkty",
 
+  "current_image": "aktualne zdjęcie",
+
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",

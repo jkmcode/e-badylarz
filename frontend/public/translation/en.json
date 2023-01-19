@@ -66,6 +66,8 @@
   "show_unactive_spot": "Show inactive spots",
   "show_active_spot": "Show active spots",
 
+  "current_image": "current image",
+
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",
