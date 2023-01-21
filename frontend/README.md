@@ -72,3 +72,93 @@ Addcontact do zrobienia:
    Dlatego musimy puścić pętle po "shopList". W momencie naciśnięcia guzika "EDIT" zmienna "successUpdateShop" zmienia swoja wartość na True co pozwala na wykonanie warunek w UseEffecie odpowiedzialnego za nawigowanie do głownego menu oraz uruchomienie GET_SHOPS_LIST_DELETE (czyli reducera kasującego liste sklepów).
 
    Powoduje to problem w przypadku gdy będziemy zmieniać NIP (musimy rozważyć czy nip może być edytowany)
+
+Sposoby na zmienjszenie zdjęcia do uploadu na AWS-a używając Reacta
+
+import React, { useState } from 'react';
+import AWS from 'aws-sdk';
+
+const ResizeableImageUploader = () => {
+const [image, setImage] = useState(null);
+const [url, setUrl] = useState('');
+const [width, setWidth] = useState(200);
+const [height, setHeight] = useState(200);
+
+// You should set your AWS credentials and region
+AWS.config.update({
+accessKeyId: 'YOUR_ACCESS_KEY_ID',
+secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
+region: 'YOUR_REGION'
+});
+
+const handleFileChange = async e => {
+const file = e.target.files[0];
+if (!file) return;
+setImage(file);
+};
+
+const handleUpload = async () => {
+if (!image) return;
+
+    // Resize the image before uploading
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = URL.createObjectURL(image);
+    img.onload = () => {
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        async (resizedImage) => {
+          try {
+            // Create an S3 service object
+            const s3 = new AWS.S3();
+            // Define the parameters for the S3 upload
+            const params = {
+              Bucket: 'YOUR_BUCKET_NAME',
+              Key: `images/${image.name}`, // This is the path and file name of the image
+              Body: resizedImage,
+              ContentType: image.type,
+              ACL: 'public-read'
+            };
+            // Upload the image to S3
+            const data = await s3.upload(params).promise();
+            // Get the URL of the uploaded image
+            setUrl(data.Location);
+            // Insert the image URL into the database
+            // ...
+          } catch (err) {
+            console.error(err);
+          }
+        },
+        image.type
+      );
+    };
+
+};
+
+return (
+<div>
+<input type="file" onChange={handleFileChange} />
+<div>
+<label>Width:</label>
+<input
+type="number"
+value={width}
+onChange={e => setWidth(e.target.value)}
+/>
+<label>Height:</label>
+<input
+type="number"
+value={height}
+onChange={e => setHeight(e.target.value)}
+/>
+</div>
+<button onClick={handleUpload}>Upload</button>
+{url && <img src={url} width={width} height={height} />}
+</div>
+);
+};
+
+export default ResizeableImageUploader;

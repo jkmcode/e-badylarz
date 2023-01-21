@@ -95,13 +95,12 @@ def uploadMultiImages(request):
     data = request.data
     taxNo = data["taxNo"]
 
-    #need to check if this var is important 
-    #images_upload = request.FILES.get('image')
-
     shop = Shops.objects.get(nip=taxNo)
 
     shop.photo = request.FILES.get('image')
     shop.save()
+
+    print('działa views: uploadMultiImages')
 
     return Response("Image was uploaded")
 

@@ -9,6 +9,8 @@ function UploadImage() {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
+  const [width, setWidth] = useState(200);
+  const [height, setHeight] = useState(200);
 
   const dispatch = useDispatch();
 
@@ -32,6 +34,10 @@ function UploadImage() {
     const file = e.target.files[0];
 
     dispatch(saveImage(file));
+  };
+
+  const handleUpload = async () => {
+    console.log("pass");
   };
 
   return (
@@ -81,6 +87,7 @@ function UploadImage() {
         </BoxUpload>
 
         {isUploaded ? <h6>Type is {typeFile}</h6> : null}
+        <button onClick={handleUpload}>Update</button>
       </Container>
     </Layout>
   );

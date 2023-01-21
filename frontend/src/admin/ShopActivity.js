@@ -6,6 +6,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useResponsive from "../component/useResponsive";
 import Divider from "./Divider";
+import ImageDisplayer from "./ImageDisplayer";
 import { FormLayout, changeBtn, addBtn, returnBtn } from "./AdminCSS";
 import { Icon } from "@iconify/react";
 import {
@@ -43,7 +44,6 @@ function AddShops() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [uploading, setUploading] = useState(false);
   const [imageRender, setImageRender] = useState(false);
   const [currentTaxNo, setCurrentTaxNo] = useState("");
   const [values, setValues] = useState({
@@ -77,9 +77,6 @@ function AddShops() {
   const insertImageRedux = useSelector((state) => state.insertImage);
   const { successInsertImage, loadingInsertImage } = insertImageRedux;
 
-  const imageFlag = useSelector((state) => state.flag);
-  const { shopImageFlag } = imageFlag;
-
   const updateShopRedux = useSelector((state) => state.updateShop);
   const {
     loading: loadingUpdateShop,
@@ -98,7 +95,7 @@ function AddShops() {
   // Handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCurrentTaxNo(values.nip);
+    setCurrentTaxNo(shopDetails.nip);
     if (addShopParam) {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
@@ -140,14 +137,8 @@ function AddShops() {
           typeOfChnage: "Edit date",
         })
       );
-      // if (isImage) {
-      //   dispatch(
-      //     InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
-      //   );
-      // }
     }
   };
-
   const onChangeIBANHandler = (name, value) => {
     setValues({ ...values, [name]: value });
   };
@@ -169,20 +160,16 @@ function AddShops() {
     }
   }, []);
 
-  // add photo for new Shop
+  // add/edit photo
   useEffect(() => {
-    if (successAdd) {
-      //shopList.map((value) => {
-      //if (value.nip === currentTaxNo) {
+    if (successAdd || successUpdateShop) {
       if (isImage) {
         dispatch(
           InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
         );
-        //}
       }
-      //});
     }
-  }, [successAdd, isImage]);
+  }, [successAdd, isImage, successUpdateShop]);
 
   // navigate to ShopAdmin
   useEffect(() => {
@@ -192,23 +179,7 @@ function AddShops() {
       dispatch({ type: GET_SHOPS_LIST_DELETE });
       navigate("/dashboard/shops");
     }
-
-    // if (successAdd && !isImage && shopImageFlag) {
-    //   navigate("/dashboard/shops/shops");
-    // } else if (successAdd && isImage && successInsertImage && shopImageFlag) {
-    //   navigate("/dashboard/shops/shops");
-    // } else if (successUpdateShop && !isImage && shopImageFlag) {
-    //   navigate("/dashboard/shops/shops");
-    // } else if (
-    //   successUpdateShop &&
-    //   isImage &&
-    //   successInsertImage &&
-    //   shopImageFlag
-    // ) {
-    //   navigate("/dashboard/shops/shops");
-    // }
   }, [successAdd, successUpdateShop]);
-  //}, [successAdd, isImage, successInsertImage, successUpdateShop]);
 
   //style
 
@@ -255,6 +226,7 @@ function AddShops() {
       //pattern: t("Pattern_nip"),
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.nip,
+      disabled: editShopParam === "edit" ? true : false,
       required: true,
     },
     {
@@ -456,30 +428,11 @@ function AddShops() {
               })}
             </FormLayout>
             <UploadImage />
-            <div
-              style={{
-                textTransform: "uppercase",
-                marginTop: "1.5rem",
-                textAlign: "center",
-              }}
-            >
-              {t("current_image")}
-            </div>
-            {imageRender
-              ? editShopParam === "edit" &&
-                shopDetails.photo !== null && (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <img
-                      style={{
-                        maxWidth: "400px",
-                        minWidth: "280px",
-                        margin: "1rem",
-                      }}
-                      src={shopDetails.photo}
-                    />
-                  </div>
-                )
-              : null}
+            {imageRender &&
+              editShopParam === "edit" &&
+              shopDetails.photo !== null && (
+                <ImageDisplayer imageSrc={shopDetails.photo} />
+              )}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {editShopParam === "edit" ? (
                 <button type="submit" style={changeBtn}>
