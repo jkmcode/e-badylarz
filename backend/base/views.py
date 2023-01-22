@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
+from django.core.files import File
+from PIL import Image
+from io import BytesIO
 
 from datetime import datetime
 
@@ -88,7 +91,35 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-#uploading image
+
+# @api_view(["PUT"])
+# def uploadMultiImages(request):
+    # data = request.data
+    # taxNo = data["taxNo"]
+    # shop = Shops.objects.get(nip=taxNo)
+    
+    # Get the uploaded file
+    # image = request.FILES.get('image')
+    # Get the desired width and height
+    # width = data.get('width',200)
+    # height = data.get('height',200)
+   
+    # if not image:
+    #     return Response("Image not found")
+    # Open image
+    # image = Image.open(BytesIO(image.read()))
+    # Resize the image
+    # image = image.resize((width, height), Image.ANTIALIAS)
+
+    # Save image
+    # image.save(image.name, 'JPEG')
+
+    # Assign the resized image to the shop object
+    # shop.photo = image_file
+    # shop.save()
+
+    # return Response("Image was uploaded")
+
 @api_view(["PUT"])
 def uploadMultiImages(request):
 
@@ -103,7 +134,6 @@ def uploadMultiImages(request):
     print('działa views: uploadMultiImages')
 
     return Response("Image was uploaded")
-
 
 
 @api_view(['GET'])

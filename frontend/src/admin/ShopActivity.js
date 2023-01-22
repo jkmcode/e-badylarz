@@ -169,7 +169,7 @@ function AddShops() {
         );
       }
     }
-  }, [successAdd, isImage, successUpdateShop]);
+  }, [successAdd, isImage, successUpdateShop, imageUpload]);
 
   // navigate to ShopAdmin
   useEffect(() => {

@@ -8,6 +8,7 @@ import ErrorMessage from "../component/ErrorMessage";
 import useBackToLogin from "../component/useBackToLogin";
 import DistrictTable from "./DistrictTable";
 import RadioButtons from "./RadioButtons";
+import { title } from "./AdminCSS";
 
 import {
   DISTRICT_DELETE,
@@ -60,15 +61,6 @@ function AdminScreenDistrict() {
   const handleBtnValue = (e) => {
     setRadioValue(e.target.value);
     setIsOpen(false);
-  };
-
-  const title = {
-    display: "flex",
-    justifyContent: "center",
-    fontSize: "calc(1.2rem + 1vw)",
-    marginBottom: "1rem",
-    marginTop: "1rem",
-    textAlign: "center",
   };
 
   return (

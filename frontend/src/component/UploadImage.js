@@ -11,6 +11,9 @@ function UploadImage() {
   const [typeFile, setTypeFile] = useState("");
   const [width, setWidth] = useState(200);
   const [height, setHeight] = useState(200);
+  const [detectWidth, setDetectWidth] = useState("");
+  const [detectHeigth, setDetectHeigth] = useState("");
+  const [ratio, setRadio] = useState("");
 
   const dispatch = useDispatch();
 
@@ -20,11 +23,20 @@ function UploadImage() {
   const handleImageChange = async (e) => {
     if (e.target.files[0]) {
       setTypeFile(e.target.files[0].type);
-      let reader = new FileReader();
 
+      let reader = new FileReader();
       reader.onload = function () {
-        setImage(reader.result);
-        setIsUploaded(true);
+        var img = new Image();
+        img.onload = function () {
+          var width = img.naturalWidth;
+          var height = img.naturalHeight;
+          setDetectWidth(width);
+          setDetectHeigth(height);
+          setRadio(width / height);
+          setImage(reader.result);
+          setIsUploaded(true);
+        };
+        img.src = reader.result;
       };
 
       reader.readAsDataURL(e.target.files[0]);
@@ -34,10 +46,6 @@ function UploadImage() {
     const file = e.target.files[0];
 
     dispatch(saveImage(file));
-  };
-
-  const handleUpload = async () => {
-    console.log("pass");
   };
 
   return (
@@ -86,8 +94,13 @@ function UploadImage() {
           </div>
         </BoxUpload>
 
-        {isUploaded ? <h6>Type is {typeFile}</h6> : null}
-        <button onClick={handleUpload}>Update</button>
+        {isUploaded && <h6>Type is {typeFile}</h6>}
+        {isUploaded && (
+          <h6>
+            width: {detectWidth} heigth: {detectHeigth}
+          </h6>
+        )}
+        {isUploaded && <h6>ratio {ratio}</h6>}
       </Container>
     </Layout>
   );

@@ -465,5 +465,7 @@
   "AddArea_success": "Obszar sprzedaży dodany poprawnie",
   "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie",
 
-  "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$"
+  "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+
+  "ProductCategories_title": "Kategorie produktów"
 }

@@ -470,5 +470,7 @@
   "AddArea_success": "Sales area added correctly",
   "EditArea_success": "Sales area editing correctly",
 
-  "Pattern_nip": "[A-Z]"
+  "Pattern_nip": "[A-Z]",
+
+  "ProductCategories_title": "Product categories"
 }

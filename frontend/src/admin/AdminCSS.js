@@ -135,3 +135,12 @@ export const returnBtn = {
   lineHeight: 1.5,
   color: "black",
 };
+
+export const title = {
+  display: "flex",
+  justifyContent: "center",
+  fontSize: "calc(1.2rem + 1vw)",
+  marginBottom: "1rem",
+  marginTop: "1rem",
+  textAlign: "center",
+};

@@ -2,11 +2,8 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { adminCategory } from "../Data/dashboardData";
 import useResponsive from "../component/useResponsive";
 import useBackToLogin from "../component/useBackToLogin";
-import ContentContainer from "../component/ContentContainer";
-import AdminScreenDistrict from "../admin/AdminScreenDistrict";
 
 import { navLinksAdminPanel } from "../Data/NavTopAdminData";
 

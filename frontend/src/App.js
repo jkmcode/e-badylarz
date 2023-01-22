@@ -36,6 +36,7 @@ import LoginAdmin from "./admin/LoginAdmin";
 import AddCity from "./admin/AddCity";
 import AreaSpotActivity from "./admin/AreaSpotActivity";
 import CityDescription from "./admin/CityDescription";
+import ProductCategories from "./admin/ProductCategories";
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -89,13 +90,14 @@ function App() {
             element={<AreaSpotActivity />}
           />
           <Route path="areas/:id/details" element={<AreaShowMore />} />
-
           <Route path="cities" element={<AdminCities />} />
-          <Route path="products" element={<AdminAddProducts />} />
+          <Route path="product-categories" element={<ProductCategories />} />
         </Route>
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>
       <Routes>
+        {/* <Route path="products" element={<AdminAddProducts />} />
+        <Route path="product-categories" element={<AdminAddProducts />} /> */}
         {/* <Route
             path="add-description/:name/:id/:cityId/add"
             element={<CityDescription />}

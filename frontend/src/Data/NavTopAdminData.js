@@ -199,7 +199,7 @@ export const navLinksAdminPanel = [
   },
   {
     id: 6,
-    path: "product_category",
+    path: "product-categories",
     name: "Product Category",
     icon: (
       <Icon
