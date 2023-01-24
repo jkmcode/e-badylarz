@@ -40,6 +40,12 @@ export const editBtn = {
   backgroundImage: `linear-gradient(183deg, rgb(236, 181, 26) 0%, rgb(217, 196, 33) 100%)`,
 };
 
+export const addProdCatBtn = {
+  ...btn,
+  backgroundImage: `linear-gradient(137deg, rgba(110, 170, 102, 1) 0%, rgba(59, 100, 73, 1) 100%)`,
+  textAlign: "center",
+};
+
 export function FormLayout({ children, col, ratio }) {
   const { windowWidth } = useResponsive();
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { title, FormLayout, submitBtn } from "./AdminCSS";
+import { title, FormLayout, addProdCatBtn } from "./AdminCSS";
 import { dataProductCategories } from "../Data/dataProductCategories";
 import { ONE } from "../constants/adminConstans";
 import RadioButtons from "./RadioButtons";
+import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 function ProductCategories() {
   const { t } = useTranslation();
@@ -54,8 +56,21 @@ function ProductCategories() {
                     borderRadius: "1rem",
                     margin: "auto",
                     marginBottom: "1rem",
+                    position: "relative",
                   }}
                 >
+                  <button
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      right: "10px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                    }}
+                  >
+                    <Icon icon="ph:dots-three-outline-fill" color="white" />
+                  </button>
+
                   {category.name}
                   <div>{category.icon}</div>
                 </button>
@@ -92,7 +107,9 @@ function ProductCategories() {
             marginTop: "1rem",
           }}
         >
-          <button style={submitBtn}>Add Category</button>
+          <Link to="add" style={addProdCatBtn}>
+            Add Category
+          </Link>
         </div>
       )}
     </div>

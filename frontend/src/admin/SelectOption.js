@@ -46,7 +46,7 @@ function SelectOption({
             {defaultValue}
           </option>
           {optionsList.map((option) => (
-            <option key={option.id} value={option.id} name="apple">
+            <option key={option.id} value={option.id}>
               {option.name}
             </option>
           ))}
