@@ -6,6 +6,7 @@ import { FormLayout, title, addBtn } from "./AdminCSS";
 import { TWO } from "../constants/environmentConstans";
 import FormInput from "./FormInput";
 import SelectOption from "./SelectOption";
+import language from "../language";
 
 function AddProductCategories() {
   const { t } = useTranslation();
@@ -37,10 +38,10 @@ function AddProductCategories() {
 
   //Lists
 
-  const languages = [
-    { id: 1, name: "PL" },
-    { id: 2, name: "EN" },
-  ];
+  // const languages = [
+  //   { id: 1, name: "PL" },
+  //   { id: 2, name: "EN" },
+  // ];
 
   const inputs = [
     {
@@ -57,7 +58,7 @@ function AddProductCategories() {
       id: "2",
       name: "language",
       label: "language",
-      optionsList: languages,
+      optionsList: language,
       defaultValue: "Select an option",
     },
   ];
@@ -96,7 +97,7 @@ function AddProductCategories() {
               return (
                 <SelectOption
                   key={input.id}
-                  optionsList={languages}
+                  optionsList={input.optionsList}
                   label={input.label}
                   defaultValue={input.defaultValue}
                   emptyValueError={emptyValueError}
