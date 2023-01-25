@@ -19,6 +19,10 @@ import {
   SET_FLAG_CITY_TRUE,
 } from "../constants/adminConstans";
 
+import {
+  TIME_AUT_ERROR,
+} from "../constants/environmentConstans"
+
 function EditDistrict() {
   useBackToLogin();
   const { t } = useTranslation();
@@ -76,6 +80,18 @@ function EditDistrict() {
     }
   }, []);
 
+  useEffect(() => {
+    // if (error === CREDENTIALS_WERE_NOT_PROVIDED || error === NO_PERMISSION) {
+    //   dispatch({ type: DISTRICT_ADD_DESC_DELETE });
+    //   dispatch({ type: USER_LOGOUT });
+    //   navigate("/login-admin");
+    // }
+    if (error) {
+      setAddDescr(false)
+      dispatch({ type: SET_FLAG_DESC_FALSE });
+    }
+  }, [error]);
+
   return (
     <>
       {loading ? (
@@ -90,11 +106,11 @@ function EditDistrict() {
             borderRadius: "0.5rem",
           }}
         >
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
           <Link to="/dashboard/district" className="text-secondary">
             <Icon icon="material-symbols:arrow-back-ios" />
             {t("btn-return")}
           </Link>
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
           <div
             style={{
               textAlign: "center",

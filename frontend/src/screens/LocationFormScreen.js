@@ -31,7 +31,7 @@ function LocationFormScreen() {
   const { districtList } = discrictListRedux;
 
   const dataRedux = useSelector((state) => state.citesList);
-  const { loading, citiesList, error, success } = dataRedux;
+  const { loading, cityList: citiesList, error, success } = dataRedux;
 
   const {
     register,
@@ -96,6 +96,9 @@ function LocationFormScreen() {
       setCityFlag(true);
     }
   }, [success]);
+
+  console.log("cityFlag", cityFlag)
+  console.log("citiesList", citiesList)
 
   const infoMsg = {
     backgroundColor: "#EAFEE1",
@@ -191,10 +194,10 @@ function LocationFormScreen() {
                     </option>
                     {cityFlag
                       ? citiesList.map((city) => (
-                          <option key={city.id} value={city.id}>
-                            {city.name}
-                          </option>
-                        ))
+                        <option key={city.id} value={city.id}>
+                          {city.name}
+                        </option>
+                      ))
                       : null}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">

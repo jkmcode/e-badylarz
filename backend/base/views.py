@@ -845,7 +845,7 @@ def activeList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getFullDescriptionsDesc(request, Id, obj_type):
-    descrition = Descriptions.objects.filter(obj_id = Id, obj_type=obj_type) 
+    descrition = Descriptions.objects.filter(id_district = Id) 
     seriaziler = DistrictsDescSerializer(descrition, many=True)
     return Response(seriaziler.data)
 
@@ -855,11 +855,12 @@ def addDesc(request):
     data=request.data
 
     if data["addDesc"]:
+        disctrict_obj= Districts.objects.get(id=data['objId'])
         desc = Descriptions.objects.create(
         description=data['desc'],
         language=data['lng'],
-        obj_type=data['objType'],
-        obj_id=data['objId'],
+        # obj_type=data['objType'],
+        id_district=disctrict_obj,
         creator=data['id'])
     else:
         descrip = Descriptions.objects.get(id=data['descId'])
@@ -873,7 +874,7 @@ def addDesc(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getDiscrictDesc(request, Id, lng, obj_type):
-    descrition = Descriptions.objects.filter(obj_id = Id, language=lng, obj_type=obj_type) 
+    descrition = Descriptions.objects.filter(id_district = Id, language=lng) 
     seriaziler = DistrictsDescSerializer(descrition, many=True)
     return Response(seriaziler.data)
 

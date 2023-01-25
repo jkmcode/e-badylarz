@@ -14,60 +14,45 @@
   "ErrorMessage_no_type_object": "Changing the active flag - no object type",
   "ErrorMessage_product_type_already_exist": "Product type already exist",
   "ErrorMessage_area_already_exist": "Sales area with this name already exist",
-
   "latitude_placeholder": "Enter latitude ...",
   "latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
   "label_latitude": "Latitude",
-
   "longitude_placeholder": "Enter longitude ...",
   "longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
   "label_longitude": "Longitude",
-
   "nip_error_message": "NIP format: xxx-xxx-xx-xx",
   "nip_label": "Tax number",
   "nip_placeholder": "Enter tax number ...",
-
   "city_error_message": "city name should be 3-16 characters without any special character",
   "city_label": "City",
   "city_placeholder": "Enter city name ...",
-
   "street_placeholder": "Enter street name ...",
   "street_error_message": "Street name should be 3-50 characters without any special character",
   "street_label": "Street",
-
   "number_placeholder": "Enter building number ...",
   "number_error_message": "invalid number",
   "number_label": "No building",
-
   "postCode_placeholder": "Enter post code ...",
   "postCode_error_message": "Post code fromat: xx-xxx",
   "postCode_label": "Post code",
-
   "post_placeholder": "Enter post ...",
   "post_error_message": "Post name should be 3-50 characters without any special character",
   "post_label": "Post",
-
   "bankAccound_placeholder": "Enter bank account ...",
   "bankAccound_error_message": "Invalid bank account IBAN format",
   "bankAccound_label": "Bank account",
-
   "Confirmation_alert_unactive_area": "Are you sure you want to unactive area?",
   "Confirmation_alert_active_area": "Are you sure you want to active area?",
-
   "main_data_title": "Main data",
-
   "activate_staus_InfoWindow_body": "Are you sure you want to change status on active?",
   "inactivate_status_InfoWindow_body": "Are you sure you want to change status on inactive?",
-
   "spots_table_title": "Spots list",
   "btn_add_spot": "New spot",
   "btn_close_edit_spot": "Close editing spot",
   "btn_close_spot": "Close new spot",
   "show_unactive_spot": "Show inactive spots",
   "show_active_spot": "Show active spots",
-
   "current_image": "current image",
-
   "Wrong_lat": "Wrong latitude value",
   "Wrong_lng": "Wrong longitude value",
   "No_data": "No data available",
@@ -150,17 +135,16 @@
   "FormAddressScreen__info": "After choosing the location, the closest shopping area will be selected for you!",
   "FormAddressScreen__btn": "Search shopping area",
   "FormAddressScreen__learn_more_btn": "Learn more",
+  "FormAddressScreen_more_title": "Your favorite local shops in one place!",
   "AdminScreen_district_btn": "District",
   "AdminScreenDistrict_title_active": "List of active districts",
   "AdminScreenDistrict_title_unactive": "List of unactive districts",
-
   "Confirmation_title": "Confirmation",
   "Confirmation_alert_unactive": "Are you sure you want to unactive district?",
   "Confirmation_alert_active": "Are you sure you want to active district?",
   "Confirmation_alert_active_city": "Are you sure you want to unactive city?",
   "Confirmation_alert_unactive_city": "Are you sure you want to active city?",
   "city": "cities",
-
   "AddDiscrict_title": "Add district",
   "AddDiscrict_success": "District correctly added",
   "AddDistrict_label_name": "District name",
@@ -170,7 +154,6 @@
   "AddDistrict_name_error_message": "District name should be 3-16 characters and shouldn't include any special character!",
   "AddDistrict_latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
   "AddDistrict_longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
-
   "LoginScreen_title": "Login",
   "LoginScreen_label_username": "Username",
   "LoginScreen_username_placeholder": "Enter unsername ...",
@@ -192,17 +175,14 @@
   "DistrictAddDescription_success": "Description correctly changed",
   "DistrictAddDescription_error_message_requred": "Required field",
   "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 100",
-
+  "DistrictAddDescription_option_placeholder": "Select an option",
   "AddCiti_title": "Add city for districts : ",
   "AddCiti_label_name": "City name",
   "AddCiti_name_placeholder": "Enter city name ...",
   "AddCiti_name_error_message": "City name should be 3-50 characters and shouldn't include any special character!",
-
   "AddCiti_label_post_code": "Post code",
   "AddCiti_post_code_placeholder": "Enter post code ...",
-
   "AddCiti_post_code_error_message": "Post code fromat: xx-xxx",
-
   "AddCity_success": "City correctly added",
   "AddCity_body_window": "Add description ?",
   "InfoComponent_title": "Description of district:",
@@ -234,40 +214,26 @@
   "EditShops_title": "Edit shop",
   "AddShops_title_address": "HQ address",
   "AddShops_label_nip": "Tax number",
-
   "AddShops_nip_error_message": "NIP format: xxx-xxx-xx-xx",
-
   "AddShops_nip_placeholder": "Enter tax number ...",
   "AddShops_name_placeholder": "Enter shop name ...",
-
   "AddShops_shop_name_error_message": "Shop name should be 3-16 characters without any special character",
-
   "AddShops_label_name": "Shop name",
   "AddShops_label_city": "City",
   "AddShops_city_placeholder": "Enter city name ...",
-
   "AddShops_city_error_message": "city name should be 3-16 characters without any special character",
-
   "AddShops_label_street": "Street",
   "AddShops_street_placeholder": "Enter street name ...",
-
   "AddShops_street_error_message": "Street name should be 3-50 characters without any special character",
-
   "AddShops_label_number": "No building",
   "AddShops_number_placeholder": "Enter building number ...",
-
   "AddShops_number_error_message": "invalid number",
-
   "AddShops_label_postCode": "Post code",
   "AddShops_postCode_placeholder": "Enter post code ...",
-
   "AddShops_postCode_error_message": "Post code fromat: xx-xxx",
-
   "AddShops_label_post": "Post",
   "AddShops_post_placeholder": "Enter post ...",
-
   "AddShops_post_error_message": "Post name should be 3-50 characters without any special character",
-
   "AddShops_title_geolocation": "HQ geolocation",
   "AddShops_label_latitude": "Latitude",
   "AddShops_latitude_placeholder": "Enter latitude ...",
@@ -275,31 +241,21 @@
   "AddShops_longitude_placeholder": "Enter longitude ...",
   "AddShops_label_bankAccound": "Bank account",
   "AddShops_bankAccound_placeholder": "Enter bank account ...",
-
   "AddShops_bankAccound_error_message": "Invalid bank account IBAN format",
-
   "AddContact_title": "Contact Form",
   "AddContact_contactList": "Conatct list",
   "AddContact_label_name": "First name",
   "AddContact_name_placeholder": "Enter first name ...",
-
   "AddContact_name_error_message": "First name should be 3-20 characters without any special character",
-
   "AddContact_label_surname": "Surname",
   "AddContact_surname_placeholder": "Enter surname ...",
-
   "AddContact_surname_error_message": "Surname name should be 3-20 characters without any special character",
-
   "AddContact_label_email": "email",
   "AddContact_email_placeholder": "Enter email ...",
-
   "AddContact_email_error_message": "invalid email format",
-
   "AddContact_label_phone": "phone no",
   "AddContact_phone_placeholder": "Enter phone no ...",
-
   "AddContact_phone_error_message": "Invalid phone format",
-
   "AddContact_main_data": "Main data",
   "AddContact_name": "Name",
   "AddContact_nip": "Tax number",
@@ -310,9 +266,7 @@
   "AddContact_email": "Email",
   "AddContact_description": "Description",
   "AddContact_description_placeholder": "Enter description ...",
-
   "AddContact_description_error_message": "Maximum number of characters is 200",
-
   "AddContact_btn_add": "New contact",
   "AddContact_btn_close": "Close new contact",
   "AddContact_btn_close_edit": "Close editing contact",
@@ -331,39 +285,29 @@
   "ShopsSpot_Add_title": "Add spot",
   "ShopsSpot_label_name": "Spots name",
   "ShopsSpot_name_placeholder": "Enter spots name ...",
-
   "ShopsSpot_name_error_message": "Spot name should be 3-20 characters without any special character",
-
   "ShopsSpot_title_address": "Spots address",
   "ShopsSpot_title_geolocation": "Spots geolocation",
   "ShopsSpot_label_range": "Range delivery",
   "ShopsSpot_range_placeholder": "Enter range delivery ...",
-
   "ShopsSpot_range_error_message": "Only letters",
-
   "ShopsSpot_label_districtList": "Districts list",
-
   "ShopSpot_district_placeholder": "Select district ...",
   "ShopsSpot_label_district": "Disctrict",
   "ShopsSpot_label_city": "City",
   "ShopSpot_city_placeholder": "Select city ...",
-
   "ShopsSpot_street_placeholder": "Enter street name ...",
   "ShopsSpot_street_error_message": "Street name should be 3-50 characters without any special character",
   "ShopsSpot_street_label": "Street",
-
   "ShopsSpot_number_placeholder": "Enter building number ...",
   "ShopsSpot_number_error_message": "Invalid format",
   "ShopsSpot_number_label": "No building",
-
   "ShopsSpot_postCode_placeholder": "Enter post code ...",
   "ShopsSpot_postCode_error_message": "Post code format: xx-xxx",
   "ShopsSpot_postCode_label": "Post code",
-
   "ShopsSpot_post_placeholder": "Enter post name...",
   "ShopsSpot_post_error_message": "Post name should be 3-50 characters without any special character",
   "ShopsSpot_post_label": "Post",
-
   "PrivatePolicy_title": "THE PRIVACY POLICY DESCRIBES THE RULES FOR THE PROCESSING OF INFORMATION ABOUT YOU, INCLUDING PERSONAL DATA AND COOKIES, i.e. COOKIES.",
   "PrivatePolicy_1_General_Information": "1. General information",
   "PrivatePolicy_1.1_General_Information": "This policy applies to the Website, operating at the url: jkmcode.eu.",
@@ -443,12 +387,9 @@
   "AreaActivity_AddAreas_title": "Add Areas",
   "AreaActivity_label_name": "Sales Area Name",
   "AreaActivity_name_placeholder": "Enter Sales Area Name ...",
-
   "AreaActivity_name_error_message": "Area name should be 3-50 characters without any special character",
-
   "AreaActivity_label_nip": "Tax number",
   "AreaActivity_nip_placeholder": "Enter tax number ...",
-
   "AreaActivity_title_address": "Address",
   "AreaActivity_label_city": "City",
   "AreaActivity_city_placeholder": "Enter city ...",
@@ -469,8 +410,7 @@
   "AreaActivity_longitude_placeholder": "Enter longitude ...",
   "AddArea_success": "Sales area added correctly",
   "EditArea_success": "Sales area editing correctly",
-
   "Pattern_nip": "[A-Z]",
-
-  "ProductCategories_title": "Product categories"
+  "ProductCategories_title": "Product categories",
+  "Table_empty_list": "Empty list"
 }

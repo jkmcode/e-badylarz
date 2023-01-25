@@ -49,6 +49,8 @@ function AddDescription(props) {
     error: adderror,
   } = addDescription;
 
+  console.log("desc--->", desc)
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -90,7 +92,6 @@ function AddDescription(props) {
           id: userInfo.id,
           lng: lngDesc,
           Id: props.objId,
-          type: props.descType,
         })
       );
     }
@@ -118,7 +119,12 @@ function AddDescription(props) {
       dispatch({ type: USER_LOGOUT });
       navigate("/login-admin");
     }
-  }, [error]);
+    if (error || adderror) {
+      setActiveDesc(false)
+      dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
+      console.log('sprawdzam---!!!@@@')
+    }
+  }, [error, adderror]);
 
   //styling
 
@@ -173,7 +179,7 @@ function AddDescription(props) {
           </div>
 
           <form>
-            {!activeDesc ? (
+            {!activeDesc && !error ? (
               <>
                 {t("DistrictAddDescription_choice_lng")}
                 <div
@@ -196,7 +202,7 @@ function AddDescription(props) {
                     }}
                   >
                     <option value="" hidden selected>
-                      --Select an option--
+                      {t("DistrictAddDescription_option_placeholder")}
                     </option>
                     {language.map(({ code, name }) => (
                       <option key={code} value={code}>
@@ -233,12 +239,13 @@ function AddDescription(props) {
                 </div>
               </>
             ) : (
-              <p>{`${t("DistrictAddDescription_selected_lng")} ${lngName}`}</p>
+              null
             )}
           </form>
 
           {activeDesc && (
             <>
+              <p>{`${t("DistrictAddDescription_selected_lng")}: ${lngName}`}</p>
               <Description
                 descText={descText}
                 parentProps={props}

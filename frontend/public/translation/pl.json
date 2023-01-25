@@ -14,60 +14,45 @@
   "ErrorMessage_store_already_exist": "Sklep z taką nazwą już istneje",
   "ErrorMessage_nip_already_exist": "Podany NIP juz istnieje",
   "ErrorMessage_area_already_exist": "Obszar sprzedaży o podanej nazwie już istneje",
-
   "latitude_placeholder": "Wprowadź warotść ...",
   "latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
   "label_latitude": "Szerokość geograficzna",
-
   "longitude_placeholder": "Wprowadź wartość ...",
   "longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
   "label_longitude": "Długość geograficzna",
-
   "nip_error_message": "Poprawny format NIP: xxx-xxx-xx-xx",
   "nip_label": "NIP",
   "nip_placeholder": "Wpisz NIP ...",
-
   "city_error_message": "Nazwa miasta powinna mieć od 3 do 16 znaków bez znaków specjalnych",
   "city_label": "Miasto",
   "city_placeholder": "Wpisz nazwe miasta ...",
-
   "street_placeholder": "Wpisz nazwe ulicy ...",
   "street_error_message": "Nazwa ulicy powinna mieć od 3 do 16 znaków bez znaków specjalnychr",
   "street_label": "Ulica",
-
   "number_placeholder": "Wpisz numer budynku ...",
   "number_error_message": "Niepoprawny format",
   "number_label": "Nr budynku",
-
   "postCode_placeholder": "Wpisz kod pocztowy ...",
   "postCode_error_message": "Format kodu pocztowego: xx-xxx",
   "postCode_label": "Kod pocztowy",
-
   "post_placeholder": "Wpisz poczte ...",
   "post_error_message": "Nazwa poczty powinna mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
   "post_label": "Poczta",
-
   "bankAccound_placeholder": "Wpisz konto bankowe ...",
   "bankAccound_error_message": "Niepoprawny format konta bankwego IBAN",
   "bankAccound_label": "Konto bankowe",
-
   "Confirmation_alert_unactive_area": "Czy jesteś pewny, że chcerz dezaktywować obszar zakupu?",
   "Confirmation_alert_active_area": "Czy jesteś pewny, że chcerz aktywować obszar zakupu?",
-
   "activate_staus_InfoWindow_body": "Czy na pewno chcesz zmienić status na aktywny?",
   "inactivate_status_InfoWindow_body": "Czy na pewno chcesz zmienić status na nieaktywny?",
-
   "main_data_title": "Dane główne",
-
   "spots_title": "Lista punktów sprzedaży towaru",
   "btn_add_spot": "Nowy punkt",
   "btn_close_edit_spot": "Zamknij edytowany punkt",
   "btn_close_spot": "Zamknij nowy punkt",
   "show_unactive_spot": "Pokaż nieaktywne punkty",
   "show_active_spot": "Pokaż aktywne punkty",
-
   "current_image": "aktualne zdjęcie",
-
   "Wrong_lat": "Błędna wartość szerokości geograficznej",
   "Wrong_lng": "Błędna wartość długosci geograficznej",
   "No_data": "Brak dostępnych danych",
@@ -149,17 +134,16 @@
   "FormAddressScreen__info": "Po wyborze lokalizacji nastąpi dobranie dla Ciebie najbiższego obszaru zakupów!",
   "FormAddressScreen__btn": "Szukaj obszaru zakupów",
   "FormAddressScreen__learn_more_btn": "Dowiec się więcej",
+  "FormAddressScreen_more_title": "Twoje ulubione lokalne sklepy w jednym miejscu!",
   "AdminScreen_district_btn": "Powiat",
   "AdminScreenDistrict_title_active": "Lista aktywnych powiatów",
   "AdminScreenDistrict_title_unactive": "Lista nieaktywnych powiatów",
-
   "Confirmation_title": "Potwierdzenie",
   "Confirmation_alert_unactive": "Czy jesteś pewny, że chcerz dezaktywować powiat?",
   "Confirmation_alert_active": "Czy jesteś pewny, że chcerz aktywować powiat?",
   "Confirmation_alert_active_city": "Czy jesteś pewny, że chcerz dezaktywować miasto?",
   "Confirmation_alert_unactive_city": "Czy jesteś pewny, że chcerz aktywować miasto?",
   "city": "miasta",
-
   "AddDiscrict_title": "Dodaj powiat",
   "AddDiscrict_success": "Powiat prawidłowo dodany",
   "AddDistrict_label_name": "Nazwa powiatu",
@@ -167,7 +151,7 @@
   "AddDistrict_name_error_message": "Nazwa dzielnicy powinna mieć od 3 do 16 znaków i nie powinna zawierać żadnych znaków specjalnych!",
   "AddDistrict_latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
   "AddDistrict_longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
-
+  "DistrictAddDescription_option_placeholder": "Wybierz język",
   "LoginScreen_title": "Logowanie",
   "LoginScreen_label_username": "Nazwa użytkownika",
   "LoginScreen_username_placeholder": "Podaj nazwę użytkownika ...",
@@ -189,15 +173,12 @@
   "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
   "DistrictAddDescription_error_message_requred": "Pole wymagane",
   "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 100",
-
   "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
   "AddCiti_label_name": "Nazwa miejscowości",
   "AddCiti_name_placeholder": "Podaj nazwę miejscowosci ...",
   "AddCiti_label_post_code": "Kod pocztowy",
   "AddCiti_post_code_error_message": "Format kodu pocztowego: xx-xxx",
-
   "AddCiti_name_error_message": "Nazwa Miasta powinna mieć od 3 do 50 znaków bez znaków specjalnych!",
-
   "AddCiti_post_code_placeholder": "Wpisz główny kod poicztowy ...",
   "AddCity_success": "Miejscowość prawidłowo dodana",
   "AddCity_body_window": "Dodać opis ?",
@@ -230,39 +211,26 @@
   "EditShops_title": "Edycja skelpu",
   "AddShops_title_address": "Adres",
   "AddShops_label_nip": "NIP",
-
   "AddShops_nip_error_message": "Poprawny format NIP: xxx-xxx-xx-xx",
-
   "AddShops_nip_placeholder": "Wpisz NIP ...",
   "AddShops_name_placeholder": "Wpisz nazwe sklepu ...",
   "AddShops_label_name": "Nazwa sklepu",
   "AddShops_label_city": "Miejscowość",
-
   "AddShops_city_error_message": "Nazwa miasta powinna mieć od 3 do 16 znaków bez znaków specjalnych",
-
   "AddShops_city_placeholder": "Wpisz nazwe miejscowości ...",
   "AddShops_label_street": "Ulica",
   "AddShops_street_placeholder": "Wpisz nazwe ulicy ...",
-
   "AddShops_street_error_message": "Nazwa ulicy powinna mieć od 3 do 16 znaków bez znaków specjalnychr",
-
   "AddShops_shop_name_error_message": "Nazwa sklepu powinna mieć od 3 do 16 znaków bez znaków specjalnych",
-
   "AddShops_label_number": "Nr budynku",
   "AddShops_number_placeholder": "Wpisz numer budynku ...",
-
   "AddShops_number_error_message": "Nieprawidłowy format numeru budynku",
-
   "AddShops_label_postCode": "Kod pocztowy",
   "AddShops_postCode_placeholder": "Wpisz kod pocztowy ...",
-
   "AddShops_postCode_error_message": "Format kodu pocztowego: xx-xxx",
-
   "AddShops_label_post": "Poczta",
   "AddShops_post_placeholder": "Wpisz poczte ...",
-
   "AddShops_post_error_message": "Nazwa poczty powinna mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
-
   "AddShops_title_geolocation": "Współrzędne geograficzne",
   "AddShops_label_latitude": "Szerokość",
   "AddShops_latitude_placeholder": "Wpisz szerokość ...",
@@ -270,31 +238,21 @@
   "AddShops_longitude_placeholder": "Wpisz długość ...",
   "AddShops_label_bankAccound": "Konto bankowe",
   "AddShops_bankAccound_placeholder": "Wpisz konto bankowe ...",
-
   "AddShops_bankAccound_error_message": "Niepoprawny format konta bankwego IBAN",
-
   "AddContact_title": "Formularz kontaktowy",
   "AddContact_contactList": "Lista kontaktów",
   "AddContact_label_name": "Imię",
   "AddContact_name_placeholder": "Wpisz imię ...",
-
   "AddContact_name_error_message": "Imię powinno mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
-
   "AddContact_label_surname": "Nazwisko",
   "AddContact_surname_placeholder": "Wpisz nazwisko ...",
-
   "AddContact_surname_error_message": "Nazwisko powinno mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
-
   "AddContact_label_email": "email",
   "AddContact_email_placeholder": "Wpisz emial ...",
-
   "AddContact_email_error_message": "Niepoprawny format email",
-
   "AddContact_label_phone": "Numer telefonu",
   "AddContact_phone_placeholder": "Wpisz numer kontaktowy ...",
-
   "AddContact_phone_error_message": "niepoprawny format numeru telefonu",
-
   "PrivatePolicy_title": "Polityka prywatności opisuje zasady przetwarzania przez nas informacji na Twój temat,w tym danych osobowych oraz ciasteczek, czyli tzw. cookies.",
   "PrivatePolicy_1_General_Information": "1. Informacje ogólne",
   "PrivatePolicy_1.1_General_Information": "Niniejsza polityka dotyczy Serwisu www, funkcjonującego pod adresem url: jkmcode.eu.",
@@ -315,9 +273,7 @@
   "AddContact_email": "e-mail",
   "AddContact_description": "Opis",
   "AddContact_description_placeholder": "Wpisz opis ...",
-
   "AddContact_description_error_message": "Maksymalna ilość znaków wynosi 200",
-
   "AddContact_btn_add": "Nowy kontakt",
   "AddContact_btn_close": "Zamknij nowy kontakt",
   "AddContact_btn_close_edit": "Zamknij edytowany kontakt",
@@ -336,40 +292,29 @@
   "ShopsSpot_Add_title": "Dodaj punkt sprzedaży",
   "ShopsSpot_label_name": "Nazwa punktu sprzedaży",
   "ShopsSpot_name_placeholder": "Wpisz nazwę punktu sprzedaży ...",
-
   "ShopsSpot_name_error_message": "Punkt sprzedaży powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
-
   "ShopsSpot_title_address": "Adres punktu sprzedaży",
   "ShopsSpot_title_geolocation": "Współrzędne geograficzne punktu sprzedaży",
   "ShopsSpot_label_range": "Zasięg dostawy",
   "ShopsSpot_range_placeholder": "Wpisz zasięg dostawy ...",
-
   "ShopsSpot_range_error_message": "Możesz wpisać tylko liczby",
-
   "ShopsSpot_label_districtList": "Lista powiatów",
-
   "ShopSpot_district_placeholder": "Wybierz powiat ...",
   "ShopsSpot_label_district": "Powiat",
   "ShopsSpot_label_city": "Miejscowość",
-
   "ShopSpot_city_placeholder": "Wybierz miejscowość ...",
-
   "ShopsSpot_street_placeholder": "Wpisz nazwe ulicy ...",
   "ShopsSpot_street_error_message": "Nazwa ulicy powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
   "ShopsSpot_street_label": "Ulica",
-
   "ShopsSpot_number_placeholder": "Wpisz numer budynku ...",
   "ShopsSpot_number_error_message": "Nieprawidłowy format",
   "ShopsSpot_number_label": "Numer budynku",
-
   "ShopsSpot_postCode_placeholder": "Wpisz kod pocztowy ...",
   "ShopsSpot_postCode_error_message": "Format kodu pocztowego: xx-xxx",
   "ShopsSpot_postCode_label": "Kody pocztowy",
-
   "ShopsSpot_post_placeholder": "Wpisz nazwe poczty...",
   "ShopsSpot_post_error_message": "Nazwa poczty powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
   "ShopsSpot_post_label": "Poczta",
-
   "PrivatePolicy_2_Selected_data_protection": "2. Wybrane metody ochrony danych stosowane przez Operatora",
   "PrivatePolicy_2.1_Selected_data_protection": "Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji (certyfikat SSL). Dzięki temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą być odczytane jedynie na docelowym serwerze.",
   "PrivatePolicy_2.2_Selected_data_protection": "Operator okresowo zmienia swoje hasła administracyjne.",
@@ -439,9 +384,7 @@
   "AreaActivity_AddAreas_title": "Dodaj obszar sprzedaży",
   "AreaActivity_label_name": "Nazwa obszaru sprzedaży",
   "AreaActivity_name_placeholder": "Wprowadź nazwę obszaru sprzedaży ...",
-
   "AreaActivity_name_error_message": "Nazwa obszaru powinien mieć od 3 do 50 znaków bez żadnych znaków specjalnych",
-
   "AreaActivity_label_nip": "NIP",
   "AreaActivity_nip_placeholder": "Wprowadź NIP ...",
   "AreaActivity_title_address": "Adres",
@@ -464,8 +407,7 @@
   "AreaActivity_longitude_placeholder": "Wprowadź długość ...",
   "AddArea_success": "Obszar sprzedaży dodany poprawnie",
   "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie",
-
   "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
-
-  "ProductCategories_title": "Kategorie produktów"
+  "ProductCategories_title": "Kategorie produktów",
+  "Table_empty_list": "Pusta lista"
 }

@@ -200,7 +200,7 @@ function DistrictTable({ radioValue }) {
       return (
         <>
           <div style={emptylistTitle}>
-            <div style={{ marginTop: "3rem" }}>pusta lista</div>
+            <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
           </div>
           <div style={emptyListIcon}>
             <Icon icon="ic:outline-featured-play-list" />

@@ -24,7 +24,8 @@ import {
   SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 
-import { ONE, ZERO } from "../constants/environmentConstans";
+import { ONE, ZERO, TIME_AUT_ERROR } from "../constants/environmentConstans";
+
 
 function CitiesList(props) {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ function CitiesList(props) {
   const { userInfo } = userLogin;
 
   const data2 = useSelector((state) => state.unOrActiveDescription);
-  const { loading: loadingUpdate } = data2;
+  const { loading: loadingUpdate, error: unOrActiveError } = data2;
 
   const [citiesData, setCitiesData] = useState(false);
   const [objInfo, setObjInfo] = useState({});
@@ -103,6 +104,12 @@ function CitiesList(props) {
       setCitiesData(true);
     }
   }, [dispatch, cityList.length, citiesData]);
+
+  useEffect(() => {
+    if (cityList.length === 0) {
+      setCitiesData(true);
+    }
+  }, [success]);
 
   ////
 
@@ -237,7 +244,7 @@ function CitiesList(props) {
       return (
         <>
           <div style={emptylistTitle}>
-            <div style={{ marginTop: "3rem" }}>pusta lista</div>
+            <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
           </div>
           <div style={emptyListIcon}>
             <Icon icon="ic:outline-featured-play-list" />
@@ -262,12 +269,23 @@ function CitiesList(props) {
               <tr key={i.id}>
                 <td style={tableCell}>{i.name}</td>
                 <td style={tableCell}>
-                  <button
-                    style={btnUnactive}
-                    onClick={() => unActiveHandler(i.id)}
-                  >
-                    {t("btn_unactive")}
-                  </button>
+                  {radioValue === ONE ?
+
+                    <button
+                      style={btnUnactive}
+                      onClick={() => unActiveHandler(i.id)}
+                    >
+                      {t("btn_unactive")}
+                    </button>
+
+                    :
+                    <button
+                      style={btnActive}
+                      className="btnHover"
+                      onClick={() => activeHandler(i.id)}
+                    >
+                      {t("btn_active")}
+                    </button>}
                 </td>
                 <td style={tableCell}>
                   <button
@@ -320,7 +338,8 @@ function CitiesList(props) {
         <Loader />
       ) : (
         <div style={mainContainer}>
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
+          {unOrActiveError ? <ErrorMessage msg={unOrActiveError} timeOut={TIME_AUT_ERROR} /> : null}
 
           {infoFlag && (
             <InfoComponent
