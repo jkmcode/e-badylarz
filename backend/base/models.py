@@ -24,8 +24,6 @@ class Descriptions(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
-    # obj_type = models.CharField(max_length=50, null=True, blank=True)
-    # obj_id = models.CharField(max_length=10, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True, null=True,blank=True)
     creator = models.CharField(max_length=5, null=True, blank=True)
@@ -416,7 +414,7 @@ class ProductGeneraDescriptions(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
 ## ------------END  PRODUCT  ------------ ##  
-
+0
 # To change
 class Place_of_pickups(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)

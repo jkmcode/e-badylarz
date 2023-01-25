@@ -167,7 +167,8 @@ function FormAddressScreen() {
         <div style={windowWidth > 1200 ? shadowForDesktop : shadowForMobile} />
         <Row>
           <div style={positionInfo} className="fw-bolder">
-            Twoje ulubione lokalne sklepy w jednym miejscu!
+            {t("FormAddressScreen_more_title")}
+
           </div>
         </Row>
 

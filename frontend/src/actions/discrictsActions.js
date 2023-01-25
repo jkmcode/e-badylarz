@@ -10,7 +10,6 @@ import {
 
 export const getDiscrict = (inserData) => async (dispatch) => {
 
-  console.log("inserData", inserData);
   try {
     dispatch({ type: DISTRICT_REQUEST });
 

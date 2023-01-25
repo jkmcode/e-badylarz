@@ -16,6 +16,10 @@ import {
   ONE,
 } from "../constants/adminConstans";
 
+import {
+  TIME_AUT_ERROR,
+} from "../constants/environmentConstans"
+
 function AdminScreenDistrict() {
   useBackToLogin();
   const { t } = useTranslation();
@@ -76,7 +80,8 @@ function AdminScreenDistrict() {
             borderRadius: "0.5rem",
           }}
         >
-          {error ? <ErrorMessage msg={error} timeOut={1000} /> : null}
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
+          {errorUnOrActive ? <ErrorMessage msg={errorUnOrActive} timeOut={TIME_AUT_ERROR} /> : null}
           {!error && (
             <Link
               to="add"
