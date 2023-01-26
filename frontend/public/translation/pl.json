@@ -145,7 +145,7 @@
   "Confirmation_alert_unactive_city": "Czy jesteś pewny, że chcerz aktywować miasto?",
   "city": "miasta",
   "AddDiscrict_title": "Dodaj powiat",
-  "AddDiscrict_success": "Powiat prawidłowo dodany",
+  "AddDiscrict_success": "Powiat dodany prawidłowo",
   "AddDistrict_label_name": "Nazwa powiatu",
   "AddDistrict_name_placeholder": "Podaj nazwe powiatu ...",
   "AddDistrict_name_error_message": "Nazwa dzielnicy powinna mieć od 3 do 16 znaków i nie powinna zawierać żadnych znaków specjalnych!",
@@ -408,6 +408,8 @@
   "AddArea_success": "Obszar sprzedaży dodany poprawnie",
   "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie",
   "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+  "Table_empty_list": "Pusta lista",
+
   "ProductCategories_title": "Kategorie produktów",
-  "Table_empty_list": "Pusta lista"
+  "ProductCategories_msg_add_success": "Kategoria produktu dodana prawidłowo"
 }

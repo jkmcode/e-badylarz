@@ -79,7 +79,7 @@ function AddDiscrict() {
         }
       }, TIME_SET_TIMEOUT);
     }
-  }, [navigate, success]);
+  }, [success]);
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
@@ -136,12 +136,16 @@ function AddDiscrict() {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
-            <ErrorMessage msg={error} timeOut={4000} variant="danger" />
+            <ErrorMessage
+              msg={error}
+              timeOut={TIME_SET_TIMEOUT}
+              variant="danger"
+            />
           ) : null}
           {success ? (
             <ErrorMessage
               msg={t("AddDiscrict_success")}
-              timeOut={4000}
+              timeOut={TIME_SET_TIMEOUT}
               variant="success"
               success={true}
             />

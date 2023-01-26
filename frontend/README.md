@@ -139,6 +139,7 @@ if (!image) return;
 };
 
 return (
+
 <div>
 <input type="file" onChange={handleFileChange} />
 <div>

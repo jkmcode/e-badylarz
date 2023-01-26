@@ -102,6 +102,7 @@ import {
   EDIT_SHOP_SPOT_SUCCESS,
   EDIT_SHOP_SPOT_FAIL,
   EDIT_SHOP_SPOT_DELETE,
+  SET_FLAG_ADD_TRUE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -379,6 +380,8 @@ export const flagReducer = (state = {}, action) => {
       return { cityDescFlag: true, cityFlag: true };
     case SET_CITY_FLAG_DESC_FALSE:
       return { cityDescFlag: false, cityFlag: true };
+    case SET_FLAG_ADD_TRUE:
+      return { addFlag: true };
     default:
       return state;
   }

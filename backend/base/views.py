@@ -942,4 +942,23 @@ def addDiscrict(request):
         seriaziler = DistrictsSerializer(newdistrict, many=True)
         return Response(seriaziler.data)
 
+# PRODUCT       
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addProductCat(request):
+    data = request.data
+    alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
+    if alreadyExists:
+        content = {"detail": "Disctrict already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    else: 
+        productCat = ProductTypes.objects.create(
+            name=data['name'],
+            creator = data['creator'],
+            is_active=True,
+            language = data['language']
+        )   
 
+        newProductCat=ProductTypes.objects.filter(name=data['name'])
+        seriaziler = ProductTypeSerializer(newProductCat, many=True)
+        return Response(seriaziler.data)

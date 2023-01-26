@@ -35,7 +35,7 @@ function SelectOption({
           style={
             emptyValueError
               ? { ...formInput, borderColor: "red" }
-              : { ...formInput }
+              : { ...formInput, borderColor: "rgb(206, 212, 218)" }
           }
           value={selectedValue}
           onChange={handleChange}

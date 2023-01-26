@@ -8,17 +8,18 @@ from base.views import *
 urlpatterns = [
     #upload image 
     path("api/upload-image/", uploadMultiImages),
-
     path('admin/', admin.site.urls),
+
+    # district
+    path('api/add-district/', addDiscrict),
     path('api/<str:lat>/<str:lng>/discrict/', getDiscrict),
     path('api/<str:param>/full-discricts/', getFullDiscricts),
-    path('api/add-district/', addDiscrict),
     path('api/add-citi/', addCiti),
     path('api/add-shop-contact/<str:Id>/list', addCiti),
     path('api/add-product-type/', addProductType),
     
 
-    #shop
+    # shop
     path('api/get-cites/<str:Id>/<str:param>/list', getCites),
     path('api/get-cites/all/list', getAllCities),
     path('api/get-shops/', getShops),
@@ -48,6 +49,9 @@ urlpatterns = [
     path('api/add-desc/', addDesc, name="addDesc"),
     path('api/get-desc/full/<str:Id>/<str:obj_type>', getFullDescriptionsDesc, name="get-full-descriptions"),
     path('api/desc-active/', activeList, name="activeList"),
+
+    # product
+    path('api/add-product-cat/', addProductCat),
     
 ]
 

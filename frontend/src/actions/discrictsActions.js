@@ -9,7 +9,6 @@ import {
 } from "../constants/adminConstans";
 
 export const getDiscrict = (inserData) => async (dispatch) => {
-
   try {
     dispatch({ type: DISTRICT_REQUEST });
 
@@ -34,13 +33,10 @@ export const getDiscrict = (inserData) => async (dispatch) => {
 };
 
 export const getFullDiscricts = (insertData) => async (dispatch) => {
-
   try {
     dispatch({ type: DISTRICT_REQUEST });
 
-    const { data } = await axios.get(
-      `/api/${insertData}/full-discricts/`
-    );
+    const { data } = await axios.get(`/api/${insertData}/full-discricts/`);
 
     dispatch({
       type: DISTRICT_SUCCESS,
