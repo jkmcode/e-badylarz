@@ -5,7 +5,10 @@ import { testListReducer } from "./reducers/testReducer";
 import { districtReducer } from "./reducers/FormAdressScreen/discrictsReducer";
 import { cartReducer } from "./reducers/cartReducer";
 import { uploadImageReducers } from "./reducers/imageActivityReducer";
-import { addProductReducer } from "./reducers/productReducer";
+import {
+  addProductReducer,
+  productCatListReducer,
+} from "./reducers/productReducer";
 import {
   areaActivityReducer,
   areaListReducer,
@@ -68,6 +71,7 @@ const reducer = combineReducers({
   shopSpotUpdate: shopSpotUpdateListReducer,
   areaSpot: areaSpotReducer,
   addProduct: addProductReducer,
+  productCatList: productCatListReducer,
   uploadImage: uploadImageReducers,
 });
 

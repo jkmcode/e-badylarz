@@ -6,9 +6,11 @@ from base.views import *
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    
     #upload image 
     path("api/upload-image/", uploadMultiImages),
-    path('admin/', admin.site.urls),
+    path("api/upload-image2/", uploadMultiImages2),
 
     # district
     path('api/add-district/', addDiscrict),
@@ -52,6 +54,8 @@ urlpatterns = [
 
     # product
     path('api/add-product-cat/', addProductCat),
+    path('api/get-product-categories/', getProductCategories),
+
     
 ]
 

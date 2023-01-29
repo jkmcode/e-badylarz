@@ -131,10 +131,22 @@ def uploadMultiImages(request):
     shop.photo = request.FILES.get('image')
     shop.save()
 
-    print('działa views: uploadMultiImages')
-
     return Response("Image was uploaded")
 
+
+@api_view(["PUT"])
+def uploadMultiImages2(request):
+    data = request.data
+    uniqueId = data["uniqueId"]
+    print('uniqueId we views uploadMultiImages2-----', uniqueId)
+
+
+    productTypes = ProductTypes.objects.get(uniqueId=uniqueId)
+
+    productTypes.photo = request.FILES.get('image')
+    productTypes.save()
+
+    return Response("Image was uploaded")
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -956,9 +968,22 @@ def addProductCat(request):
             name=data['name'],
             creator = data['creator'],
             is_active=True,
-            language = data['language']
+            language = data['language'],
+            uniqueId = data['uniqueId']
         )   
 
         newProductCat=ProductTypes.objects.filter(name=data['name'])
         seriaziler = ProductTypeSerializer(newProductCat, many=True)
         return Response(seriaziler.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getProductCategories(request):
+    productCat = ProductTypes.objects.all().order_by('name')
+
+    for i in productCat : 
+        i.name = cleanStr(i.name)
+        i.language = cleanStr(i.language)
+
+    seriaziler = ProductTypeSerializer(productCat, many=True)
+    return Response(seriaziler.data)        

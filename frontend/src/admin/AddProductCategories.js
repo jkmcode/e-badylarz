@@ -7,22 +7,29 @@ import { FormLayout, title, addBtn } from "./AdminCSS";
 import FormInput from "./FormInput";
 import SelectOption from "./SelectOption";
 import ErrorMessage from "../component/ErrorMessage";
+import UploadImage from "../component/UploadImage";
 import language from "../language";
 import { useNavigate } from "react-router-dom";
 import { addProductCat } from "../actions/productActions";
 import { TWO, EMPTY } from "../constants/environmentConstans";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import { SET_FLAG_ADD_TRUE } from "../constants/adminConstans";
-import { ADD_PRODUCT_CAT_DELETE } from "../constants/productConstans";
+import { GET_PRODUCT_CAT_LIST_DELETE } from "../constants/productConstans";
+import { v4 as uuidv4 } from "uuid";
+
+import { InsertImage2 } from "../actions/adminActions";
 
 function AddProductCategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const newId = uuidv4();
 
   //Variables
   const [selectedLgn, setSelectedLng] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
+  const [uniqueId, setUniqueId] = useState("");
+  const [switcher, setSwitcher] = useState(false);
   const [values, setValues] = useState({
     name: "",
     language: "",
@@ -33,7 +40,10 @@ function AddProductCategories() {
   const { userInfo } = userLogin;
 
   const newProductCat = useSelector((state) => state.addProduct);
-  const { loading, error, success, result } = newProductCat;
+  const { loading, error, success, successAdd } = newProductCat;
+
+  const imageRedux = useSelector((state) => state.saveImage);
+  const { imageUpload, isImage } = imageRedux;
 
   const dflag = useSelector((state) => state.flag);
   const { addFlag } = dflag;
@@ -41,17 +51,8 @@ function AddProductCategories() {
   //Handlers
   const handleSubmit = (e) => {
     e.preventDefault();
-    const insertData = {
-      name: values.name,
-      creator: userInfo.id,
-      language: values.language,
-    };
-
-    if (selectedLgn === EMPTY) {
-      setEmptyValueError(true);
-    } else {
-      dispatch(addProductCat(insertData));
-    }
+    setUniqueId(newId);
+    setSwitcher(true);
   };
 
   const selectLngHandler = (option) => {
@@ -66,32 +67,32 @@ function AddProductCategories() {
 
   //UseEffects
 
-  // fetching list of shops from DB
+  // save data to DB
   useEffect(() => {
-    //if (shopList.length === 0) {
-    //dispatch(getShops());
-    //}
-    // delete current data shop in order to edit general data
-    // we need to delete them because form in ShopActivity take defaultValue from the old one
-    // if (shopDetails) {
-    //   dispatch({ type: GET_SHOP_DELETE });
-    // }
-    // change shopImageFlag to Flase while every render. We need that to able open edit/add shop.
-    // Otherwise in ShopActivity the condition (successAdd && !isImage) will come true
-    // if (shopImageFlag) {
-    //   dispatch({ type: SET_FLAG_IMAGE_FALSE });
-    // }
-    // if (ListOfContact.length !== 0) {
-    //   dispatch({ type: GET_CONTACT_LIST_DELETE });
-    // }
-  }, []);
+    if (switcher) {
+      const insertData = {
+        name: values.name,
+        creator: userInfo.id,
+        language: values.language,
+        uniqueId: uniqueId,
+      };
+
+      setSwitcher(false);
+
+      if (selectedLgn === EMPTY) {
+        setEmptyValueError(true);
+      } else {
+        dispatch(addProductCat(insertData));
+      }
+    }
+  }, [switcher]);
 
   //
   useEffect(() => {
     if (success) {
       setTimeout(() => {
         dispatch({ type: SET_FLAG_ADD_TRUE });
-        dispatch({ type: ADD_PRODUCT_CAT_DELETE });
+        dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE });
       }, TIME_SET_TIMEOUT);
     }
   }, [success]);
@@ -102,6 +103,17 @@ function AddProductCategories() {
       navigate("/dashboard/product-categories");
     }
   }, [addFlag]);
+
+  // add/edit photo
+  useEffect(() => {
+    if (successAdd) {
+      if (isImage) {
+        dispatch(
+          InsertImage2({ imageUpload: imageUpload, uniqueId: uniqueId })
+        );
+      }
+    }
+  }, [successAdd]);
 
   //Lists
   const inputs = [
@@ -177,6 +189,7 @@ function AddProductCategories() {
             }
           })}
         </FormLayout>
+        <UploadImage />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button style={addBtn}>{t("btn-add")}</button>
         </div>
