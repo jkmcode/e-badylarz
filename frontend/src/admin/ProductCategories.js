@@ -79,11 +79,6 @@ function ProductCategories() {
       }}
     >
       <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-      <div
-        style={{ display: "flex", justifyContent: "center", height: "200px" }}
-      >
-        <RotateCard />
-      </div>
 
       <div style={title}>{t("ProductCategories_title")}</div>
       {loadingProductCat ? (
@@ -102,44 +97,43 @@ function ProductCategories() {
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               {productCatList.map((category) => {
                 if (category.is_active && radioValue === ONE) {
-                  return (
-                    <div
-                      key={category.id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "relative",
-                        backgroundImage:
-                          "linear-gradient(195deg, rgb(66, 66, 74) 0%, rgb(25, 25, 25) 100%)",
-                        color: "white",
-                        minWidth: "200px",
-                        minHeight: "200px",
-                        fontSize: "2rem",
-                        borderRadius: "1rem",
-                        margin: "auto",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      <button
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          right: "10%",
-                          backgroundColor: "transparent",
-                          border: "none",
-                          padding: "0",
-                        }}
-                      >
-                        <Icon
-                          icon="entypo:dots-three-horizontal"
-                          color="white"
-                        />
-                      </button>
+                  return <RotateCard key={category.id} name={category.name} />;
+                  // <div
+                  //   key={category.id}
+                  //   style={{
+                  //     display: "flex",
+                  //     justifyContent: "center",
+                  //     alignItems: "center",
+                  //     position: "relative",
+                  //     backgroundImage:
+                  //       "linear-gradient(195deg, rgb(66, 66, 74) 0%, rgb(25, 25, 25) 100%)",
+                  //     color: "white",
+                  //     minWidth: "200px",
+                  //     minHeight: "200px",
+                  //     fontSize: "2rem",
+                  //     borderRadius: "1rem",
+                  //     margin: "auto",
+                  //     marginBottom: "1rem",
+                  //   }}
+                  // >
+                  //   <button
+                  //     style={{
+                  //       position: "absolute",
+                  //       top: 0,
+                  //       right: "10%",
+                  //       backgroundColor: "transparent",
+                  //       border: "none",
+                  //       padding: "0",
+                  //     }}
+                  //   >
+                  //     <Icon
+                  //       icon="entypo:dots-three-horizontal"
+                  //       color="white"
+                  //     />
+                  //   </button>
 
-                      {category.name}
-                    </div>
-                  );
+                  //   {category.name}
+                  // </div>
                 }
 
                 if (!category.is_active && radioValue === ZERO) {
