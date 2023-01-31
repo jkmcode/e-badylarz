@@ -11,6 +11,7 @@ import { ONE, ZERO } from "../constants/environmentConstans";
 import { SET_FLAG_ADD_FALSE } from "../constants/adminConstans";
 import { ADD_PRODUCT_CAT_DELETE } from "../constants/productConstans";
 import { Icon } from "@iconify/react";
+import { emptylistTitle, emptyListIcon, unactiveBtn } from "./AdminCSS";
 
 function ProductCategories() {
   const { t } = useTranslation();
@@ -68,6 +69,104 @@ function ProductCategories() {
     }
   }, [addFlag, success]);
 
+  // List/Frontend data
+
+  const unActiveHandler = () => {
+    console.log("działa unActiveHandler");
+    //setuniqueID(uniqueId);
+  };
+
+  const listOfButtons = [
+    {
+      id: "1",
+      button: (
+        <button onClick={() => unActiveHandler()} style={unactiveBtn}>
+          {t("btn_unactive")}
+        </button>
+      ),
+    },
+  ];
+
+  function StatusProductCatCard({ active }) {
+    let currentProductCatList = [];
+
+    if (active === true) {
+      currentProductCatList = productCatList.filter(
+        (disc) => disc.is_active == true
+      );
+    }
+
+    if (active === false) {
+      currentProductCatList = productCatList.filter(
+        (disc) => disc.is_active === false
+      );
+    }
+
+    if (currentProductCatList.length === 0) {
+      return (
+        <>
+          <div style={emptylistTitle}>
+            <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
+          </div>
+          <div style={emptyListIcon}>
+            <Icon icon="ic:outline-featured-play-list" />
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <div
+        style={{
+          padding: "1rem",
+          borderRadius: "1rem",
+          border: "3px solid rgb(66, 66, 74)",
+        }}
+      >
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {productCatList.map((category) => {
+            if (category.is_active && radioValue === ONE) {
+              return (
+                <RotateCard
+                  key={category.id}
+                  name={category.name}
+                  uniqueId={category.uniqueId}
+                  listOfButtons={listOfButtons}
+                />
+              );
+            }
+          })}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {productCatList.map((category) => {
+            if (!category.is_active && radioValue === ZERO) {
+              return (
+                <RotateCard
+                  key={category.id}
+                  name={category.name}
+                  id={category.id}
+                  listOfButtons={listOfButtons}
+                />
+              );
+            }
+          })}
+        </div>
+        {active === true && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Link to="add" style={addProdCatBtn}>
+              Add Category
+            </Link>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -87,92 +186,8 @@ function ProductCategories() {
         </div>
       ) : (
         <>
-          <div
-            style={{
-              padding: "1rem",
-              borderRadius: "1rem",
-              border: "3px solid rgb(66, 66, 74)",
-            }}
-          >
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-              {productCatList.map((category) => {
-                if (category.is_active && radioValue === ONE) {
-                  return <RotateCard key={category.id} name={category.name} />;
-                  // <div
-                  //   key={category.id}
-                  //   style={{
-                  //     display: "flex",
-                  //     justifyContent: "center",
-                  //     alignItems: "center",
-                  //     position: "relative",
-                  //     backgroundImage:
-                  //       "linear-gradient(195deg, rgb(66, 66, 74) 0%, rgb(25, 25, 25) 100%)",
-                  //     color: "white",
-                  //     minWidth: "200px",
-                  //     minHeight: "200px",
-                  //     fontSize: "2rem",
-                  //     borderRadius: "1rem",
-                  //     margin: "auto",
-                  //     marginBottom: "1rem",
-                  //   }}
-                  // >
-                  //   <button
-                  //     style={{
-                  //       position: "absolute",
-                  //       top: 0,
-                  //       right: "10%",
-                  //       backgroundColor: "transparent",
-                  //       border: "none",
-                  //       padding: "0",
-                  //     }}
-                  //   >
-                  //     <Icon
-                  //       icon="entypo:dots-three-horizontal"
-                  //       color="white"
-                  //     />
-                  //   </button>
-
-                  //   {category.name}
-                  // </div>
-                }
-
-                if (!category.is_active && radioValue === ZERO) {
-                  return (
-                    <button
-                      key={category.id}
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(195deg, rgb(66, 66, 74) 0%, rgb(25, 25, 25) 100%)",
-                        color: "white",
-                        minWidth: "200px",
-                        minHeight: "200px",
-                        fontSize: "2rem",
-                        borderRadius: "1rem",
-                        margin: "auto",
-                        marginBottom: "1rem",
-                        position: "relative",
-                      }}
-                    >
-                      {category.name}
-                    </button>
-                  );
-                }
-              })}
-            </div>
-          </div>
-          {radioValue === ONE && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "1rem",
-              }}
-            >
-              <Link to="add" style={addProdCatBtn}>
-                Add Category
-              </Link>
-            </div>
-          )}
+          {radioValue === ONE && <StatusProductCatCard active={true} />}
+          {radioValue === ZERO && <StatusProductCatCard active={false} />}
         </>
       )}
     </div>

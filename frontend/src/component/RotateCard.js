@@ -1,28 +1,37 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import { unactiveBtn } from "../admin/AdminCSS";
+import { useTranslation } from "react-i18next";
 
-function RotateCard({ name }) {
-  const [isHovered, setIsHovered] = useState(false);
+function RotateCard({ name, uniqueId, listOfButtons }) {
+  const { t } = useTranslation();
+
   const [toggle, setToggle] = useState(false);
+  const [uniqueID, setuniqueID] = useState({});
+
+  console.log("listOfButtons", listOfButtons);
+
+  //styling
 
   const cardStyles = {
     position: "relative",
     width: "300px",
-    height: "300px",
+    minHeight: "250px",
     boxShadow: "none",
     background: "none",
     margin: "auto",
+    marginBottom: "2rem",
   };
 
   const cardSideStyles = {
-    height: "200px",
+    minHeight: "200px",
     transition: "all 0.8s ease",
     backfaceVisibility: "hidden",
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
-    padding: "1rem",
+    padding: "0 1rem 1rem 1rem",
     color: "white",
   };
 
@@ -36,9 +45,6 @@ function RotateCard({ name }) {
 
   const frontStyles = {
     ...cardSideStyles,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
     fontSize: "2rem",
     transform: `rotateY(${toggle ? 180 : 0}deg)`,
     backgroundColor: "#207b00",
@@ -55,60 +61,55 @@ function RotateCard({ name }) {
         >
           <Icon
             icon="material-symbols:arrow-circle-left"
+            color="white"
             width="32"
             height="32"
           />
         </button>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "1rem",
-          }}
-        >
-          <button
-            style={{
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-            }}
-          >
-            Edit
-          </button>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "1rem",
-          }}
-        >
-          <button
-            style={{
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "white",
-            }}
-          >
-            Unactive
-          </button>
-        </div>
+        {listOfButtons.map((button) => {
+          return (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "1rem",
+              }}
+              key={button.id}
+            >
+              {button.button}
+            </div>
+          );
+        })}
       </div>
       <div style={frontStyles}>
-        <button
-          onClick={() => setToggle(!toggle)}
+        <div
           style={{
-            position: "absolute",
-            top: 0,
-            right: "10%",
-            backgroundColor: "transparent",
-            border: "none",
-            padding: "0",
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
-          <Icon icon="entypo:dots-three-horizontal" color="white" />
-        </button>
-        <div>{name}</div>
+          <button
+            onClick={() => setToggle(!toggle)}
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              backgroundColor: "transparent",
+              border: "none",
+            }}
+          >
+            <Icon icon="entypo:dots-three-horizontal" color="white" />
+          </button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "2rem",
+          }}
+        >
+          <div>{name}</div>
+        </div>
       </div>
     </div>
   );
