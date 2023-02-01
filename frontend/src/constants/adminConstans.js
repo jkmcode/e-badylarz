@@ -138,6 +138,9 @@ export const EDIT_SHOP_SPOT_DELETE = "EDIT_SHOP_SPOT_DELETE";
 export const SET_CITY_FLAG_DESC_TRUE = "SET_CITY_FLAG_DESC_TRUE";
 export const SET_CITY_FLAG_DESC_FALSE = "SET_CITY_FLAG_DESC_FALSE";
 
+export const SET_FLAG_ADD_TRUE = "SET_FLAG_ADD_TRUE";
+export const SET_FLAG_ADD_FALSE = "SET_FLAG_ADD_FALSE";
+
 //NavbarTopAdmin
 
 export const HAMBURGER = "hamburger";

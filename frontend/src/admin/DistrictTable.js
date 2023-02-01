@@ -50,7 +50,7 @@ function DistrictTable({ radioValue }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  //functions
+  //handlers
   const unActiveHandler = (id) => {
     setShowAlert(true);
     setDiscObj(id);

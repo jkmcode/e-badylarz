@@ -411,6 +411,8 @@
   "AddArea_success": "Sales area added correctly",
   "EditArea_success": "Sales area editing correctly",
   "Pattern_nip": "[A-Z]",
+  "Table_empty_list": "Empty list",
+
   "ProductCategories_title": "Product categories",
-  "Table_empty_list": "Empty list"
+  "ProductCategories_msg_add_success": "Product category correctly added"
 }

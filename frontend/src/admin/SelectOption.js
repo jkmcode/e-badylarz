@@ -35,7 +35,7 @@ function SelectOption({
           style={
             emptyValueError
               ? { ...formInput, borderColor: "red" }
-              : { ...formInput }
+              : { ...formInput, borderColor: "rgb(206, 212, 218)" }
           }
           value={selectedValue}
           onChange={handleChange}
@@ -46,7 +46,7 @@ function SelectOption({
             {defaultValue}
           </option>
           {optionsList.map((option) => (
-            <option key={option.id} value={option.id} name="apple">
+            <option key={option.id} value={option.id}>
               {option.name}
             </option>
           ))}

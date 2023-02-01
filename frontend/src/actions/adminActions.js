@@ -101,6 +101,43 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
   }
 };
 
+export const InsertImage2 = (insertData) => async (dispatch, getState) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", insertData.imageUpload);
+    formData.append("uniqueId", insertData.uniqueId);
+
+    dispatch({ type: ADD_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/upload-image2/`, formData, config);
+
+    dispatch({
+      type: ADD_IMAGE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_IMAGE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+//////
+
 export const saveImage = (imageToSave) => (dispatch) => {
   dispatch({
     type: SAVE_IMAGE_REDUX,

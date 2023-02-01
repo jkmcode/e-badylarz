@@ -6,6 +6,7 @@ export const dataProductCategories = [
     icon: <Icon icon="lucide:carrot" color="white" width="64" height="64" />,
     path: "",
     name: "WARZYWA",
+    isActive: true,
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ export const dataProductCategories = [
     ),
     path: "",
     name: "OWOCE",
+    isActive: true,
   },
   {
     id: 3,
@@ -32,5 +34,6 @@ export const dataProductCategories = [
     ),
     path: "",
     name: "MIĘSO",
+    isActive: false,
   },
 ];

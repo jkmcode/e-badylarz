@@ -102,6 +102,8 @@ import {
   EDIT_SHOP_SPOT_SUCCESS,
   EDIT_SHOP_SPOT_FAIL,
   EDIT_SHOP_SPOT_DELETE,
+  SET_FLAG_ADD_TRUE,
+  SET_FLAG_ADD_FALSE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -297,14 +299,6 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
       return { loading: true, success: false, shopList: [] };
     case GET_SHOPS_LIST_SUCCESS:
       return { loading: false, success: true, shopList: action.payload };
-    case ADD_SHOP_REQUEST:
-      return { loading: true, successAdd: false, shopList: [] };
-    case ADD_SHOP_SUCCESS:
-      return { loading: false, successAdd: true, shopList: action.payload };
-    case ADD_SHOP_DELETE_SUCCESS:
-      return { loading: false, successAdd: false, shopList: action.payload };
-    case ADD_SHOP_FAIL:
-      return { loading: false, error: action.payload, successAdd: false };
     case GET_SHOPS_LIST_FAIL:
       return {
         loading: false,
@@ -314,6 +308,16 @@ export const shopListReducer = (state = { shopList: [] }, action) => {
       };
     case GET_SHOPS_LIST_DELETE:
       return { shopList: [] };
+
+    case ADD_SHOP_REQUEST:
+      return { loading: true, successAdd: false, shopList: [] };
+    case ADD_SHOP_SUCCESS:
+      return { loading: false, successAdd: true, shopList: action.payload };
+    case ADD_SHOP_DELETE_SUCCESS:
+      return { loading: false, successAdd: false, shopList: action.payload };
+    case ADD_SHOP_FAIL:
+      return { loading: false, error: action.payload, successAdd: false };
+
     default:
       return state;
   }
@@ -379,6 +383,10 @@ export const flagReducer = (state = {}, action) => {
       return { cityDescFlag: true, cityFlag: true };
     case SET_CITY_FLAG_DESC_FALSE:
       return { cityDescFlag: false, cityFlag: true };
+    case SET_FLAG_ADD_TRUE:
+      return { addFlag: true };
+    case SET_FLAG_ADD_FALSE:
+      return { addFlag: false };
     default:
       return state;
   }

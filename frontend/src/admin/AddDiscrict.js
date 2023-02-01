@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -23,36 +22,25 @@ import {
   TWO,
 } from "../constants/adminConstans";
 
-import { FormLayout, submitBtn } from "./AdminCSS";
+import { FormLayout, submitBtn, title } from "./AdminCSS";
 
 import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddDiscrict() {
+  useBackToLogin();
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useBackToLogin();
-
   const [nextDesc, setNextDesc] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
-
-  const [disctrictName, setDisctrictName] = useState("");
-
   const [values, setValues] = useState({
     name: "",
     latitude: "",
     longitude: "",
   });
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit: addhandleSubmit,
-    reset,
-    trigger,
-  } = useForm();
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -64,7 +52,8 @@ function AddDiscrict() {
   const newDistrict = useSelector((state) => state.addDistrict);
   const { loading, error, success, district } = newDistrict;
 
-  const onSubmit = () => {
+  const handlerSubmit = (e) => {
+    e.preventDefault();
     const insertData = {
       name: values.name,
       creator: userInfo.id,
@@ -90,7 +79,7 @@ function AddDiscrict() {
         }
       }, TIME_SET_TIMEOUT);
     }
-  }, [navigate, success]);
+  }, [success]);
 
   useEffect(() => {
     dispatch({ type: SET_FLAG_DESC_FALSE });
@@ -147,12 +136,16 @@ function AddDiscrict() {
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
           {error ? (
-            <ErrorMessage msg={error} timeOut={4000} variant="danger" />
+            <ErrorMessage
+              msg={error}
+              timeOut={TIME_SET_TIMEOUT}
+              variant="danger"
+            />
           ) : null}
           {success ? (
             <ErrorMessage
               msg={t("AddDiscrict_success")}
-              timeOut={4000}
+              timeOut={TIME_SET_TIMEOUT}
               variant="success"
               success={true}
             />
@@ -164,10 +157,8 @@ function AddDiscrict() {
             <Icon icon="material-symbols:arrow-back-ios" />
             {t("btn-return")}
           </Link>
-          <div className="d-flex justify-content-center display-6">
-            {t("AddDiscrict_title")}
-          </div>
-          <form onSubmit={addhandleSubmit(onSubmit)}>
+          <div style={title}>{t("AddDiscrict_title")}</div>
+          <form onSubmit={handlerSubmit}>
             {inputs.map((input, index) => {
               if (index === 0) {
                 return (
