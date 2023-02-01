@@ -845,8 +845,19 @@ def activeList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getFullDescriptionsDesc(request, Id, obj_type):
-    descrition = Descriptions.objects.filter(id_district = Id) 
-    seriaziler = DistrictsDescSerializer(descrition, many=True)
+    
+    print('sprawdzam ---->',obj_type,'ID---->',Id)
+    if obj_type=='DISTRICT':
+        descrition = Descriptions.objects.filter(id_district = Id) 
+        seriaziler = DistrictsDescSerializer(descrition, many=True)
+    elif obj_type=='CITY':
+        descrition = CitiesDescriptions.objects.filter(id_city = Id)
+        seriaziler = CitiesDescSerializer(descrition, many=True)
+    else:
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+
     return Response(seriaziler.data)
 
 @api_view(['POST', 'PUT'])

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Divider from "../admin/Divider";
+import ErrorMessage from "../component/ErrorMessage";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
 import { GET_FULL_DESCRIPTION_DELETE } from "../constants/adminConstans";
+import { TIME_AUT_ERROR } from "../constants/environmentConstans";
 
 function InfoComponent(props) {
   const { t } = useTranslation();
@@ -104,6 +106,7 @@ function InfoComponent(props) {
         <div></div>
       ) : (
         <div style={showModalOverlay}>
+          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
           <div style={mainContainer}>
             <div style={title}>
               {props.title} {props.obj.name}

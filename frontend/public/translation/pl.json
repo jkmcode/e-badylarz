@@ -172,7 +172,7 @@
   "DistrictAddDescription_selected_lng": "Wybrany język",
   "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
   "DistrictAddDescription_error_message_requred": "Pole wymagane",
-  "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 100",
+  "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 250",
   "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
   "AddCiti_label_name": "Nazwa miejscowości",
   "AddCiti_name_placeholder": "Podaj nazwę miejscowosci ...",
