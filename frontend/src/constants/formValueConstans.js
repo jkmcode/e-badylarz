@@ -1,7 +1,12 @@
-export const NUMBERS_AND_NATIONAL_LETTERS = /^[A-Za-z1-9ąćĆśŚęłŁńóżŻźŹ -.]+$/;
+export const NUMBERS_AND_NATIONAL_LETTERS = /^[A-Za-z0-9ąćĆśŚęłŁńóżŻźŹ -.]+$/;
 export const NIP_FORMAT = /^[0-9 -]+$/;
 export const BANK_ACCOUNT_FORMAT = /^[A-Za-z0-9 ]+$/;
 export const GPS_FORMAT = /^[0-9.]+$/;
 export const ONLY_NUMBER = /^[0-9]+$/;
 export const EMAIL_FORMAT = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 export const DESCRIPTION_PATTERN = "[A-Za-z0-9]{3,}";
+export const NAME_PATTERN = "^[A-Za-ząćĆśŚęłŁńóżŻźŹ -.0-9]{3,30}$";
+export const LATITUDE_PATTERN = "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$";
+export const LONGITUDE_PATTERN = "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$";
+export const POST_FORMAT = "^[0-9]{2}-[0-9]{3}$";
+export const LONG_NAME_PATTERN = "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ-. ]{3,50}$";

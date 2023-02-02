@@ -865,6 +865,9 @@ def getFullDescriptionsDesc(request, Id, obj_type):
     elif obj_type=='CITY':
         descrition = CitiesDescriptions.objects.filter(id_city = Id)
         seriaziler = CitiesDescSerializer(descrition, many=True)
+    elif obj_type=='SHOP':
+        descrition = ShopsDescriptions.objects.filter(id_shops = Id)
+        seriaziler = ShopDescSerializer(descrition, many=True)
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -877,29 +880,75 @@ def getFullDescriptionsDesc(request, Id, obj_type):
 def addDesc(request):
     data=request.data
 
-    if data["addDesc"]:
-        disctrict_obj= Districts.objects.get(id=data['objId'])
-        desc = Descriptions.objects.create(
-        description=data['desc'],
-        language=data['lng'],
-        # obj_type=data['objType'],
-        id_district=disctrict_obj,
-        creator=data['id'])
+    if data['objType']== "DISTRICT":
+        if data["addDesc"]:
+            disctrict_obj= Districts.objects.get(id=data['objId'])
+            desc = Descriptions.objects.create(
+            description=data['desc'],
+            language=data['lng'],
+            id_district=disctrict_obj,
+            creator=data['id'])
+        else:
+            descrip = Descriptions.objects.get(id=data['descId'])
+            descrip.description=data['desc']
+            descrip.date_of_change=datetime.now()
+            descrip.modifier=data['id']
+            descrip.save()
+    
+    elif data['objType']== "CITY":
+        if data["addDesc"]:
+            city_obj= Citis.objects.get(id=data['objId'])
+            desc = CitiesDescriptions.objects.create(
+            description=data['desc'],
+            language=data['lng'],
+            id_city=city_obj,
+            creator=data['id'])
+        else:
+            descrip = CitiesDescriptions.objects.get(id=data['descId'])
+            descrip.description=data['desc']
+            descrip.date_of_change=datetime.now()
+            descrip.modifier=data['id']
+            descrip.save()
+    elif data['objType']== "SHOP":
+        if data["addDesc"]:
+            shop_obj= Shops.objects.get(id=data['objId'])
+            desc = ShopsDescriptions.objects.create(
+            description=data['desc'],
+            language=data['lng'],
+            id_shops=shop_obj,
+            creator=data['id'])
+        else:
+            descrip = ShopsDescriptions.objects.get(id=data['descId'])
+            descrip.description=data['desc']
+            descrip.date_of_change=datetime.now()
+            descrip.modifier=data['id']
+            descrip.save()
     else:
-        descrip = Descriptions.objects.get(id=data['descId'])
-        descrip.description=data['desc']
-        descrip.date_of_change=datetime.now()
-        descrip.modifier=data['id']
-        descrip.save()
-
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
     return Response("OK")
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getDiscrictDesc(request, Id, lng, obj_type):
-    descrition = Descriptions.objects.filter(id_district = Id, language=lng) 
-    seriaziler = DistrictsDescSerializer(descrition, many=True)
-    return Response(seriaziler.data)
+
+    if obj_type == "DISTRICT":
+        descrition = Descriptions.objects.filter(id_district = Id, language=lng) 
+        seriaziler = DistrictsDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    elif obj_type == "CITY":
+        descrition = CitiesDescriptions.objects.filter(id_city = Id, language=lng) 
+        seriaziler = CitiesDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    elif obj_type=='SHOP':
+        descrition = ShopsDescriptions.objects.filter(id_shops = Id, language=lng)
+        seriaziler = ShopDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    else:
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+   
 
 
 @api_view(['GET'])

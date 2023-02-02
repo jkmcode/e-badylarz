@@ -148,9 +148,11 @@
   "AddDiscrict_success": "Powiat dodany prawidłowo",
   "AddDistrict_label_name": "Nazwa powiatu",
   "AddDistrict_name_placeholder": "Podaj nazwe powiatu ...",
-  "AddDistrict_name_error_message": "Nazwa dzielnicy powinna mieć od 3 do 16 znaków i nie powinna zawierać żadnych znaków specjalnych!",
+  "AddDistrict_name_error_message": "Nazwa dzielnicy powinna mieć od 3 do 30 znaków i nie powinna zawierać żadnych znaków specjalnych!",
   "AddDistrict_latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
   "AddDistrict_longitude_error_message": "Długość geograficzna zawiera tylko cyfry w formacie: xx.xxx z zakresu od -180 do 180!",
+  "AddDistrict_label_latitude": "Szerokość geograficzna",
+  "AddDistrict_label_longitude": "Długość geograficzna",
   "DistrictAddDescription_option_placeholder": "Wybierz język",
   "LoginScreen_title": "Logowanie",
   "LoginScreen_label_username": "Nazwa użytkownika",
@@ -409,7 +411,6 @@
   "EditArea_success": "Dane obszaru sprzedaży zostały zmienione poprawnie",
   "Pattern_nip": "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
   "Table_empty_list": "Pusta lista",
-
   "ProductCategories_title": "Kategorie produktów",
   "ProductCategories_msg_add_success": "Kategoria produktu dodana prawidłowo"
 }

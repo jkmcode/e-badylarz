@@ -151,7 +151,7 @@
   "AddDistrict_label_latitude": "Latitude",
   "AddDistrict_label_longitude": "Longitude",
   "AddDistrict_name_placeholder": "Enter district name ...",
-  "AddDistrict_name_error_message": "District name should be 3-16 characters and shouldn't include any special character!",
+  "AddDistrict_name_error_message": "District name should be 3-30 characters and shouldn't include any special character!",
   "AddDistrict_latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
   "AddDistrict_longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
   "LoginScreen_title": "Login",
@@ -412,7 +412,6 @@
   "EditArea_success": "Sales area editing correctly",
   "Pattern_nip": "[A-Z]",
   "Table_empty_list": "Empty list",
-
   "ProductCategories_title": "Product categories",
   "ProductCategories_msg_add_success": "Product category correctly added"
 }

@@ -24,7 +24,11 @@ import {
 
 import { FormLayout, submitBtn, title } from "./AdminCSS";
 
-import { NUMBERS_AND_NATIONAL_LETTERS } from "../constants/formValueConstans";
+import {
+  NAME_PATTERN,
+  LATITUDE_PATTERN,
+  LONGITUDE_PATTERN
+} from "../constants/formValueConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
@@ -65,19 +69,9 @@ function AddDiscrict() {
 
   useEffect(() => {
     if (success) {
-      setTimeout(() => {
-        if (window.confirm(t("AddDiscrict_window_confirm"))) {
-          setNextDesc(true);
-          setIdNewDistrict(district[0].id);
-          dispatch({ type: SET_FLAG_DESC_TRUE });
-          dispatch({ type: DISTRICT_ADD_DELETE });
-          dispatch({ type: DISTRICT_DELETE });
-        } else {
-          dispatch({ type: DISTRICT_ADD_DELETE });
-          dispatch({ type: DISTRICT_DELETE });
-          dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
-        }
-      }, TIME_SET_TIMEOUT);
+      dispatch({ type: DISTRICT_ADD_DELETE });
+      dispatch({ type: DISTRICT_DELETE });
+      dispatch({ type: SET_FLAG_ADD_DESC_TRUE });
     }
   }, [success]);
 
@@ -100,7 +94,7 @@ function AddDiscrict() {
       placeholder: t("AddDistrict_name_placeholder"),
       errorMessage: t("AddDistrict_name_error_message"),
       label: t("AddDistrict_label_name"),
-      pattern: "^[A-Za-z]{3,16}$",
+      pattern: NAME_PATTERN,
       required: true,
     },
     {
@@ -110,7 +104,7 @@ function AddDiscrict() {
       placeholder: t("AddShops_latitude_placeholder"),
       errorMessage: t("AddDistrict_longitude_error_message"),
       label: t("AddDistrict_label_latitude"),
-      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      pattern: LATITUDE_PATTERN,
       required: true,
     },
     {
@@ -120,7 +114,7 @@ function AddDiscrict() {
       placeholder: t("AddShops_longitude_placeholder"),
       errorMessage: t("AddDistrict_longitude_error_message"),
       label: t("AddDistrict_label_longitude"),
-      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      pattern: LONGITUDE_PATTERN,
       required: true,
     },
   ];
@@ -203,12 +197,12 @@ function AddDiscrict() {
               )}
             </div>
           </form>
-          {nextDesc & descFlag ? (
+          {/* {nextDesc & descFlag ? (
             <AddDescription
               objId={idNewDistrict}
               descType={DISCTRICT_DESCRIPTION}
             />
-          ) : null}
+          ) : null} */}
         </div>
       )}
     </>
