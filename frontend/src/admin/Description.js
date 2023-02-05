@@ -5,6 +5,7 @@ import { addDesc } from "../actions/adminActions";
 import { formLabel } from "./AdminCSS";
 
 import { DISTRICT_ADD_DESC_DELETE } from "../constants/adminConstans";
+import { DESCRIPTION_PATTERN } from "../constants/formValueConstans";
 
 function Description(props) {
   const userLogin = useSelector((state) => state.userLogin);
@@ -29,7 +30,7 @@ function Description(props) {
 
     if (value.length === 0) {
       setErrorMessage(t("DistrictAddDescription_error_message_requred"));
-    } else if (value.length > 100) {
+    } else if (value.length > 250) {
       setErrorMessage(t("DistrictAddDescription_error_message_too_long"));
     } else {
       dispatch({ type: DISTRICT_ADD_DESC_DELETE });
@@ -88,7 +89,7 @@ function Description(props) {
         </label>
         <textarea
           placeholder={t("DistrictAddDescription_placeholder_desc")}
-          pattern="[A-Za-z0-9]{3,}"
+          pattern={DESCRIPTION_PATTERN}
           className="textAreaInput"
           name="description"
           style={textArea}
@@ -103,7 +104,7 @@ function Description(props) {
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <button type="submit" style={btnSumbitDesc}>
-          {t("btn_submit")}
+          {t("btn-change")}
         </button>
       </div>
     </form>

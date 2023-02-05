@@ -5,12 +5,14 @@ import { NavLink } from "react-router-dom";
 import useResponsive from "../component/useResponsive";
 import useBackToLogin from "../component/useBackToLogin";
 
-import { navLinksAdminPanel } from "../Data/NavTopAdminData";
+import { useNavLinksAdminPanel } from "../Data/NavTopAdminData";
 
 function DashboardScreen() {
   const { t } = useTranslation();
   const { windowWidth } = useResponsive();
   useBackToLogin();
+
+  const navLinksAdminPanel = useNavLinksAdminPanel();
 
   const divider = {
     marginTop: "1rem",
@@ -24,7 +26,6 @@ function DashboardScreen() {
   const textCenter = {
     marginLeft: "0.7rem",
     display: "flex",
-    justifyContent: "center",
     alignItems: "center",
   };
 
@@ -96,7 +97,7 @@ function DashboardScreen() {
                       }}
                     >
                       {icon}
-                      <span style={textCenter}>{name}</span>
+                      <div style={textCenter}>{name}</div>
                     </NavLink>
                   </li>
                 );

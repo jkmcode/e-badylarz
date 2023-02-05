@@ -21,6 +21,13 @@ import {
   TWO,
 } from "../constants/adminConstans";
 
+import {
+  POST_FORMAT,
+  LONG_NAME_PATTERN,
+  LATITUDE_PATTERN,
+  LONGITUDE_PATTERN
+} from "../constants/formValueConstans";
+
 import { submitBtn, FormLayout } from "./AdminCSS";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
@@ -134,7 +141,7 @@ function AddCity() {
       placeholder: t("AddCiti_name_placeholder"),
       errorMessage: t("AddCiti_name_error_message"),
       label: t("AddCiti_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
+      pattern: LONG_NAME_PATTERN,
       required: true,
     },
     {
@@ -144,7 +151,7 @@ function AddCity() {
       placeholder: t("AddCiti_post_code_placeholder"),
       errorMessage: t("AddCiti_post_code_error_message"),
       label: t("AddCiti_label_post_code"),
-      pattern: "^[0-9]{2}-[0-9]{3}$",
+      pattern: POST_FORMAT,
       required: true,
     },
     {
@@ -154,7 +161,7 @@ function AddCity() {
       placeholder: t("latitude_placeholder"),
       errorMessage: t("latitude_error_message"),
       label: t("label_latitude"),
-      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      pattern: LATITUDE_PATTERN,
       required: true,
     },
     {
@@ -164,7 +171,7 @@ function AddCity() {
       placeholder: t("longitude_placeholder"),
       errorMessage: t("longitude_error_message"),
       label: t("label_longitude"),
-      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      pattern: LONGITUDE_PATTERN,
       required: true,
     },
   ];

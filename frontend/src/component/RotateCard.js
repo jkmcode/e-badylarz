@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { unactiveBtn } from "../admin/AdminCSS";
+import PropTypes from "prop-types";
 
 function RotateCard({ name, objects, id }) {
   const [toggle, setToggle] = useState(false);
@@ -122,3 +123,14 @@ function RotateCard({ name, objects, id }) {
 }
 
 export default RotateCard;
+
+RotateCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  objects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      buttonUnactive: PropTypes.element.isRequired,
+    })
+  ).isRequired,
+  id: PropTypes.number.isRequired,
+};

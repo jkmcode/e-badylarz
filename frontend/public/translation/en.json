@@ -151,7 +151,7 @@
   "AddDistrict_label_latitude": "Latitude",
   "AddDistrict_label_longitude": "Longitude",
   "AddDistrict_name_placeholder": "Enter district name ...",
-  "AddDistrict_name_error_message": "District name should be 3-16 characters and shouldn't include any special character!",
+  "AddDistrict_name_error_message": "District name should be 3-30 characters and shouldn't include any special character!",
   "AddDistrict_latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
   "AddDistrict_longitude_error_message": "Longitude contains only digits in format: xx.xxx in range of -180 to 180!",
   "LoginScreen_title": "Login",
@@ -174,7 +174,7 @@
   "DistrictAddDescription_selected_lng": "You have chosen a language",
   "DistrictAddDescription_success": "Description correctly changed",
   "DistrictAddDescription_error_message_requred": "Required field",
-  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 100",
+  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 250",
   "DistrictAddDescription_option_placeholder": "Select an option",
   "AddCiti_title": "Add city for districts : ",
   "AddCiti_label_name": "City name",
@@ -412,8 +412,13 @@
   "EditArea_success": "Sales area editing correctly",
   "Pattern_nip": "[A-Z]",
   "Table_empty_list": "Empty list",
-
   "ProductCategories_title": "Product categories",
   "ProductCategories_msg_add_success": "Product category correctly added",
-  "Confirmation_alert_unactive_product_category": "Are you sure you want to unactive product category?"
+  "Confirmation_alert_unactive_product_category": "Are you sure you want to unactive product category?",
+
+  "sidebar_navlink_districts": "Districts",
+  "sidebar_navlink_shops": "Shops",
+  "sidebar_navlink_areas": "Areas",
+  "sidebar_navlink_product_cat": "Categories",
+  "sidebar_navlink_products": "Products"
 }

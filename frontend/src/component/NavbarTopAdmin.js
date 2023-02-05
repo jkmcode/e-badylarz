@@ -10,15 +10,18 @@ import {
   navItems,
   navLinksItem,
   navLinksSettings,
-  navLinksAdminPanel,
 } from "../Data/NavTopAdminData";
 import { HAMBURGER, LOGOUT } from "../constants/adminConstans";
 import { logout } from "../actions/userAction";
 import LogoNavbar from "../images/logoNavbar.png";
+import { useNavLinksAdminPanel } from "../Data/NavTopAdminData";
 
 function AdminNavbarTop() {
   const { windowWidth } = useResponsive();
   const [openDropDown, setOpenDropDown] = useState(true);
+  const navLinksAdminPanel = useNavLinksAdminPanel();
+
+  console.log("navLinksAdminPanel", navLinksAdminPanel);
 
   /************************STYLE*****************************/
   const navContainer = {

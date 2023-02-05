@@ -6,7 +6,6 @@ import RadioButtons from "./RadioButtons";
 import DotsLoader from "../component/DotsLoader";
 import RotateCard from "../component/RotateCard";
 import InfoAlertComponent from "../component/InfoAlertComponent";
-import BtnHoverAnimation from "../component/BtnHoverAnimation";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link } from "react-router-dom";
 import { getProductCat } from "../actions/productActions";
@@ -234,7 +233,6 @@ function ProductCategories() {
       }}
     >
       <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-      <BtnHoverAnimation name={"XXX"} />
       {showAlert && updateStatus === UNACTIVE && (
         <InfoAlertComponent
           confirmYes={confirmYes}

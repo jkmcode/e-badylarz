@@ -85,11 +85,13 @@ function AddDescription(props) {
   }, [desc, activeDesc]);
 
   // fetch description from DB
+
   useEffect(() => {
     if (activeDesc) {
+      // console.log('type-->', props.descType)
       dispatch(
         getDesc({
-          id: userInfo.id,
+          type: props.descType,
           lng: lngDesc,
           Id: props.objId,
         })
@@ -119,12 +121,16 @@ function AddDescription(props) {
       dispatch({ type: USER_LOGOUT });
       navigate("/login-admin");
     }
-    if (error || adderror) {
-      setActiveDesc(false)
-      dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
-      console.log('sprawdzam---!!!@@@')
+    if (error || adderror || addsuccess) {
+      setTimeout(() => {
+        setActiveDesc(false)
+        dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
+      }, TIME_SET_TIMEOUT);
+      // setActiveDesc(false)
+      // dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
+
     }
-  }, [error, adderror]);
+  }, [error, adderror, addsuccess]);
 
   //styling
 

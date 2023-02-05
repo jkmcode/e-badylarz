@@ -20,7 +20,7 @@ import {
   CITY_DESCRIPTION,
   UNACTIVE,
   ACTIVE,
-  CITY,
+  GET_CITES_LIST_DELETE,
   SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 
@@ -54,7 +54,7 @@ function CitiesList(props) {
   const { userInfo } = userLogin;
 
   const data2 = useSelector((state) => state.unOrActiveDescription);
-  const { loading: loadingUpdate, error: unOrActiveError } = data2;
+  const { loading: loadingUpdate, error: unOrActiveError, success: activeSucces } = data2;
 
   const [citiesData, setCitiesData] = useState(false);
   const [objInfo, setObjInfo] = useState({});
@@ -110,6 +110,12 @@ function CitiesList(props) {
       setCitiesData(true);
     }
   }, [success]);
+
+  useEffect(() => {
+    if (activeSucces) {
+      dispatch({ type: GET_CITES_LIST_DELETE });
+    }
+  }, [activeSucces]);
 
   ////
 

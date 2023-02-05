@@ -6,6 +6,8 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
+import useResponsive from "../component/useResponsive";
+import AddDescription from "./AddDescription";
 import {
   FormLayout,
   activeBadge,
@@ -28,12 +30,16 @@ import rocket from "../images/rocket.png";
 import {
   SHOP_CONTACT_DESCRIPTION,
   SHOP_SPOT_DESCRIPTION,
+  SHOP_DESCRIPTION,
   GET_CONTACT_LIST_DELETE,
   GET_SOPTS_LIST_DELETE,
   SET_WINDOW_FLAG_DELETE,
+  SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
+
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AddContact() {
   const containerRef = useRef(null);
@@ -42,8 +48,12 @@ function AddContact() {
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
+  const { windowWidth } = useResponsive();
 
   const shopId = Number(params.id);
+
+  const tableRef = useRef(null);
+  const btnMinWidth = 100;
 
   const [newContact, setNewContact] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -53,6 +63,9 @@ function AddContact() {
 
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
+
+  const [helper, setHelper] = useState("");
+  const [objId, setObjId] = useState("");
 
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
@@ -97,7 +110,21 @@ function AddContact() {
   const shopFlagVar = useSelector((state) => state.windowFlag);
   const { windowFlag } = shopFlagVar;
 
+  const infoFlagRedux = useSelector((state) => state.flag);
+  const { cityDescFlag } = infoFlagRedux;
+
   //Handlers
+
+  const infoHandler = (i) => {
+    console.log("Info--->>>", i);
+  };
+
+  const descriptionHandler = (i) => {
+    dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
+    setHelper(i.name);
+    setObjId(i.id);
+    console.log("Opis--->>>", i);
+  };
 
   const unActiveHandler = (id) => {
     setShowAlert(true);
@@ -285,7 +312,6 @@ function AddContact() {
 
   const contactContainer = {
     ...mainContainer,
-    height: "500px",
   };
 
   const listContainer = {
@@ -467,6 +493,27 @@ function AddContact() {
   const tableCellNoBorderRight = {
     ...tableCell,
     borderRight: "none",
+  };
+  const shopsBtn = {
+    fontSize: "0.7rem",
+    fontWeight: "700",
+    background: "transparent",
+    color: "white",
+    textTransform: "uppercase",
+    border: "none",
+    padding: "0.4rem",
+    //minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
+    minWidth: "100px",
+  };
+  const btnDescription = {
+    ...shopsBtn,
+    backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
+  };
+
+  const btnInfo = {
+    ...shopsBtn,
+    paddingLeft: "0.2rem",
+    backgroundImage: `linear-gradient(171deg, rgba(34, 95, 165, 1) 45%, rgba(42, 51, 113, 1) 89%)`,
   };
 
   /************************TABLE PROPS - SPOT *****************************/
@@ -681,13 +728,13 @@ function AddContact() {
             {/* Main Data About Company */}
             <div style={contactContainer}>
               {error ? (
-                <ErrorMessage msg={error} timeOut={4000} />
+                <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
               ) : activeError ? (
-                <ErrorMessage msg={activeError} timeOut={4000} />
+                <ErrorMessage msg={activeError} timeOut={TIME_SET_TIMEOUT} />
               ) : shopListError ? (
-                <ErrorMessage msg={shopListError} timeOut={4000} />
+                <ErrorMessage msg={shopListError} timeOut={TIME_SET_TIMEOUT} />
               ) : spotListError ? (
-                <ErrorMessage msg={spotListError} timeOut={4000} />
+                <ErrorMessage msg={spotListError} timeOut={TIME_SET_TIMEOUT} />
               ) : null}
 
               {/* Main Data */}
@@ -708,6 +755,60 @@ function AddContact() {
                     if (shop.id === shopId) {
                       return (
                         <div key={shop.id}>
+                          <Divider backgroundColor="grey" />
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
+                          >
+                            <button
+                              style={btnDescription}
+                              onClick={() => descriptionHandler(shop)}
+                            >
+                              {t("btn_description")}
+                            </button>
+                            <button
+                              style={btnInfo}
+                              onClick={() => infoHandler(shop)}
+                            >
+                              {t("btn_info")}
+                            </button>
+                          </div>
+
+                          {helper === shop.name && cityDescFlag && (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  backgroundColor: "#4d4d4d",
+                                  padding: "0.4rem",
+                                  width: "80%",
+                                  margin: "0.4rem",
+                                }}
+                              >
+                                <AddDescription
+                                  objId={objId}
+                                  descType={SHOP_DESCRIPTION}
+                                  return={true}
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          <Divider backgroundColor="grey" />
+                          <div style={subtitle}>
+                            {t("AdminShops_status")}:
+                            <div style={mainDataSection}>
+                              {shop.is_active
+                                ? t("status_active")
+                                : t("status_inactive")}
+                            </div>
+                          </div>
                           <div style={subtitle}>
                             {t("AddContact_name")}:
                             <div style={mainDataSection}>{shop.name}</div>
@@ -735,6 +836,7 @@ function AddContact() {
                               {shop.bank_account}
                             </div>
                           </div>
+                          <Divider backgroundColor="grey" />
                           <div
                             style={{
                               display: "flex",
