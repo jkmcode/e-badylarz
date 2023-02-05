@@ -106,7 +106,7 @@ function DistrictTable({ radioValue }) {
   };
 
   const editHandler = (i) => {
-    navigate(`${i.id}/edit`);
+    navigate(`/dashboard/district/${i.id}/edit`);
   };
 
   const showMoreHandler = (discrict) => {

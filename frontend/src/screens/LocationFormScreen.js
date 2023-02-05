@@ -7,10 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { getCitiesList } from "../actions/adminActions";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import BtnHoverAnimation from "../component/BtnHoverAnimation";
 
-import {
-  TIME_AUT_ERROR,
-} from "../constants/environmentConstans"
+import { TIME_AUT_ERROR } from "../constants/environmentConstans";
 
 function LocationFormScreen() {
   const navigate = useNavigate();
@@ -97,8 +96,8 @@ function LocationFormScreen() {
     }
   }, [success]);
 
-  console.log("cityFlag", cityFlag)
-  console.log("citiesList", citiesList)
+  console.log("cityFlag", cityFlag);
+  console.log("citiesList", citiesList);
 
   const infoMsg = {
     backgroundColor: "#EAFEE1",
@@ -194,10 +193,10 @@ function LocationFormScreen() {
                     </option>
                     {cityFlag
                       ? citiesList.map((city) => (
-                        <option key={city.id} value={city.id}>
-                          {city.name}
-                        </option>
-                      ))
+                          <option key={city.id} value={city.id}>
+                            {city.name}
+                          </option>
+                        ))
                       : null}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
@@ -209,13 +208,17 @@ function LocationFormScreen() {
               </Row>
               {locationMsg ? <p>{locationMsg}</p> : null}
             </Form.Group>
-            <div className="d-flex justify-content-center">
-              <button
+            <div
+              style={{ margin: "1rem" }}
+              className="d-flex justify-content-center"
+            >
+              {/* <button
                 className="w-90 w-md-50 my-1 py-3 h6"
                 style={searchAreaBtn}
               >
                 {t("FormAddressScreen__btn")}
-              </button>
+              </button> */}
+              <BtnHoverAnimation name={t("FormAddressScreen__btn")} />
             </div>
           </Form>
         </>

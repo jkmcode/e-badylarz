@@ -414,5 +414,6 @@
   "Table_empty_list": "Empty list",
 
   "ProductCategories_title": "Product categories",
-  "ProductCategories_msg_add_success": "Product category correctly added"
+  "ProductCategories_msg_add_success": "Product category correctly added",
+  "Confirmation_alert_unactive_product_category": "Are you sure you want to unactive product category?"
 }

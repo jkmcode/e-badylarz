@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { unactiveBtn } from "../admin/AdminCSS";
-import { useTranslation } from "react-i18next";
 
-function RotateCard({ name, uniqueId, listOfButtons }) {
-  const { t } = useTranslation();
-
+function RotateCard({ name, objects, id }) {
   const [toggle, setToggle] = useState(false);
-  const [uniqueID, setuniqueID] = useState({});
-
-  console.log("listOfButtons", listOfButtons);
 
   //styling
 
@@ -66,19 +60,31 @@ function RotateCard({ name, uniqueId, listOfButtons }) {
             height="32"
           />
         </button>
-        {listOfButtons.map((button) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "1rem",
-              }}
-              key={button.id}
-            >
-              {button.button}
-            </div>
-          );
+        {objects.map((object) => {
+          if (object.id === id) {
+            return (
+              <div key={object.id}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "1rem",
+                  }}
+                >
+                  {object.buttonUnactive}
+                </div>
+                {/* <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "1rem",
+                  }}
+                >
+                  {object.buttonEdit}
+                </div> */}
+              </div>
+            );
+          }
         })}
       </div>
       <div style={frontStyles}>
