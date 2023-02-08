@@ -34,6 +34,18 @@ import {
   TIME_AUT_SUCCESS,
 } from "../constants/environmentConstans";
 
+import {
+  NAME_PATTERN,
+  NUMBERS_PATTERN,
+  LONG_NAME_PATTERN,
+  POST_NAME_PATTERN,
+  LONGITUDE_PATTERN,
+  LATITUDE_PATTERN,
+  NO_BUILDING_PATTERN,
+  POST_FORMAT,
+  ONLY_NUMBER
+} from "../constants/formValueConstans";
+
 import { Icon } from "@iconify/react";
 
 function AddShopsSpot() {
@@ -54,7 +66,7 @@ function AddShopsSpot() {
   const [values, setValues] = useState({
     spotName: "",
     range: "",
-    cityList: "",
+    kindSpot: "",
     street: "",
     number: "",
     postCode: "",
@@ -173,58 +185,60 @@ function AddShopsSpot() {
   };
 
   const handleSubmit = (event) => {
-    //setCurrentTaxNo(data.nip);
     event.preventDefault();
 
-    if (SpotParam === "add") {
-      //dispatch({ type: SET_FLAG_IMAGE_TRUE });
-      if (selectedDistrict !== 0 && selectedCity !== 0) {
-        const insertData = {
-          add: true,
-          id_shops: shopId,
-          name: values.spotName,
-          city: values.cityList,
-          street: values.street,
-          no_building: values.number,
-          postCode: values.postCode,
-          post: values.post,
-          latitude: values.latitude,
-          longitude: values.longitude,
-          creator: userInfo.id,
-          is_active: "True",
-          delivery: radioValue === "1" ? "False" : "True",
-          range: radioValue === "1" ? "0" : values.range,
-        };
-        dispatch(addShopSpot(insertData));
-      } else {
-        setEmptyValueError(true);
-      }
-    } else {
-      dispatch({ type: SET_FLAG_IMAGE_TRUE });
-      dispatch({ type: GET_SHOPS_LIST_DELETE });
-      if (radioValue === "1") {
-        const insertData = {
-          add: false,
-          id_spot: spotId,
-          id_shops: shopId,
-          name: !values.spotName ? shopDetails.name : values.spotName,
-          city: values.cityList, /// To jest źle
-          street: !values.street ? spotDetails.street : values.street,
-          no_building: !values.number ? spotDetails.no_building : values.number,
-          postCode: !values.postCode ? spotDetails.post_code : values.postCode,
-          post: !values.post ? spotDetails.post : values.post,
-          latitude: !values.latitude ? spotDetails.latitude : values.latitude,
-          longitude: !values.longitude
-            ? spotDetails.longitude
-            : values.longitude,
-          creator: userInfo.id,
-          is_active: "True",
-          delivery: "False",
-          range: "0",
-        };
-        dispatch(updateShopSpot(insertData));
-      }
-    }
+
+    console.log("event", event)
+    console.log("values", values)
+
+    // if (SpotParam === "add") {
+    //   if (selectedDistrict !== 0 && selectedCity !== 0) {
+    //     const insertData = {
+    //       add: true,
+    //       id_shops: shopId,
+    //       name: values.spotName,
+    //       city: values.cityList,
+    //       street: values.street,
+    //       no_building: values.number,
+    //       postCode: values.postCode,
+    //       post: values.post,
+    //       latitude: values.latitude,
+    //       longitude: values.longitude,
+    //       creator: userInfo.id,
+    //       is_active: "True",
+    //       delivery: radioValue === "1" ? "False" : "True",
+    //       range: radioValue === "1" ? "0" : values.range,
+    //     };
+    //     dispatch(addShopSpot(insertData));
+    //   } else {
+    //     setEmptyValueError(true);
+    //   }
+    // } else {
+    //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
+    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
+    //   if (radioValue === "1") {
+    //     const insertData = {
+    //       add: false,
+    //       id_spot: spotId,
+    //       id_shops: shopId,
+    //       name: !values.spotName ? shopDetails.name : values.spotName,
+    //       city: values.cityList, /// To jest źle
+    //       street: !values.street ? spotDetails.street : values.street,
+    //       no_building: !values.number ? spotDetails.no_building : values.number,
+    //       postCode: !values.postCode ? spotDetails.post_code : values.postCode,
+    //       post: !values.post ? spotDetails.post : values.post,
+    //       latitude: !values.latitude ? spotDetails.latitude : values.latitude,
+    //       longitude: !values.longitude
+    //         ? spotDetails.longitude
+    //         : values.longitude,
+    //       creator: userInfo.id,
+    //       is_active: "True",
+    //       delivery: "False",
+    //       range: "0",
+    //     };
+    //     dispatch(updateShopSpot(insertData));
+    //   }
+    // }
   };
 
   ///USEEFFECT
@@ -302,6 +316,30 @@ function AddShopsSpot() {
     margin: "auto",
   };
 
+  //List of kind Spots
+  const kindSpots = [
+    {
+      id: "1",
+      name: t("ShopsSpot_kind_shop")
+    },
+    {
+      id: "2",
+      name: t("ShopsSpot_kind_farmer")
+    },
+    {
+      id: "3",
+      name: t("ShopsSpot_kind_manufacturer")
+    },
+    {
+      id: "4",
+      name: t("ShopsSpot_kind_wholesaler")
+    },
+    {
+      id: "5",
+      name: t("ShopsSpot_kind_agent")
+    }
+  ]
+
   //List of inputs
   const inputs = [
     {
@@ -311,7 +349,7 @@ function AddShopsSpot() {
       placeholder: t("ShopsSpot_name_placeholder"),
       errorMessage: t("ShopsSpot_name_error_message"),
       label: t("ShopsSpot_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      pattern: NAME_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -320,43 +358,57 @@ function AddShopsSpot() {
     },
     {
       id: "2",
+      name: "kindSpot",
+      label: t("ShopsSpot_label_kindSpot"),
+      optionsList: kindSpots,
+      defaultValue:
+        SpotParam === "add"
+          ? t("ShopsSpot_select_placeholder")
+          : successGetSpot &&
+          SpotParam === "edit" &&
+          spotDetails.city.id_district.name,
+      disabled: SpotParam === "edit" ? true : false,
+    },
+    {
+      id: "3",
       name: "range",
       type: "text",
       placeholder: t("ShopsSpot_range_placeholder"),
       errorMessage: t("ShopsSpot_range_error_message"),
       label: t("ShopsSpot_label_range"),
-      pattern: "^[0-9]$",
+      pattern: "^\\d+$",
       defaultValue:
         SpotParam === "add"
-          ? ""
+          ? "0"
           : successGetSpot && SpotParam === "edit" && spotDetails.range,
       required: true,
     },
     {
-      id: "3",
-      name: "districtList",
-      label: t("ShopsSpot_label_districtList"),
-      optionsList: districtList,
-      defaultValue:
-        SpotParam === "add"
-          ? "Select option"
-          : successGetSpot &&
-            SpotParam === "edit" &&
-            spotDetails.city.id_district.name,
-      disabled: SpotParam === "edit" ? true : false,
-    },
-    {
       id: "4",
-      name: "cityList",
-      label: t("ShopsSpot_label_city"),
-      optionsList: newListCities,
+      name: "cityName",
+      type: "text",
+      placeholder: t("ShopsSpot_city_name_placeholder"),
+      errorMessage: t("ShopsSpot_city_name_error_message"),
+      label: t("ShopsSpot_label_city_name"),
+      pattern: NAME_PATTERN,
       defaultValue:
         SpotParam === "add"
-          ? "Select option"
-          : successGetSpot && SpotParam === "edit" && spotDetails.city.name,
-      disabled:
-        SpotParam === "edit" ? true : newListCities.length === 0 ? true : false,
+          ? ""
+          : successGetSpot && SpotParam === "edit" && spotDetails.name,
+      required: true,
     },
+    // {
+    //   id: "4",
+    //   name: "cityList",
+    //   label: t("ShopsSpot_label_city"),
+    //   optionsList: newListCities,
+    //   defaultValue:
+    //     SpotParam === "add"
+    //       ? "Select option"
+    //       : successGetSpot && SpotParam === "edit" && spotDetails.city.name,
+    //   disabled:
+    //     SpotParam === "edit" ? true : newListCities.length === 0 ? true : false,
+    // },
     {
       id: "5",
       name: "street",
@@ -364,7 +416,7 @@ function AddShopsSpot() {
       placeholder: t("ShopsSpot_street_placeholder"),
       errorMessage: t("ShopsSpot_street_error_message"),
       label: t("ShopsSpot_street_label"),
-      pattern: "^[A-Za-ząćęłńóśźżs]{3,50}$",
+      pattern: LONG_NAME_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -378,7 +430,7 @@ function AddShopsSpot() {
       placeholder: t("ShopsSpot_number_placeholder"),
       errorMessage: t("ShopsSpot_number_error_message"),
       label: t("ShopsSpot_number_label"),
-      pattern: "^(?!/|-|,)[0-9A-Za-z/,-]+(?<!/|,|-)$",
+      pattern: NO_BUILDING_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -392,7 +444,7 @@ function AddShopsSpot() {
       placeholder: t("ShopsSpot_postCode_placeholder"),
       errorMessage: t("ShopsSpot_postCode_error_message"),
       label: t("ShopsSpot_postCode_label"),
-      pattern: "^[0-9]{2}-[0-9]{3}$",
+      pattern: POST_FORMAT,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -406,7 +458,7 @@ function AddShopsSpot() {
       placeholder: t("ShopsSpot_post_placeholder"),
       errorMessage: t("ShopsSpot_post_error_message"),
       label: t("ShopsSpot_post_label"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
+      pattern: POST_NAME_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -420,7 +472,7 @@ function AddShopsSpot() {
       placeholder: t("latitude_placeholder"),
       errorMessage: t("latitude_error_message"),
       label: t("label_latitude"),
-      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      pattern: LATITUDE_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -434,7 +486,7 @@ function AddShopsSpot() {
       placeholder: t("longitude_placeholder"),
       errorMessage: t("longitude_error_message"),
       label: t("label_longitude"),
-      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      pattern: LONGITUDE_PATTERN,
       defaultValue:
         SpotParam === "add"
           ? ""
@@ -446,14 +498,14 @@ function AddShopsSpot() {
   return (
     <>
       {loadingDisctrict ||
-      loadingCity ||
-      loadingShopList ||
-      // nie sprawdzone
-      loadingInsertImage ||
-      loadingGetShop ||
-      loadingUpdateShop ||
-      spotLoading ||
-      addSpotLoading ? (
+        loadingCity ||
+        loadingShopList ||
+        // nie sprawdzone
+        loadingInsertImage ||
+        loadingGetShop ||
+        loadingUpdateShop ||
+        spotLoading ||
+        addSpotLoading ? (
         <Loader />
       ) : (
         <div style={background}>
@@ -497,7 +549,7 @@ function AddShopsSpot() {
           </div>
           <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
           <form onSubmit={handleSubmit}>
-            <FormLayout col={TWO}>
+            <FormLayout col={THREE}>
               {inputs.map((input, index) => {
                 if (index === 0) {
                   return (
@@ -506,24 +558,11 @@ function AddShopsSpot() {
                 }
               })}
               {inputs.map((input, index) => {
-                if (index === 1 && radioValue === "0") {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-            </FormLayout>
-            <Divider backgroundColor="grey" />
-            <div style={{ fontWeight: 500 }}>
-              {t("ShopsSpot_title_address")}
-            </div>
-            <FormLayout col={THREE}>
-              {inputs.map((input, index) => {
-                if (index === 2 || index === 3) {
+                if (index === 1) {
                   return (
                     <SelectOption
-                      key={input.id}
-                      optionsList={districtList}
+                      key={kindSpots.id}
+                      optionsList={kindSpots}
                       label={input.label}
                       defaultValue={input.defaultValue}
                       emptyValueError={emptyValueError}
@@ -534,16 +573,51 @@ function AddShopsSpot() {
                     />
                   );
                 }
-                if (index === 4) {
+              })}
+              {inputs.map((input, index) => {
+                if (index === 2 && radioValue === "0") {
                   return (
                     <FormInput key={input.id} {...input} onChange={onChange} />
                   );
                 }
               })}
             </FormLayout>
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>
+              {t("ShopsSpot_title_address")}
+            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 4 || index === 3) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+                // if (index === 2 || index === 3) {
+                //   return (
+                //     <SelectOption
+                //       key={input.id}
+                //       optionsList={districtList}
+                //       label={input.label}
+                //       defaultValue={input.defaultValue}
+                //       emptyValueError={emptyValueError}
+                //       onChange={
+                //         index === 2 ? selectDistrictHandler : selectCityHandler
+                //       }
+                //       {...input}
+                //     />
+                //   );
+                // }
+                // if (index === 4) {
+                //   return (
+                //     <FormInput key={input.id} {...input} onChange={onChange} />
+                //   );
+                // }
+              })}
+            </FormLayout>
             <FormLayout col={THREE}>
               {inputs.map((input, index) => {
-                if (index === 5 || index === 6 || index === 7) {
+                if (index === 7 || index === 5 || index === 6) {
                   return (
                     <FormInput key={input.id} {...input} onChange={onChange} />
                   );
@@ -557,7 +631,7 @@ function AddShopsSpot() {
 
             <FormLayout col={TWO}>
               {inputs.map((input, index) => {
-                if (index === 8 || index === 9) {
+                if (index === 9 || index === 8) {
                   return (
                     <FormInput key={input.id} {...input} onChange={onChange} />
                   );
@@ -568,7 +642,7 @@ function AddShopsSpot() {
               <UploadImage nip={currentTaxNo} />
               {imageRender
                 ? editShopParam === "edit" &&
-                  shopDetails.photo !== null && <img src={shopDetails.photo} />
+                shopDetails.photo !== null && <img src={shopDetails.photo} />
                 : null}
             </div>
 

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import InfoComponent from "../component/infoComponent";
 import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
 import useResponsive from "../component/useResponsive";
@@ -34,7 +35,9 @@ import {
   GET_CONTACT_LIST_DELETE,
   GET_SOPTS_LIST_DELETE,
   SET_WINDOW_FLAG_DELETE,
-  SET_CITY_FLAG_DESC_TRUE
+  SET_FLAG_INFO_TRUE,
+  SET_FLAG_INFO_FALSE,
+  SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
@@ -67,6 +70,8 @@ function AddContact() {
   const [helper, setHelper] = useState("");
   const [objId, setObjId] = useState("");
 
+  const [objInfo, setObjInfo] = useState({});
+
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
   const [idSpot, setIdSpot] = useState();
@@ -81,6 +86,9 @@ function AddContact() {
   // data from redux
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact, loading, error } = contactListRedux;
+
+  const infoFlag12 = useSelector((state) => state.flag);
+  const { infoFlag } = infoFlag12;
 
   const contactActivRedux = useSelector((state) => state.unOrActiveDescription);
   const {
@@ -117,6 +125,8 @@ function AddContact() {
 
   const infoHandler = (i) => {
     console.log('Info--->>>', i)
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
   }
 
   const descriptionHandler = (i) => {
@@ -166,6 +176,10 @@ function AddContact() {
 
   const editSpotHandler = (id) => {
     navigate(`/dashboard/shops/spot/${shopId}/edit/${id}`);
+  };
+
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
   };
 
   const editHandler = (id) => {
@@ -696,11 +710,20 @@ function AddContact() {
         height: "auto",
         padding: "1rem",
       }}
+
     >
       {loading || activeLoading || shopListLoading || spotListLoading ? (
         <Loader />
       ) : (
         <>
+          {infoFlag ? (
+            <InfoComponent
+              title={t("InfoComponent_title_shop")}
+              obj={objInfo}
+              typeObj={SHOP_DESCRIPTION}
+              closeInfoHandler={closeInfoHandler}
+            />
+          ) : null}
           {showAlert && contactOrSpot && (
             <InfoAlertComponent
               confirmYes={confirmYes}

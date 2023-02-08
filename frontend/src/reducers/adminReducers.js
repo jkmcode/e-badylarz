@@ -251,7 +251,7 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
       return {
         loading: false,
         success: true,
-        successAdd: true,
+        successAdd: false,
         shopSpotList: action.payload,
       };
     case GET_SOPTS_LIST_FAIL:

@@ -858,7 +858,6 @@ def activeList(request):
 @permission_classes([IsAdminUser])
 def getFullDescriptionsDesc(request, Id, obj_type):
     
-    print('sprawdzam ---->',obj_type,'ID---->',Id)
     if obj_type=='DISTRICT':
         descrition = Descriptions.objects.filter(id_district = Id) 
         seriaziler = DistrictsDescSerializer(descrition, many=True)
