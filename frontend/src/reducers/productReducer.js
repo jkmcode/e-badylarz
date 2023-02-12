@@ -8,6 +8,10 @@ import {
   GET_PRODUCT_CAT_LIST_FAIL,
   GET_PRODUCT_CAT_LIST_DELETE,
   ADD_PRODUCT_CAT_DELETE_SUCCESS,
+  SORT_BY_LNG_REQUEST,
+  SORT_BY_LNG_SUCCESS,
+  SORT_BY_LNG_FAIL,
+  SORT_BY_LNG_DELETE,
 } from "../constants/productConstans";
 
 export const addProductReducer = (state = {}, action) => {
@@ -30,6 +34,38 @@ export const addProductReducer = (state = {}, action) => {
       };
     case ADD_PRODUCT_CAT_DELETE:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const sortedProductCatListReducer = (
+  state = { sortedProductCatList: [] },
+  action
+) => {
+  switch (action.type) {
+    case SORT_BY_LNG_REQUEST:
+      return {
+        loading: true,
+        success: false,
+        sortedProductCatList: [],
+      };
+    case SORT_BY_LNG_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        sortedProductCatList: action.payload,
+      };
+    case SORT_BY_LNG_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        sortedProductCatList: [],
+      };
+    case SORT_BY_LNG_DELETE:
+      return { productCatList: [] };
+
     default:
       return state;
   }

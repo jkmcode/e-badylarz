@@ -26,7 +26,7 @@ function AddProductCategories() {
   const newId = uuidv4();
 
   //Variables
-  const [selectedLgn, setSelectedLng] = useState(0);
+  const [selectedLgn, setSelectedLng] = useState("");
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [uniqueId, setUniqueId] = useState("");
   const [switcher, setSwitcher] = useState(false);
@@ -121,9 +121,9 @@ function AddProductCategories() {
       id: "1",
       name: "name",
       type: "text",
-      placeholder: t("AddDistrict_name_placeholder"),
-      errorMessage: t("AddDistrict_name_error_message"),
-      label: t("AddDistrict_label_name"),
+      placeholder: t("ProductCategories_name_placeholder"),
+      errorMessage: t("ProductCategories_name_error_message"),
+      label: t("ProductCategories_name_label"),
       pattern: "^[A-Za-z]{3,16}$",
       required: true,
     },

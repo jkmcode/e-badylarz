@@ -21,8 +21,6 @@ function AdminNavbarTop() {
   const [openDropDown, setOpenDropDown] = useState(true);
   const navLinksAdminPanel = useNavLinksAdminPanel();
 
-  console.log("navLinksAdminPanel", navLinksAdminPanel);
-
   /************************STYLE*****************************/
   const navContainer = {
     backgroundImage: `linear-gradient(90deg, rgba(248, 248, 248, 1) 6%, rgba(36, 37, 38, 1) 43%)`,

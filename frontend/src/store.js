@@ -8,6 +8,7 @@ import { uploadImageReducers } from "./reducers/imageActivityReducer";
 import {
   addProductReducer,
   productCatListReducer,
+  sortedProductCatListReducer,
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -72,6 +73,7 @@ const reducer = combineReducers({
   areaSpot: areaSpotReducer,
   addProduct: addProductReducer,
   productCatList: productCatListReducer,
+  sortedProductCatList: sortedProductCatListReducer,
   uploadImage: uploadImageReducers,
 });
 
