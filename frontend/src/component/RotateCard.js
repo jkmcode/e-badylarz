@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { unactiveBtn } from "../admin/AdminCSS";
-import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
-function RotateCard({ name, uniqueId, listOfButtons }) {
-  const { t } = useTranslation();
-
+function RotateCard({ name, objects, id }) {
   const [toggle, setToggle] = useState(false);
-  const [uniqueID, setuniqueID] = useState({});
-
-  console.log("listOfButtons", listOfButtons);
 
   //styling
 
@@ -66,19 +61,31 @@ function RotateCard({ name, uniqueId, listOfButtons }) {
             height="32"
           />
         </button>
-        {listOfButtons.map((button) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "1rem",
-              }}
-              key={button.id}
-            >
-              {button.button}
-            </div>
-          );
+        {objects.map((object) => {
+          if (object.id === id) {
+            return (
+              <div key={object.id}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "1rem",
+                  }}
+                >
+                  {object.buttonUnactive}
+                </div>
+                {/* <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "1rem",
+                  }}
+                >
+                  {object.buttonEdit}
+                </div> */}
+              </div>
+            );
+          }
         })}
       </div>
       <div style={frontStyles}>
@@ -116,3 +123,14 @@ function RotateCard({ name, uniqueId, listOfButtons }) {
 }
 
 export default RotateCard;
+
+RotateCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  objects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      buttonUnactive: PropTypes.element.isRequired,
+    })
+  ).isRequired,
+  id: PropTypes.number.isRequired,
+};

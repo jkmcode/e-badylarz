@@ -42,7 +42,7 @@ class Citis(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
     latitude = models.CharField(max_length=25, null=True, blank=True)
     longitude = models.CharField(max_length=25, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
+    country = models.CharField(max_length=2, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -141,7 +141,7 @@ class AreaContactARC(models.Model):
     id_contact = models.IntegerField()
     archiver = models.CharField(max_length=20, null=True, blank=True)
 
-#Shops spot - miejsce sprzedaży, wydania towaru
+#Areas spot - miejsce prowadzenia kurierki
 class AreasSpot(models.Model):
     id_area = models.ForeignKey(Areas, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
@@ -162,7 +162,7 @@ class AreasSpot(models.Model):
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50)
 
-#Shops spot ARC
+#Areas spot ARC
 class AreasSpotARC(models.Model):
     id_area = models.IntegerField()
     id_spot = models.IntegerField()
@@ -251,7 +251,7 @@ class ShopsDescriptions(models.Model):
 class ShopsSpot(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
-    city = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
+    city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)
     post_code = models.CharField(max_length=20)
@@ -267,13 +267,14 @@ class ShopsSpot(models.Model):
     delivery = models.BooleanField(null=True,blank=True)
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50)
+    kind = models.CharField(max_length=5, null=True, blank=True)
 
 #Shops spot ARC
 class ShopsSpotARC(models.Model):
     id_shops = models.IntegerField()
     id_spot = models.IntegerField()
     name = models.CharField(max_length=50)
-    city = models.IntegerField()
+    city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)
     post_code = models.CharField(max_length=20)
@@ -291,6 +292,7 @@ class ShopsSpotARC(models.Model):
     type_of_change = models.CharField(max_length=50)
     date_of_archiv = models.DateTimeField(auto_now_add=True, null=True,blank=True)
     archiver = models.CharField(max_length=5, null=True, blank=True)
+    kind = models.CharField(max_length=5, null=True, blank=True)
 
 #Shops Spot description
 class ShopsSpotDescriptions(models.Model):
@@ -338,7 +340,7 @@ class ShopsContactARC(models.Model):
 
 ## ------------  PRODUCT  ------------ ##
 
-# Product type
+# Product type - pierwszy pozion kategorii
 class ProductTypes(models.Model):
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
@@ -364,11 +366,10 @@ class ProductTypesDescriptions(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
 
-# Product Species
+# Product Species - drugi pozion kategorii
 class ProductSpecies(models.Model):
     id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
@@ -389,12 +390,9 @@ class ProductSpeciesDescriptions(models.Model):
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
-####
-# Product Genera
-class ProductGenera(models.Model):
+class Product(models.Model):
     id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
@@ -405,9 +403,9 @@ class ProductGenera(models.Model):
     def __str__(self):
          return self.name
 
-#Product Genera description
-class ProductGeneraDescriptions(models.Model):
-    id_product_genera = models.ForeignKey(ProductGenera, on_delete=models.CASCADE, null=True)
+# Product description
+class ProductDescriptions(models.Model):
+    id_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
@@ -415,8 +413,9 @@ class ProductGeneraDescriptions(models.Model):
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
+
 ## ------------END  PRODUCT  ------------ ##  
-0
+
 # To change
 class Place_of_pickups(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)

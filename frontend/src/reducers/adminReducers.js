@@ -83,6 +83,7 @@ import {
   DELETE_IMAGE_REDUX,
   ADD_IMAGE_REQUEST,
   ADD_IMAGE_SUCCESS,
+  ADD_IMAGE_DELETE,
   ADD_IMAGE_FAIL,
   SET_FLAG_IMAGE_TRUE,
   SET_FLAG_IMAGE_FALSE,
@@ -123,6 +124,11 @@ export const insertImageReducer = (state = {}, action) => {
         successInsertImage: false,
         error: action.payload,
       };
+    case ADD_IMAGE_DELETE:
+      return {
+        loadingInsertImage: false,
+        successInsertImage: false,
+      }
     default:
       return state;
   }

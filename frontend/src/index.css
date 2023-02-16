@@ -872,3 +872,61 @@ input:invalid {
 .card:hover .card-side.back {
   transform: rotateY(0deg);
 }
+
+/* btn Hover Effect */
+
+.btn-effect {
+  position: relative;
+  display: flex;
+  margin-top: 1rem;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: 550;
+  color: white;
+  border: none;
+  background-color: #ffdc60;
+  padding: 0 50px;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  text-transform: uppercase;
+  height: 60px;
+  line-height: 60px;
+}
+
+.btn-effect::after,
+.btn-effect::before {
+  position: absolute;
+  width: 0;
+  content: "";
+  color: black;
+  background-color: #57c9da;
+  height: 50%;
+  transition: 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  -webkit-transition: 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  z-index: -1;
+}
+
+.btn-effect:hover::before {
+  width: 100%;
+  right: 0;
+  left: auto;
+}
+
+.btn-effect::before {
+  top: 0;
+  left: 0;
+  right: auto;
+}
+
+.btn-effect:hover::after {
+  width: 100%;
+  left: 0;
+  right: auto;
+}
+
+.btn-effect::after {
+  bottom: 0;
+  right: 0;
+  left: auto;
+}

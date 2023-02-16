@@ -6,7 +6,7 @@ import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
 import useResponsive from "../component/useResponsive";
 import Divider from "./Divider";
-import ImageDisplayer from "./ImageDisplayer";
+import ImageDisplayer from "../component/ImageDisplayerComponent";
 import { FormLayout, changeBtn, addBtn, returnBtn } from "./AdminCSS";
 import { Icon } from "@iconify/react";
 import {
@@ -27,6 +27,7 @@ import {
   THREE,
   ADD_SHOP_DELETE_SUCCESS,
   EDIT_SHOP_DELETE,
+  ADD_IMAGE_DELETE,
 } from "../constants/adminConstans";
 
 import {
@@ -34,6 +35,18 @@ import {
   TIME_AUT_SUCCESS,
   EDIT,
 } from "../constants/environmentConstans";
+
+import {
+  LONGITUDE_PATTERN,
+  LATITUDE_PATTERN,
+  NIP_PATTERN,
+  PL_BANKACCOUNT_PATTERN,
+  POST_NAME_PATTERN,
+  POST_FORMAT,
+  NAME_PATTERN,
+  LONG_NAME_PATTERN,
+  NO_BUILDING_PATTERN
+} from "../constants/formValueConstans"
 
 function AddShops() {
   const { windowWidth } = useResponsive();
@@ -95,7 +108,7 @@ function AddShops() {
   // Handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCurrentTaxNo(shopDetails.nip);
+    !values.nip ? setCurrentTaxNo(shopDetails.nip) : setCurrentTaxNo(values.nip);
     if (addShopParam) {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch(
@@ -168,18 +181,29 @@ function AddShops() {
           InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
         );
       }
+      else {
+        setTimeout(() => {
+          dispatch({ type: ADD_SHOP_DELETE_SUCCESS });
+          dispatch({ type: EDIT_SHOP_DELETE });
+          dispatch({ type: GET_SHOPS_LIST_DELETE });
+          navigate("/dashboard/shops");
+        }, TIME_AUT_SUCCESS);
+      }
     }
-  }, [successAdd, isImage, successUpdateShop, imageUpload]);
+  }, [successAdd, isImage, successUpdateShop, imageUpload,]);
 
-  // navigate to ShopAdmin
+  // navigate to adminShop when changing photo 
   useEffect(() => {
-    if (successAdd || successUpdateShop) {
-      dispatch({ type: ADD_SHOP_DELETE_SUCCESS });
-      dispatch({ type: EDIT_SHOP_DELETE });
-      dispatch({ type: GET_SHOPS_LIST_DELETE });
-      navigate("/dashboard/shops");
+    if (successInsertImage) {
+      setTimeout(() => {
+        dispatch({ type: ADD_SHOP_DELETE_SUCCESS });
+        dispatch({ type: EDIT_SHOP_DELETE });
+        dispatch({ type: GET_SHOPS_LIST_DELETE });
+        dispatch({ type: ADD_IMAGE_DELETE });
+        navigate("/dashboard/shops");
+      }, TIME_AUT_SUCCESS);
     }
-  }, [successAdd, successUpdateShop]);
+  }, [successInsertImage]);
 
   //style
 
@@ -210,7 +234,7 @@ function AddShops() {
       placeholder: t("AddShops_name_placeholder"),
       errorMessage: t("AddShops_shop_name_error_message"),
       label: t("AddShops_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,16}$",
+      pattern: NAME_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.name,
       required: true,
@@ -222,7 +246,7 @@ function AddShops() {
       placeholder: t("AddShops_nip_placeholder"),
       errorMessage: t("AddShops_nip_error_message"),
       label: t("AddShops_label_nip"),
-      pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+      pattern: NIP_PATTERN,
       //pattern: t("Pattern_nip"),
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.nip,
@@ -236,7 +260,7 @@ function AddShops() {
       placeholder: t("AddShops_city_placeholder"),
       errorMessage: t("AddShops_city_error_message"),
       label: t("AddShops_label_city"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,16}$",
+      pattern: NAME_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.city,
       required: true,
@@ -248,7 +272,7 @@ function AddShops() {
       placeholder: t("AddShops_street_placeholder"),
       errorMessage: t("AddShops_street_error_message"),
       label: t("AddShops_label_street"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
+      pattern: LONG_NAME_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.street,
       required: true,
@@ -260,7 +284,7 @@ function AddShops() {
       placeholder: t("AddShops_number_placeholder"),
       errorMessage: t("AddShops_number_error_message"),
       label: t("AddShops_label_number"),
-      pattern: "^[0-9A-Z]+(-[0-9]+)?(/[0-9]+(-[0-9]+)?)*$",
+      pattern: NO_BUILDING_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.no_building,
       required: true,
@@ -272,7 +296,7 @@ function AddShops() {
       placeholder: t("AddShops_postCode_placeholder"),
       errorMessage: t("AddShops_postCode_error_message"),
       label: t("AddShops_label_postCode"),
-      pattern: "^[0-9]{2}-[0-9]{3}$",
+      pattern: POST_FORMAT,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.post_code,
       required: true,
@@ -284,7 +308,7 @@ function AddShops() {
       placeholder: t("AddShops_post_placeholder"),
       errorMessage: t("AddShops_post_error_message"),
       label: t("AddShops_label_post"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
+      pattern: POST_NAME_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.post,
       required: true,
@@ -296,8 +320,7 @@ function AddShops() {
       placeholder: t("AddShops_bankAccound_placeholder"),
       errorMessage: t("AddShops_bankAccound_error_message"),
       label: t("AddShops_label_bankAccound"),
-      pattern:
-        "^PL[0-9]{2} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$",
+      pattern: PL_BANKACCOUNT_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.bank_account,
       required: true,
@@ -309,7 +332,7 @@ function AddShops() {
       placeholder: t("AddShops_latitude_placeholder"),
       errorMessage: t("AddDistrict_latitude_error_message"),
       label: t("AddDistrict_label_latitude"),
-      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      pattern: LATITUDE_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.latitude,
       required: true,
@@ -321,7 +344,7 @@ function AddShops() {
       placeholder: t("AddShops_longitude_placeholder"),
       errorMessage: t("AddDistrict_longitude_error_message"),
       label: t("AddDistrict_label_longitude"),
-      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      pattern: LONGITUDE_PATTERN,
       defaultValue:
         successGetShop && editShopParam === "edit" && shopDetails.longitude,
       required: true,
@@ -427,12 +450,13 @@ function AddShops() {
                 }
               })}
             </FormLayout>
-            <UploadImage />
+
             {imageRender &&
               editShopParam === "edit" &&
               shopDetails.photo !== null && (
                 <ImageDisplayer imageSrc={shopDetails.photo} />
               )}
+            <UploadImage />
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {editShopParam === "edit" ? (
                 <button type="submit" style={changeBtn}>

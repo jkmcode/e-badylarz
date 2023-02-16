@@ -40,6 +40,12 @@ import {
   SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 
+import {
+  FIRST_NAME_PATTERN,
+  EMAIL_PATTERN,
+  PHONE_PATTERN,
+} from "../constants/formValueConstans"
+
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
 
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
@@ -56,7 +62,7 @@ function AddContact() {
   const shopId = Number(params.id);
 
   const tableRef = useRef(null);
-  const btnMinWidth = 70;
+  const btnMinWidth = 100;
 
   const [newContact, setNewContact] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -128,12 +134,13 @@ function AddContact() {
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
   }
+  // };
 
   const descriptionHandler = (i) => {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(i.name);
     setObjId(i.id);
-    console.log('Opis--->>>', i)
+    console.log("Opis--->>>", i);
   };
 
   const unActiveHandler = (id) => {
@@ -326,7 +333,6 @@ function AddContact() {
 
   const contactContainer = {
     ...mainContainer,
-    height: "700px",
   };
 
   const listContainer = {
@@ -417,7 +423,7 @@ function AddContact() {
       placeholder: t("AddContact_name_placeholder"),
       errorMessage: t("AddContact_name_error_message"),
       label: t("AddContact_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      pattern: FIRST_NAME_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.name,
       required: true,
@@ -429,7 +435,7 @@ function AddContact() {
       placeholder: t("AddContact_surname_placeholder"),
       errorMessage: t("AddContact_surname_error_message"),
       label: t("AddContact_label_surname"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      pattern: FIRST_NAME_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.surname,
       required: true,
@@ -441,8 +447,7 @@ function AddContact() {
       placeholder: t("AddContact_email_placeholder"),
       errorMessage: t("AddContact_email_error_message"),
       label: t("AddContact_label_email"),
-      pattern:
-        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+[.][a-zA-Z]{2,3}",
+      pattern: EMAIL_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.email,
       required: true,
@@ -454,7 +459,7 @@ function AddContact() {
       placeholder: t("AddContact_phone_placeholder"),
       errorMessage: t("AddContact_phone_error_message"),
       label: t("AddContact_label_phone"),
-      pattern: "^(?:(\\+\\d{2})\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$",
+      pattern: PHONE_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.phone,
       required: true,
@@ -517,7 +522,8 @@ function AddContact() {
     textTransform: "uppercase",
     border: "none",
     padding: "0.4rem",
-    minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
+    //minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
+    minWidth: "100px",
   };
   const btnDescription = {
     ...shopsBtn,
@@ -587,7 +593,7 @@ function AddContact() {
   const dataSpotsTable = currentStatusSpotList.map((item) => ({
     id: item.id,
     name: item.name,
-    adress: `${item.city.name}, ${item.street} ${item.no_building}`,
+    adress: `${item.city}, ${item.street} ${item.no_building}`,
     status: activeSpot ? (
       <span style={activeBadge}>{t("status_active")}</span>
     ) : (
@@ -636,7 +642,7 @@ function AddContact() {
   const tableConatctcolumns = [
     {
       key: "name",
-      label: t("AddContact_name"),
+      label: t("AddContact_name&surname"),
       styleTableCell: tableCell,
       styleHeader: styleHeader,
     },
@@ -674,7 +680,7 @@ function AddContact() {
 
   const dataContactTable = currentStatusContactList.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: item.name + " " + item.surname,
     phone: item.phone,
     email: item.email,
     status: activeContact ? (
@@ -696,7 +702,8 @@ function AddContact() {
         {t("btn_edit")}
       </button>
     ),
-  }));
+  })
+  )
 
   /*****************************************************/
 
@@ -779,21 +786,31 @@ function AddContact() {
                       return (
                         <div key={shop.id}>
                           <Divider backgroundColor="grey" />
-                          <button
-                            style={btnDescription}
-                            onClick={() => descriptionHandler(shop)}
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
                           >
-                            {t("btn_description")}
-                          </button>
-                          <button style={btnInfo} onClick={() => infoHandler(shop)}>
-                            {t("btn_info")}
-                          </button>
+                            <button
+                              style={btnDescription}
+                              onClick={() => descriptionHandler(shop)}
+                            >
+                              {t("btn_description")}
+                            </button>
+                            <button
+                              style={btnInfo}
+                              onClick={() => infoHandler(shop)}
+                            >
+                              {t("btn_info")}
+                            </button>
+                          </div>
+
                           {helper === shop.name && cityDescFlag && (
                             <div
                               style={{
                                 display: "flex",
                                 justifyContent: "center",
-                                // width: `calc(0.00001% + ${tableRef.current.offsetWidth}px)`,
                               }}
                             >
                               <div
@@ -813,12 +830,13 @@ function AddContact() {
                             </div>
                           )}
 
-
                           <Divider backgroundColor="grey" />
                           <div style={subtitle}>
                             {t("AdminShops_status")}:
                             <div style={mainDataSection}>
-                              {shop.is_active ? t("status_active") : t("status_inactive")}
+                              {shop.is_active
+                                ? t("status_active")
+                                : t("status_inactive")}
                             </div>
                           </div>
                           <div style={subtitle}>
@@ -855,7 +873,6 @@ function AddContact() {
                               justifyContent: "center",
                             }}
                           >
-
                             <button
                               style={changeBtn}
                               onClick={() => editShopHandler()}

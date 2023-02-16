@@ -27,6 +27,7 @@ import {
   SET_FLAG_IMAGE_TRUE,
   GET_SHOPS_LIST_DELETE,
   ADD_SHOP_SPOT_DELETE,
+  ADD_IMAGE_DELETE,
 } from "../constants/adminConstans";
 
 import {
@@ -48,6 +49,9 @@ import {
 
 import { Icon } from "@iconify/react";
 
+
+import { useKindShopSpots } from "../Data/KindShop";
+
 function AddShopsSpot() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -57,10 +61,10 @@ function AddShopsSpot() {
 
   const [uploading, setUploading] = useState(false);
   const [imageRender, setImageRender] = useState(false);
-  const [currentTaxNo, setCurrentTaxNo] = useState("");
+  const [currentSpotName, setCurrentSpotName] = useState("");
   const [showShop, setShowShop] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState(0);
-  const [selectedCity, setSelectedCity] = useState(0);
+  const [selectedKindSpot, setSelectedKindSpot] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
   const [values, setValues] = useState({
@@ -110,6 +114,7 @@ function AddShopsSpot() {
     successAdd: successAddSpot,
     loading: addSpotLoading,
     error: addSpotError,
+    shopSpotList,
   } = addSpotRedux;
 
   const imageRedux = useSelector((state) => state.saveImage);
@@ -169,14 +174,14 @@ function AddShopsSpot() {
     setValues({ ...values, [name]: value });
   };
 
-  const selectDistrictHandler = (option) => {
-    setSelectedDistrict(Number(option));
-    setEmptyValueError(false);
-  };
+  // const selectDistrictHandler = (option) => {
+  //   setSelectedDistrict(Number(option));
+  //   setEmptyValueError(false);
+  // };
 
-  const selectCityHandler = (option) => {
-    setSelectedCity(Number(option));
-    setValues({ ...values, cityList: option });
+  const selectKindHandler = (option) => {
+    setSelectedKindSpot(Number(option));
+    setValues({ ...values, kindSpot: option });
     setEmptyValueError(false);
   };
 
@@ -191,29 +196,32 @@ function AddShopsSpot() {
     console.log("event", event)
     console.log("values", values)
 
-    // if (SpotParam === "add") {
-    //   if (selectedDistrict !== 0 && selectedCity !== 0) {
-    //     const insertData = {
-    //       add: true,
-    //       id_shops: shopId,
-    //       name: values.spotName,
-    //       city: values.cityList,
-    //       street: values.street,
-    //       no_building: values.number,
-    //       postCode: values.postCode,
-    //       post: values.post,
-    //       latitude: values.latitude,
-    //       longitude: values.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: radioValue === "1" ? "False" : "True",
-    //       range: radioValue === "1" ? "0" : values.range,
-    //     };
-    //     dispatch(addShopSpot(insertData));
-    //   } else {
-    //     setEmptyValueError(true);
-    //   }
-    // } else {
+    if (SpotParam === "add") {
+      if (selectedKindSpot !== 0) {
+        setCurrentSpotName(values.spotName)
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: values.spotName,
+          city: values.cityName,
+          street: values.street,
+          no_building: values.number,
+          postCode: values.postCode,
+          post: values.post,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: radioValue === "1" ? "False" : "True",
+          range: radioValue === "1" ? "0" : values.range,
+          kind: values.kindSpot
+        };
+        dispatch(addShopSpot(insertData));
+      } else {
+        setEmptyValueError(true);
+      }
+    }
+    // else {
     //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
     //   dispatch({ type: GET_SHOPS_LIST_DELETE });
     //   if (radioValue === "1") {
@@ -243,7 +251,7 @@ function AddShopsSpot() {
 
   ///USEEFFECT
 
-  // uruchamiane na samym początku
+  // uruchamiane na samym początku, chyba niepotrzebne !!!!!!!!!!!!!!
   useEffect(() => {
     if (districtList.length === 0) {
       dispatch(getFullDiscricts("only active"));
@@ -280,28 +288,36 @@ function AddShopsSpot() {
     }
   }, []);
 
-  // set current Tax Number
+  // console.log('shopSpotList--->>>>>', shopSpotList)
+  // console.log('currentSpotName--->>>>>', currentSpotName)
+
+  // add/edit photo
   useEffect(() => {
-    if (successAdd) {
-      shopList.map((value) => {
-        if (value.nip === currentTaxNo) {
+    if (successAddSpot) {
+      shopSpotList.map((value) => {
+        if (value.name === currentSpotName) {
           if (isImage) {
             dispatch(
-              InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+              InsertImage({ imageUpload: imageUpload, Id: value.id, objType: "Spot" })
             );
+          } else {
+            dispatch({ type: ADD_SHOP_SPOT_DELETE });
+            navigate(`/dashboard/shops/${shopId}/contact`);
           }
         }
       });
     }
-  }, [successAdd]);
+  }, [dispatch, successAddSpot]);
 
-  // navigate to ShopAdmin
+  // navigate to ShopAdmin when image is seved
   useEffect(() => {
-    if (successAddSpot) {
+    if (successInsertImage) {
       dispatch({ type: ADD_SHOP_SPOT_DELETE });
+      dispatch({ type: DELETE_IMAGE_REDUX });
+      dispatch({ type: ADD_IMAGE_DELETE })
       navigate(`/dashboard/shops/${shopId}/contact`);
     }
-  }, [dispatch, successAddSpot]);
+  }, [dispatch, successInsertImage]);
 
   //style
   const background = {
@@ -317,28 +333,8 @@ function AddShopsSpot() {
   };
 
   //List of kind Spots
-  const kindSpots = [
-    {
-      id: "1",
-      name: t("ShopsSpot_kind_shop")
-    },
-    {
-      id: "2",
-      name: t("ShopsSpot_kind_farmer")
-    },
-    {
-      id: "3",
-      name: t("ShopsSpot_kind_manufacturer")
-    },
-    {
-      id: "4",
-      name: t("ShopsSpot_kind_wholesaler")
-    },
-    {
-      id: "5",
-      name: t("ShopsSpot_kind_agent")
-    }
-  ]
+  const kindSpots = useKindShopSpots()
+
 
   //List of inputs
   const inputs = [
@@ -366,8 +362,8 @@ function AddShopsSpot() {
           ? t("ShopsSpot_select_placeholder")
           : successGetSpot &&
           SpotParam === "edit" &&
-          spotDetails.city.id_district.name,
-      disabled: SpotParam === "edit" ? true : false,
+          kindSpots.filter((i) => spotDetails.kind === i.id).name,
+      disabled: SpotParam === "edit" ? false : false,
     },
     {
       id: "3",
@@ -566,8 +562,8 @@ function AddShopsSpot() {
                       label={input.label}
                       defaultValue={input.defaultValue}
                       emptyValueError={emptyValueError}
-                      onChange={
-                        index === 2 ? selectDistrictHandler : selectCityHandler
+                      onChange={selectKindHandler
+                        // index === 2 ? selectDistrictHandler : selectKindHandler
                       }
                       {...input}
                     />
@@ -639,11 +635,13 @@ function AddShopsSpot() {
               })}
             </FormLayout>
             <div>
-              <UploadImage nip={currentTaxNo} />
+              {/* <UploadImage nip={currentTaxNo} /> */}
+
               {imageRender
-                ? editShopParam === "edit" &&
+                ? SpotParam === "edit" &&
                 shopDetails.photo !== null && <img src={shopDetails.photo} />
                 : null}
+              <UploadImage />
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>

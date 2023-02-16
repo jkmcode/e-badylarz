@@ -101,24 +101,11 @@ class CitiesNameSerializer(serializers.ModelSerializer):
         fields = ["name", "id_district"]
 
 class ShopSpotsSerializer(serializers.ModelSerializer):
-    city = CitiesNameSerializer(many=False)
+    # city = CitiesNameSerializer(many=False)
 
     class Meta:
         model = ShopsSpot
-        fields = [
-            "name", 
-            "street",
-            "no_building",
-            "city",
-            "id",
-            "is_active",
-            "post_code",
-            "post",
-            "latitude",
-            "longitude",
-            "photo",
-            "delivery",
-            "range"]
+        fields = '__all__' 
 
 
 class AreaSpotsSerializer(serializers.ModelSerializer):

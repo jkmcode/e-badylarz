@@ -13,3 +13,8 @@ export const LONG_NAME_PATTERN = "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ -
 export const NUMBERS_PATTERN = /^[0-9]$/;
 export const POST_NAME_PATTERN = "^[A-Za-ząćĆśŚęłŁńóżŻźŹ -.0-9]{3,30}$";
 export const NO_BUILDING_PATTERN = "^(?!/|-|,)[0-9A-Za-z/,-]+(?<!/|,|-)$";
+export const PL_BANKACCOUNT_PATTERN = "^PL[0-9]{2} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$";
+export const NIP_PATTERN = "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$";
+export const FIRST_NAME_PATTERN = "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,20}$";
+export const EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+[.][a-zA-Z]{2,3}";
+export const PHONE_PATTERN = "^(?:(\\+\\d{2})\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$";

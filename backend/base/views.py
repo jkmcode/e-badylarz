@@ -124,12 +124,15 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def uploadMultiImages(request):
 
     data = request.data
+    objType = data['objType']
     taxNo = data["taxNo"]
+    if objType == 'Spot':
+        active_object = ShopsSpot.objects.get(id=data['Id'])
+    else:
+        active_object = Shops.objects.get(nip=taxNo)
 
-    shop = Shops.objects.get(nip=taxNo)
-
-    shop.photo = request.FILES.get('image')
-    shop.save()
+    active_object.photo = request.FILES.get('image')
+    active_object.save()
 
     return Response("Image was uploaded")
 
@@ -491,15 +494,13 @@ def getShops(request):
 def addShopSpot(request):
     data = request.data
 
-    cit_obj = Citis.objects.get(id=data['city'])
-
     if data['add']:
         shop = Shops.objects.get(id=data['id_shops'])
 
         spot=ShopsSpot.objects.create(
             id_shops=shop,
             name=data['name'],
-            city=cit_obj,
+            city=data['city'],
             street=data['street'],
             no_building=data['no_building'],
             post_code=data['postCode'],
@@ -509,7 +510,8 @@ def addShopSpot(request):
             creator=data['creator'],
             is_active=data['is_active'],
             delivery=data['delivery'],
-            range=data['range']
+            range=data['range'],
+            kind=data['kind']
         )
     else:
         spot = ShopsSpot.objects.get(id=data['id_spot'])
@@ -535,11 +537,12 @@ def addShopSpot(request):
         delivery = spot.delivery,
         range = spot.range,
         type_of_change = spot.type_of_change,
+        kind=spot.kind,
         archiver = data['creator']
         )
         # change data
         spot.name = data['name']
-        spot.city=cit_obj,
+        spot.city=data['city'],
         spot.street = data['street']
         spot.no_building = data['no_building']
         spot.post_code = data['postCode']
@@ -551,6 +554,7 @@ def addShopSpot(request):
         spot.delivery = data['delivery']
         spot.range = data['range']
         spot.type_of_change = 'Edit - change data'
+        spot.kind = data['kind']
 
         spot.save()
 
@@ -764,6 +768,8 @@ def addCiti(request):
 def activeList(request):
     data=request.data
 
+    print('działa views ----- activeList', data['objType'])
+
     if data['objType']=='DISTRICT':
         descrip = Districts.objects.get(id=data['Id'])
     elif data['objType']=='CITY':
@@ -834,10 +840,10 @@ def activeList(request):
         )
     elif data['objType'] == "AREA_CONTACT":
         descrip = AreaContact.objects.get(id=data['Id'])
-
     elif data['objType'] == "AREA_SPOT":
         descrip = AreasSpot.objects.get(id=data['Id'])
-
+    elif data['objType'] == "PRODUCT_CAT":
+        descrip = ProductTypes.objects.get(id=data["Id"])
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 

@@ -5,13 +5,24 @@ import { title, addProdCatBtn } from "./AdminCSS";
 import RadioButtons from "./RadioButtons";
 import DotsLoader from "../component/DotsLoader";
 import RotateCard from "../component/RotateCard";
+import InfoAlertComponent from "../component/InfoAlertComponent";
+import { unOrActiveList } from "../actions/adminActions";
 import { Link } from "react-router-dom";
 import { getProductCat } from "../actions/productActions";
 import { ONE, ZERO } from "../constants/environmentConstans";
-import { SET_FLAG_ADD_FALSE } from "../constants/adminConstans";
+import {
+  SET_FLAG_ADD_FALSE,
+  PRODUCT_CAT_DESCRIPTION,
+  UNACTIVE,
+} from "../constants/adminConstans";
 import { ADD_PRODUCT_CAT_DELETE } from "../constants/productConstans";
 import { Icon } from "@iconify/react";
-import { emptylistTitle, emptyListIcon, unactiveBtn } from "./AdminCSS";
+import {
+  emptylistTitle,
+  emptyListIcon,
+  unactiveBtn,
+  editBtn,
+} from "./AdminCSS";
 
 function ProductCategories() {
   const { t } = useTranslation();
@@ -24,6 +35,10 @@ function ProductCategories() {
 
   //variables
   const [radioValue, setRadioValue] = useState(ONE);
+  const [catObj, setCatObj] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState("");
 
   //RadioButtons functions
   const handleBtnValue = (e) => {
@@ -31,6 +46,9 @@ function ProductCategories() {
   };
 
   // data from redux
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const productCatListRedux = useSelector((state) => state.productCatList);
   const {
     loading: loadingProductCat,
@@ -71,21 +89,44 @@ function ProductCategories() {
 
   // List/Frontend data
 
-  const unActiveHandler = () => {
-    console.log("działa unActiveHandler");
-    //setuniqueID(uniqueId);
+  const unActiveHandler = (id) => {
+    setCatObj(id);
+    setShowAlert(true);
+    setUpdateStatus(UNACTIVE);
+    // dispatch(
+    //   unOrActiveList({
+    //     Id: discObj,
+    //     active: false,
+    //     userId: userInfo.id,
+    //     objType: PRODUCT_CAT_DESCRIPTION,
+    //     kind: "",
+    //   })
+    // );
   };
 
-  const listOfButtons = [
-    {
-      id: "1",
-      button: (
-        <button onClick={() => unActiveHandler()} style={unactiveBtn}>
-          {t("btn_unactive")}
-        </button>
-      ),
-    },
-  ];
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
+  };
+
+  const objects = productCatList.map((cat) => ({
+    id: cat.id,
+    buttonUnactive: (
+      <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
+        {t("btn_unactive")}
+      </button>
+    ),
+    // buttonEdit: (
+    //   <button onClick={() => unActiveHandler(cat.id)} style={editBtn}>
+    //     {t("btn_edit")}
+    //   </button>
+    // ),
+  }));
 
   function StatusProductCatCard({ active }) {
     let currentProductCatList = [];
@@ -130,8 +171,8 @@ function ProductCategories() {
                 <RotateCard
                   key={category.id}
                   name={category.name}
-                  uniqueId={category.uniqueId}
-                  listOfButtons={listOfButtons}
+                  id={category.id}
+                  objects={objects}
                 />
               );
             }
@@ -145,7 +186,7 @@ function ProductCategories() {
                   key={category.id}
                   name={category.name}
                   id={category.id}
-                  listOfButtons={listOfButtons}
+                  objects={objects}
                 />
               );
             }
@@ -167,6 +208,20 @@ function ProductCategories() {
     );
   }
 
+  useEffect(() => {
+    if (confirm && updateStatus === UNACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: catObj,
+          active: false,
+          userId: userInfo.id,
+          objType: PRODUCT_CAT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+  }, [confirm, dispatch, updateStatus]);
+
   return (
     <div
       style={{
@@ -178,6 +233,13 @@ function ProductCategories() {
       }}
     >
       <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+      {showAlert && updateStatus === UNACTIVE && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={t("Confirmation_alert_unactive_product_category")}
+        />
+      )}
 
       <div style={title}>{t("ProductCategories_title")}</div>
       {loadingProductCat ? (
