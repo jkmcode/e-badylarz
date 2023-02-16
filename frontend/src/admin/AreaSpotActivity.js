@@ -228,7 +228,7 @@ function AreaSpotActivity() {
       placeholder: t("ShopsSpot_range_placeholder"),
       errorMessage: t("ShopsSpot_range_error_message"),
       label: t("ShopsSpot_label_range"),
-      pattern: "^[0-9]$",
+      pattern: "^\\d+$",
       defaultValue:
         areaParam === "add"
           ? ""

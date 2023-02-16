@@ -1019,7 +1019,16 @@ def addDiscrict(request):
         seriaziler = DistrictsSerializer(newdistrict, many=True)
         return Response(seriaziler.data)
 
-# PRODUCT       
+# PRODUCT      
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def sortByLng(request):
+    data = request.data
+    sortedProductCat = ProductTypes.objects.filter(language=data['language']).order_by('name')
+    seriaziler = ProductTypeSerializer(sortedProductCat, many=True)
+    return Response(seriaziler.data)
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def addProductCat(request):
@@ -1052,3 +1061,5 @@ def getProductCategories(request):
 
     seriaziler = ProductTypeSerializer(productCat, many=True)
     return Response(seriaziler.data)        
+
+   

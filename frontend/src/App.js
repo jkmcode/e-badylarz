@@ -38,6 +38,7 @@ import AreaSpotActivity from "./admin/AreaSpotActivity";
 import CityDescription from "./admin/CityDescription";
 import ProductCategories from "./admin/ProductCategories";
 import AddProductCategories from "./admin/AddProductCategories";
+import Products from "./admin/Products";
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -66,6 +67,7 @@ function App() {
           <Route path="shop-details" element={<ShopScreen />} />
           {/* <Route path="*" element={<NotFoundScreen />} /> */}
         </Route>
+
         <Route path="dashboard" element={<ShareLayoutsAdmin />}>
           <Route index element={<AdminScreenDistrict />} />
           <Route path="district" element={<AdminScreenDistrict />} />
@@ -97,6 +99,7 @@ function App() {
             path="product-categories/add"
             element={<AddProductCategories />}
           />
+          <Route path="products" element={<Products />} />
         </Route>
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>

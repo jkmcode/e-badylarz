@@ -45,6 +45,11 @@ export const unactiveBtn = {
   backgroundImage: `linear-gradient(171deg, rgba(234, 17, 59, 1) 45%, rgba(202, 71, 130, 1) 89%)`,
 };
 
+export const activeBtn = {
+  ...btn,
+  backgroundImage: `linear-gradient(173deg, rgba(56, 168, 48, 1) 0%, rgba(69, 141, 43, 1) 100%)`,
+};
+
 export const addProdCatBtn = {
   ...btn,
   backgroundImage: `linear-gradient(137deg, rgba(110, 170, 102, 1) 0%, rgba(59, 100, 73, 1) 100%)`,

@@ -6,22 +6,29 @@ import RadioButtons from "./RadioButtons";
 import DotsLoader from "../component/DotsLoader";
 import RotateCard from "../component/RotateCard";
 import InfoAlertComponent from "../component/InfoAlertComponent";
+import SelectOption from "./SelectOption";
+import language from "../language";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link } from "react-router-dom";
-import { getProductCat } from "../actions/productActions";
-import { ONE, ZERO } from "../constants/environmentConstans";
+import { getProductCat, sortByLng } from "../actions/productActions";
+import { ONE, ZERO, EMPTY } from "../constants/environmentConstans";
 import {
   SET_FLAG_ADD_FALSE,
   PRODUCT_CAT_DESCRIPTION,
   UNACTIVE,
+  ACTIVE,
+  ACTIVE_DESCRIPTION_DELETE,
 } from "../constants/adminConstans";
-import { ADD_PRODUCT_CAT_DELETE } from "../constants/productConstans";
+import {
+  ADD_PRODUCT_CAT_DELETE,
+  GET_PRODUCT_CAT_LIST_DELETE,
+} from "../constants/productConstans";
 import { Icon } from "@iconify/react";
 import {
   emptylistTitle,
   emptyListIcon,
   unactiveBtn,
-  editBtn,
+  activeBtn,
 } from "./AdminCSS";
 
 function ProductCategories() {
@@ -58,11 +65,26 @@ function ProductCategories() {
     successAdd,
   } = productCatListRedux;
 
+  const sortetProductCatListRedux = useSelector(
+    (state) => state.sortedProductCatList
+  );
+  const { sortedProductCatList } = sortetProductCatListRedux;
+
   const dflag = useSelector((state) => state.flag);
   const { addFlag } = dflag;
 
   const newProductCat = useSelector((state) => state.addProduct);
   const { loading, error, success, result } = newProductCat;
+
+  const unOrActive = useSelector((state) => state.unOrActiveDescription);
+  const {
+    loading: loadingUnOrActive,
+    success: successUnOrActive,
+    error: errorUnOrActive,
+  } = unOrActive;
+
+  //console.log("productCatList", productCatList);
+  //console.log("successUnOrActive", successUnOrActive);
 
   // USEEFFECTS
 
@@ -71,7 +93,7 @@ function ProductCategories() {
     if (productCatList.length === 0) {
       dispatch(getProductCat());
     }
-  }, []);
+  }, [dispatch, productCatList.length]);
 
   // reset global variable after add product category
   useEffect(() => {
@@ -81,27 +103,55 @@ function ProductCategories() {
 
     // ustawienie zmiennej success na undefined.
     // Jeżeli tego nie zrobimy to będzie się renderować komunikat o dodanym product category
-    // ponieważ jest spełnia się warunek w AddProductCategories
+    // ponieważ spełnia się warunek w AddProductCategories
     if (success) {
       dispatch({ type: ADD_PRODUCT_CAT_DELETE });
     }
-  }, [addFlag, success]);
+
+    if (successUnOrActive) {
+      dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE });
+      //dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+    }
+  }, [addFlag, success, successUnOrActive]);
+
+  // dispatch function for active and unactive product category
+  useEffect(() => {
+    if (confirm && updateStatus === UNACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: catObj,
+          active: false,
+          userId: userInfo.id,
+          objType: PRODUCT_CAT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+
+    if (confirm && updateStatus === ACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: catObj,
+          active: true,
+          userId: userInfo.id,
+          objType: PRODUCT_CAT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+  }, [dispatch, confirm, updateStatus]);
 
   // List/Frontend data
-
   const unActiveHandler = (id) => {
     setCatObj(id);
     setShowAlert(true);
     setUpdateStatus(UNACTIVE);
-    // dispatch(
-    //   unOrActiveList({
-    //     Id: discObj,
-    //     active: false,
-    //     userId: userInfo.id,
-    //     objType: PRODUCT_CAT_DESCRIPTION,
-    //     kind: "",
-    //   })
-    // );
+  };
+
+  const activeHandler = (id) => {
+    setCatObj(id);
+    setShowAlert(true);
+    setUpdateStatus(ACTIVE);
   };
 
   const confirmYes = () => {
@@ -114,25 +164,87 @@ function ProductCategories() {
     setConfirm(false);
   };
 
-  const objects = productCatList.map((cat) => ({
-    id: cat.id,
-    buttonUnactive: (
-      <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
-        {t("btn_unactive")}
-      </button>
-    ),
-    // buttonEdit: (
-    //   <button onClick={() => unActiveHandler(cat.id)} style={editBtn}>
-    //     {t("btn_edit")}
-    //   </button>
-    // ),
-  }));
+  /////////////////////////////////////////////////////WORK/////////////////////////////////
+
+  const [selectedLgn, setSelectedLng] = useState(0);
+  const [emptyValueError, setEmptyValueError] = useState(false);
+  const [switcher, setSwitcher] = useState(false);
+
+  // input
+  const input = {
+    id: "1",
+    name: "language",
+    label: "language",
+    optionsList: language,
+    defaultValue: "Select an option",
+  };
+
+  const selectLngHandler = (option) => {
+    setSwitcher(true);
+    setSelectedLng(option);
+    setEmptyValueError(false);
+  };
+
+  // save data to DB
+  useEffect(() => {
+    if (switcher) {
+      const insertData = {
+        creator: userInfo.id,
+        language: selectedLgn,
+      };
+
+      setSwitcher(false);
+
+      if (selectedLgn === EMPTY) {
+        setEmptyValueError(true);
+      } else {
+        dispatch(sortByLng(insertData));
+      }
+    }
+  }, [switcher]);
 
   function StatusProductCatCard({ active }) {
-    let currentProductCatList = [];
+    const objects = productCatList.map((cat) => ({
+      id: cat.id,
+      buttons: [
+        {
+          id: 1,
+          btn: (
+            <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
+              {t("btn_unactive")}
+            </button>
+          ),
+          btnActive: false,
+        },
+        {
+          id: 2,
+          btn: (
+            <button onClick={() => activeHandler(cat.id)} style={activeBtn}>
+              {t("btn_active")}
+            </button>
+          ),
+          btnActive: true,
+        },
+      ],
+    }));
 
-    if (active === true) {
+    let currentProductCatList = [];
+    //let sortedCurrentProductCatList = [];
+    // sortedCurrentProductCatList = sortedProductCatList.filter(
+    //   (pro) => pro.language && pro.is_active === active
+    // );
+    // sortedCurrentProductCatList = sortedProductCatList.filter(
+    //   (pro) => pro.language && pro.is_active === active
+    // );
+
+    if (active === true && sortedProductCatList.length === 0) {
       currentProductCatList = productCatList.filter(
+        (disc) => disc.is_active == true
+      );
+    }
+
+    if (active === true && sortedProductCatList.length !== 0) {
+      currentProductCatList = sortedProductCatList.filter(
         (disc) => disc.is_active == true
       );
     }
@@ -140,6 +252,12 @@ function ProductCategories() {
     if (active === false) {
       currentProductCatList = productCatList.filter(
         (disc) => disc.is_active === false
+      );
+    }
+
+    if (active === false && sortedProductCatList.length !== 0) {
+      currentProductCatList = sortedProductCatList.filter(
+        (disc) => disc.is_active == false
       );
     }
 
@@ -156,6 +274,22 @@ function ProductCategories() {
       );
     }
 
+    // if (
+    //   currentProductCatList.length !== 0 &&
+    //   sortedCurrentProductCatList.length === 0
+    // ) {
+    //   return (
+    //     <>
+    //       <div style={emptylistTitle}>
+    //         <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
+    //       </div>
+    //       <div style={emptyListIcon}>
+    //         <Icon icon="ic:outline-featured-play-list" />
+    //       </div>
+    //     </>
+    //   );
+    // }
+
     return (
       <div
         style={{
@@ -165,32 +299,62 @@ function ProductCategories() {
         }}
       >
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {productCatList.map((category) => {
-            if (category.is_active && radioValue === ONE) {
-              return (
-                <RotateCard
-                  key={category.id}
-                  name={category.name}
-                  id={category.id}
-                  objects={objects}
-                />
-              );
-            }
-          })}
+          {sortedProductCatList.length === 0
+            ? productCatList.map((category) => {
+                if (category.is_active && radioValue === ONE) {
+                  return (
+                    <RotateCard
+                      key={category.id}
+                      name={category.name}
+                      id={category.id}
+                      objects={objects}
+                      isActive={true}
+                    />
+                  );
+                }
+              })
+            : sortedProductCatList.map((category) => {
+                if (category.is_active && radioValue === ONE) {
+                  return (
+                    <RotateCard
+                      key={category.id}
+                      name={category.name}
+                      id={category.id}
+                      objects={objects}
+                      isActive={true}
+                    />
+                  );
+                }
+              })}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {productCatList.map((category) => {
-            if (!category.is_active && radioValue === ZERO) {
-              return (
-                <RotateCard
-                  key={category.id}
-                  name={category.name}
-                  id={category.id}
-                  objects={objects}
-                />
-              );
-            }
-          })}
+          {sortedProductCatList.length === 0
+            ? productCatList.map((category) => {
+                if (!category.is_active && radioValue === ZERO) {
+                  return (
+                    <RotateCard
+                      key={category.id}
+                      name={category.name}
+                      id={category.id}
+                      objects={objects}
+                      isActive={false}
+                    />
+                  );
+                }
+              })
+            : sortedProductCatList.map((category) => {
+                if (!category.is_active && radioValue === ZERO) {
+                  return (
+                    <RotateCard
+                      key={category.id}
+                      name={category.name}
+                      id={category.id}
+                      objects={objects}
+                      isActive={false}
+                    />
+                  );
+                }
+              })}
         </div>
         {active === true && (
           <div
@@ -208,20 +372,6 @@ function ProductCategories() {
     );
   }
 
-  useEffect(() => {
-    if (confirm && updateStatus === UNACTIVE) {
-      dispatch(
-        unOrActiveList({
-          Id: catObj,
-          active: false,
-          userId: userInfo.id,
-          objType: PRODUCT_CAT_DESCRIPTION,
-          kind: "",
-        })
-      );
-    }
-  }, [confirm, dispatch, updateStatus]);
-
   return (
     <div
       style={{
@@ -232,12 +382,40 @@ function ProductCategories() {
         minHeight: "50vh",
       }}
     >
-      <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <SelectOption
+            key={input.id}
+            label={input.label}
+            defaultValue={input.defaultValue}
+            optionsList={input.optionsList}
+            emptyValueError={emptyValueError}
+            onChange={selectLngHandler}
+          />
+        </div>
+      </div>
+
       {showAlert && updateStatus === UNACTIVE && (
         <InfoAlertComponent
           confirmYes={confirmYes}
           confirmNo={confirmNo}
           context={t("Confirmation_alert_unactive_product_category")}
+        />
+      )}
+
+      {showAlert && updateStatus === ACTIVE && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={t("Confirmation_alert_active_product_category")}
         />
       )}
 

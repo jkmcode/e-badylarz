@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { unactiveBtn } from "../admin/AdminCSS";
 import PropTypes from "prop-types";
 
-function RotateCard({ name, objects, id }) {
+function RotateCard({ name, objects, id, isActive }) {
   const [toggle, setToggle] = useState(false);
 
   //styling
@@ -33,61 +32,22 @@ function RotateCard({ name, objects, id }) {
   const backStyles = {
     ...cardSideStyles,
     transform: `rotateY(${toggle ? 0 : -180}deg)`,
-    backgroundColor: "#207b00",
     backgroundImage:
       "linear-gradient(157deg, rgba(252, 185, 89, 1) 0%, rgba(156, 131, 90, 1) 99%)",
+    overflowY: "auto",
+    maxHeight: "250px",
   };
 
   const frontStyles = {
     ...cardSideStyles,
     fontSize: "2rem",
     transform: `rotateY(${toggle ? 180 : 0}deg)`,
-    backgroundColor: "#207b00",
     backgroundImage:
       "linear-gradient(157deg, rgba(89, 131, 252, 1) 0%, rgba(41, 53, 86, 1) 99%)",
   };
 
   return (
     <div style={cardStyles}>
-      <div style={backStyles}>
-        <button
-          onClick={() => setToggle(!toggle)}
-          style={{ backgroundColor: "transparent", border: "none" }}
-        >
-          <Icon
-            icon="material-symbols:arrow-circle-left"
-            color="white"
-            width="32"
-            height="32"
-          />
-        </button>
-        {objects.map((object) => {
-          if (object.id === id) {
-            return (
-              <div key={object.id}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    margin: "1rem",
-                  }}
-                >
-                  {object.buttonUnactive}
-                </div>
-                {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    margin: "1rem",
-                  }}
-                >
-                  {object.buttonEdit}
-                </div> */}
-              </div>
-            );
-          }
-        })}
-      </div>
       <div style={frontStyles}>
         <div
           style={{
@@ -118,6 +78,42 @@ function RotateCard({ name, objects, id }) {
           <div>{name}</div>
         </div>
       </div>
+      <div style={backStyles}>
+        <button
+          onClick={() => setToggle(!toggle)}
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            marginTop: "0.5rem",
+          }}
+        >
+          <Icon
+            icon="material-symbols:arrow-circle-left"
+            color="white"
+            width="32"
+            height="32"
+          />
+        </button>
+        {isActive
+          ? objects.map((object) => {
+              if (object.id === id) {
+                return object.buttons.map((btn) => {
+                  if (!btn.btnActive) {
+                    return <div key={btn.id}>{btn.btn}</div>;
+                  }
+                });
+              }
+            })
+          : objects.map((object) => {
+              if (object.id === id) {
+                return object.buttons.map((btn) => {
+                  if (btn.btnActive) {
+                    return <div key={btn.id}>{btn.btn}</div>;
+                  }
+                });
+              }
+            })}
+      </div>
     </div>
   );
 }
@@ -129,8 +125,15 @@ RotateCard.propTypes = {
   objects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      buttonUnactive: PropTypes.element.isRequired,
+      buttons: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          btn: PropTypes.node.isRequired,
+          btnActive: PropTypes.bool.isRequired,
+        })
+      ).isRequired,
     })
   ).isRequired,
   id: PropTypes.number.isRequired,
+  isActive: PropTypes.bool.isRequired,
 };

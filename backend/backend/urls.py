@@ -55,7 +55,7 @@ urlpatterns = [
     # product
     path('api/add-product-cat/', addProductCat),
     path('api/get-product-categories/', getProductCategories),
-
+    path('api/sort-by-lng/', sortByLng),
     
 ]
 

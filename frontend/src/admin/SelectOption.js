@@ -23,7 +23,9 @@ function SelectOption({
   };
 
   useEffect(() => {
-    onChange(selectedValue);
+    if (selectedValue) {
+      onChange(selectedValue);
+    }
   }, [selectedValue]);
 
   return (
