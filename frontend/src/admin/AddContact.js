@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import InfoComponent from "../component/infoComponent";
 import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
 import useResponsive from "../component/useResponsive";
@@ -14,6 +15,12 @@ import {
   inactiveBadge,
   submitBtn,
   editBtn,
+  btnUnactive,
+  btnActive,
+  btnEdit,
+  tableCell,
+  tableCellNoBorderRight,
+  styleHeader,
 } from "./AdminCSS";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
@@ -35,6 +42,7 @@ import {
   GET_SOPTS_LIST_DELETE,
   SET_WINDOW_FLAG_DELETE,
   SET_CITY_FLAG_DESC_TRUE,
+  SET_FLAG_INFO_FALSE,
 } from "../constants/adminConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
@@ -67,6 +75,8 @@ function AddContact() {
   const [helper, setHelper] = useState("");
   const [objId, setObjId] = useState("");
 
+  const [objInfo, setObjInfo] = useState({});
+
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
   const [idSpot, setIdSpot] = useState();
@@ -81,6 +91,9 @@ function AddContact() {
   // data from redux
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact, loading, error } = contactListRedux;
+
+  const infoFlag12 = useSelector((state) => state.flag);
+  const { infoFlag } = infoFlag12;
 
   const contactActivRedux = useSelector((state) => state.unOrActiveDescription);
   const {
@@ -123,7 +136,6 @@ function AddContact() {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(i.name);
     setObjId(i.id);
-    console.log("Opis--->>>", i);
   };
 
   const unActiveHandler = (id) => {
@@ -166,6 +178,10 @@ function AddContact() {
 
   const editSpotHandler = (id) => {
     navigate(`/dashboard/shops/spot/${shopId}/edit/${id}`);
+  };
+
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
   };
 
   const editHandler = (id) => {
@@ -362,29 +378,6 @@ function AddContact() {
     color: "red",
   };
 
-  const btnTable = {
-    backgroundColor: "white",
-    border: "none",
-    fontWeight: 600,
-    borderRadius: "0.25rem",
-    fontSize: "0.85rem",
-  };
-
-  const btnUnactive = {
-    ...btnTable,
-    color: "red",
-  };
-
-  const btnEdit = {
-    ...btnTable,
-    color: "#dec314",
-  };
-
-  const btnActive = {
-    ...btnTable,
-    color: "green",
-  };
-
   /************************FORM*****************************/
   const [values, setValues] = useState({
     firstName: "",
@@ -478,22 +471,6 @@ function AddContact() {
     marginTop: "1rem",
   };
 
-  const styleHeader = {
-    borderBottom: `3px solid rgb(219, 219, 219)`,
-    padding: "1rem",
-  };
-
-  const tableCell = {
-    padding: "0.75rem",
-    verticalAlign: "middle",
-    borderTop: "2px solid rgb(219, 219, 219)",
-    borderRight: "2px solid rgb(219, 219, 219)",
-  };
-
-  const tableCellNoBorderRight = {
-    ...tableCell,
-    borderRight: "none",
-  };
   const shopsBtn = {
     fontSize: "0.7rem",
     fontWeight: "700",
@@ -701,6 +678,14 @@ function AddContact() {
         <Loader />
       ) : (
         <>
+          {infoFlag ? (
+            <InfoComponent
+              title={t("InfoComponent_title_shop")}
+              obj={objInfo}
+              typeObj={SHOP_DESCRIPTION}
+              closeInfoHandler={closeInfoHandler}
+            />
+          ) : null}
           {showAlert && contactOrSpot && (
             <InfoAlertComponent
               confirmYes={confirmYes}

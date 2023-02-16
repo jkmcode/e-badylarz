@@ -10,6 +10,7 @@ import SelectOption from "./SelectOption";
 import language from "../language";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
 import { ONE, ZERO, EMPTY } from "../constants/environmentConstans";
 import {
@@ -29,11 +30,13 @@ import {
   emptyListIcon,
   unactiveBtn,
   activeBtn,
+  subcategoryBtn,
 } from "./AdminCSS";
 
 function ProductCategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -46,6 +49,9 @@ function ProductCategories() {
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [updateStatus, setUpdateStatus] = useState("");
+  const [selectedLgn, setSelectedLng] = useState(0);
+  const [emptyValueError, setEmptyValueError] = useState(false);
+  const [switcher, setSwitcher] = useState(false);
 
   //RadioButtons functions
   const handleBtnValue = (e) => {
@@ -83,12 +89,9 @@ function ProductCategories() {
     error: errorUnOrActive,
   } = unOrActive;
 
-  //console.log("productCatList", productCatList);
-  //console.log("successUnOrActive", successUnOrActive);
-
   // USEEFFECTS
 
-  // fetching list of shops from DB
+  // fetching list of product categories from DB
   useEffect(() => {
     if (productCatList.length === 0) {
       dispatch(getProductCat());
@@ -139,6 +142,7 @@ function ProductCategories() {
         })
       );
     }
+    setConfirm(false);
   }, [dispatch, confirm, updateStatus]);
 
   // List/Frontend data
@@ -163,12 +167,6 @@ function ProductCategories() {
     setShowAlert(false);
     setConfirm(false);
   };
-
-  /////////////////////////////////////////////////////WORK/////////////////////////////////
-
-  const [selectedLgn, setSelectedLng] = useState(0);
-  const [emptyValueError, setEmptyValueError] = useState(false);
-  const [switcher, setSwitcher] = useState(false);
 
   // input
   const input = {
@@ -201,41 +199,52 @@ function ProductCategories() {
         dispatch(sortByLng(insertData));
       }
     }
-  }, [switcher]);
+  }, [dispatch, switcher]);
+
+  // sub Category
+
+  const subcategoryProduct = (id) => {
+    navigate("subcategories");
+  };
+
+  const objects = productCatList.map((cat) => ({
+    id: cat.id,
+    buttons: [
+      {
+        id: 1,
+        btn: (
+          <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
+            {t("btn_unactive")}
+          </button>
+        ),
+        btnActive: true,
+      },
+      {
+        id: 2,
+        btn: (
+          <button onClick={() => activeHandler(cat.id)} style={activeBtn}>
+            {t("btn_active")}
+          </button>
+        ),
+        btnActive: false,
+      },
+      {
+        id: 3,
+        btn: (
+          <button
+            onClick={() => subcategoryProduct(cat.id)}
+            style={subcategoryBtn}
+          >
+            {t("btn_subcategory")}
+          </button>
+        ),
+        btnActive: false,
+      },
+    ],
+  }));
 
   function StatusProductCatCard({ active }) {
-    const objects = productCatList.map((cat) => ({
-      id: cat.id,
-      buttons: [
-        {
-          id: 1,
-          btn: (
-            <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
-              {t("btn_unactive")}
-            </button>
-          ),
-          btnActive: false,
-        },
-        {
-          id: 2,
-          btn: (
-            <button onClick={() => activeHandler(cat.id)} style={activeBtn}>
-              {t("btn_active")}
-            </button>
-          ),
-          btnActive: true,
-        },
-      ],
-    }));
-
     let currentProductCatList = [];
-    //let sortedCurrentProductCatList = [];
-    // sortedCurrentProductCatList = sortedProductCatList.filter(
-    //   (pro) => pro.language && pro.is_active === active
-    // );
-    // sortedCurrentProductCatList = sortedProductCatList.filter(
-    //   (pro) => pro.language && pro.is_active === active
-    // );
 
     if (active === true && sortedProductCatList.length === 0) {
       currentProductCatList = productCatList.filter(
@@ -273,22 +282,6 @@ function ProductCategories() {
         </>
       );
     }
-
-    // if (
-    //   currentProductCatList.length !== 0 &&
-    //   sortedCurrentProductCatList.length === 0
-    // ) {
-    //   return (
-    //     <>
-    //       <div style={emptylistTitle}>
-    //         <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
-    //       </div>
-    //       <div style={emptyListIcon}>
-    //         <Icon icon="ic:outline-featured-play-list" />
-    //       </div>
-    //     </>
-    //   );
-    // }
 
     return (
       <div

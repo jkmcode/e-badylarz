@@ -75,6 +75,11 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         model = ProductTypes
         fields = '__all__'     
 
+class SubproductTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSubTypes
+        fields = '__all__'           
+
 class ShopsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shops

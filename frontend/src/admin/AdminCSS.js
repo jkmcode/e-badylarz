@@ -50,10 +50,55 @@ export const activeBtn = {
   backgroundImage: `linear-gradient(173deg, rgba(56, 168, 48, 1) 0%, rgba(69, 141, 43, 1) 100%)`,
 };
 
+export const subcategoryBtn = {
+  ...btn,
+  backgroundImage: `linear-gradient(149deg, rgba(89, 165, 252, 1) 0%, rgba(44, 63, 116, 1) 100%)`,
+};
+
 export const addProdCatBtn = {
   ...btn,
   backgroundImage: `linear-gradient(137deg, rgba(110, 170, 102, 1) 0%, rgba(59, 100, 73, 1) 100%)`,
   textAlign: "center",
+};
+
+export const btnTable = {
+  backgroundColor: "white",
+  border: "none",
+  fontWeight: 600,
+  borderRadius: "0.25rem",
+  fontSize: "0.85rem",
+};
+
+export const btnUnactive = {
+  ...btnTable,
+  color: "red",
+};
+
+export const btnEdit = {
+  ...btnTable,
+  color: "#dec314",
+};
+
+export const btnActive = {
+  ...btnTable,
+  color: "green",
+};
+
+export const tableCell = {
+  padding: "0.75rem",
+  verticalAlign: "middle",
+  borderTop: "2px solid rgb(219, 219, 219)",
+  borderRight: "2px solid rgb(219, 219, 219)",
+};
+
+export const tableCellNoBorderRight = {
+  ...tableCell,
+  borderRight: "none",
+};
+
+export const styleHeader = {
+  borderBottom: `3px solid rgb(219, 219, 219)`,
+  padding: "1rem",
 };
 
 export function FormLayout({ children, col, ratio }) {

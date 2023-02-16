@@ -9,6 +9,10 @@ import {
   GET_PRODUCT_CAT_LIST_REQUEST,
   GET_PRODUCT_CAT_LIST_SUCCESS,
   GET_PRODUCT_CAT_LIST_FAIL,
+  GET_PRODUCT_SUBCAT_LIST_REQUEST,
+  GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+  GET_PRODUCT_SUBCAT_LIST_FAIL,
+  GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 
 export const addProductCat = (insertData) => async (dispatch, getState) => {
@@ -103,6 +107,39 @@ export const getProductCat = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_PRODUCT_CAT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
+  }
+};
+
+export const getSubproductCat = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/get-product-subcategories/`, config);
+
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_LIST_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

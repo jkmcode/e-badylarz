@@ -860,7 +860,6 @@ def activeList(request):
 @permission_classes([IsAdminUser])
 def getFullDescriptionsDesc(request, Id, obj_type):
     
-    print('sprawdzam ---->',obj_type,'ID---->',Id)
     if obj_type=='DISTRICT':
         descrition = Descriptions.objects.filter(id_district = Id) 
         seriaziler = DistrictsDescSerializer(descrition, many=True)
@@ -1057,6 +1056,17 @@ def getProductCategories(request):
         i.language = cleanStr(i.language)
 
     seriaziler = ProductTypeSerializer(productCat, many=True)
-    return Response(seriaziler.data)        
+    return Response(seriaziler.data)       
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getProductSubcategories(request):
+    productSubCat = ProductSubTypes.objects.all().order_by('name')
+
+    seriaziler = SubproductTypeSerializer(productSubCat, many=True)
+
+    print(seriaziler)
+
+    return Response('okey')  
 
    

@@ -42,6 +42,7 @@ class Citis(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
     latitude = models.CharField(max_length=25, null=True, blank=True)
     longitude = models.CharField(max_length=25, null=True, blank=True)
+    language = models.CharField(max_length=2, null=True, blank=True)
 
     def __str__(self):
          return self.name
@@ -362,12 +363,10 @@ class ProductTypesDescriptions(models.Model):
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
-
-# Product Species
-class ProductSpecies(models.Model):
+# Product Subtypes
+class ProductSubTypes(models.Model):
     id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
@@ -376,11 +375,11 @@ class ProductSpecies(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
     def __str__(self):
-         return self.name
+         return self.name        
 
 #Product Species description
 class ProductSpeciesDescriptions(models.Model):
-    id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
+    id_product_species = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)
@@ -391,7 +390,7 @@ class ProductSpeciesDescriptions(models.Model):
 ####
 # Product Genera
 class ProductGenera(models.Model):
-    id_product_species = models.ForeignKey(ProductSpecies, on_delete=models.CASCADE, null=True)
+    id_product_species = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)

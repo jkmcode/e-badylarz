@@ -9,7 +9,7 @@ const TableComponent = ({ data, columns, tableStyle, mainTableContainer }) => {
           <tr>
             {columns.map((column) => {
               return (
-                <th style={column.styleHeader} key={column.key}>
+                <th style={{ ...column.styleHeader }} key={column.key}>
                   {column.label}
                 </th>
               );

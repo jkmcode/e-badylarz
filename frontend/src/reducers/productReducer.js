@@ -12,6 +12,10 @@ import {
   SORT_BY_LNG_SUCCESS,
   SORT_BY_LNG_FAIL,
   SORT_BY_LNG_DELETE,
+  GET_PRODUCT_SUBCAT_LIST_REQUEST,
+  GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+  GET_PRODUCT_SUBCAT_LIST_FAIL,
+  GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 
 export const addProductReducer = (state = {}, action) => {
@@ -107,6 +111,38 @@ export const productCatListReducer = (
         successAdd: false,
         productCatList: action.payload,
       };
+
+    default:
+      return state;
+  }
+};
+
+export const subproductCatListReducer = (
+  state = { subproductCatList: [] },
+  action
+) => {
+  switch (action.type) {
+    case GET_PRODUCT_SUBCAT_LIST_REQUEST:
+      return {
+        loading: true,
+        success: false,
+        subproductCatList: [],
+      };
+    case GET_PRODUCT_SUBCAT_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        subproductCatList: action.payload,
+      };
+    case GET_PRODUCT_SUBCAT_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+        subproductCatList: [],
+      };
+    case GET_PRODUCT_SUBCAT_LIST_DELETE:
+      return { subproductCatList: [] };
 
     default:
       return state;

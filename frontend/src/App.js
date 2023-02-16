@@ -38,6 +38,7 @@ import AreaSpotActivity from "./admin/AreaSpotActivity";
 import CityDescription from "./admin/CityDescription";
 import ProductCategories from "./admin/ProductCategories";
 import AddProductCategories from "./admin/AddProductCategories";
+import ProductSubcategories from "./admin/ProductSubcategories";
 import Products from "./admin/Products";
 
 //Customer side
@@ -98,6 +99,10 @@ function App() {
           <Route
             path="product-categories/add"
             element={<AddProductCategories />}
+          />
+          <Route
+            path="product-categories/subcategories"
+            element={<ProductSubcategories />}
           />
           <Route path="products" element={<Products />} />
         </Route>
