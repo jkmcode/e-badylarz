@@ -422,6 +422,8 @@
   "Products_add_product_btn": "Dodaj Produkt",
 
   "ProductSubcategories_title": "Podkategorie produktów",
+  "Products_add_subproduct_btn": "Dodaj podkategorie",
+  "AddProductSubcategories_title": "Dodaj podkategorie",
 
   "sidebar_navlink_districts": "Powiaty",
   "sidebar_navlink_shops": "Sklepy",
@@ -434,5 +436,7 @@
   "ShopsSpot_kind_wholesaler": "Hurtownik",
   "ShopsSpot_kind_agent": "Pośrednik",
   "ShopsSpot_label_kindSpot": "Rodzaj punktu sprzedaży",
-  "ShopsSpot_select_placeholder": "Wybierz opcję ..."
+  "ShopsSpot_select_placeholder": "Wybierz opcję ...",
+
+  "Error_404_title": "brak połączenia z internetem"
 }

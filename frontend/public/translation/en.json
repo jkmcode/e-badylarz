@@ -425,6 +425,8 @@
   "Products_add_product_btn": "Add Product",
 
   "ProductSubcategories_title": "Product subcategory",
+  "Products_add_subproduct_btn": "Add subcategory",
+  "AddProductSubcategories_title": "Add subcategory",
 
   "sidebar_navlink_districts": "Districts",
   "sidebar_navlink_shops": "Shops",
@@ -437,5 +439,7 @@
   "ShopsSpot_kind_wholesaler": "Wholesaler",
   "ShopsSpot_kind_agent": "Agent",
   "ShopsSpot_label_kindSpot": "Kind spot's",
-  "ShopsSpot_select_placeholder": "Select options ..."
+  "ShopsSpot_select_placeholder": "Select options ...",
+
+  "Error_404_title": "no connection to internet"
 }

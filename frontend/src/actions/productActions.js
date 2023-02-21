@@ -6,13 +6,15 @@ import {
   ADD_PRODUCT_CAT_REQUEST,
   ADD_PRODUCT_CAT_SUCCESS,
   ADD_PRODUCT_CAT_FAIL,
+  ADD_PRODUCT_SUBCAT_REQUEST,
+  ADD_PRODUCT_SUBCAT_SUCCESS,
+  ADD_PRODUCT_SUBCAT_FAIL,
   GET_PRODUCT_CAT_LIST_REQUEST,
   GET_PRODUCT_CAT_LIST_SUCCESS,
   GET_PRODUCT_CAT_LIST_FAIL,
   GET_PRODUCT_SUBCAT_LIST_REQUEST,
   GET_PRODUCT_SUBCAT_LIST_SUCCESS,
   GET_PRODUCT_SUBCAT_LIST_FAIL,
-  GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 
 export const addProductCat = (insertData) => async (dispatch, getState) => {
@@ -116,9 +118,47 @@ export const getProductCat = () => async (dispatch, getState) => {
   }
 };
 
-export const getSubproductCat = () => async (dispatch, getState) => {
+export const getSubproductCat =
+  ({ subcategoryId }) =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `/api/${subcategoryId}/get-product-subcategories/`,
+        config
+      );
+
+      dispatch({
+        type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_PRODUCT_SUBCAT_LIST_FAIL,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+      console.log(error);
+    }
+  };
+
+export const addProductSubcat = (insertData) => async (dispatch, getState) => {
   try {
-    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
+    dispatch({ type: ADD_PRODUCT_SUBCAT_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -131,20 +171,23 @@ export const getSubproductCat = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/get-product-subcategories/`, config);
+    const { data } = await axios.post(
+      `/api/add-product-subcat/`,
+      insertData,
+      config
+    );
 
     dispatch({
-      type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+      type: ADD_PRODUCT_SUBCAT_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: GET_PRODUCT_SUBCAT_LIST_FAIL,
+      type: ADD_PRODUCT_SUBCAT_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail
           : error.message,
     });
-    console.log(error);
   }
 };

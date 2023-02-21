@@ -8,6 +8,8 @@ export const TWO = "2";
 export const THREE = "3";
 export const ONE_TO_TWO = "1/2";
 
+export const EMPTY_LIST = 0;
+
 export const EMPTY = "";
 
 export const TABLE_TYPE_CONTACT = "contact";

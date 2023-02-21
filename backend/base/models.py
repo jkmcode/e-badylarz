@@ -373,6 +373,7 @@ class ProductSubTypes(models.Model):
     is_active = models.BooleanField(null=True,blank=True)
     creator = models.CharField(max_length=5, null=True, blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
+    uniqueId = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
          return self.name        

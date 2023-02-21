@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { FormLayout, title, addBtn } from "./AdminCSS";
 import FormInput from "./FormInput";
 import SelectOption from "./SelectOption";
 import ErrorMessage from "../component/ErrorMessage";
 import UploadImage from "../component/UploadImage";
 import language from "../language";
+import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { FormLayout, title, addBtn } from "./AdminCSS";
 import { useNavigate } from "react-router-dom";
 import { addProductCat } from "../actions/productActions";
 import { TWO, EMPTY } from "../constants/environmentConstans";
@@ -16,8 +16,8 @@ import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import { SET_FLAG_ADD_TRUE } from "../constants/adminConstans";
 import { GET_PRODUCT_CAT_LIST_DELETE } from "../constants/productConstans";
 import { v4 as uuidv4 } from "uuid";
-
 import { InsertImage2 } from "../actions/adminActions";
+import { PRODUCT_SUBCAT } from "../constants/adminConstans";
 
 function AddProductCategories() {
   const { t } = useTranslation();
@@ -109,7 +109,11 @@ function AddProductCategories() {
     if (successAdd) {
       if (isImage) {
         dispatch(
-          InsertImage2({ imageUpload: imageUpload, uniqueId: uniqueId })
+          InsertImage2({
+            imageUpload: imageUpload,
+            uniqueId: uniqueId,
+            type: PRODUCT_SUBCAT,
+          })
         );
       }
     }

@@ -9,8 +9,7 @@ import InfoAlertComponent from "../component/InfoAlertComponent";
 import SelectOption from "./SelectOption";
 import language from "../language";
 import { unOrActiveList } from "../actions/adminActions";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
 import { ONE, ZERO, EMPTY } from "../constants/environmentConstans";
 import {
@@ -23,6 +22,7 @@ import {
 import {
   ADD_PRODUCT_CAT_DELETE,
   GET_PRODUCT_CAT_LIST_DELETE,
+  GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 import { Icon } from "@iconify/react";
 import {
@@ -89,7 +89,16 @@ function ProductCategories() {
     error: errorUnOrActive,
   } = unOrActive;
 
-  // USEEFFECTS
+  //useEffect
+
+  //Comment
+  // This useEffect hook dispatches the GET_PRODUCT_SUBCAT_LIST_DELETE action to reset the subproductCatList array,
+  // ensuring that any previously stored data is cleared.
+  // This helps to avoid errors and ensures that the subproduct list is properly displayed to the user.
+  // The hook is triggered once, on component mount.
+  useEffect(() => {
+    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });
+  }, []);
 
   // fetching list of product categories from DB
   useEffect(() => {
@@ -204,7 +213,7 @@ function ProductCategories() {
   // sub Category
 
   const subcategoryProduct = (id) => {
-    navigate("subcategories");
+    navigate(`${id}/subcategories`);
   };
 
   const objects = productCatList.map((cat) => ({
@@ -217,7 +226,7 @@ function ProductCategories() {
             {t("btn_unactive")}
           </button>
         ),
-        btnActive: true,
+        btnActive: false,
       },
       {
         id: 2,
@@ -226,7 +235,7 @@ function ProductCategories() {
             {t("btn_active")}
           </button>
         ),
-        btnActive: false,
+        btnActive: true,
       },
       {
         id: 3,

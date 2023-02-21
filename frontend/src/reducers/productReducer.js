@@ -3,6 +3,10 @@ import {
   ADD_PRODUCT_CAT_SUCCESS,
   ADD_PRODUCT_CAT_FAIL,
   ADD_PRODUCT_CAT_DELETE,
+  ADD_PRODUCT_SUBCAT_REQUEST,
+  ADD_PRODUCT_SUBCAT_SUCCESS,
+  ADD_PRODUCT_SUBCAT_FAIL,
+  ADD_PRODUCT_SUBCAT_DELETE,
   GET_PRODUCT_CAT_LIST_REQUEST,
   GET_PRODUCT_CAT_LIST_SUCCESS,
   GET_PRODUCT_CAT_LIST_FAIL,
@@ -144,6 +148,29 @@ export const subproductCatListReducer = (
     case GET_PRODUCT_SUBCAT_LIST_DELETE:
       return { subproductCatList: [] };
 
+    default:
+      return state;
+  }
+};
+
+export const addSubproductCatListReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_PRODUCT_SUBCAT_REQUEST:
+      return { loading: true, success: false };
+    case ADD_PRODUCT_SUBCAT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case ADD_PRODUCT_SUBCAT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case ADD_PRODUCT_SUBCAT_DELETE:
+      return {};
     default:
       return state;
   }

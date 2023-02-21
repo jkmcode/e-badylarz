@@ -138,13 +138,17 @@ def uploadMultiImages(request):
 def uploadMultiImages2(request):
     data = request.data
     uniqueId = data["uniqueId"]
-    print('uniqueId we views uploadMultiImages2-----', uniqueId)
 
+    if data["type"] == "PRODUCT_SUBCAT":
+        image = ProductSubTypes.objects.get(uniqueId=uniqueId)
+    elif data["type"] == "PRODUCT_CAT":
+        image = ProductTypes.objects.get(uniqueId=uniqueId)        
+    else: 
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST) 
 
-    productTypes = ProductTypes.objects.get(uniqueId=uniqueId)
-
-    productTypes.photo = request.FILES.get('image')
-    productTypes.save()
+    image.photo = request.FILES.get('image')
+    image.save()    
 
     return Response("Image was uploaded")
 
@@ -562,7 +566,6 @@ def addShopSpot(request):
 @permission_classes([IsAdminUser])
 def addAreaSpot(request):
     data = request.data
-    print('data---------', data)
     cit_obj = Citis.objects.get(id=data['city'])
 
     if data['add']:
@@ -1031,7 +1034,7 @@ def addProductCat(request):
     data = request.data
     alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
     if alreadyExists:
-        content = {"detail": "Disctrict already exist"}
+        content = {"detail": "Product category already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)  
     else: 
         productCat = ProductTypes.objects.create(
@@ -1060,13 +1063,33 @@ def getProductCategories(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getProductSubcategories(request):
-    productSubCat = ProductSubTypes.objects.all().order_by('name')
-
+def getProductSubcategories(request, Id):
+    productSubCat = ProductSubTypes.objects.filter(id_product_type=Id).order_by('name')
     seriaziler = SubproductTypeSerializer(productSubCat, many=True)
 
-    print(seriaziler)
+    return Response(seriaziler.data)  
 
-    return Response('okey')  
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addProductSubcat(request):
+    data = request.data
+    alreadyExists = ProductSubTypes.objects.filter(name=data['name']).exists()
+    productCat = ProductTypes.objects.all().order_by('name')
+
+    if alreadyExists:
+        content = {"detail": "Product subcategory already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    else: 
+        for i in productCat :
+            if data['subcategoryId'] == i.id :
+                subCat = i
+        productSubcat = ProductSubTypes.objects.create(
+            name=data['name'],
+            creator = data['creator'],
+            uniqueId = data['uniqueId'],
+            is_active=True,
+            id_product_type_id = subCat.id
+        )   
+        return Response("okey")
 
    

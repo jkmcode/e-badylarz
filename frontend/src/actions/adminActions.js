@@ -106,6 +106,7 @@ export const InsertImage2 = (insertData) => async (dispatch, getState) => {
     const formData = new FormData();
     formData.append("image", insertData.imageUpload);
     formData.append("uniqueId", insertData.uniqueId);
+    formData.append("type", insertData.type);
 
     dispatch({ type: ADD_IMAGE_REQUEST });
 
