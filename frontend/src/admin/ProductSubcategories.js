@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ONE, EMPTY_LIST } from "../constants/environmentConstans";
-import { getSubproductCat } from "../actions/productActions";
 import RadioButtons from "./RadioButtons";
 import TableComponent from "./TableComponent";
 import DotsLoader from "../component/DotsLoader";
 import ImageError404 from "../imageSVG/ImageError404";
 import BackButton from "./BackButton";
-
-//import { subproductCatList } from "../Data/dataProductCategories";
+import InfoAlertComponent from "../component/InfoAlertComponent";
+import { useTranslation } from "react-i18next";
+import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ONE, EMPTY_LIST } from "../constants/environmentConstans";
+import { getSubproductCat } from "../actions/productActions";
+import { unOrActiveList } from "../actions/adminActions";
+import {
+  UNACTIVE,
+  ACTIVE,
+  PRODUCT_SUBCAT_DESCRIPTION,
+} from "../constants/adminConstans";
 import {
   activeBadge,
   inactiveBadge,
@@ -30,6 +35,10 @@ function ProductSubcategories() {
 
   const [radioValue, setRadioValue] = useState(ONE);
   const [currentSubproductList, setCurrentSubproductList] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState("");
+  const [confirm, setConfirm] = useState(false);
+  const [catObj, setCatObj] = useState({});
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -37,6 +46,9 @@ function ProductSubcategories() {
   ];
 
   // data from redux
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const subproductSubcatListRedux = useSelector(
     (state) => state.subproductCatList
   );
@@ -66,15 +78,29 @@ function ProductSubcategories() {
   };
 
   const unActiveHandler = (id) => {
-    console.log("działa unActiveHandler");
+    setCatObj(id);
+    setShowAlert(true);
+    setUpdateStatus(UNACTIVE);
   };
 
   const activeHandler = (id) => {
-    console.log("działa activeHandler");
+    setCatObj(id);
+    setShowAlert(true);
+    setUpdateStatus(ACTIVE);
   };
 
   const editHandler = (id) => {
     console.log("działa editHandler");
+  };
+
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
   };
 
   const tableConatctcolumns = [
@@ -167,6 +193,34 @@ function ProductSubcategories() {
     }
   }, [radioValue, subproductCatList]);
 
+  // dispatch function for active and unactive product category
+  useEffect(() => {
+    if (confirm && updateStatus === UNACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: catObj,
+          active: false,
+          userId: userInfo.id,
+          objType: PRODUCT_SUBCAT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+
+    if (confirm && updateStatus === ACTIVE) {
+      dispatch(
+        unOrActiveList({
+          Id: catObj,
+          active: true,
+          userId: userInfo.id,
+          objType: PRODUCT_SUBCAT_DESCRIPTION,
+          kind: "",
+        })
+      );
+    }
+    setConfirm(false);
+  }, [dispatch, confirm, updateStatus]);
+
   // error rendering
   if (error) {
     return (
@@ -203,6 +257,21 @@ function ProductSubcategories() {
         minHeight: "50vh",
       }}
     >
+      {showAlert && updateStatus === UNACTIVE && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={t("Confirmation_alert_unactive_product_category")}
+        />
+      )}
+
+      {showAlert && updateStatus === ACTIVE && (
+        <InfoAlertComponent
+          confirmYes={confirmYes}
+          confirmNo={confirmNo}
+          context={t("Confirmation_alert_active_product_category")}
+        />
+      )}
       <BackButton />
       <div
         style={{

@@ -767,8 +767,6 @@ def addCiti(request):
 def activeList(request):
     data=request.data
 
-    print('działa views ----- activeList', data['objType'])
-
     if data['objType']=='DISTRICT':
         descrip = Districts.objects.get(id=data['Id'])
     elif data['objType']=='CITY':
@@ -843,6 +841,8 @@ def activeList(request):
         descrip = AreasSpot.objects.get(id=data['Id'])
     elif data['objType'] == "PRODUCT_CAT":
         descrip = ProductTypes.objects.get(id=data["Id"])
+    elif data['objType'] == "PRODUCT_SUBCAT":
+        descrip = ProductSubTypes.objects.get(id=data["Id"])    
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 

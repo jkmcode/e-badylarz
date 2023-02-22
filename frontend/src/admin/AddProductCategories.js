@@ -100,7 +100,7 @@ function AddProductCategories() {
   // navigate to main dashboard
   useEffect(() => {
     if (addFlag) {
-      navigate("/dashboard/product-categories");
+      navigate(-1);
     }
   }, [addFlag]);
 

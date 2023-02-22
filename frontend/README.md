@@ -164,4 +164,4 @@ onChange={e => setHeight(e.target.value)}
 
 export default ResizeableImageUploader;
 
-dodać cofanie po dodanej podkategorii produktu
+dodać cofanie po zmianie statusu podkategorii

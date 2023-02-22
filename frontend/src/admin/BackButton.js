@@ -14,7 +14,7 @@ function BackButton() {
   }
 
   return (
-    <div>
+    <div style={{ marginBottom: "1rem" }}>
       {location.pathname !== "/" && (
         <Link to="#" onClick={handleClick} style={returnBtn}>
           <Icon icon="ion:arrow-back" />

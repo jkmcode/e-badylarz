@@ -294,7 +294,7 @@ class ShopsSpotARC(models.Model):
 
 #Shops Spot description
 class ShopsSpotDescriptions(models.Model):
-    id_shops_spot = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
+    id_shops_spot = models.ForeignKey(ShopsSpot, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)

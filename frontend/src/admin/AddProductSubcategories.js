@@ -2,20 +2,24 @@ import React, { useState, useEffect } from "react";
 import FormInput from "./FormInput";
 import UploadImage from "../component/UploadImage";
 import BackButton from "./BackButton";
-import { useParams } from "react-router-dom";
+import ErrorMessage from "../component/ErrorMessage";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { addProductSubcat } from "../actions/productActions";
 import { InsertImage2 } from "../actions/adminActions";
 import { v4 as uuidv4 } from "uuid";
 import { title, addBtn } from "./AdminCSS";
-import { PRODUCT_SUBCAT } from "../constants/adminConstans";
+import { PRODUCT_SUBCAT, SET_FLAG_ADD_TRUE } from "../constants/adminConstans";
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
+import { ADD_PRODUCT_SUBCAT_DELETE } from "../constants/productConstans";
 
 function AddProductSubcategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const newId = uuidv4();
   const params = useParams();
+  const navigate = useNavigate();
   const subcategoryId = Number(params.id);
 
   const [values, setValues] = useState({
@@ -33,6 +37,9 @@ function AddProductSubcategories() {
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
+
+  const dflag = useSelector((state) => state.flag);
+  const { addFlag } = dflag;
 
   //Handlers
   const handleSubmit = (e) => {
@@ -58,6 +65,22 @@ function AddProductSubcategories() {
       required: true,
     },
   ];
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        dispatch({ type: SET_FLAG_ADD_TRUE });
+        dispatch({ type: ADD_PRODUCT_SUBCAT_DELETE });
+      }, TIME_SET_TIMEOUT);
+    }
+  }, [success]);
+
+  // navigate to main dashboard
+  useEffect(() => {
+    if (addFlag) {
+      navigate("/dashboard/product-categories");
+    }
+  }, [addFlag]);
 
   //Comment
   //This code is a React useEffect hook that triggers whenever the value of switcher changes.
@@ -102,6 +125,14 @@ function AddProductSubcategories() {
         minHeight: "50vh",
       }}
     >
+      {success && (
+        <ErrorMessage
+          msg={t("ProductCategories_msg_add_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
       <BackButton />
       <div style={title}>{t("AddProductSubcategories_title")}</div>
 
