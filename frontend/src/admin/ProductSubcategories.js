@@ -6,7 +6,7 @@ import ImageError404 from "../imageSVG/ImageError404";
 import BackButton from "./BackButton";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ONE, EMPTY_LIST } from "../constants/environmentConstans";
 import { getSubproductCat } from "../actions/productActions";
@@ -16,6 +16,7 @@ import {
   ACTIVE,
   PRODUCT_SUBCAT_DESCRIPTION,
 } from "../constants/adminConstans";
+import { GET_PRODUCT_SUBCAT_LIST_DELETE } from "../constants/productConstans";
 import {
   activeBadge,
   inactiveBadge,
@@ -30,6 +31,7 @@ import {
 function ProductSubcategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
   const subcategoryId = Number(params.id);
 
@@ -55,10 +57,12 @@ function ProductSubcategories() {
   const { loading, subproductCatList, error, success } =
     subproductSubcatListRedux;
 
-  //RadioButtons functions
-  const handleBtnValue = (e) => {
-    setRadioValue(e.target.value);
-  };
+  const unOrActive = useSelector((state) => state.unOrActiveDescription);
+  const {
+    loading: loadingUnOrActive,
+    success: successUnOrActive,
+    error: errorUnOrActive,
+  } = unOrActive;
 
   const mainTableContainer = {
     overflowY: "auto",
@@ -77,6 +81,13 @@ function ProductSubcategories() {
     backgroundImage: `linear-gradient(90deg, rgba(186, 189, 193, 1) 0%, rgba(160, 162, 166, 1) 100%)`,
   };
 
+  //Handlers
+
+  //RadioButtons functions
+  const handleBtnValue = (e) => {
+    setRadioValue(e.target.value);
+  };
+
   const unActiveHandler = (id) => {
     setCatObj(id);
     setShowAlert(true);
@@ -90,7 +101,7 @@ function ProductSubcategories() {
   };
 
   const editHandler = (id) => {
-    console.log("działa editHandler");
+    navigate(`${id}/edit`);
   };
 
   const confirmYes = () => {
@@ -170,6 +181,16 @@ function ProductSubcategories() {
     }
   }, [dispatch, subproductCatList.length]);
 
+  //Comment
+  //When the successUnOrActive value is truthy,
+  //the component will dispatch an action of type GET_PRODUCT_SUBCAT_LIST_DELETE (clean a subproductCatList)
+  //it trigger other useEffect which fetch thw newst subproductCatList.
+  useEffect(() => {
+    if (successUnOrActive) {
+      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });
+    }
+  }, [successUnOrActive]);
+
   // Comment
   // This useEffect hook updates the current subproduct list based on the selected radio button value.
   // If the subproductCatList array is not empty, the hook filters and sets the list to display
@@ -193,6 +214,7 @@ function ProductSubcategories() {
     }
   }, [radioValue, subproductCatList]);
 
+  //Comment
   // dispatch function for active and unactive product category
   useEffect(() => {
     if (confirm && updateStatus === UNACTIVE) {
@@ -261,7 +283,7 @@ function ProductSubcategories() {
         <InfoAlertComponent
           confirmYes={confirmYes}
           confirmNo={confirmNo}
-          context={t("Confirmation_alert_unactive_product_category")}
+          context={t("Confirmation_alert_unactive_product_subcategory")}
         />
       )}
 
@@ -269,7 +291,7 @@ function ProductSubcategories() {
         <InfoAlertComponent
           confirmYes={confirmYes}
           confirmNo={confirmNo}
-          context={t("Confirmation_alert_active_product_category")}
+          context={t("Confirmation_alert_active_product_subcategory")}
         />
       )}
       <BackButton />

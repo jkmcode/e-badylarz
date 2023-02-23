@@ -417,6 +417,8 @@
   "ProductCategories_name_label": "Nazwa kategorii produktu",
   "ProductCategories_name_placeholder": "Wpisz nazwe kategorii produktu ...",
   "ProductCategories_name_error_message": "Nazwa kategorii produktów powinna mieć od 3 do 30 znaków i nie powinna zawierać żadnych znaków specjalnych!",
+  "Confirmation_alert_unactive_product_category": "Czy na pewno chcerz dezaktywować kategorie?",
+  "Confirmation_alert_active_product_category": "Czy na pewno chcerz aktywować kategorie?",
 
   "Products_title": "Lista Produktów",
   "Products_add_product_btn": "Dodaj Produkt",
@@ -424,6 +426,9 @@
   "ProductSubcategories_title": "Podkategorie produktów",
   "Products_add_subproduct_btn": "Dodaj podkategorie",
   "AddProductSubcategories_title": "Dodaj podkategorie",
+  "EditProductSubcategories_title": "Edit subcategory",
+  "Confirmation_alert_unactive_product_subcategory": "Czy na pewno chcerz dezaktywować podkategorie?",
+  "Confirmation_alert_active_product_subcategory": "Czy na pewno chcerz aktywować podkategorie?",
 
   "sidebar_navlink_districts": "Powiaty",
   "sidebar_navlink_shops": "Sklepy",

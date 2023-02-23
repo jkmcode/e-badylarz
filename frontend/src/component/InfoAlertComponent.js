@@ -42,7 +42,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
   };
 
   const body = {
-    textAlign: "left",
+    textAlign: "center",
     marginLeft: "3rem",
     marginRight: "3rem",
     fontWeight: "600",

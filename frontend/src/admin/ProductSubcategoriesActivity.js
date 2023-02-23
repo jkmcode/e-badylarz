@@ -9,18 +9,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProductSubcat } from "../actions/productActions";
 import { InsertImage2 } from "../actions/adminActions";
 import { v4 as uuidv4 } from "uuid";
-import { title, addBtn } from "./AdminCSS";
+import { title, addBtn, changeBtn } from "./AdminCSS";
 import { PRODUCT_SUBCAT, SET_FLAG_ADD_TRUE } from "../constants/adminConstans";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import { ADD_PRODUCT_SUBCAT_DELETE } from "../constants/productConstans";
+import { EDIT } from "../constants/environmentConstans";
 
-function AddProductSubcategories() {
+function ProductSubcategoriesActivity() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const newId = uuidv4();
   const params = useParams();
   const navigate = useNavigate();
   const subcategoryId = Number(params.id);
+  const activity = params.activity;
 
   const [values, setValues] = useState({
     name: "",
@@ -62,10 +64,16 @@ function AddProductSubcategories() {
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductCategories_name_label"),
       pattern: "^[A-Za-z]{3,16}$",
+      defaultValue: activity === EDIT && "działa warunek",
       required: true,
     },
   ];
 
+  //Comment
+  //Inside the function, it checks if success is true, and if it is,
+  //it schedules two dispatch actions to occur after a specified delay using the setTimeout method.
+  //The first dispatched action sets the SET_FLAG_ADD_TRUE flag in the Redux store (it trigger other useEffet which navigate to the main dashoboard),
+  //and the second dispatched action triggers a state update to ADD_PRODUCT_SUBCAT_DELETE in the Redux store.
   useEffect(() => {
     if (success) {
       setTimeout(() => {
@@ -75,6 +83,7 @@ function AddProductSubcategories() {
     }
   }, [success]);
 
+  //Comment
   // navigate to main dashboard
   useEffect(() => {
     if (addFlag) {
@@ -101,7 +110,10 @@ function AddProductSubcategories() {
     }
   }, [switcher]);
 
-  // add/edit photo
+  //Comment
+  //add/edit photo
+  //Inside the function, it checks if success is true and whether the variable isImage is also true.
+  //If both conditions are met, then it dispatches an action to insert an image using dispatch method from Redux.
   useEffect(() => {
     if (success) {
       if (isImage) {
@@ -134,7 +146,11 @@ function AddProductSubcategories() {
         />
       )}
       <BackButton />
-      <div style={title}>{t("AddProductSubcategories_title")}</div>
+      {activity === EDIT ? (
+        <div style={title}>{t("EditProductSubcategories_title")}</div>
+      ) : (
+        <div style={title}>{t("AddProductSubcategories_title")}</div>
+      )}
 
       <form onSubmit={handleSubmit}>
         {inputs.map((input) => {
@@ -149,11 +165,17 @@ function AddProductSubcategories() {
         })}
         <UploadImage />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <button style={addBtn}>{t("btn-add")}</button>
+          {activity === EDIT ? (
+            <button type="submit" style={changeBtn}>
+              {t("btn-change")}
+            </button>
+          ) : (
+            <button style={addBtn}>{t("btn-add")}</button>
+          )}
         </div>
       </form>
     </div>
   );
 }
 
-export default AddProductSubcategories;
+export default ProductSubcategoriesActivity;

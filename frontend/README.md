@@ -164,4 +164,5 @@ onChange={e => setHeight(e.target.value)}
 
 export default ResizeableImageUploader;
 
-dodać cofanie po zmianie statusu podkategorii
+Edit:
+pobrać z DB bieżący subcategory, żeby wpisać defaultowe wartości

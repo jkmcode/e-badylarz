@@ -39,7 +39,7 @@ import CityDescription from "./admin/CityDescription";
 import ProductCategories from "./admin/ProductCategories";
 import AddProductCategories from "./admin/AddProductCategories";
 import ProductSubcategories from "./admin/ProductSubcategories";
-import AddProductSubcategories from "./admin/AddProductSubcategories";
+import ProductSubcategoriesActivity from "./admin/ProductSubcategoriesActivity";
 import Products from "./admin/Products";
 
 //Customer side
@@ -107,7 +107,11 @@ function App() {
           />
           <Route
             path="product-categories/:id/subcategories/add"
-            element={<AddProductSubcategories />}
+            element={<ProductSubcategoriesActivity />}
+          />
+          <Route
+            path="product-categories/:id/subcategories/:idSubCat/:activity"
+            element={<ProductSubcategoriesActivity />}
           />
           <Route path="products" element={<Products />} />
         </Route>
