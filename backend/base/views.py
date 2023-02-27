@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
+from rest_framework.exceptions import ValidationError
 from django.core.files import File
 from PIL import Image
 from io import BytesIO
@@ -1092,4 +1093,34 @@ def addProductSubcat(request):
         )   
         return Response("okey")
 
-   
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSubcategory(request, Id, typeActivity):
+    
+    if typeActivity == 'subcategory':
+        productSubcat = ProductSubTypes.objects.filter(id=Id).first()
+        if productSubcat is None:
+            raise Http404('ProductSubTypes not found')
+
+        serializer = SubproductTypeSerializer(productSubcat)
+        return Response(serializer.data)   
+
+    raise ValidationError('Invalid typeActivity')
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def edit_subcategory(request):
+    try: 
+        data = request.data
+        subcategory_obj = ProductSubTypes.objects.get(id=data['editSubcategoryId'])
+        subcategory_obj.name = data['name']
+        subcategory_obj.date_of_change = datetime.now()
+        subcategory_obj.modifier = data['modifier']
+        subcategory_obj.save()
+        return Response({'message': 'Subcategory updated successfully'}, status=status.HTTP_200_OK)
+    except ProductSubTypes.DoesNotExist:
+        return Response({'message': 'Subcategory not found'}, status=status.HTTP_404_NOT_FOUND)
+    except serializers.ValidationError as e:
+        return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception:
+        return Response({'message': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        

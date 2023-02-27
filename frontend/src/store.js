@@ -11,6 +11,8 @@ import {
   sortedProductCatListReducer,
   subproductCatListReducer,
   addSubproductCatListReducer,
+  getSubproductCatReducer,
+  editSubproductCatReducer,
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -78,6 +80,8 @@ const reducer = combineReducers({
   sortedProductCatList: sortedProductCatListReducer,
   subproductCatList: subproductCatListReducer,
   addSubproductCatList: addSubproductCatListReducer,
+  getSubproductCat: getSubproductCatReducer,
+  editSubproductCat: editSubproductCatReducer,
   uploadImage: uploadImageReducers,
 });
 

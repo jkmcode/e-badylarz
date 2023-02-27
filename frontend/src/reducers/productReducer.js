@@ -20,6 +20,14 @@ import {
   GET_PRODUCT_SUBCAT_LIST_SUCCESS,
   GET_PRODUCT_SUBCAT_LIST_FAIL,
   GET_PRODUCT_SUBCAT_LIST_DELETE,
+  GET_PRODUCT_SUBCAT_REQUEST,
+  GET_PRODUCT_SUBCAT_SUCCESS,
+  GET_PRODUCT_SUBCAT_FAIL,
+  GET_PRODUCT_SUBCAT_DELETE,
+  EDIT_PRODUCT_SUBCAT_REQUEST,
+  EDIT_PRODUCT_SUBCAT_SUCCESS,
+  EDIT_PRODUCT_SUBCAT_FAIL,
+  EDIT_PRODUCT_SUBCAT_DELETE,
 } from "../constants/productConstans";
 
 export const addProductReducer = (state = {}, action) => {
@@ -170,6 +178,44 @@ export const addSubproductCatListReducer = (state = {}, action) => {
         success: false,
       };
     case ADD_PRODUCT_SUBCAT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getSubproductCatReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_PRODUCT_SUBCAT_REQUEST:
+      return { loading: true, success: false, productSubcategoryDetails: {} };
+    case GET_PRODUCT_SUBCAT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        productSubcategoryDetails: action.payload,
+      };
+    case GET_PRODUCT_SUBCAT_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case GET_PRODUCT_SUBCAT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const editSubproductCatReducer = (state = {}, action) => {
+  switch (action.type) {
+    case EDIT_PRODUCT_SUBCAT_REQUEST:
+      return { loading: true, success: false, result: {} };
+    case EDIT_PRODUCT_SUBCAT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case EDIT_PRODUCT_SUBCAT_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case EDIT_PRODUCT_SUBCAT_DELETE:
       return {};
     default:
       return state;

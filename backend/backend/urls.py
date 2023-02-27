@@ -58,6 +58,8 @@ urlpatterns = [
     path('api/sort-by-lng/', sortByLng),
     path('api/<str:Id>/get-product-subcategories/', getProductSubcategories),
     path('api/add-product-subcat/', addProductSubcat),
+    path('api/<str:Id>/<str:typeActivity>/get-subcategory/', getSubcategory),
+    path('api/edit-product-subcategory/', edit_subcategory),
     
 ]
 

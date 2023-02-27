@@ -15,6 +15,12 @@ import {
   GET_PRODUCT_SUBCAT_LIST_REQUEST,
   GET_PRODUCT_SUBCAT_LIST_SUCCESS,
   GET_PRODUCT_SUBCAT_LIST_FAIL,
+  GET_PRODUCT_SUBCAT_REQUEST,
+  GET_PRODUCT_SUBCAT_SUCCESS,
+  GET_PRODUCT_SUBCAT_FAIL,
+  EDIT_PRODUCT_SUBCAT_REQUEST,
+  EDIT_PRODUCT_SUBCAT_SUCCESS,
+  EDIT_PRODUCT_SUBCAT_FAIL,
 } from "../constants/productConstans";
 
 export const addProductCat = (insertData) => async (dispatch, getState) => {
@@ -184,6 +190,76 @@ export const addProductSubcat = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_PRODUCT_SUBCAT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getSubcategory = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_PRODUCT_SUBCAT_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/${insertData.typeActivity}/get-subcategory`,
+      config,
+      insertData
+    );
+
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const updateSubcategory = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: EDIT_PRODUCT_SUBCAT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/edit-product-subcategory/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: EDIT_PRODUCT_SUBCAT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EDIT_PRODUCT_SUBCAT_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

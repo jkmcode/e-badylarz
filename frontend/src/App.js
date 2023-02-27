@@ -106,7 +106,7 @@ function App() {
             element={<ProductSubcategories />}
           />
           <Route
-            path="product-categories/:id/subcategories/add"
+            path="product-categories/:id/subcategories/:activity"
             element={<ProductSubcategoriesActivity />}
           />
           <Route

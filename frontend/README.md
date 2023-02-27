@@ -165,4 +165,5 @@ onChange={e => setHeight(e.target.value)}
 export default ResizeableImageUploader;
 
 Edit:
-pobrać z DB bieżący subcategory, żeby wpisać defaultowe wartości
+Czy ujednolicić pobieranie odpowiednich rekorów z DB, żeby wpisać defaultowe wartości przy edytowaniu.
+ogarnąc ten błąd odnośnie defaultowych wartości !!!

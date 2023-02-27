@@ -187,9 +187,6 @@ function AddShopsSpot() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("event", event);
-    console.log("values", values);
-
     // if (SpotParam === "add") {
     //   if (selectedDistrict !== 0 && selectedCity !== 0) {
     //     const insertData = {
@@ -253,8 +250,6 @@ function AddShopsSpot() {
     }
   }, [dispatch, districtList.length, cityListAll.length]);
 
-  // *********************************************************
-
   // uruchamiany gdy jest wybrany powiat
   const [newListCities, setNewListCities] = useState([]);
 
@@ -263,8 +258,6 @@ function AddShopsSpot() {
       cityListAll.filter((city) => selectedDistrict === city.id_district)
     );
   }, [dispatch, selectedDistrict]);
-
-  // *********************************************************
 
   // fetch data from DB -- shop & spot to edit
   // remove old image

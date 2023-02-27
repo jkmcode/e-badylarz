@@ -429,12 +429,12 @@ function AddShops() {
             </FormLayout>
             <UploadImage />
             {imageRender &&
-              editShopParam === "edit" &&
+              editShopParam === EDIT &&
               shopDetails.photo !== null && (
                 <ImageDisplayer imageSrc={shopDetails.photo} />
               )}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {editShopParam === "edit" ? (
+              {editShopParam === EDIT ? (
                 <button type="submit" style={changeBtn}>
                   {t("btn-change")}
                 </button>

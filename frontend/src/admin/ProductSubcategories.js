@@ -15,6 +15,7 @@ import {
   UNACTIVE,
   ACTIVE,
   PRODUCT_SUBCAT_DESCRIPTION,
+  SET_FLAG_ADD_FALSE,
 } from "../constants/adminConstans";
 import { GET_PRODUCT_SUBCAT_LIST_DELETE } from "../constants/productConstans";
 import {
@@ -56,6 +57,13 @@ function ProductSubcategories() {
   );
   const { loading, subproductCatList, error, success } =
     subproductSubcatListRedux;
+
+  const editsubcatProduct = useSelector((state) => state.editSubproductCat);
+  const {
+    success: successEditsubcatProduct,
+    loading: loadingEditsubcatProduct,
+    error: errorEditsubcatProduct,
+  } = editsubcatProduct;
 
   const unOrActive = useSelector((state) => state.unOrActiveDescription);
   const {
@@ -242,6 +250,13 @@ function ProductSubcategories() {
     }
     setConfirm(false);
   }, [dispatch, confirm, updateStatus]);
+
+  //Comment
+  // The dispatch function updates the state with the SET_FLAG_ADD_FALSE action type.
+  // It unable to run UseEffect in ProductSubcategoriesActivity to navigate to this component.
+  useEffect(() => {
+    dispatch({ type: SET_FLAG_ADD_FALSE });
+  }, []);
 
   // error rendering
   if (error) {
