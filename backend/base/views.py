@@ -7,6 +7,7 @@ from rest_framework.exceptions import ValidationError
 from django.core.files import File
 from PIL import Image
 from io import BytesIO
+from django.http import Http404
 
 from datetime import datetime
 
@@ -844,6 +845,8 @@ def activeList(request):
         descrip = ProductTypes.objects.get(id=data["Id"])
     elif data['objType'] == "PRODUCT_SUBCAT":
         descrip = ProductSubTypes.objects.get(id=data["Id"])    
+    elif data['objType'] == "PRODUCTS":
+        descrip = Product.objects.get(id=data["Id"])         
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -1093,20 +1096,6 @@ def addProductSubcat(request):
         )   
         return Response("okey")
 
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def getSubcategory(request, Id, typeActivity):
-    
-    if typeActivity == 'subcategory':
-        productSubcat = ProductSubTypes.objects.filter(id=Id).first()
-        if productSubcat is None:
-            raise Http404('ProductSubTypes not found')
-
-        serializer = SubproductTypeSerializer(productSubcat)
-        return Response(serializer.data)   
-
-    raise ValidationError('Invalid typeActivity')
-
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def edit_subcategory(request):
@@ -1124,3 +1113,31 @@ def edit_subcategory(request):
         return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception:
         return Response({'message': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_single_instance(request, Id, typeActivity):
+    
+    if typeActivity == 'subcategory':
+        single_instance = ProductSubTypes.objects.filter(id=Id).first()
+        serializer = SubproductTypeSerializer(single_instance)
+    elif typeActivity == 'PRODUCT_CAT':
+        single_instance = ProductTypes.objects.filter(id=Id).first()
+        serializer = ProductTypeSerializer(single_instance)
+    else:
+        raise Http404('Invalid typeActivity')
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_list_of_data(request, typeActivity):
+    
+    if typeActivity == "LIST_OF_PRODUCTS":
+        products = Product.objects.all().order_by('name')
+        seriaziler = ProductsSerializer(products, many=True)
+    else:
+        raise Http404('Invalid typeActivity')
+    
+    return Response(seriaziler.data)      

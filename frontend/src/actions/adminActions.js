@@ -62,6 +62,12 @@ import {
   EDIT_SHOP_SPOT_REQUEST,
   EDIT_SHOP_SPOT_SUCCESS,
   EDIT_SHOP_SPOT_FAIL,
+  GET_SINGLE_INSTANCE_REQUEST,
+  GET_SINGLE_INSTANCE_CAT_SUCCESS,
+  GET_SINGLE_INSTANCE_CAT_FAIL,
+  GET_LIST_OF_DATA_REQUEST,
+  GET_LIST_OF_DATA_SUCCESS,
+  GET_LIST_OF_DATA_FAIL,
 } from "../constants/adminConstans";
 
 // Save image in redax
@@ -762,5 +768,77 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
           ? error.response.data.detail
           : error.message,
     });
+  }
+};
+
+//TEST
+
+export const getSingleInstance = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_SINGLE_INSTANCE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData.Id}/${insertData.typeActivity}/get-single-instance`,
+      config,
+      insertData
+    );
+
+    dispatch({
+      type: GET_SINGLE_INSTANCE_CAT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SINGLE_INSTANCE_CAT_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getListOfData = (typeActivity) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_LIST_OF_DATA_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/${typeActivity}/get-list-of-data/`,
+      config
+    );
+
+    dispatch({
+      type: GET_LIST_OF_DATA_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_LIST_OF_DATA_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    console.log(error);
   }
 };

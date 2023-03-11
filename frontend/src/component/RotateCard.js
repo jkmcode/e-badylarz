@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import PropTypes from "prop-types";
+import noImage from "../images/noImage.png";
 
-function RotateCard({ name, objects, id, isActive }) {
+function RotateCard({ name, photo, objects, id, isActive }) {
   const [toggle, setToggle] = useState(false);
 
   //styling
@@ -68,11 +69,19 @@ function RotateCard({ name, objects, id, isActive }) {
           </button>
         </div>
 
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {photo ? (
+            <img style={{ width: "60%", borderRadius: "10%" }} src={photo} />
+          ) : (
+            <img style={{ width: "60%", borderRadius: "10%" }} src={noImage} />
+          )}
+        </div>
+
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "2rem",
+            marginTop: "1rem",
           }}
         >
           <div>{name}</div>
@@ -122,6 +131,7 @@ export default RotateCard;
 
 RotateCard.propTypes = {
   name: PropTypes.string.isRequired,
+  photo: PropTypes.string,
   objects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

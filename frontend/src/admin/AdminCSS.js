@@ -101,6 +101,12 @@ export const styleHeader = {
   padding: "1rem",
 };
 
+export const productsStyleHeader = {
+  backgroundColor: "white",
+  borderBottom: `3px solid #1a6985`,
+  padding: "1rem",
+};
+
 export function FormLayout({ children, col, ratio }) {
   const { windowWidth } = useResponsive();
 

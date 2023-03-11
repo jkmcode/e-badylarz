@@ -42,6 +42,8 @@ import {
   getSpotReducer,
   shopSpotUpdateListReducer,
   citesListAllReducer,
+  getSingleInstanceReducer,
+  getListOfDataReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -83,6 +85,8 @@ const reducer = combineReducers({
   getSubproductCat: getSubproductCatReducer,
   editSubproductCat: editSubproductCatReducer,
   uploadImage: uploadImageReducers,
+  getSingleInstance: getSingleInstanceReducer,
+  getListOfData: getListOfDataReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

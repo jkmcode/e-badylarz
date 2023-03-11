@@ -11,7 +11,7 @@ import language from "../language";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link, useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
-import { ONE, ZERO, EMPTY } from "../constants/environmentConstans";
+import { ONE, ZERO, EMPTY, EMPTY_LIST } from "../constants/environmentConstans";
 import {
   SET_FLAG_ADD_FALSE,
   PRODUCT_CAT_DESCRIPTION,
@@ -31,6 +31,7 @@ import {
   unactiveBtn,
   activeBtn,
   subcategoryBtn,
+  editBtn,
 } from "./AdminCSS";
 
 function ProductCategories() {
@@ -89,8 +90,6 @@ function ProductCategories() {
     error: errorUnOrActive,
   } = unOrActive;
 
-  //useEffect
-
   //Comment
   // This useEffect hook dispatches the GET_PRODUCT_SUBCAT_LIST_DELETE action to reset the subproductCatList array,
   // ensuring that any previously stored data is cleared.
@@ -102,7 +101,7 @@ function ProductCategories() {
 
   // fetching list of product categories from DB
   useEffect(() => {
-    if (productCatList.length === 0) {
+    if (productCatList.length === EMPTY_LIST) {
       dispatch(getProductCat());
     }
   }, [dispatch, productCatList.length]);
@@ -183,7 +182,7 @@ function ProductCategories() {
     name: "language",
     label: "language",
     optionsList: language,
-    defaultValue: "Select an option",
+    defaultValue: t("default_option_lng"),
   };
 
   const selectLngHandler = (option) => {
@@ -216,6 +215,10 @@ function ProductCategories() {
     navigate(`${id}/subcategories`);
   };
 
+  const editProductCat = (id) => {
+    navigate(`${id}/edit`);
+  };
+
   const objects = productCatList.map((cat) => ({
     id: cat.id,
     buttons: [
@@ -245,6 +248,15 @@ function ProductCategories() {
             style={subcategoryBtn}
           >
             {t("btn_subcategory")}
+          </button>
+        ),
+        btnActive: false,
+      },
+      {
+        id: 4,
+        btn: (
+          <button onClick={() => editProductCat(cat.id)} style={editBtn}>
+            {t("btn_edit")}
           </button>
         ),
         btnActive: false,
@@ -308,6 +320,7 @@ function ProductCategories() {
                     <RotateCard
                       key={category.id}
                       name={category.name}
+                      photo={category.photo}
                       id={category.id}
                       objects={objects}
                       isActive={true}
@@ -321,6 +334,7 @@ function ProductCategories() {
                     <RotateCard
                       key={category.id}
                       name={category.name}
+                      photo={category.photo}
                       id={category.id}
                       objects={objects}
                       isActive={true}
@@ -366,7 +380,7 @@ function ProductCategories() {
             }}
           >
             <Link to="add" style={addProdCatBtn}>
-              Add Category
+              {t("product_category_add")}
             </Link>
           </div>
         )}

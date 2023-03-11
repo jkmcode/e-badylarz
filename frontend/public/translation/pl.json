@@ -1,5 +1,4 @@
 {
-  "test": "po polsku",
   "ErrorMessage_title": "Wystąpił błąd",
   "ErrorMessage_title_success": "Sukces",
   "ErrorMessage_inproper_password": "Nieprawidłowy login lub hasło",
@@ -77,6 +76,8 @@
   "btn_description": "Opis",
   "btn_yes": "TAK",
   "btn_no": "NIE",
+  "default_option_lng": "Wybierz język",
+  "default_option_product_cat": "Wybierz categorie produktu",
   "btn_show_active_shops": "skley aktywne",
   "btn_show_inactive_shops": "sklepy nieaktywne",
   "btn_show_active_areas": "Aktywne obszary",
@@ -414,14 +415,26 @@
 
   "ProductCategories_title": "Kategorie produktów",
   "ProductCategories_msg_add_success": "Kategoria produktu dodana prawidłowo",
+  "ProductCategories_msg_image_edit_success": "Zdjęcie zostało zmienione",
   "ProductCategories_name_label": "Nazwa kategorii produktu",
   "ProductCategories_name_placeholder": "Wpisz nazwe kategorii produktu ...",
   "ProductCategories_name_error_message": "Nazwa kategorii produktów powinna mieć od 3 do 30 znaków i nie powinna zawierać żadnych znaków specjalnych!",
   "Confirmation_alert_unactive_product_category": "Czy na pewno chcerz dezaktywować kategorie?",
   "Confirmation_alert_active_product_category": "Czy na pewno chcerz aktywować kategorie?",
+  "product_category_add": "Dodaj kategorie",
+  "Product_category_edit_title": "Zmień kategorie",
+  "Product_category_add_title": "dodaj kategorie",
 
   "Products_title": "Lista Produktów",
   "Products_add_product_btn": "Dodaj Produkt",
+  "Products_name": "nazwa",
+  "Products_status": "status",
+
+  "ProductsActivity_add_title": "Dodawanie produktu",
+  "ProductsActivity_edit_title": "Edycja produktu",
+  "ProductsActivity_name_placeholder": "Wpisz nazwe produktu ...",
+  "ProductsActivity_name_error_message": "Nazwa produktu powinna mieć od 3 do 30 znaków i nie powinna zawierać żadnych znaków specjalnych!",
+  "ProductsActivity_name_label": "Nazwa produktu",
 
   "ProductSubcategories_title": "Podkategorie produktów",
   "Products_add_subproduct_btn": "Dodaj podkategorie",
@@ -430,6 +443,8 @@
   "EditSubProductCategories_msg_edit_success": "Subcategory został zmieniony",
   "Confirmation_alert_unactive_product_subcategory": "Czy na pewno chcerz dezaktywować podkategorie?",
   "Confirmation_alert_active_product_subcategory": "Czy na pewno chcerz aktywować podkategorie?",
+  "Confirmation_alert_unactive_product": "Czy na pewno chcerz dezaktywować produkt?",
+  "Confirmation_alert_active_product": "Czy na pewno chcerz aktywować produkt?",
 
   "sidebar_navlink_districts": "Powiaty",
   "sidebar_navlink_shops": "Sklepy",

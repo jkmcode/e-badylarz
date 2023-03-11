@@ -8,7 +8,7 @@ import InfoAlertComponent from "../component/InfoAlertComponent";
 import { useTranslation } from "react-i18next";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ONE, EMPTY_LIST } from "../constants/environmentConstans";
+import { ONE, EMPTY_LIST, EMPTY } from "../constants/environmentConstans";
 import { getSubproductCat } from "../actions/productActions";
 import { unOrActiveList } from "../actions/adminActions";
 import {
@@ -192,7 +192,7 @@ function ProductSubcategories() {
   //Comment
   //When the successUnOrActive value is truthy,
   //the component will dispatch an action of type GET_PRODUCT_SUBCAT_LIST_DELETE (clean a subproductCatList)
-  //it trigger other useEffect which fetch thw newst subproductCatList.
+  //it triggers other useEffect which fetch the newest subproductCatList.
   useEffect(() => {
     if (successUnOrActive) {
       dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });

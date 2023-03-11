@@ -12,7 +12,7 @@ import {
   getSubcategory,
   updateSubcategory,
 } from "../actions/productActions";
-import { InsertImage2 } from "../actions/adminActions";
+import { InsertImage2, getSingleInstance } from "../actions/adminActions";
 import { v4 as uuidv4 } from "uuid";
 import { title, addBtn, changeBtn } from "./AdminCSS";
 import {
@@ -57,14 +57,6 @@ function ProductSubcategoriesActivity() {
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
 
-  const subcatProduct = useSelector((state) => state.getSubproductCat);
-  const {
-    productSubcategoryDetails,
-    success: successGetProductSubcategory,
-    loading: productSubcategotyLoading,
-    error: productSubcategotyError,
-  } = subcatProduct;
-
   const editsubcatProduct = useSelector((state) => state.editSubproductCat);
   const {
     success: successEditsubcatProduct,
@@ -74,6 +66,9 @@ function ProductSubcategoriesActivity() {
 
   const dflag = useSelector((state) => state.flag);
   const { addFlag } = dflag;
+
+  const singleSingleRedux = useSelector((state) => state.getSingleInstance);
+  const { result, success: successSingleInstance } = singleSingleRedux;
 
   //Handlers
   const handleSubmit = (e) => {
@@ -107,8 +102,8 @@ function ProductSubcategoriesActivity() {
       defaultValue:
         activity === "add"
           ? ""
-          : successGetProductSubcategory && activity === EDIT
-          ? productSubcategoryDetails.name
+          : successSingleInstance && activity === EDIT
+          ? result.name
           : "",
       required: true,
     },
@@ -149,7 +144,7 @@ function ProductSubcategoriesActivity() {
   //It also updates the state of switcher to false using setSwitcher(false).
   //When editSwitcher is true, it adds some additional properties to insertData and dispatches an action using the updateSubcategory action creator.
   //It also sets the state of editSwitcher to false. The value for the name property in insertData is determined based on the values.name property
-  //, or the productSubcategoryDetails.name property if values.name is falsy.
+  //, or the successSingleInstance.name property if values.name is falsy.
   useEffect(() => {
     if (addSwitcher) {
       const insertData = {
@@ -165,7 +160,7 @@ function ProductSubcategoriesActivity() {
 
     if (editSwitcher) {
       const insertData = {
-        name: !values.name ? productSubcategoryDetails.name : values.name,
+        name: !values.name ? successSingleInstance.name : values.name,
         modifier: userInfo.id,
         uniqueId: uniqueId,
         editSubcategoryId: editSubcategoryId,
@@ -189,7 +184,7 @@ function ProductSubcategoriesActivity() {
         dispatch(
           InsertImage2({
             imageUpload: imageUpload,
-            uniqueId: success ? uniqueId : productSubcategoryDetails.uniqueId,
+            uniqueId: success ? uniqueId : successSingleInstance.uniqueId,
             type: PRODUCT_SUBCAT,
           })
         );
@@ -205,7 +200,7 @@ function ProductSubcategoriesActivity() {
     setImageRender(true);
     if (activity === EDIT) {
       dispatch(
-        getSubcategory({
+        getSingleInstance({
           Id: editSubcategoryId,
           typeActivity: "subcategory",
         })
@@ -258,11 +253,9 @@ function ProductSubcategoriesActivity() {
           );
         })}
         <UploadImage />
-        {imageRender &&
-          activity === EDIT &&
-          productSubcategoryDetails.photo !== null && (
-            <ImageDisplayer imageSrc={productSubcategoryDetails.photo} />
-          )}
+        {imageRender && activity === EDIT && result.photo !== null && (
+          <ImageDisplayer imageSrc={result.photo} />
+        )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           {activity === EDIT ? (
             <button type="submit" style={changeBtn}>

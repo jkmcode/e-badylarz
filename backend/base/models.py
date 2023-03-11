@@ -390,10 +390,10 @@ class ProductSpeciesDescriptions(models.Model):
 
 ####
 # Product Genera
-class ProductGenera(models.Model):
+class Product(models.Model):
     id_product_species = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    language = models.CharField(max_length=2, null=True, blank=True)
+    #language = models.CharField(max_length=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True, null=True,blank=True)
     date_of_change= models.DateTimeField(auto_now=True,null=True,blank=True)
@@ -406,7 +406,7 @@ class ProductGenera(models.Model):
 
 #Product Genera description
 class ProductGeneraDescriptions(models.Model):
-    id_product_genera = models.ForeignKey(ProductGenera, on_delete=models.CASCADE, null=True)
+    id_product_genera = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     description =  models.CharField(max_length=255, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now_add=True, null=True,blank=True)

@@ -195,7 +195,7 @@ export const getSubproductCatReducer = (state = {}, action) => {
         productSubcategoryDetails: action.payload,
       };
     case GET_PRODUCT_SUBCAT_FAIL:
-      return { loading: false, error: action.payload, success: false };
+      return { loading: false, success: false, error: action.payload };
     case GET_PRODUCT_SUBCAT_DELETE:
       return {};
     default:
