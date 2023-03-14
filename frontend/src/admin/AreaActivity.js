@@ -11,20 +11,29 @@ import FormInput from "./FormInput";
 import FormInputIBAN from "./FormInputIBAN";
 import Divider from "./Divider";
 import { addArea, getAreaToEdit } from "../actions/areaAction";
-import { ADD_AREA_DELETE, TIME_AUT } from "../constants/areaConstans";
-import { GET_AREA_LIST_DELETE } from "../constants/areaConstans";
+import {
+  GET_AREA_LIST_DELETE,
+  TIME_AUT,
+  ADD_AREA_DELETE
+} from "../constants/areaConstans";
 
 import {
   TIME_AUT_ERROR,
   TIME_AUT_SUCCESS,
+  UNIQUE_VALUE
 } from "../constants/environmentConstans";
 
 import { TWO, THREE } from "../constants/adminConstans";
 import {
-  NUMBERS_AND_NATIONAL_LETTERS,
-  NIP_FORMAT,
-  BANK_ACCOUNT_FORMAT,
-  GPS_FORMAT,
+  NAME_PATTERN,
+  NIP_PATTERN,
+  LONG_NAME_PATTERN,
+  NO_BUILDING_PATTERN,
+  POST_FORMAT,
+  POST_NAME_PATTERN,
+  PL_BANKACCOUNT_PATTERN,
+  LATITUDE_PATTERN,
+  LONGITUDE_PATTERN
 } from "../constants/formValueConstans";
 
 import { Icon } from "@iconify/react";
@@ -40,13 +49,11 @@ function AddArea() {
 
   const activityAreaParam = params.add;
   const Id = params.id;
-
-  const [successFlag, setSuccessFlag] = useState(false);
   const [values, setValues] = useState({
     areaName: "",
     nip: "",
     city: "",
-    street: "",
+    street: UNIQUE_VALUE,
     number: "",
     postCode: "",
     post: "",
@@ -101,7 +108,7 @@ function AddArea() {
           number: !values.number ? area.no_building : values.number,
           post: !values.post ? area.post : values.post,
           postCode: !values.postCode ? area.post_code : values.postCode,
-          street: !values.street ? area.street : values.street,
+          street: values.street === UNIQUE_VALUE ? area.street : values.street,
           creator: userInfo.id,
           bankAccount: !values.bankAccount
             ? area.bank_account
@@ -124,8 +131,9 @@ function AddArea() {
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        setSuccessFlag(true);
+        dispatch({ type: GET_AREA_LIST_DELETE });
         dispatch({ type: ADD_AREA_DELETE });
+        navigate("/dashboard/areas");
       }, TIME_AUT);
     }
   }, [success]);
@@ -135,12 +143,6 @@ function AddArea() {
       dispatch(getAreaToEdit(Id));
     }
   }, []);
-
-  useEffect(() => {
-    if (successFlag) {
-      navigate("/dashboard/areas");
-    }
-  }, [successFlag]);
 
   //style
   const mainContainer = {
@@ -162,7 +164,7 @@ function AddArea() {
       placeholder: t("AreaActivity_name_placeholder"),
       errorMessage: t("AreaActivity_name_error_message"),
       label: t("AreaActivity_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
+      pattern: NAME_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -176,7 +178,7 @@ function AddArea() {
       placeholder: t("nip_placeholder"),
       errorMessage: t("nip_error_message"),
       label: t("nip_label"),
-      pattern: "^[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}$",
+      pattern: NIP_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -190,7 +192,7 @@ function AddArea() {
       placeholder: t("city_placeholder"),
       errorMessage: t("city_error_message"),
       label: t("city_label"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,16}$",
+      pattern: NAME_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -204,12 +206,12 @@ function AddArea() {
       placeholder: t("street_placeholder"),
       errorMessage: t("street_error_message"),
       label: t("street_label"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ ]{3,50}$",
+      pattern: LONG_NAME_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
           : successAreaToEdit && activityAreaParam === "edit" && area.street,
-      required: true,
+      required: false,
     },
     {
       id: "5",
@@ -218,13 +220,13 @@ function AddArea() {
       placeholder: t("number_placeholder"),
       errorMessage: t("number_error_message"),
       label: t("number_label"),
-      pattern: "^[0-9A-Z]+(-[0-9]+)?(/[0-9]+(-[0-9]+)?)*$",
+      pattern: NO_BUILDING_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
           : successAreaToEdit &&
-            activityAreaParam === "edit" &&
-            area.no_building,
+          activityAreaParam === "edit" &&
+          area.no_building,
       required: true,
     },
     {
@@ -234,7 +236,7 @@ function AddArea() {
       placeholder: t("postCode_placeholder"),
       errorMessage: t("postCode_error_message"),
       label: t("postCode_label"),
-      pattern: "^[0-9]{2}-[0-9]{3}$",
+      pattern: POST_FORMAT,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -248,7 +250,7 @@ function AddArea() {
       placeholder: t("AddShops_post_placeholder"),
       errorMessage: t("AddShops_post_error_message"),
       label: t("AddShops_label_post"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,50}$",
+      pattern: POST_NAME_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -262,14 +264,13 @@ function AddArea() {
       placeholder: t("bankAccound_placeholder"),
       errorMessage: t("bankAccound_error_message"),
       label: t("bankAccound_label"),
-      pattern:
-        "^PL[0-9]{2} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$",
+      pattern: PL_BANKACCOUNT_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
           : successAreaToEdit &&
-            activityAreaParam === "edit" &&
-            area.bank_account,
+          activityAreaParam === "edit" &&
+          area.bank_account,
       required: true,
     },
     {
@@ -279,7 +280,7 @@ function AddArea() {
       placeholder: t("latitude_placeholder"),
       errorMessage: t("latitude_error_message"),
       label: t("label_latitude"),
-      pattern: "^-?([1-8]\\d|90|[0-9])(\\.\\d+)?$",
+      pattern: LATITUDE_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -293,7 +294,7 @@ function AddArea() {
       placeholder: t("longitude_placeholder"),
       errorMessage: t("longitude_error_message"),
       label: t("label_longitude"),
-      pattern: "^-?(180|1[0-7]\\d|[1-9]\\d|[1-9])(\\.\\d+)?$",
+      pattern: LONGITUDE_PATTERN,
       defaultValue:
         activityAreaParam === "add"
           ? ""
@@ -304,7 +305,7 @@ function AddArea() {
 
   return (
     <>
-      {loading ? (
+      {loading || loadingAreaToEdit ? (
         <Loader />
       ) : (
         <div style={mainContainer}>

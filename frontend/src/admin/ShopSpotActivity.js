@@ -1,11 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { getFullDiscricts } from "../actions/discrictsActions";
-import { getAllCities } from "../actions/adminActions";
-import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
-import { TWO, THREE } from "../constants/environmentConstans";
 import useResponsive from "../component/useResponsive";
 import FormInput from "./FormInput";
 import Divider from "./Divider";
@@ -13,7 +6,17 @@ import Loader from "../component/Loader";
 import SelectOption from "./SelectOption";
 import ErrorMessage from "../component/ErrorMessage";
 import UploadImage from "../component/UploadImage";
+import ImageDisplayer from "../component/ImageDisplayerComponent";
 import RadioButtons from "./RadioButtons";
+import AddDescription from "./AddDescription";
+import InfoComponent from "../component/infoComponent";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
+import { TWO, THREE, FOUR } from "../constants/environmentConstans";
+import { Icon } from "@iconify/react";
+import { useKindShopSpots } from "../Data/KindShop";
 import {
   addShopSpot,
   getShop,
@@ -27,6 +30,12 @@ import {
   SET_FLAG_IMAGE_TRUE,
   GET_SHOPS_LIST_DELETE,
   ADD_SHOP_SPOT_DELETE,
+  ADD_IMAGE_DELETE,
+  EDIT_SHOP_SPOT_DELETE,
+  SET_CITY_FLAG_DESC_TRUE,
+  SPOT_DESCRIPTION,
+  SET_FLAG_INFO_TRUE,
+  SET_FLAG_INFO_FALSE,
 } from "../constants/adminConstans";
 
 import {
@@ -36,7 +45,6 @@ import {
 
 import {
   NAME_PATTERN,
-  NUMBERS_PATTERN,
   LONG_NAME_PATTERN,
   POST_NAME_PATTERN,
   LONGITUDE_PATTERN,
@@ -46,8 +54,6 @@ import {
   ONLY_NUMBER,
 } from "../constants/formValueConstans";
 
-import { Icon } from "@iconify/react";
-
 function AddShopsSpot() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -55,12 +61,13 @@ function AddShopsSpot() {
   const navigate = useNavigate();
   const { windowWidth } = useResponsive();
 
-  const [uploading, setUploading] = useState(false);
+  const [helper, setHelper] = useState(false);
+  const [objId, setObjId] = useState("");
+  const [objInfo, setObjInfo] = useState({});
+
   const [imageRender, setImageRender] = useState(false);
-  const [currentTaxNo, setCurrentTaxNo] = useState("");
-  const [showShop, setShowShop] = useState(false);
-  const [selectedDistrict, setSelectedDistrict] = useState(0);
-  const [selectedCity, setSelectedCity] = useState(0);
+  const [currentSpotName, setCurrentSpotName] = useState("");
+  const [selectedKindSpot, setSelectedKindSpot] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
   const [values, setValues] = useState({
@@ -73,10 +80,10 @@ function AddShopsSpot() {
     post: "",
     latitude: "",
     longitude: "",
+    cityName: "",
   });
 
   const SpotParam = params.add;
-  const editShopParam = params.edit;
   const shopId = params.id;
   const spotId = params.idSpot;
 
@@ -89,13 +96,11 @@ function AddShopsSpot() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const shopListRedux = useSelector((state) => state.shopList);
-  const {
-    loading: loadingShopList,
-    error: errorShopList,
-    successAdd,
-    shopList,
-  } = shopListRedux;
+  const infoFlagRedux = useSelector((state) => state.flag);
+  const { cityDescFlag } = infoFlagRedux;
+
+  const infoFlag12 = useSelector((state) => state.flag);
+  const { infoFlag } = infoFlag12;
 
   const spotRedux = useSelector((state) => state.getSpot);
   const {
@@ -110,35 +115,21 @@ function AddShopsSpot() {
     successAdd: successAddSpot,
     loading: addSpotLoading,
     error: addSpotError,
+    shopSpotList,
   } = addSpotRedux;
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
 
   const insertImageRedux = useSelector((state) => state.insertImage);
-  const { successInsertImage, loadingInsertImage } = insertImageRedux;
-
-  const imageFlag = useSelector((state) => state.flag);
-  const { shopImageFlag } = imageFlag;
-
-  const updateShopRedux = useSelector((state) => state.updateShop);
-  const { loading: loadingUpdateShop, success: successUpdateShop } =
-    updateShopRedux;
+  const {
+    successInsertImage,
+    loadingInsertImage,
+    error: errorInsertImage,
+  } = insertImageRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
-  const {
-    loading: loadingGetShop,
-    shopDetails,
-    success: successGetShop,
-  } = getShopRedux;
-
-  const discrictListRedux = useSelector((state) => state.districts);
-  const {
-    loading: loadingDisctrict,
-    districtList,
-    error: errorDisctrict,
-    success: successDisctric,
-  } = discrictListRedux;
+  const { shopDetails, success: successGetShop, loading } = getShopRedux;
 
   const shopSpotUpdateRedux = useSelector((state) => state.shopSpotUpdate);
   const {
@@ -147,36 +138,31 @@ function AddShopsSpot() {
     success: successUpdate,
   } = shopSpotUpdateRedux;
 
-  const dataRedux = useSelector((state) => state.citesList);
-  const {
-    loading: loadingCity,
-    cityList,
-    success,
-    error: errorCity,
-  } = dataRedux;
-
-  const dataReduxCitiesListAll = useSelector((state) => state.citesListAll);
-  const {
-    loading: loadingCityAllList,
-    cityListAll,
-    success: successGetAllCities,
-    error: errorGetAllCities,
-  } = dataReduxCitiesListAll;
-
   // Handlers
+
+  const infoHandler = (i) => {
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
+  };
+
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+  };
+
+  const descriptionHandler = (i) => {
+    dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
+    setHelper(true);
+    setObjId(i.id);
+    console.log("JESTEM w opisie --->>>", i);
+  };
 
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
 
-  const selectDistrictHandler = (option) => {
-    setSelectedDistrict(Number(option));
-    setEmptyValueError(false);
-  };
-
-  const selectCityHandler = (option) => {
-    setSelectedCity(Number(option));
-    setValues({ ...values, cityList: option });
+  const selectKindHandler = (option) => {
+    setSelectedKindSpot(Number(option));
+    setValues({ ...values, kindSpot: option });
     setEmptyValueError(false);
   };
 
@@ -187,77 +173,62 @@ function AddShopsSpot() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // if (SpotParam === "add") {
-    //   if (selectedDistrict !== 0 && selectedCity !== 0) {
-    //     const insertData = {
-    //       add: true,
-    //       id_shops: shopId,
-    //       name: values.spotName,
-    //       city: values.cityList,
-    //       street: values.street,
-    //       no_building: values.number,
-    //       postCode: values.postCode,
-    //       post: values.post,
-    //       latitude: values.latitude,
-    //       longitude: values.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: radioValue === "1" ? "False" : "True",
-    //       range: radioValue === "1" ? "0" : values.range,
-    //     };
-    //     dispatch(addShopSpot(insertData));
-    //   } else {
-    //     setEmptyValueError(true);
-    //   }
-    // } else {
-    //   dispatch({ type: SET_FLAG_IMAGE_TRUE });
-    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-    //   if (radioValue === "1") {
-    //     const insertData = {
-    //       add: false,
-    //       id_spot: spotId,
-    //       id_shops: shopId,
-    //       name: !values.spotName ? shopDetails.name : values.spotName,
-    //       city: values.cityList, /// To jest źle
-    //       street: !values.street ? spotDetails.street : values.street,
-    //       no_building: !values.number ? spotDetails.no_building : values.number,
-    //       postCode: !values.postCode ? spotDetails.post_code : values.postCode,
-    //       post: !values.post ? spotDetails.post : values.post,
-    //       latitude: !values.latitude ? spotDetails.latitude : values.latitude,
-    //       longitude: !values.longitude
-    //         ? spotDetails.longitude
-    //         : values.longitude,
-    //       creator: userInfo.id,
-    //       is_active: "True",
-    //       delivery: "False",
-    //       range: "0",
-    //     };
-    //     dispatch(updateShopSpot(insertData));
-    //   }
-    // }
+    if (SpotParam === "add") {
+      if (selectedKindSpot !== 0) {
+        setCurrentSpotName(values.spotName);
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: values.spotName,
+          city: values.cityName,
+          street: values.street,
+          no_building: values.number,
+          postCode: values.postCode,
+          post: values.post,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: radioValue === "1" ? "False" : "True",
+          range: radioValue === "1" ? "0" : values.range,
+          kind: values.kindSpot,
+        };
+        dispatch(addShopSpot(insertData));
+      } else {
+        setEmptyValueError(true);
+      }
+    } else {
+      dispatch({ type: SET_FLAG_IMAGE_TRUE });
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      //
+      const insertData = {
+        add: false,
+        id_spot: spotId,
+        id_shops: shopId,
+        name: !values.spotName ? spotDetails.name : values.spotName,
+        city: !values.cityName ? spotDetails.city : values.cityName,
+        street: !values.street ? spotDetails.street : values.street,
+        no_building: !values.number ? spotDetails.no_building : values.number,
+        postCode: !values.postCode ? spotDetails.post_code : values.postCode,
+        post: !values.post ? spotDetails.post : values.post,
+        latitude: !values.latitude ? spotDetails.latitude : values.latitude,
+        longitude: !values.longitude ? spotDetails.longitude : values.longitude,
+        creator: userInfo.id,
+        is_active: "True",
+        delivery: radioValue === "1" ? "False" : "True",
+        range:
+          radioValue === "1"
+            ? "0"
+            : !values.range
+            ? spotDetails.range
+            : values.range,
+        kind: !values.kindSpot ? spotDetails.kind : values.kindSpot,
+      };
+      dispatch(updateShopSpot(insertData));
+    }
   };
 
   ///USEEFFECT
-
-  // uruchamiane na samym początku
-  useEffect(() => {
-    if (districtList.length === 0) {
-      dispatch(getFullDiscricts("only active"));
-    }
-
-    if (cityListAll.length === 0) {
-      dispatch(getAllCities());
-    }
-  }, [dispatch, districtList.length, cityListAll.length]);
-
-  // uruchamiany gdy jest wybrany powiat
-  const [newListCities, setNewListCities] = useState([]);
-
-  useEffect(() => {
-    setNewListCities(
-      cityListAll.filter((city) => selectedDistrict === city.id_district)
-    );
-  }, [dispatch, selectedDistrict]);
 
   // fetch data from DB -- shop & spot to edit
   // remove old image
@@ -272,28 +243,54 @@ function AddShopsSpot() {
     }
   }, []);
 
-  // set current Tax Number
+  // add photo
   useEffect(() => {
-    if (successAdd) {
-      shopList.map((value) => {
-        if (value.nip === currentTaxNo) {
+    if (successAddSpot) {
+      shopSpotList.map((value) => {
+        if (value.name === currentSpotName) {
           if (isImage) {
             dispatch(
-              InsertImage({ imageUpload: imageUpload, taxNo: currentTaxNo })
+              InsertImage({
+                imageUpload: imageUpload,
+                Id: value.id,
+                objType: "Spot",
+              })
             );
+          } else {
+            dispatch({ type: ADD_SHOP_SPOT_DELETE });
+            dispatch({ type: EDIT_SHOP_SPOT_DELETE });
+            navigate(`/dashboard/shops/${shopId}/contact`);
           }
         }
       });
     }
-  }, [successAdd]);
+  }, [dispatch, successAddSpot, isImage]);
 
-  // navigate to ShopAdmin
+  // edit photo
   useEffect(() => {
-    if (successAddSpot) {
+    if (successUpdate) {
+      if (isImage) {
+        dispatch(
+          InsertImage({ imageUpload: imageUpload, Id: spotId, objType: "Spot" })
+        );
+      } else {
+        dispatch({ type: ADD_SHOP_SPOT_DELETE });
+        dispatch({ type: EDIT_SHOP_SPOT_DELETE });
+        navigate(`/dashboard/shops/${shopId}/contact`);
+      }
+    }
+  }, [dispatch, successUpdate, isImage]);
+
+  // navigate to ShopAdmin when image is seved
+  useEffect(() => {
+    if (successInsertImage) {
       dispatch({ type: ADD_SHOP_SPOT_DELETE });
+      dispatch({ type: EDIT_SHOP_SPOT_DELETE });
+      dispatch({ type: DELETE_IMAGE_REDUX });
+      dispatch({ type: ADD_IMAGE_DELETE });
       navigate(`/dashboard/shops/${shopId}/contact`);
     }
-  }, [dispatch, successAddSpot]);
+  }, [dispatch, successInsertImage]);
 
   //style
   const background = {
@@ -307,30 +304,57 @@ function AddShopsSpot() {
     width: windowWidth > 800 ? "80%" : "100%",
     margin: "auto",
   };
+  const btnTable = {
+    backgroundColor: "white",
+    border: "none",
+    fontWeight: 600,
+    borderRadius: "0.25rem",
+    fontSize: "0.85rem",
+  };
+  const btnEdit = {
+    ...btnTable,
+    color: "#dec314",
+  };
+  const shopsBtn = {
+    fontSize: "0.7rem",
+    fontWeight: "700",
+    background: "transparent",
+    color: "white",
+    textTransform: "uppercase",
+    border: "none",
+    padding: "0.4rem",
+    //minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
+    minWidth: "100px",
+  };
+  const btnDescription = {
+    ...shopsBtn,
+    backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
+  };
 
   //List of kind Spots
-  const kindSpots = [
-    {
-      id: "1",
-      name: t("ShopsSpot_kind_shop"),
-    },
-    {
-      id: "2",
-      name: t("ShopsSpot_kind_farmer"),
-    },
-    {
-      id: "3",
-      name: t("ShopsSpot_kind_manufacturer"),
-    },
-    {
-      id: "4",
-      name: t("ShopsSpot_kind_wholesaler"),
-    },
-    {
-      id: "5",
-      name: t("ShopsSpot_kind_agent"),
-    },
-  ];
+  // const kindSpots = [
+  //   {
+  //     id: "1",
+  //     name: t("ShopsSpot_kind_shop"),
+  //   },
+  //   {
+  //     id: "2",
+  //     name: t("ShopsSpot_kind_farmer"),
+  //   },
+  //   {
+  //     id: "3",
+  //     name: t("ShopsSpot_kind_manufacturer"),
+  //   },
+  //   {
+  //     id: "4",
+  //     name: t("ShopsSpot_kind_wholesaler"),
+  //   },
+  //   {
+  //     id: "5",
+  //     name: t("ShopsSpot_kind_agent"),
+  //   },
+  // ];
+  const kindSpots = useKindShopSpots();
 
   //List of inputs
   const inputs = [
@@ -357,9 +381,8 @@ function AddShopsSpot() {
         SpotParam === "add"
           ? t("ShopsSpot_select_placeholder")
           : successGetSpot &&
-            SpotParam === "edit" &&
-            spotDetails.city.id_district.name,
-      disabled: SpotParam === "edit" ? true : false,
+            kindSpots.filter((i) => spotDetails.kind == i.id)[0].name,
+      disabled: SpotParam === "edit" ? false : false,
     },
     {
       id: "3",
@@ -386,7 +409,7 @@ function AddShopsSpot() {
       defaultValue:
         SpotParam === "add"
           ? ""
-          : successGetSpot && SpotParam === "edit" && spotDetails.name,
+          : successGetSpot && SpotParam === "edit" && spotDetails.city,
       required: true,
     },
     {
@@ -477,26 +500,24 @@ function AddShopsSpot() {
 
   return (
     <>
-      {loadingDisctrict ||
-      loadingCity ||
-      loadingShopList ||
-      // nie sprawdzone
-      loadingInsertImage ||
-      loadingGetShop ||
-      loadingUpdateShop ||
+      {loading ||
       spotLoading ||
-      addSpotLoading ? (
+      addSpotLoading ||
+      loadingInsertImage ||
+      loadingUpdate ? (
         <Loader />
       ) : (
         <div style={background}>
-          {errorShopList ? (
-            <ErrorMessage msg={errorShopList} timeOut={TIME_AUT_ERROR} />
+          {infoFlag ? (
+            <InfoComponent
+              title={t("InfoComponent_title_spot")}
+              obj={objInfo}
+              typeObj={SPOT_DESCRIPTION}
+              closeInfoHandler={closeInfoHandler}
+            />
           ) : null}
-          {errorDisctrict ? (
-            <ErrorMessage msg={errorDisctrict} timeOut={TIME_AUT_ERROR} />
-          ) : null}
-          {errorCity ? (
-            <ErrorMessage msg={errorCity} timeOut={TIME_AUT_ERROR} />
+          {errorInsertImage ? (
+            <ErrorMessage msg={errorInsertImage} timeOut={TIME_AUT_ERROR} />
           ) : null}
           {spotError ? (
             <ErrorMessage msg={spotError} timeOut={TIME_AUT_ERROR} />
@@ -514,7 +535,7 @@ function AddShopsSpot() {
             <Icon icon="ion:arrow-back" />
             {t("btn-return")}
           </Link>
-          {SpotParam === "edit" && successGetSpot && successGetShop && (
+          {successGetSpot && successGetShop && (
             <div style={{ textAlign: "center" }}>
               {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
               {shopDetails.no_building}
@@ -527,6 +548,50 @@ function AddShopsSpot() {
               ? t("ShopsSpot_Edit_title")
               : t("ShopsSpot_Add_title")}
           </div>
+          {helper && cityDescFlag && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#4d4d4d",
+                  padding: "0.4rem",
+                  width: "80%",
+                  margin: "0.4rem",
+                }}
+              >
+                <AddDescription
+                  objId={objId}
+                  descType={SPOT_DESCRIPTION}
+                  return={true}
+                />
+              </div>
+            </div>
+          )}
+          {SpotParam === "edit" && (
+            <>
+              <Divider backgroundColor="grey" />
+              <FormLayout col={TWO}>
+                <button
+                  style={btnDescription}
+                  onClick={() => descriptionHandler(spotDetails)}
+                >
+                  {t("btn_description")}
+                </button>
+                <button
+                  style={btnEdit}
+                  onClick={() => infoHandler(spotDetails)}
+                >
+                  {t("btn_info")}
+                </button>
+              </FormLayout>
+            </>
+          )}
+
+          <Divider backgroundColor="grey" />
           <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
           <form onSubmit={handleSubmit}>
             <FormLayout col={THREE}>
@@ -546,9 +611,7 @@ function AddShopsSpot() {
                       label={input.label}
                       defaultValue={input.defaultValue}
                       emptyValueError={emptyValueError}
-                      onChange={
-                        index === 2 ? selectDistrictHandler : selectCityHandler
-                      }
+                      onChange={selectKindHandler}
                       {...input}
                     />
                   );
@@ -563,6 +626,7 @@ function AddShopsSpot() {
               })}
             </FormLayout>
             <Divider backgroundColor="grey" />
+
             <div style={{ fontWeight: 500 }}>
               {t("ShopsSpot_title_address")}
             </div>
@@ -599,11 +663,13 @@ function AddShopsSpot() {
               })}
             </FormLayout>
             <div>
-              <UploadImage nip={currentTaxNo} />
               {imageRender
-                ? editShopParam === "edit" &&
-                  shopDetails.photo !== null && <img src={shopDetails.photo} />
+                ? SpotParam === "edit" &&
+                  spotDetails.photo !== null && (
+                    <ImageDisplayer imageSrc={spotDetails.photo} />
+                  )
                 : null}
+              <UploadImage />
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>

@@ -49,8 +49,6 @@ function AddDescription(props) {
     error: adderror,
   } = addDescription;
 
-  console.log("desc--->", desc)
-
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -88,7 +86,6 @@ function AddDescription(props) {
 
   useEffect(() => {
     if (activeDesc) {
-      // console.log('type-->', props.descType)
       dispatch(
         getDesc({
           type: props.descType,
@@ -127,7 +124,7 @@ function AddDescription(props) {
         dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
       }, TIME_SET_TIMEOUT);
       // setActiveDesc(false)
-      // dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
+      dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
 
     }
   }, [error, adderror, addsuccess]);

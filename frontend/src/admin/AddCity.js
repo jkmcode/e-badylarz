@@ -19,17 +19,21 @@ import {
   CITY_DESCRIPTION,
   SET_FLAG_DESC_FALSE,
   TWO,
+  THREE
 } from "../constants/adminConstans";
 
 import {
   POST_FORMAT,
   LONG_NAME_PATTERN,
   LATITUDE_PATTERN,
-  LONGITUDE_PATTERN
+  LONGITUDE_PATTERN,
 } from "../constants/formValueConstans";
 
 import { submitBtn, FormLayout } from "./AdminCSS";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
+
+import SelectOption from "./SelectOption";
+import language from "../language";
 
 function AddCity() {
   useBackToLogin();
@@ -48,6 +52,7 @@ function AddCity() {
   });
   const [addDescription, setAddDescription] = useState(false);
   const [idNewDistrict, setIdNewDistrict] = useState("");
+  const [emptyValueError, setEmptyValueError] = useState(false);
 
   const {
     register,
@@ -56,6 +61,8 @@ function AddCity() {
     reset,
     trigger,
   } = useForm();
+
+  const [selectedCountry, setSelectedCountry] = useState("");
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -77,6 +84,11 @@ function AddCity() {
     error: descError,
   } = discrictListRedux;
 
+  // Hendlers
+  const selectCountry = (option) => {
+    setSelectedCountry(option);
+  };
+
   const onSubmit = () => {
     const insertData = {
       name: values.cityName,
@@ -85,6 +97,7 @@ function AddCity() {
       lat: values.latitude,
       lng: values.longitude,
       desc_id: dscrictId,
+      country: selectedCountry,
     };
     dispatch(addCiti(insertData));
   };
@@ -156,6 +169,17 @@ function AddCity() {
     },
     {
       id: "3",
+      name: "country",
+      defaultValue: t("AddCiti_country_placeholder"),
+      optionsList: language,
+      label: t("AddCiti_label_country"),
+      disabled: false,
+      // errorMessage: t("AddCiti_country_error_message"),
+      // pattern: NAME_PATTERN,
+      // required: true,
+    },
+    {
+      id: "4",
       name: "latitude",
       type: "text",
       placeholder: t("latitude_placeholder"),
@@ -165,7 +189,7 @@ function AddCity() {
       required: true,
     },
     {
-      id: "4",
+      id: "5",
       name: "longitude",
       type: "text",
       placeholder: t("longitude_placeholder"),
@@ -230,11 +254,27 @@ function AddCity() {
               : districtList.filter((i) => i.id === dscrictId)[0].name}
           </div>
           <form onSubmit={addhandleSubmit(onSubmit)}>
-            <FormLayout col={TWO}>
+            <FormLayout col={THREE}>
               {inputs.map((input, index) => {
                 if (index <= 1) {
                   return (
                     <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+              {inputs.map((input, index) => {
+                if (index === 2) {
+                  return (
+                    <SelectOption
+                      key={language.id}
+                      optionsList={language}
+                      label={input.label}
+                      defaultValue={input.defaultValue}
+                      emptyValueError={emptyValueError}
+                      onChange={selectCountry
+                      }
+                      {...input}
+                    />
                   );
                 }
               })}
@@ -246,7 +286,7 @@ function AddCity() {
             </div>
             <FormLayout col={TWO}>
               {inputs.map((input, index) => {
-                if (index === 2 || index === 3) {
+                if (index === 4 || index === 3) {
                   return (
                     <FormInput key={input.id} {...input} onChange={onChange} />
                   );

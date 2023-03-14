@@ -7,6 +7,7 @@ export const ONE = "1";
 export const ZERO = "0";
 export const TWO = "2";
 export const THREE = "3";
+export const FOUR = "4";
 export const ONE_TO_TWO = "1/2";
 
 export const EMPTY_LIST = 0;
@@ -23,3 +24,4 @@ export const PRODUCT_CAT = "PRODUCT_CAT";
 export const LIST_OF_PRODUCTS = "LIST_OF_PRODUCTS";
 
 export const PRODUCT = "PRODUCT";
+export const UNIQUE_VALUE = "sgrfyuaghdfjgadskjbcasbfbahsfjhadhvbsdfbvzbvbh";

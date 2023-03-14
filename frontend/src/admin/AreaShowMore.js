@@ -11,6 +11,7 @@ import Divider from "./Divider";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
 import { addAreaContact } from "../actions/areaAction";
+import AddDescription from "./AddDescription";
 import {
   FormLayout,
   activeBadge,
@@ -29,6 +30,9 @@ import {
 import {
   AREA_CONTACT_DESCRIPTION,
   AREA_SPOT_DESCRIPTION,
+  SET_FLAG_INFO_TRUE,
+  SET_CITY_FLAG_DESC_TRUE,
+  AREA_DESCRIPTION
 } from "../constants/adminConstans";
 import {
   GET_AREA_CONTACT_LIST_DELETE,
@@ -58,7 +62,15 @@ function AreaShowMore() {
   const [activeSpot, setActiveSpot] = useState(true);
   const [idSpotActive, setIdSpotActive] = useState();
 
+  const [helper, setHelper] = useState("");
+  const [objId, setObjId] = useState("");
+  const [objInfo, setObjInfo] = useState({});
+
   // fech data from Redux
+
+  const infoFlagRedux = useSelector((state) => state.flag);
+  const { cityDescFlag } = infoFlagRedux;
+
   const areaListRedux = useSelector((state) => state.areaList);
   const { loading, areaList, error, success } = areaListRedux;
 
@@ -80,6 +92,21 @@ function AreaShowMore() {
   } = contactActivRedux;
 
   //Handlers
+
+  const infoHandler = (i) => {
+    // setInfoShop(true)
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
+    console.log('Jestem w info---->>>', i)
+  }
+
+  const descriptionHandler = (i) => {
+    dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
+    setHelper(i.name);
+    setObjId(i.id);
+    console.log('Jestem---->>>', i)
+  };
+
   const editHandler = (id) => {
     setNewContact(true);
     setEditContact(true);
@@ -347,7 +374,6 @@ function AreaShowMore() {
 
   const contactContainer = {
     ...mainContainer,
-    height: "500px",
   };
 
   const listContainer = {
@@ -414,6 +440,28 @@ function AreaShowMore() {
     padding: "0.75rem",
     verticalAlign: "middle",
     color: "black",
+  };
+
+  const shopsBtn = {
+    fontSize: "0.7rem",
+    fontWeight: "700",
+    background: "transparent",
+    color: "white",
+    textTransform: "uppercase",
+    border: "none",
+    padding: "0.4rem",
+    minWidth: "100px",
+  };
+
+  const btnDescription = {
+    ...shopsBtn,
+    backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
+  };
+
+  const btnInfo = {
+    ...shopsBtn,
+    paddingLeft: "0.2rem",
+    backgroundImage: `linear-gradient(171deg, rgba(34, 95, 165, 1) 45%, rgba(42, 51, 113, 1) 89%)`,
   };
 
   const btnTable = {
@@ -653,6 +701,51 @@ function AreaShowMore() {
                 return (
                   <div key={area.id}>
                     <div style={subtitle}>
+                      <Divider backgroundColor="grey" />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <button
+                          style={btnDescription}
+                          onClick={() => descriptionHandler(area)}
+                        >
+                          {t("btn_description")}
+                        </button>
+                        <button
+                          style={btnInfo}
+                          onClick={() => infoHandler(area)}
+                        >
+                          {t("btn_info")}
+                        </button>
+                      </div>
+
+                      <Divider backgroundColor="grey" />
+                      {helper === area.name && cityDescFlag && (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              backgroundColor: "#4d4d4d",
+                              padding: "0.4rem",
+                              width: "80%",
+                              margin: "0.4rem",
+                            }}
+                          >
+                            <AddDescription
+                              objId={objId}
+                              descType={AREA_DESCRIPTION}
+                              return={true}
+                            />
+                          </div>
+                        </div>
+                      )}
                       {t("AddContact_name")}:
                       <div style={mainDataSection}>{area.name}</div>
                     </div>
@@ -715,8 +808,8 @@ function AreaShowMore() {
                 {!newContact
                   ? t("AddContact_btn_add")
                   : editContact
-                  ? t("AddContact_btn_close_edit")
-                  : t("AddContact_btn_close")}
+                    ? t("AddContact_btn_close_edit")
+                    : t("AddContact_btn_close")}
               </button>
 
               <button

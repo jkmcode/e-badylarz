@@ -126,12 +126,15 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def uploadMultiImages(request):
 
     data = request.data
+    objType = data['objType']
     taxNo = data["taxNo"]
+    if objType == 'Spot':
+        active_object = ShopsSpot.objects.get(id=data['Id'])
+    else:
+        active_object = Shops.objects.get(nip=taxNo)
 
-    shop = Shops.objects.get(nip=taxNo)
-
-    shop.photo = request.FILES.get('image')
-    shop.save()
+    active_object.photo = request.FILES.get('image')
+    active_object.save()
 
     return Response("Image was uploaded")
 
@@ -355,6 +358,8 @@ def getAreaContacts(request, Id):
 @permission_classes([IsAdminUser])
 def getSpots(request, Id):
     spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
+    for i in spots:
+        i.city=cleanStr(i.city)
     seriaziler = ShopSpotsSerializer(spots, many=True)
 
     return Response(seriaziler.data)  
@@ -365,6 +370,7 @@ def getSpot(request, Id, typeSpot):
 
     if typeSpot == "shop":
         spot = ShopsSpot.objects.get(id=Id)
+        spot.city=cleanStr(spot.city)
         seriaziler = ShopSpotsSerializer(spot, many=False)
 
     if typeSpot == "area":
@@ -497,15 +503,13 @@ def getShops(request):
 def addShopSpot(request):
     data = request.data
 
-    cit_obj = Citis.objects.get(id=data['city'])
-
     if data['add']:
         shop = Shops.objects.get(id=data['id_shops'])
 
         spot=ShopsSpot.objects.create(
             id_shops=shop,
             name=data['name'],
-            city=cit_obj,
+            city=data['city'],
             street=data['street'],
             no_building=data['no_building'],
             post_code=data['postCode'],
@@ -515,7 +519,8 @@ def addShopSpot(request):
             creator=data['creator'],
             is_active=data['is_active'],
             delivery=data['delivery'],
-            range=data['range']
+            range=data['range'],
+            kind=data['kind']
         )
     else:
         spot = ShopsSpot.objects.get(id=data['id_spot'])
@@ -541,11 +546,12 @@ def addShopSpot(request):
         delivery = spot.delivery,
         range = spot.range,
         type_of_change = spot.type_of_change,
+        kind=spot.kind,
         archiver = data['creator']
         )
         # change data
         spot.name = data['name']
-        spot.city=cit_obj,
+        spot.city=data['city'],
         spot.street = data['street']
         spot.no_building = data['no_building']
         spot.post_code = data['postCode']
@@ -557,10 +563,13 @@ def addShopSpot(request):
         spot.delivery = data['delivery']
         spot.range = data['range']
         spot.type_of_change = 'Edit - change data'
+        spot.kind = data['kind']
 
         spot.save()
 
     spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
+    for i in spots:
+        i.city=cleanStr(i.city)
     seriaziler = ShopSpotsSerializer(spots, many=True) 
     return Response(seriaziler.data)
 
@@ -757,7 +766,8 @@ def addCiti(request):
             post_code = data['post'],
             latitude = data['lat'],
             longitude = data['lng'],
-            is_active=True
+            is_active=True,
+            country = data['country']
         )
         newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
         seriaziler = CitiesSerializer(newdciti, many=True)
@@ -876,6 +886,9 @@ def getFullDescriptionsDesc(request, Id, obj_type):
     elif obj_type=='SHOP':
         descrition = ShopsDescriptions.objects.filter(id_shops = Id)
         seriaziler = ShopDescSerializer(descrition, many=True)
+    elif obj_type=='SPOT':
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id)
+        seriaziler = ShopSpotDescSerializer(descrition, many=True)
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -931,6 +944,20 @@ def addDesc(request):
             descrip.date_of_change=datetime.now()
             descrip.modifier=data['id']
             descrip.save()
+    elif data['objType']== "SPOT":
+        if data["addDesc"]:
+            spot_obj= ShopsSpot.objects.get(id=data['objId'])
+            desc = ShopsSpotDescriptions.objects.create(
+            description=data['desc'],
+            language=data['lng'],
+            id_shops_spot=spot_obj,
+            creator=data['id'])
+        else:
+            descrip = ShopsSpotDescriptions.objects.get(id=data['descId'])
+            descrip.description=data['desc']
+            descrip.date_of_change=datetime.now()
+            descrip.modifier=data['id']
+            descrip.save()
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -952,6 +979,14 @@ def getDiscrictDesc(request, Id, lng, obj_type):
     elif obj_type=='SHOP':
         descrition = ShopsDescriptions.objects.filter(id_shops = Id, language=lng)
         seriaziler = ShopDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    elif obj_type=='SPOT':
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
+        seriaziler = ShopSpotDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    elif obj_type=='AREA':
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
+        seriaziler = ShopSpotDescSerializer(descrition, many=True)
         return Response(seriaziler.data)
     else:
         content = {"detail": "Changing the active flag - no object type"}

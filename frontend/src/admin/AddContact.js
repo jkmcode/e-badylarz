@@ -38,12 +38,20 @@ import {
   SHOP_CONTACT_DESCRIPTION,
   SHOP_SPOT_DESCRIPTION,
   SHOP_DESCRIPTION,
+  SPOT_DESCRIPTION,
   GET_CONTACT_LIST_DELETE,
   GET_SOPTS_LIST_DELETE,
   SET_WINDOW_FLAG_DELETE,
-  SET_CITY_FLAG_DESC_TRUE,
+  SET_FLAG_INFO_TRUE,
   SET_FLAG_INFO_FALSE,
+  SET_CITY_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
+
+import {
+  FIRST_NAME_PATTERN,
+  EMAIL_PATTERN,
+  PHONE_PATTERN,
+} from "../constants/formValueConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
 
@@ -56,12 +64,9 @@ function AddContact() {
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
-  const { windowWidth } = useResponsive();
+  //const { windowWidth } = useResponsive();
 
   const shopId = Number(params.id);
-
-  const tableRef = useRef(null);
-  const btnMinWidth = 100;
 
   const [newContact, setNewContact] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -77,9 +82,11 @@ function AddContact() {
 
   const [objInfo, setObjInfo] = useState({});
 
+  const [infoSpot, setInfoSpot] = useState(false);
+  const [infoShop, setInfoShop] = useState(false);
+
   const [newSpot, setNewSpot] = useState(false);
   const [editSpot, setEditSpot] = useState(false);
-  const [idSpot, setIdSpot] = useState();
   const [idSpotActive, setIdSpotActive] = useState();
   const [activeSpot, setActiveSpot] = useState(true);
   const [editContactObj, setEditContactObj] = useState({});
@@ -120,8 +127,8 @@ function AddContact() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const shopFlagVar = useSelector((state) => state.windowFlag);
-  const { windowFlag } = shopFlagVar;
+  // const shopFlagVar = useSelector((state) => state.windowFlag);
+  // const { windowFlag } = shopFlagVar;
 
   const infoFlagRedux = useSelector((state) => state.flag);
   const { cityDescFlag } = infoFlagRedux;
@@ -130,6 +137,15 @@ function AddContact() {
 
   const infoHandler = (i) => {
     console.log("Info--->>>", i);
+    setInfoShop(true);
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
+  };
+
+  const infoHandlerSpot = (i) => {
+    setInfoSpot(true);
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
   };
 
   const descriptionHandler = (i) => {
@@ -182,11 +198,22 @@ function AddContact() {
 
   const closeInfoHandler = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
+    setInfoShop(false);
+  };
+
+  const closeInfoHandlerSpot = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+    setInfoSpot(true);
   };
 
   const editHandler = (id) => {
-    setNewContact(true);
-    setEditContact(true);
+    if (editContact) {
+      setEditContact(false);
+      setNewContact(!newContact);
+    } else {
+      setEditContact(true);
+      setNewContact(true);
+    }
 
     ListOfContact.map((i) => {
       if (i.id === id) {
@@ -290,7 +317,6 @@ function AddContact() {
   useEffect(() => {
     if (success) {
       dispatch({ type: GET_CONTACT_LIST_DELETE });
-      //dispatch({ type: SET_WINDOW_FLAG_DELETE });
       dispatch({ type: GET_SOPTS_LIST_DELETE });
     }
   }, [dispatch, success]);
@@ -395,7 +421,7 @@ function AddContact() {
       placeholder: t("AddContact_name_placeholder"),
       errorMessage: t("AddContact_name_error_message"),
       label: t("AddContact_label_name"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      pattern: FIRST_NAME_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.name,
       required: true,
@@ -407,7 +433,7 @@ function AddContact() {
       placeholder: t("AddContact_surname_placeholder"),
       errorMessage: t("AddContact_surname_error_message"),
       label: t("AddContact_label_surname"),
-      pattern: "^[A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ]{3,20}$",
+      pattern: FIRST_NAME_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.surname,
       required: true,
@@ -419,8 +445,7 @@ function AddContact() {
       placeholder: t("AddContact_email_placeholder"),
       errorMessage: t("AddContact_email_error_message"),
       label: t("AddContact_label_email"),
-      pattern:
-        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+[.][a-zA-Z]{2,3}",
+      pattern: EMAIL_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.email,
       required: true,
@@ -432,7 +457,7 @@ function AddContact() {
       placeholder: t("AddContact_phone_placeholder"),
       errorMessage: t("AddContact_phone_error_message"),
       label: t("AddContact_label_phone"),
-      pattern: "^(?:(\\+\\d{2})\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$",
+      pattern: PHONE_PATTERN,
       defaultValue:
         editContactObjSuccess && editContactObj && editContactObj.phone,
       required: true,
@@ -479,7 +504,6 @@ function AddContact() {
     textTransform: "uppercase",
     border: "none",
     padding: "0.4rem",
-    //minWidth: windowWidth < 800 ? null : `${btnMinWidth}px`,
     minWidth: "100px",
   };
   const btnDescription = {
@@ -545,12 +569,18 @@ function AddContact() {
       styleTableCell: tableCellNoBorderRight,
       styleHeader: styleHeader,
     },
+    {
+      key: "btnInfo",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
   ];
 
   const dataSpotsTable = currentStatusSpotList.map((item) => ({
     id: item.id,
     name: item.name,
-    adress: `${item.city.name}, ${item.street} ${item.no_building}`,
+    adress: `${item.city}, ${item.street} ${item.no_building}`,
     status: activeSpot ? (
       <span style={activeBadge}>{t("status_active")}</span>
     ) : (
@@ -568,6 +598,11 @@ function AddContact() {
     btnEdit: activeSpot && (
       <button style={btnEdit} onClick={() => editSpotHandler(item.id)}>
         {t("btn_edit")}
+      </button>
+    ),
+    btnInfo: activeSpot && (
+      <button style={btnEdit} onClick={() => infoHandlerSpot(item)}>
+        {t("btn_info")}
       </button>
     ),
   }));
@@ -599,7 +634,7 @@ function AddContact() {
   const tableConatctcolumns = [
     {
       key: "name",
-      label: t("AddContact_name"),
+      label: t("AddContact_name&surname"),
       styleTableCell: tableCell,
       styleHeader: styleHeader,
     },
@@ -637,7 +672,7 @@ function AddContact() {
 
   const dataContactTable = currentStatusContactList.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: item.name + " " + item.surname,
     phone: item.phone,
     email: item.email,
     status: activeContact ? (
@@ -678,7 +713,15 @@ function AddContact() {
         <Loader />
       ) : (
         <>
-          {infoFlag ? (
+          {infoFlag && infoSpot ? (
+            <InfoComponent
+              title={t("InfoComponent_title_spot")}
+              obj={objInfo}
+              typeObj={SPOT_DESCRIPTION}
+              closeInfoHandler={closeInfoHandlerSpot}
+            />
+          ) : null}
+          {infoFlag && infoShop ? (
             <InfoComponent
               title={t("InfoComponent_title_shop")}
               obj={objInfo}

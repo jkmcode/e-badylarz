@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import { unOrActiveList } from "../actions/adminActions";
 import ErrorMessage from "../component/ErrorMessage";
 import useBackToLogin from "../component/useBackToLogin";
 import { getAreas } from "../actions/areaAction";
-import useResponsive from "../component/useResponsive";
-import { Icon } from "@iconify/react";
 import { activeBadge, inactiveBadge } from "./AdminCSS";
 import TableComponent from "./TableComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 
 import {
   TIME_AUT_ERROR,
-  TIME_AUT_SUCCESS,
 } from "../constants/environmentConstans";
 
 import {
@@ -28,14 +24,6 @@ import { UNACTIVE, ACTIVE } from "../constants/adminConstans";
 
 function AdminAreas() {
   useBackToLogin();
-  const { windowWidth } = useResponsive();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    trigger,
-  } = useForm();
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -50,7 +38,7 @@ function AdminAreas() {
 
   // fech data from Redux
   const areaListRedux = useSelector((state) => state.areaList);
-  const { loading, areaList, error, success } = areaListRedux;
+  const { loading, areaList, error } = areaListRedux;
 
   const areaActive = useSelector((state) => state.unOrActiveDescription);
   const {
@@ -261,6 +249,12 @@ function AdminAreas() {
       styleTableCell: tableCellNoBorderRight,
       styleHeader: styleHeader,
     },
+    {
+      key: "btnAdmin",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
   ];
 
   const dataAreaTable = currentStatusContactList.map((item) => ({
@@ -285,6 +279,11 @@ function AdminAreas() {
     ),
     btnShowMore: activeAreas && (
       <Link to={`${item.id}/details`}>{t("btn_more")}</Link>
+    ),
+    btnAdmin: activeAreas && (
+      <button style={btnDelete} onClick={() => console.log('JESTEM - to jest do roboty')}>
+        {t("btn_admin")}
+      </button>
     ),
   }));
 

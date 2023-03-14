@@ -81,6 +81,8 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
     const formData = new FormData();
     formData.append("image", insertData.imageUpload);
     formData.append("taxNo", insertData.taxNo);
+    formData.append("Id", insertData.Id);
+    formData.append("objType", insertData.objType);
 
     dispatch({ type: ADD_IMAGE_REQUEST });
 
