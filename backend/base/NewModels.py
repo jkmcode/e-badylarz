@@ -342,7 +342,7 @@ class ShopsSpot(models.Model):
     delivery = models.BooleanField(null=True,blank=True)
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50, null=True,blank=True)
-    pick-up_point = models.BooleanField(default=False)
+    pick_up_point = models.BooleanField(default=False)
 
 #Shops spot ARC
 class ShopsSpotARC(models.Model):
@@ -365,7 +365,7 @@ class ShopsSpotARC(models.Model):
     delivery = models.BooleanField(null=True,blank=True)
     range = models.IntegerField(default=0)
     type_of_change = models.CharField(max_length=50)
-    pick-up_point = models.BooleanField(null=True,blank=True)
+    pick_up_point = models.BooleanField(null=True,blank=True)
     date_of_archiv = models.DateTimeField(auto_now_add=True)
     archiver = models.CharField(max_length=5)
 
@@ -423,7 +423,7 @@ class MyProducts(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
 # Archiwizacja wszelkich zmian w tabeli - MyProducts 
-class AreasSpotsShopsARC(models.Model):
+class MyProducts(models.Model):
     id_product = models.IntegerField()
     id_shops_spot = models.IntegerField()
     date_of_entry = models.DateTimeField()
@@ -433,9 +433,48 @@ class AreasSpotsShopsARC(models.Model):
     date_of_archiv = models.DateTimeField(auto_now=True)
     archiver = models.CharField(max_length=5)
 
-# MyProductsPhotos - dodatkowe zdjecia sklepu( rolnika itp.)
+# MyProductsPhotos - dodatkowe zdjecia produktu robione przrz sklep ( rolnika itp.)
 class MyProductsPhotos(models.Model):
     id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
+    photo = models.ImageField()
+    date_of_entry = models.DateTimeField(auto_now_add=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+
+# Archiwizacja wszelkich zmian w tabeli - MyProductsPhotos
+class MyProductsPhotosARC(models.Model):
+    id_my_product = models.IntegerField()
+    photo = models.ImageField()
+    date_of_entry = models.DateTimeField()
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+    date_of_archiv = models.DateTimeField(auto_now=True)
+    archiver = models.CharField(max_length=5)
+
+# MyProductsDescriptions - dodatkowy opis robiony przez sklep( rolnika itp.)
+# dla sprzedawanego produktu
+class MyProductsDescriptions(models.Model):
+    id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2)
+    date_of_entry = models.DateTimeField(auto_now_add=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5)
+    modifier = models.CharField(max_length=5, null=True, blank=True) 
+
+# Archiwizacja wszelkich zmian w tabeli - MyProductsDescriptions
+class MyProductsDescriptionsARC(models.Model):
+    id_my_product = models.IntegerField()
+    description =  models.CharField(max_length=255, null=True, blank=True)
+    language = models.CharField(max_length=2)
+    date_of_entry = models.DateTimeField()
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+    date_of_archiv = models.DateTimeField(auto_now=True)
+    archiver = models.CharField(max_length=5)
 
 ## ---------  END SHOP  ------------ ##
 
@@ -493,7 +532,7 @@ class ProductSubtypesDescriptions(models.Model):
 
 #### Product Genera
 class Product(models.Model):
-    id_product_species = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
+    id_product_subtype = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True)
