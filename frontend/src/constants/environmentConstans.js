@@ -6,9 +6,12 @@ export const ONE = "1";
 export const ZERO = "0";
 export const TWO = "2";
 export const THREE = "3";
+export const FOUR = "4";
 export const ONE_TO_TWO = "1/2";
 
 export const EMPTY = "";
 
 export const TABLE_TYPE_CONTACT = "contact";
 export const TABLE_TYPE_SPOT = "spot";
+
+export const UNIQUE_VALUE = "sgrfyuaghdfjgadskjbcasbfbahsfjhadhvbsdfbvzbvbh";
