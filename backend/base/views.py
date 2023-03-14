@@ -1141,3 +1141,35 @@ def get_list_of_data(request, typeActivity):
         raise Http404('Invalid typeActivity')
     
     return Response(seriaziler.data)      
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def add_single_instance(request):
+    data = request.data
+    alreadyExists = Product.objects.filter(name=data['name']).exists()
+    if alreadyExists: 
+        content = {"detail": "Product category already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print('działa okey')
+
+
+    return Response('jest okey')
+    # data = request.data
+    # alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
+    # if alreadyExists:
+    #     content = {"detail": "Product category already exist"}
+    #     return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    # else: 
+    #     productCat = ProductTypes.objects.create(
+    #         name=data['name'],
+    #         creator = data['creator'],
+    #         is_active=True,
+    #         language = data['language'],
+    #         uniqueId = data['uniqueId']
+    #     )   
+
+    #     newProductCat=ProductTypes.objects.filter(name=data['name'])
+    #     seriaziler = ProductTypeSerializer(newProductCat, many=True)
+    #     return Response(seriaziler.data)    

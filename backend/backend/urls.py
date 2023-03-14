@@ -60,6 +60,7 @@ urlpatterns = [
     path('api/add-product-subcat/', addProductSubcat),
     path('api/edit-product-subcategory/', edit_subcategory),
     path('api/<str:Id>/<str:typeActivity>/get-single-instance/', get_single_instance),
+    path('api/add-single-instance/', add_single_instance),
     path('api/<str:typeActivity>/get-list-of-data/', get_list_of_data),
 ]
 

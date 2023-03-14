@@ -1,13 +1,13 @@
 const language = [
   {
-    id: "en",
+    id: "pl",
     code: "en",
     name: "English",
     country: "GB",
   },
 
   {
-    id: "pl",
+    id: "en",
     code: "pl",
     name: "Polski",
     country: "PL",

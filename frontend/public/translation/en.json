@@ -438,6 +438,13 @@
   "ProductsActivity_name_error_message": "Product name should be 3-30 characters and shouldn't include any special character!",
   "ProductsActivity_name_label": "Name of product",
 
+  "ProductsActivity_input_name_language": "language",
+  "ProductsActivity_input_label_language": "Languages",
+  "ProductsActivity_input_name_product_cat": "ProductCategory",
+  "ProductsActivity_input_label_product_cat": "Product category",
+  "ProductsActivity_input_name_product_subcat": "ProductSubcategory",
+  "ProductsActivity_input_label_product_subcat": "Product subcategory",
+
   "ProductSubcategories_title": "Product subcategory",
   "Products_add_subproduct_btn": "Add subcategory",
   "AddProductSubcategories_title": "Add subcategory",

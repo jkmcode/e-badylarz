@@ -21,3 +21,5 @@ export const TABLE_TYPE_SPOT = "spot";
 
 export const PRODUCT_CAT = "PRODUCT_CAT";
 export const LIST_OF_PRODUCTS = "LIST_OF_PRODUCTS";
+
+export const PRODUCT = "PRODUCT";

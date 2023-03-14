@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { formInput, formLabel } from "./AdminCSS";
 function SelectOption({
   onChange,
@@ -6,6 +7,7 @@ function SelectOption({
   defaultValue,
   label,
   emptyValueError,
+  disabled,
   ...inputProps
 }) {
   const [selectedValue, setSelectedValue] = useState("");
@@ -33,6 +35,7 @@ function SelectOption({
       <label style={formLabel}>{label}</label>
       <div>
         <select
+          disabled={disabled}
           className="selectFrom"
           style={
             emptyValueError
@@ -48,7 +51,7 @@ function SelectOption({
             {defaultValue}
           </option>
           {optionsList.map((option) => (
-            <option key={option.id} value={option.id}>
+            <option key={String(option.id)} value={String(option.id)}>
               {option.name}
             </option>
           ))}
@@ -62,3 +65,17 @@ function SelectOption({
 }
 
 export default SelectOption;
+
+SelectOption.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  optionsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  emptyValueError: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};

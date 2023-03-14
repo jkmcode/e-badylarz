@@ -119,7 +119,7 @@ function App() {
             element={<ProductSubcategoriesActivity />}
           />
           <Route path="products" element={<Products />} />
-          <Route path="products/:add" element={<ProductsActivity />} />
+          <Route path="products/:activity" element={<ProductsActivity />} />
         </Route>
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>

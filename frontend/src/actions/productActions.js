@@ -128,7 +128,7 @@ export const getProductCat = () => async (dispatch, getState) => {
 };
 
 export const getSubproductCat =
-  ({ subcategoryId }) =>
+  ({ categoryId }) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
@@ -145,7 +145,7 @@ export const getSubproductCat =
       };
 
       const { data } = await axios.get(
-        `/api/${subcategoryId}/get-product-subcategories/`,
+        `/api/${categoryId}/get-product-subcategories/`,
         config
       );
 

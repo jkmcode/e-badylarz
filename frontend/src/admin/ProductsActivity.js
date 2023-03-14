@@ -5,11 +5,18 @@ import UploadImage from "../component/UploadImage";
 import SelectOption from "./SelectOption";
 import language from "../language";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
+import { addSingleInstance } from "../actions/adminActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { title, changeBtn, addBtn, FormLayout } from "./AdminCSS";
-import { EDIT, TWO, EMPTY_LIST } from "../constants/environmentConstans";
+import {
+  EDIT,
+  ADD,
+  TWO,
+  EMPTY_LIST,
+  PRODUCT,
+} from "../constants/environmentConstans";
 
 function ProductsActivity() {
   const { t } = useTranslation();
@@ -24,7 +31,13 @@ function ProductsActivity() {
   const [switcher, setSwitcher] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
   const [subcategoryId, setSubcategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState(0);
   const [currentProductCatList, setCurrentProductCatList] = useState([]);
+  const [addSwitcher, setAddSwitcher] = useState(false);
+  const [uniqueId, setUniqueId] = useState("");
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const productCatListRedux = useSelector((state) => state.productCatList);
   const { loading: loadingProductCat, productCatList } = productCatListRedux;
@@ -34,17 +47,13 @@ function ProductsActivity() {
   );
   const { subproductCatList } = subproductSubcatListRedux;
 
-  console.log("subproductCatList", subproductCatList);
-
   //Handlers
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("działa handleSubmit");
-    // if (activity === "add") {
-    //   console.log("zostaje spełniony warunek");
-    //   setAddSwitcher(true);
-    //   setUniqueId(newId);
-    // }
+    if (activity === ADD) {
+      setAddSwitcher(true);
+      // setUniqueId(newId);
+    }
 
     // if (activity === EDIT) {
     //   setEditSwitcher(true);
@@ -59,16 +68,17 @@ function ProductsActivity() {
   const selectLngHandler = (option) => {
     setSwitcher(true);
     setSelectedLng(option);
+    console.log("selectLngHandler", option, typeof option);
     setEmptyValueError(false);
   };
 
   const selectProductCatHandler = (option) => {
     setSwitcher(true);
-    setSubcategoryId(option);
+    setCategoryId(option);
   };
 
   const selectProductSubcatHandler = (option) => {
-    console.log("działa selectProductSubcatHandler", option);
+    setSubcategoryId(option);
   };
 
   //Lists
@@ -91,26 +101,52 @@ function ProductsActivity() {
     },
     {
       id: "2",
-      name: "language",
-      label: "language",
+      name: t("ProductsActivity_input_name_language"),
+      label: t("ProductsActivity_input_label_language"),
       optionsList: language,
       defaultValue: t("default_option_lng"),
+      disabled: values.name.length < 4 && true,
     },
     {
       id: "3",
-      name: "ProductCategory",
-      label: "Product category",
+      name: t("ProductsActivity_input_name_product_cat"),
+      label: t("ProductsActivity_input_label_product_cat"),
       optionsList: currentProductCatList,
       defaultValue: t("default_option_product_cat"),
+      disabled: !selectedLgn && true,
     },
     {
       id: "4",
-      name: "Product subcategory",
-      label: "Product subcategory",
+      name: t("ProductsActivity_input_name_product_subcat"),
+      label: t("ProductsActivity_input_label_product_subcat"),
       optionsList: subproductCatList,
       defaultValue: t("default_option_product_cat"),
+      disabled: !categoryId && true,
     },
   ];
+
+  //Comment
+  //This code is a React useEffect hook that triggers whenever the value of switcher changes.
+  //It defines an insertData object and dispatches an action using the addProductSubcat action creator with insertData as the argument.
+  //It also updates the state of switcher to false using setSwitcher(false).
+  //When editSwitcher is true, it adds some additional properties to insertData and dispatches an action using the updateSubcategory action creator.
+  //It also sets the state of editSwitcher to false. The value for the name property in insertData is determined based on the values.name property
+  //, or the successSingleInstance.name property if values.name is falsy.
+  useEffect(() => {
+    if (addSwitcher) {
+      const insertData = {
+        name: values.name,
+        creator: userInfo.id,
+        uniqueId: uniqueId,
+        categoryId: categoryId,
+        subcategoryId: subcategoryId,
+        typeActivity: PRODUCT,
+      };
+
+      setAddSwitcher(false);
+      dispatch(addSingleInstance(insertData));
+    }
+  }, [addSwitcher]);
 
   // fetching list of product categories from DB
   useEffect(() => {
@@ -121,11 +157,11 @@ function ProductsActivity() {
 
   // fetching list of product subcategories from DB
   useEffect(() => {
-    if (switcher && subcategoryId) {
+    if (switcher && categoryId) {
       setSwitcher(false);
-      dispatch(getSubproductCat({ subcategoryId }));
+      dispatch(getSubproductCat({ categoryId }));
     }
-  }, [dispatch, subcategoryId, switcher]);
+  }, [dispatch, categoryId, switcher]);
 
   useEffect(() => {
     if (switcher) {
@@ -179,6 +215,7 @@ function ProductsActivity() {
                   label={input.label}
                   defaultValue={input.defaultValue}
                   optionsList={input.optionsList}
+                  disabled={input.disabled}
                   emptyValueError={emptyValueError}
                   onChange={
                     input.name === "language"
