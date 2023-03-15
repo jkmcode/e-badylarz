@@ -1182,15 +1182,26 @@ def get_list_of_data(request, typeActivity):
 @permission_classes([IsAdminUser])
 def add_single_instance(request):
     data = request.data
+
     alreadyExists = Product.objects.filter(name=data['name']).exists()
     if alreadyExists: 
-        content = {"detail": "Product category already exist"}
+        content = {"detail": "Product with this name already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     else:
-        print('działa okey')
+        if data['typeActivity'] == 'PRODUCT':
+            sub_product = ProductSubTypes.objects.get(id=data['subcategoryId'])
+            products = Product.objects.create(
+                id_product_subtype = sub_product,
+                name=data['name'],
+                creator = data['creator'],
+                is_active=True,
+                #uniqueId = data['uniqueId']
+            )
+        return Response('jest okey')
+        
 
 
-    return Response('jest okey')
+    
     # data = request.data
     # alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
     # if alreadyExists:

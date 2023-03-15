@@ -372,7 +372,7 @@ function ProductCategories() {
                 }
               })}
         </div>
-        {active === true && (
+        {/* {active === true && (
           <div
             style={{
               display: "flex",
@@ -383,7 +383,7 @@ function ProductCategories() {
               {t("product_category_add")}
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     );
   }
@@ -446,6 +446,16 @@ function ProductCategories() {
           {radioValue === ZERO && <StatusProductCatCard active={false} />}
         </>
       )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Link to="add" style={addProdCatBtn}>
+          {t("product_category_add")}
+        </Link>
+      </div>
     </div>
   );
 }

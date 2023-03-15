@@ -879,6 +879,5 @@ export const getListOfData = (typeActivity) => async (dispatch, getState) => {
           ? error.response.data.detail
           : error.message,
     });
-    console.log(error);
   }
 };

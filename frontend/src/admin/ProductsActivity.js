@@ -9,6 +9,7 @@ import { addSingleInstance } from "../actions/adminActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import { title, changeBtn, addBtn, FormLayout } from "./AdminCSS";
 import {
   EDIT,
@@ -23,6 +24,7 @@ function ProductsActivity() {
   const params = useParams();
   const dispatch = useDispatch();
   const activity = params.activity;
+  const newId = uuidv4();
 
   const [values, setValues] = useState({
     name: "",
@@ -52,7 +54,7 @@ function ProductsActivity() {
     e.preventDefault();
     if (activity === ADD) {
       setAddSwitcher(true);
-      // setUniqueId(newId);
+      setUniqueId(newId);
     }
 
     // if (activity === EDIT) {
@@ -68,7 +70,6 @@ function ProductsActivity() {
   const selectLngHandler = (option) => {
     setSwitcher(true);
     setSelectedLng(option);
-    console.log("selectLngHandler", option, typeof option);
     setEmptyValueError(false);
   };
 

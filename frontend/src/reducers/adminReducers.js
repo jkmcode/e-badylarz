@@ -589,6 +589,7 @@ export const getListOfDataReducer = (
       return {
         loading: false,
         success: false,
+        result: [],
         type: action.payload[0].list_of_data,
         error: action.payload,
       };
