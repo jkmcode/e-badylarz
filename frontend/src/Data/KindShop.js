@@ -1,4 +1,3 @@
-
 import { useTranslation } from "react-i18next";
 
 export function useKindShopSpots() {
@@ -6,27 +5,28 @@ export function useKindShopSpots() {
   const kindSpots = [
     {
       id: "1",
-      name: t("ShopsSpot_kind_shop")
+      name: t("ShopsSpot_kind_shop"),
     },
     {
       id: "2",
-      name: t("ShopsSpot_kind_farmer")
+      name: t("ShopsSpot_kind_farmer"),
     },
     {
       id: "3",
-      name: t("ShopsSpot_kind_manufacturer")
+      name: t("ShopsSpot_kind_manufacturer"),
     },
     {
       id: "4",
-      name: t("ShopsSpot_kind_wholesaler")
+      name: t("ShopsSpot_kind_wholesaler"),
     },
     {
       id: "5",
-      name: t("ShopsSpot_kind_agent")
-    }
+      name: t("ShopsSpot_kind_agent"),
+    },
+    {
+      id: "6",
+      name: t("ShopsSpot_kind_only_pick_up"),
+    },
   ];
-  return kindSpots
+  return kindSpots;
 }
-
-
-

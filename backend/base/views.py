@@ -3,9 +3,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
+from rest_framework.exceptions import ValidationError
 from django.core.files import File
 from PIL import Image
 from io import BytesIO
+from django.http import Http404
 
 from datetime import datetime
 
@@ -141,13 +143,17 @@ def uploadMultiImages(request):
 def uploadMultiImages2(request):
     data = request.data
     uniqueId = data["uniqueId"]
-    #print('uniqueId we views uploadMultiImages2-----', uniqueId)
 
+    if data["type"] == "PRODUCT_SUBCAT":
+        image = ProductSubTypes.objects.get(uniqueId=uniqueId)
+    elif data["type"] == "PRODUCT_CAT":
+        image = ProductTypes.objects.get(uniqueId=uniqueId)        
+    else: 
+        content = {"detail": "Changing the active flag - no object type"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST) 
 
-    productTypes = ProductTypes.objects.get(uniqueId=uniqueId)
-
-    productTypes.photo = request.FILES.get('image')
-    productTypes.save()
+    image.photo = request.FILES.get('image')
+    image.save()    
 
     return Response("Image was uploaded")
 
@@ -514,7 +520,8 @@ def addShopSpot(request):
             is_active=data['is_active'],
             delivery=data['delivery'],
             range=data['range'],
-            kind=data['kind']
+            kind=data['kind'],
+            pick_up_point=data['pick_up']
         )
     else:
         spot = ShopsSpot.objects.get(id=data['id_spot'])
@@ -541,6 +548,7 @@ def addShopSpot(request):
         range = spot.range,
         type_of_change = spot.type_of_change,
         kind=spot.kind,
+        pick_up_point=spot.pick_up_point,
         archiver = data['creator']
         )
         # change data
@@ -558,6 +566,7 @@ def addShopSpot(request):
         spot.range = data['range']
         spot.type_of_change = 'Edit - change data'
         spot.kind = data['kind']
+        spot.pick_up_point=data['pick_up']
 
         spot.save()
 
@@ -571,7 +580,6 @@ def addShopSpot(request):
 @permission_classes([IsAdminUser])
 def addAreaSpot(request):
     data = request.data
-    #print('data---------', data)
     cit_obj = Citis.objects.get(id=data['city'])
 
     if data['add']:
@@ -762,7 +770,7 @@ def addCiti(request):
             latitude = data['lat'],
             longitude = data['lng'],
             is_active=True,
-            country = data['country']
+            language = data['country']
         )
         newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
         seriaziler = CitiesSerializer(newdciti, many=True)
@@ -848,6 +856,10 @@ def activeList(request):
         descrip = AreasSpot.objects.get(id=data['Id'])
     elif data['objType'] == "PRODUCT_CAT":
         descrip = ProductTypes.objects.get(id=data["Id"])
+    elif data['objType'] == "PRODUCT_SUBCAT":
+        descrip = ProductSubTypes.objects.get(id=data["Id"])    
+    elif data['objType'] == "PRODUCTS":
+        descrip = Product.objects.get(id=data["Id"])         
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -1064,7 +1076,7 @@ def addProductCat(request):
     data = request.data
     alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
     if alreadyExists:
-        content = {"detail": "Disctrict already exist"}
+        content = {"detail": "Product category already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)  
     else: 
         productCat = ProductTypes.objects.create(
@@ -1089,6 +1101,113 @@ def getProductCategories(request):
         i.language = cleanStr(i.language)
 
     seriaziler = ProductTypeSerializer(productCat, many=True)
-    return Response(seriaziler.data)        
+    return Response(seriaziler.data)       
 
-   
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getProductSubcategories(request, Id):
+    productSubCat = ProductSubTypes.objects.filter(id_product_type=Id).order_by('name')
+    seriaziler = SubproductTypeSerializer(productSubCat, many=True)
+
+    return Response(seriaziler.data)  
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def addProductSubcat(request):
+    data = request.data
+    alreadyExists = ProductSubTypes.objects.filter(name=data['name']).exists()
+    productCat = ProductTypes.objects.all().order_by('name')
+
+    if alreadyExists:
+        content = {"detail": "Product subcategory already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    else: 
+        for i in productCat :
+            if data['subcategoryId'] == i.id :
+                subCat = i
+        productSubcat = ProductSubTypes.objects.create(
+            name=data['name'],
+            creator = data['creator'],
+            uniqueId = data['uniqueId'],
+            is_active=True,
+            id_product_type_id = subCat.id
+        )   
+        return Response("okey")
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def edit_subcategory(request):
+    try: 
+        data = request.data
+        subcategory_obj = ProductSubTypes.objects.get(id=data['editSubcategoryId'])
+        subcategory_obj.name = data['name']
+        subcategory_obj.date_of_change = datetime.now()
+        subcategory_obj.modifier = data['modifier']
+        subcategory_obj.save()
+        return Response({'message': 'Subcategory updated successfully'}, status=status.HTTP_200_OK)
+    except ProductSubTypes.DoesNotExist:
+        return Response({'message': 'Subcategory not found'}, status=status.HTTP_404_NOT_FOUND)
+    except serializers.ValidationError as e:
+        return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception:
+        return Response({'message': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_single_instance(request, Id, typeActivity):
+    
+    if typeActivity == 'subcategory':
+        single_instance = ProductSubTypes.objects.filter(id=Id).first()
+        serializer = SubproductTypeSerializer(single_instance)
+    elif typeActivity == 'PRODUCT_CAT':
+        single_instance = ProductTypes.objects.filter(id=Id).first()
+        serializer = ProductTypeSerializer(single_instance)
+    else:
+        raise Http404('Invalid typeActivity')
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_list_of_data(request, typeActivity):
+    
+    if typeActivity == "LIST_OF_PRODUCTS":
+        products = Product.objects.all().order_by('name')
+        seriaziler = ProductsSerializer(products, many=True)
+    else:
+        raise Http404('Invalid typeActivity')
+    
+    return Response(seriaziler.data)      
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def add_single_instance(request):
+    data = request.data
+    alreadyExists = Product.objects.filter(name=data['name']).exists()
+    if alreadyExists: 
+        content = {"detail": "Product category already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print('działa okey')
+
+
+    return Response('jest okey')
+    # data = request.data
+    # alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
+    # if alreadyExists:
+    #     content = {"detail": "Product category already exist"}
+    #     return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    # else: 
+    #     productCat = ProductTypes.objects.create(
+    #         name=data['name'],
+    #         creator = data['creator'],
+    #         is_active=True,
+    #         language = data['language'],
+    #         uniqueId = data['uniqueId']
+    #     )   
+
+    #     newProductCat=ProductTypes.objects.filter(name=data['name'])
+    #     seriaziler = ProductTypeSerializer(newProductCat, many=True)
+    #     return Response(seriaziler.data)    

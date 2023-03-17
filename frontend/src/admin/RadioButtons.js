@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import useResponsive from "../component/useResponsive";
 
@@ -55,3 +56,14 @@ function RadioButtons({ handleBtnValue, radios }) {
 }
 
 export default RadioButtons;
+
+RadioButtons.propTypes = {
+  handleBtnValue: PropTypes.func.isRequired,
+  radios: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};

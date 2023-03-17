@@ -15,6 +15,12 @@ import {
   inactiveBadge,
   submitBtn,
   editBtn,
+  btnUnactive,
+  btnActive,
+  btnEdit,
+  tableCell,
+  tableCellNoBorderRight,
+  styleHeader,
 } from "./AdminCSS";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
@@ -35,6 +41,7 @@ import {
   SPOT_DESCRIPTION,
   GET_CONTACT_LIST_DELETE,
   GET_SOPTS_LIST_DELETE,
+  SET_WINDOW_FLAG_DELETE,
   SET_FLAG_INFO_TRUE,
   SET_FLAG_INFO_FALSE,
   SET_CITY_FLAG_DESC_TRUE,
@@ -44,7 +51,7 @@ import {
   FIRST_NAME_PATTERN,
   EMAIL_PATTERN,
   PHONE_PATTERN,
-} from "../constants/formValueConstans"
+} from "../constants/formValueConstans";
 
 import { TWO, ONE_TO_TWO } from "../constants/environmentConstans";
 
@@ -129,16 +136,17 @@ function AddContact() {
   //Handlers
 
   const infoHandler = (i) => {
-    setInfoShop(true)
+    console.log("Info--->>>", i);
+    setInfoShop(true);
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
-  }
+  };
 
   const infoHandlerSpot = (i) => {
-    setInfoSpot(true)
+    setInfoSpot(true);
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
-  }
+  };
 
   const descriptionHandler = (i) => {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
@@ -190,22 +198,22 @@ function AddContact() {
 
   const closeInfoHandler = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
-    setInfoShop(false)
+    setInfoShop(false);
   };
 
   const closeInfoHandlerSpot = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
-    setInfoSpot(true)
+    setInfoSpot(true);
   };
 
   const editHandler = (id) => {
     if (editContact) {
-      setEditContact(false)
-      setNewContact(!newContact)
+      setEditContact(false);
+      setNewContact(!newContact);
     } else {
-      setEditContact(true)
+      setEditContact(true);
       setNewContact(true);
-    };
+    }
 
     ListOfContact.map((i) => {
       if (i.id === id) {
@@ -396,29 +404,6 @@ function AddContact() {
     color: "red",
   };
 
-  const btnTable = {
-    backgroundColor: "white",
-    border: "none",
-    fontWeight: 600,
-    borderRadius: "0.25rem",
-    fontSize: "0.85rem",
-  };
-
-  const btnUnactive = {
-    ...btnTable,
-    color: "red",
-  };
-
-  const btnEdit = {
-    ...btnTable,
-    color: "#dec314",
-  };
-
-  const btnActive = {
-    ...btnTable,
-    color: "green",
-  };
-
   /************************FORM*****************************/
   const [values, setValues] = useState({
     firstName: "",
@@ -511,22 +496,6 @@ function AddContact() {
     marginTop: "1rem",
   };
 
-  const styleHeader = {
-    borderBottom: `3px solid rgb(219, 219, 219)`,
-    padding: "1rem",
-  };
-
-  const tableCell = {
-    padding: "0.75rem",
-    verticalAlign: "middle",
-    borderTop: "2px solid rgb(219, 219, 219)",
-    borderRight: "2px solid rgb(219, 219, 219)",
-  };
-
-  const tableCellNoBorderRight = {
-    ...tableCell,
-    borderRight: "none",
-  };
   const shopsBtn = {
     fontSize: "0.7rem",
     fontWeight: "700",
@@ -725,8 +694,7 @@ function AddContact() {
         {t("btn_edit")}
       </button>
     ),
-  })
-  )
+  }));
 
   /*****************************************************/
 
@@ -740,7 +708,6 @@ function AddContact() {
         height: "auto",
         padding: "1rem",
       }}
-
     >
       {loading || activeLoading || shopListLoading || spotListLoading ? (
         <Loader />
@@ -938,8 +905,8 @@ function AddContact() {
                     {!newContact
                       ? t("AddContact_btn_add")
                       : editContact
-                        ? t("AddContact_btn_close_edit")
-                        : t("AddContact_btn_close")}
+                      ? t("AddContact_btn_close_edit")
+                      : t("AddContact_btn_close")}
                   </button>
 
                   <button
@@ -1060,8 +1027,8 @@ function AddContact() {
                     {!newSpot
                       ? t("AddContact_btn_add_spot")
                       : editSpot
-                        ? t("AddContact_btn_close_edit_spot")
-                        : t("AddContact_btn_close_spot")}
+                      ? t("AddContact_btn_close_edit_spot")
+                      : t("AddContact_btn_close_spot")}
                   </button>
 
                   <button

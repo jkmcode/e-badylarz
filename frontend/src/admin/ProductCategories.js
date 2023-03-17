@@ -9,9 +9,9 @@ import InfoAlertComponent from "../component/InfoAlertComponent";
 import SelectOption from "./SelectOption";
 import language from "../language";
 import { unOrActiveList } from "../actions/adminActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
-import { ONE, ZERO, EMPTY } from "../constants/environmentConstans";
+import { ONE, ZERO, EMPTY, EMPTY_LIST } from "../constants/environmentConstans";
 import {
   SET_FLAG_ADD_FALSE,
   PRODUCT_CAT_DESCRIPTION,
@@ -22,6 +22,7 @@ import {
 import {
   ADD_PRODUCT_CAT_DELETE,
   GET_PRODUCT_CAT_LIST_DELETE,
+  GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 import { Icon } from "@iconify/react";
 import {
@@ -29,11 +30,14 @@ import {
   emptyListIcon,
   unactiveBtn,
   activeBtn,
+  subcategoryBtn,
+  editBtn,
 } from "./AdminCSS";
 
 function ProductCategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -46,6 +50,9 @@ function ProductCategories() {
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [updateStatus, setUpdateStatus] = useState("");
+  const [selectedLgn, setSelectedLng] = useState(0);
+  const [emptyValueError, setEmptyValueError] = useState(false);
+  const [switcher, setSwitcher] = useState(false);
 
   //RadioButtons functions
   const handleBtnValue = (e) => {
@@ -83,14 +90,18 @@ function ProductCategories() {
     error: errorUnOrActive,
   } = unOrActive;
 
-  //console.log("productCatList", productCatList);
-  //console.log("successUnOrActive", successUnOrActive);
-
-  // USEEFFECTS
-
-  // fetching list of shops from DB
+  //Comment
+  // This useEffect hook dispatches the GET_PRODUCT_SUBCAT_LIST_DELETE action to reset the subproductCatList array,
+  // ensuring that any previously stored data is cleared.
+  // This helps to avoid errors and ensures that the subproduct list is properly displayed to the user.
+  // The hook is triggered once, on component mount.
   useEffect(() => {
-    if (productCatList.length === 0) {
+    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });
+  }, []);
+
+  // fetching list of product categories from DB
+  useEffect(() => {
+    if (productCatList.length === EMPTY_LIST) {
       dispatch(getProductCat());
     }
   }, [dispatch, productCatList.length]);
@@ -139,6 +150,7 @@ function ProductCategories() {
         })
       );
     }
+    setConfirm(false);
   }, [dispatch, confirm, updateStatus]);
 
   // List/Frontend data
@@ -164,19 +176,13 @@ function ProductCategories() {
     setConfirm(false);
   };
 
-  /////////////////////////////////////////////////////WORK/////////////////////////////////
-
-  const [selectedLgn, setSelectedLng] = useState(0);
-  const [emptyValueError, setEmptyValueError] = useState(false);
-  const [switcher, setSwitcher] = useState(false);
-
   // input
   const input = {
     id: "1",
     name: "language",
     label: "language",
     optionsList: language,
-    defaultValue: "Select an option",
+    defaultValue: t("default_option_lng"),
   };
 
   const selectLngHandler = (option) => {
@@ -201,41 +207,65 @@ function ProductCategories() {
         dispatch(sortByLng(insertData));
       }
     }
-  }, [switcher]);
+  }, [dispatch, switcher]);
+
+  // sub Category
+
+  const subcategoryProduct = (id) => {
+    navigate(`${id}/subcategories`);
+  };
+
+  const editProductCat = (id) => {
+    navigate(`${id}/edit`);
+  };
+
+  const objects = productCatList.map((cat) => ({
+    id: cat.id,
+    buttons: [
+      {
+        id: 1,
+        btn: (
+          <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
+            {t("btn_unactive")}
+          </button>
+        ),
+        btnActive: false,
+      },
+      {
+        id: 2,
+        btn: (
+          <button onClick={() => activeHandler(cat.id)} style={activeBtn}>
+            {t("btn_active")}
+          </button>
+        ),
+        btnActive: true,
+      },
+      {
+        id: 3,
+        btn: (
+          <button
+            onClick={() => subcategoryProduct(cat.id)}
+            style={subcategoryBtn}
+          >
+            {t("btn_subcategory")}
+          </button>
+        ),
+        btnActive: false,
+      },
+      {
+        id: 4,
+        btn: (
+          <button onClick={() => editProductCat(cat.id)} style={editBtn}>
+            {t("btn_edit")}
+          </button>
+        ),
+        btnActive: false,
+      },
+    ],
+  }));
 
   function StatusProductCatCard({ active }) {
-    const objects = productCatList.map((cat) => ({
-      id: cat.id,
-      buttons: [
-        {
-          id: 1,
-          btn: (
-            <button onClick={() => unActiveHandler(cat.id)} style={unactiveBtn}>
-              {t("btn_unactive")}
-            </button>
-          ),
-          btnActive: false,
-        },
-        {
-          id: 2,
-          btn: (
-            <button onClick={() => activeHandler(cat.id)} style={activeBtn}>
-              {t("btn_active")}
-            </button>
-          ),
-          btnActive: true,
-        },
-      ],
-    }));
-
     let currentProductCatList = [];
-    //let sortedCurrentProductCatList = [];
-    // sortedCurrentProductCatList = sortedProductCatList.filter(
-    //   (pro) => pro.language && pro.is_active === active
-    // );
-    // sortedCurrentProductCatList = sortedProductCatList.filter(
-    //   (pro) => pro.language && pro.is_active === active
-    // );
 
     if (active === true && sortedProductCatList.length === 0) {
       currentProductCatList = productCatList.filter(
@@ -274,22 +304,6 @@ function ProductCategories() {
       );
     }
 
-    // if (
-    //   currentProductCatList.length !== 0 &&
-    //   sortedCurrentProductCatList.length === 0
-    // ) {
-    //   return (
-    //     <>
-    //       <div style={emptylistTitle}>
-    //         <div style={{ marginTop: "3rem" }}>{t("Table_empty_list")}</div>
-    //       </div>
-    //       <div style={emptyListIcon}>
-    //         <Icon icon="ic:outline-featured-play-list" />
-    //       </div>
-    //     </>
-    //   );
-    // }
-
     return (
       <div
         style={{
@@ -306,6 +320,7 @@ function ProductCategories() {
                     <RotateCard
                       key={category.id}
                       name={category.name}
+                      photo={category.photo}
                       id={category.id}
                       objects={objects}
                       isActive={true}
@@ -319,6 +334,7 @@ function ProductCategories() {
                     <RotateCard
                       key={category.id}
                       name={category.name}
+                      photo={category.photo}
                       id={category.id}
                       objects={objects}
                       isActive={true}
@@ -364,7 +380,7 @@ function ProductCategories() {
             }}
           >
             <Link to="add" style={addProdCatBtn}>
-              Add Category
+              {t("product_category_add")}
             </Link>
           </div>
         )}

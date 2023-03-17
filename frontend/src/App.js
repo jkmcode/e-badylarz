@@ -37,8 +37,11 @@ import AddCity from "./admin/AddCity";
 import AreaSpotActivity from "./admin/AreaSpotActivity";
 import CityDescription from "./admin/CityDescription";
 import ProductCategories from "./admin/ProductCategories";
-import AddProductCategories from "./admin/AddProductCategories";
+import ProductCategoriesActivity from "./admin/ProductCategoriesActivity";
+import ProductSubcategories from "./admin/ProductSubcategories";
+import ProductSubcategoriesActivity from "./admin/ProductSubcategoriesActivity";
 import Products from "./admin/Products";
+import ProductsActivity from "./admin/ProductsActivity";
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -96,10 +99,27 @@ function App() {
           <Route path="cities" element={<AdminCities />} />
           <Route path="product-categories" element={<ProductCategories />} />
           <Route
-            path="product-categories/add"
-            element={<AddProductCategories />}
+            path="product-categories/:activity"
+            element={<ProductCategoriesActivity />}
+          />
+          <Route
+            path="product-categories/:id/:activity"
+            element={<ProductCategoriesActivity />}
+          />
+          <Route
+            path="product-categories/:id/subcategories"
+            element={<ProductSubcategories />}
+          />
+          <Route
+            path="product-categories/:id/subcategories/:activity"
+            element={<ProductSubcategoriesActivity />}
+          />
+          <Route
+            path="product-categories/:id/subcategories/:idSubCat/:activity"
+            element={<ProductSubcategoriesActivity />}
           />
           <Route path="products" element={<Products />} />
+          <Route path="products/:activity" element={<ProductsActivity />} />
         </Route>
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>

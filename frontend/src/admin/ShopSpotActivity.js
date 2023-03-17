@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
-import { TWO, THREE, FOUR } from "../constants/environmentConstans";
 import useResponsive from "../component/useResponsive";
 import FormInput from "./FormInput";
 import Divider from "./Divider";
@@ -15,6 +10,13 @@ import ImageDisplayer from "../component/ImageDisplayerComponent";
 import RadioButtons from "./RadioButtons";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
+import { TWO, THREE, FOUR } from "../constants/environmentConstans";
+import { Icon } from "@iconify/react";
+import { useKindShopSpots } from "../Data/KindShop";
 import {
   addShopSpot,
   getShop,
@@ -49,11 +51,8 @@ import {
   LATITUDE_PATTERN,
   NO_BUILDING_PATTERN,
   POST_FORMAT,
-  ONLY_NUMBER
+  ONLY_NUMBER,
 } from "../constants/formValueConstans";
-
-import { Icon } from "@iconify/react";
-import { useKindShopSpots } from "../Data/KindShop";
 
 function AddShopsSpot() {
   const { t } = useTranslation();
@@ -71,6 +70,7 @@ function AddShopsSpot() {
   const [selectedKindSpot, setSelectedKindSpot] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
+  const [valuePickUp, setValuePickUp] = useState(false);
   const [values, setValues] = useState({
     spotName: "",
     range: "",
@@ -126,15 +126,11 @@ function AddShopsSpot() {
   const {
     successInsertImage,
     loadingInsertImage,
-    error: errorInsertImage
+    error: errorInsertImage,
   } = insertImageRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
-  const {
-    shopDetails,
-    success: successGetShop,
-    loading
-  } = getShopRedux;
+  const { shopDetails, success: successGetShop, loading } = getShopRedux;
 
   const shopSpotUpdateRedux = useSelector((state) => state.shopSpotUpdate);
   const {
@@ -147,8 +143,8 @@ function AddShopsSpot() {
 
   const infoHandler = (i) => {
     dispatch({ type: SET_FLAG_INFO_TRUE });
-    setObjInfo(i)
-  }
+    setObjInfo(i);
+  };
 
   const closeInfoHandler = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
@@ -158,7 +154,6 @@ function AddShopsSpot() {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(true);
     setObjId(i.id);
-    console.log('JESTEM w opisie --->>>', i)
   };
 
   const onChange = (name, value) => {
@@ -175,12 +170,16 @@ function AddShopsSpot() {
     setRadioValue(e.target.value);
   };
 
+  const handleBtnValuePickUP = (e) => {
+    setValuePickUp(!valuePickUp);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (SpotParam === "add") {
       if (selectedKindSpot !== 0) {
-        setCurrentSpotName(values.spotName)
+        setCurrentSpotName(values.spotName);
         const insertData = {
           add: true,
           id_shops: shopId,
@@ -196,14 +195,14 @@ function AddShopsSpot() {
           is_active: "True",
           delivery: radioValue === "1" ? "False" : "True",
           range: radioValue === "1" ? "0" : values.range,
-          kind: values.kindSpot
+          kind: values.kindSpot,
+          pick_up: valuePickUp,
         };
         dispatch(addShopSpot(insertData));
       } else {
         setEmptyValueError(true);
       }
-    }
-    else {
+    } else {
       dispatch({ type: SET_FLAG_IMAGE_TRUE });
       dispatch({ type: GET_SHOPS_LIST_DELETE });
       //
@@ -218,18 +217,20 @@ function AddShopsSpot() {
         postCode: !values.postCode ? spotDetails.post_code : values.postCode,
         post: !values.post ? spotDetails.post : values.post,
         latitude: !values.latitude ? spotDetails.latitude : values.latitude,
-        longitude: !values.longitude
-          ? spotDetails.longitude
-          : values.longitude,
+        longitude: !values.longitude ? spotDetails.longitude : values.longitude,
         creator: userInfo.id,
         is_active: "True",
         delivery: radioValue === "1" ? "False" : "True",
-        range: radioValue === "1" ? "0"
-          : !values.range ? spotDetails.range : values.range,
+        range:
+          radioValue === "1"
+            ? "0"
+            : !values.range
+              ? spotDetails.range
+              : values.range,
         kind: !values.kindSpot ? spotDetails.kind : values.kindSpot,
+        pick_up: valuePickUp,
       };
       dispatch(updateShopSpot(insertData));
-
     }
   };
 
@@ -255,7 +256,11 @@ function AddShopsSpot() {
         if (value.name === currentSpotName) {
           if (isImage) {
             dispatch(
-              InsertImage({ imageUpload: imageUpload, Id: value.id, objType: "Spot" })
+              InsertImage({
+                imageUpload: imageUpload,
+                Id: value.id,
+                objType: "Spot",
+              })
             );
           } else {
             dispatch({ type: ADD_SHOP_SPOT_DELETE });
@@ -288,10 +293,17 @@ function AddShopsSpot() {
       dispatch({ type: ADD_SHOP_SPOT_DELETE });
       dispatch({ type: EDIT_SHOP_SPOT_DELETE });
       dispatch({ type: DELETE_IMAGE_REDUX });
-      dispatch({ type: ADD_IMAGE_DELETE })
+      dispatch({ type: ADD_IMAGE_DELETE });
       navigate(`/dashboard/shops/${shopId}/contact`);
     }
   }, [dispatch, successInsertImage]);
+
+  // is or not pick-up spot
+  useEffect(() => {
+    if (successGetSpot) {
+      setValuePickUp(spotDetails.pick_up_point);
+    }
+  }, [dispatch, successGetSpot]);
 
   //style
   const background = {
@@ -332,8 +344,7 @@ function AddShopsSpot() {
     backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
   };
 
-  //List of kind Spots
-  const kindSpots = useKindShopSpots()
+  const kindSpots = useKindShopSpots();
 
   //List of inputs
   const inputs = [
@@ -359,8 +370,7 @@ function AddShopsSpot() {
       defaultValue:
         SpotParam === "add"
           ? t("ShopsSpot_select_placeholder")
-          :
-          successGetSpot &&
+          : successGetSpot &&
           kindSpots.filter((i) => spotDetails.kind == i.id)[0].name,
       disabled: SpotParam === "edit" ? false : false,
     },
@@ -480,193 +490,201 @@ function AddShopsSpot() {
 
   return (
     <>
-      {loading || spotLoading ||
+      {loading ||
+        spotLoading ||
         addSpotLoading ||
         loadingInsertImage ||
-        loadingUpdate
-        ? (
-          <Loader />
-        ) : (
-          <div style={background}>
-            {infoFlag ? (
-              <InfoComponent
-                title={t("InfoComponent_title_spot")}
-                obj={objInfo}
-                typeObj={SPOT_DESCRIPTION}
-                closeInfoHandler={closeInfoHandler}
-              />
-            ) : null}
-            {errorInsertImage ? (
-              <ErrorMessage msg={errorInsertImage} timeOut={TIME_AUT_ERROR} />
-            ) : null}
-            {spotError ? (
-              <ErrorMessage msg={spotError} timeOut={TIME_AUT_ERROR} />
-            ) : null}
-            {addSpotError ? (
-              <ErrorMessage msg={addSpotError} timeOut={TIME_AUT_ERROR} />
-            ) : null}
-            {errorUpdate ? (
-              <ErrorMessage msg={errorUpdate} timeOut={TIME_AUT_ERROR} />
-            ) : null}
-            <Link
-              to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
-              style={{ color: "black" }}
-            >
-              <Icon icon="ion:arrow-back" />
-              {t("btn-return")}
-            </Link>
-            {successGetSpot && successGetShop && (
-              <div style={{ textAlign: "center" }}>
-                {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
-                {shopDetails.no_building}
-              </div>
-            )}
-            <div
-              style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}
-            >
-              {SpotParam === "edit"
-                ? t("ShopsSpot_Edit_title")
-                : t("ShopsSpot_Add_title")}
+        loadingUpdate ? (
+        <Loader />
+      ) : (
+        <div style={background}>
+          {infoFlag ? (
+            <InfoComponent
+              title={t("InfoComponent_title_spot")}
+              obj={objInfo}
+              typeObj={SPOT_DESCRIPTION}
+              closeInfoHandler={closeInfoHandler}
+            />
+          ) : null}
+          {errorInsertImage ? (
+            <ErrorMessage msg={errorInsertImage} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {spotError ? (
+            <ErrorMessage msg={spotError} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {addSpotError ? (
+            <ErrorMessage msg={addSpotError} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          {errorUpdate ? (
+            <ErrorMessage msg={errorUpdate} timeOut={TIME_AUT_ERROR} />
+          ) : null}
+          <Link
+            to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
+            style={{ color: "black" }}
+          >
+            <Icon icon="ion:arrow-back" />
+            {t("btn-return")}
+          </Link>
+          {successGetSpot && successGetShop && (
+            <div style={{ textAlign: "center" }}>
+              {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
+              {shopDetails.no_building}
             </div>
-            {helper && cityDescFlag && (
+          )}
+          <div
+            style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}
+          >
+            {SpotParam === "edit"
+              ? t("ShopsSpot_Edit_title")
+              : t("ShopsSpot_Add_title")}
+          </div>
+          {helper && cityDescFlag && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
+                  backgroundColor: "#4d4d4d",
+                  padding: "0.4rem",
+                  width: "80%",
+                  margin: "0.4rem",
                 }}
               >
-                <div
-                  style={{
-                    backgroundColor: "#4d4d4d",
-                    padding: "0.4rem",
-                    width: "80%",
-                    margin: "0.4rem",
-                  }}
+                <AddDescription
+                  objId={objId}
+                  descType={SPOT_DESCRIPTION}
+                  return={true}
+                />
+              </div>
+            </div>
+          )}
+          {SpotParam === "edit" && (
+            <>
+              <Divider backgroundColor="grey" />
+              <FormLayout col={TWO}>
+                <button
+                  style={btnDescription}
+                  onClick={() => descriptionHandler(spotDetails)}
                 >
-                  <AddDescription
-                    objId={objId}
-                    descType={SPOT_DESCRIPTION}
-                    return={true}
-                  />
-                </div>
-              </div>
-            )}
-            {SpotParam === "edit" &&
-              <>
-                <Divider backgroundColor="grey" />
-                <FormLayout col={TWO}>
-                  <button
-                    style={btnDescription}
-                    onClick={() => descriptionHandler(spotDetails)}
-                  >
-                    {t("btn_description")}
-                  </button>
-                  <button
-                    style={btnEdit}
-                    onClick={() => infoHandler(spotDetails)}
-                  >
-                    {t("btn_info")}
-                  </button>
-                </FormLayout>
-              </>
-            }
-
-
-            <Divider backgroundColor="grey" />
-            <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-            <form onSubmit={handleSubmit}>
-              <FormLayout col={THREE}>
-                {inputs.map((input, index) => {
-                  if (index === 0) {
-                    return (
-                      <FormInput key={input.id} {...input} onChange={onChange} />
-                    );
-                  }
-                })}
-                {inputs.map((input, index) => {
-                  if (index === 1) {
-                    return (
-                      <SelectOption
-                        key={kindSpots.id}
-                        optionsList={kindSpots}
-                        label={input.label}
-                        defaultValue={input.defaultValue}
-                        emptyValueError={emptyValueError}
-                        onChange={selectKindHandler
-                        }
-                        {...input}
-                      />
-                    );
-                  }
-                })}
-                {inputs.map((input, index) => {
-                  if (index === 2 && radioValue === "0") {
-                    return (
-                      <FormInput key={input.id} {...input} onChange={onChange} />
-                    );
-                  }
-                })}
+                  {t("btn_description")}
+                </button>
+                <button
+                  style={btnEdit}
+                  onClick={() => infoHandler(spotDetails)}
+                >
+                  {t("btn_info")}
+                </button>
               </FormLayout>
-              <Divider backgroundColor="grey" />
-
-              <div style={{ fontWeight: 500 }}>
-                {t("ShopsSpot_title_address")}
-              </div>
-              <FormLayout col={TWO}>
-                {inputs.map((input, index) => {
-                  if (index === 4 || index === 3) {
-                    return (
-                      <FormInput key={input.id} {...input} onChange={onChange} />
-                    );
-                  }
-                })}
-              </FormLayout>
-              <FormLayout col={THREE}>
-                {inputs.map((input, index) => {
-                  if (index === 7 || index === 5 || index === 6) {
-                    return (
-                      <FormInput key={input.id} {...input} onChange={onChange} />
-                    );
-                  }
-                })}
-              </FormLayout>
-              <Divider backgroundColor="grey" />
-              <div style={{ fontWeight: 500 }}>
-                {t("ShopsSpot_title_geolocation")}
-              </div>
-
-              <FormLayout col={TWO}>
-                {inputs.map((input, index) => {
-                  if (index === 9 || index === 8) {
-                    return (
-                      <FormInput key={input.id} {...input} onChange={onChange} />
-                    );
-                  }
-                })}
-              </FormLayout>
-              <div>
-
-                {imageRender
-                  ? SpotParam === "edit" &&
-                  spotDetails.photo !== null && <ImageDisplayer imageSrc={spotDetails.photo} />
-                  : null}
-                <UploadImage />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                {SpotParam === "edit" ? (
-                  <button type="submit" style={changeBtn}>
-                    {t("btn-change")}
-                  </button>
-                ) : (
-                  <button type="submit" style={addBtn}>
-                    {t("btn-add")}
-                  </button>
-                )}
-              </div>
-            </form>
+            </>
+          )}
+          <Divider backgroundColor="grey" />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {valuePickUp ? t("Pick_up") : t("No_pick_up")}
+            <button
+              style={btnEdit}
+              onClick={() => handleBtnValuePickUP()}
+            >
+              {t("btn-change")}
+            </button>
           </div>
-        )}
+          <Divider backgroundColor="grey" />
+          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+          <form onSubmit={handleSubmit}>
+            <FormLayout col={THREE}>
+              {inputs.map((input, index) => {
+                if (index === 0) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+              {inputs.map((input, index) => {
+                if (index === 1) {
+                  return (
+                    <SelectOption
+                      key={kindSpots.id}
+                      optionsList={kindSpots}
+                      label={input.label}
+                      defaultValue={input.defaultValue}
+                      emptyValueError={emptyValueError}
+                      onChange={selectKindHandler}
+                      {...input}
+                    />
+                  );
+                }
+              })}
+              {inputs.map((input, index) => {
+                if (index === 2 && radioValue === "0") {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <Divider backgroundColor="grey" />
+
+            <div style={{ fontWeight: 500 }}>
+              {t("ShopsSpot_title_address")}
+            </div>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 4 || index === 3) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <FormLayout col={THREE}>
+              {inputs.map((input, index) => {
+                if (index === 7 || index === 5 || index === 6) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>
+              {t("ShopsSpot_title_geolocation")}
+            </div>
+
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 9 || index === 8) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <div>
+              {imageRender
+                ? SpotParam === "edit" &&
+                spotDetails.photo !== null && (
+                  <ImageDisplayer imageSrc={spotDetails.photo} />
+                )
+                : null}
+              <UploadImage />
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {SpotParam === "edit" ? (
+                <button type="submit" style={changeBtn}>
+                  {t("btn-change")}
+                </button>
+              ) : (
+                <button type="submit" style={addBtn}>
+                  {t("btn-add")}
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+      )}
     </>
   );
 }

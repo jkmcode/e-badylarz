@@ -9,6 +9,10 @@ import {
   addProductReducer,
   productCatListReducer,
   sortedProductCatListReducer,
+  subproductCatListReducer,
+  addSubproductCatListReducer,
+  getSubproductCatReducer,
+  editSubproductCatReducer,
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -38,6 +42,8 @@ import {
   getSpotReducer,
   shopSpotUpdateListReducer,
   citesListAllReducer,
+  getSingleInstanceReducer,
+  getListOfDataReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -74,7 +80,13 @@ const reducer = combineReducers({
   addProduct: addProductReducer,
   productCatList: productCatListReducer,
   sortedProductCatList: sortedProductCatListReducer,
+  subproductCatList: subproductCatListReducer,
+  addSubproductCatList: addSubproductCatListReducer,
+  getSubproductCat: getSubproductCatReducer,
+  editSubproductCat: editSubproductCatReducer,
   uploadImage: uploadImageReducers,
+  getSingleInstance: getSingleInstanceReducer,
+  getListOfData: getListOfDataReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

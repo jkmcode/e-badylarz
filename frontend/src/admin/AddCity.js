@@ -27,6 +27,7 @@ import {
   LONG_NAME_PATTERN,
   LATITUDE_PATTERN,
   LONGITUDE_PATTERN,
+  NAME_PATTERN,
 } from "../constants/formValueConstans";
 
 import { submitBtn, FormLayout } from "./AdminCSS";
@@ -174,9 +175,9 @@ function AddCity() {
       optionsList: language,
       label: t("AddCiti_label_country"),
       disabled: false,
-      // errorMessage: t("AddCiti_country_error_message"),
-      // pattern: NAME_PATTERN,
-      // required: true,
+      errorMessage: t("AddCiti_country_error_message"),
+      pattern: NAME_PATTERN,
+      required: true,
     },
     {
       id: "4",
@@ -271,9 +272,8 @@ function AddCity() {
                       label={input.label}
                       defaultValue={input.defaultValue}
                       emptyValueError={emptyValueError}
-                      onChange={selectCountry
-                      }
                       {...input}
+                      onChange={selectCountry}
                     />
                   );
                 }

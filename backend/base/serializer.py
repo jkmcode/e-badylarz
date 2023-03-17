@@ -76,9 +76,22 @@ class DistrictsDescSerializer(serializers.ModelSerializer):
         fields = ["description","language","id"]
 
 class ProductTypeSerializer(serializers.ModelSerializer):
+    type_of_instance = serializers.CharField(default='product category')
     class Meta:
         model = ProductTypes
         fields = '__all__'     
+
+class ProductsSerializer(serializers.ModelSerializer):
+    list_of_data = serializers.CharField(default='list of product')
+    class Meta:
+        model = Product
+        fields = '__all__'    
+
+class SubproductTypeSerializer(serializers.ModelSerializer):
+    type_of_instance = serializers.CharField(default='product subcategory')
+    class Meta:
+        model = ProductSubTypes
+        fields = '__all__'           
 
 class ShopsSerializer(serializers.ModelSerializer):
     class Meta:

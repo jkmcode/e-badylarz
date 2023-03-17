@@ -85,6 +85,7 @@ import {
   ADD_IMAGE_SUCCESS,
   ADD_IMAGE_DELETE,
   ADD_IMAGE_FAIL,
+  ADD_IMAGE_RESET,
   SET_FLAG_IMAGE_TRUE,
   SET_FLAG_IMAGE_FALSE,
   ADD_SHOP_SPOT_REQUEST,
@@ -105,6 +106,14 @@ import {
   EDIT_SHOP_SPOT_DELETE,
   SET_FLAG_ADD_TRUE,
   SET_FLAG_ADD_FALSE,
+  GET_SINGLE_INSTANCE_REQUEST,
+  GET_SINGLE_INSTANCE_CAT_SUCCESS,
+  GET_SINGLE_INSTANCE_CAT_FAIL,
+  GET_SINGLE_INSTANCE_CAT_DELETE,
+  GET_LIST_OF_DATA_REQUEST,
+  GET_LIST_OF_DATA_SUCCESS,
+  GET_LIST_OF_DATA_FAIL,
+  GET_LIST_OF_DATA_DELETE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -124,11 +133,16 @@ export const insertImageReducer = (state = {}, action) => {
         successInsertImage: false,
         error: action.payload,
       };
+    case ADD_IMAGE_RESET:
+      return {
+        loadingInsertImage: false,
+        successInsertImage: false,
+      };
     case ADD_IMAGE_DELETE:
       return {
         loadingInsertImage: false,
         successInsertImage: false,
-      }
+      };
     default:
       return state;
   }
@@ -527,6 +541,59 @@ export const addDistrictReducer = (state = {}, action) => {
       return { loading: false, error: action.payload, success: false };
     case DISTRICT_ADD_DELETE:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const getSingleInstanceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_SINGLE_INSTANCE_REQUEST:
+      return { loading: true, success: false, type: "", result: {} };
+    case GET_SINGLE_INSTANCE_CAT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        type: action.payload.type_of_instance,
+        result: action.payload,
+      };
+    case GET_SINGLE_INSTANCE_CAT_FAIL:
+      return {
+        loading: false,
+        success: false,
+        type: action.payload.type_of_instance,
+        error: action.payload,
+      };
+    case GET_SINGLE_INSTANCE_CAT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getListOfDataReducer = (
+  state = { loading: true, success: false, type: "", result: [] },
+  action
+) => {
+  switch (action.type) {
+    case GET_LIST_OF_DATA_REQUEST:
+      return { loading: true, success: false, type: "", result: [] };
+    case GET_LIST_OF_DATA_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        type: action.payload[0].list_of_data,
+        result: action.payload,
+      };
+    case GET_LIST_OF_DATA_FAIL:
+      return {
+        loading: false,
+        success: false,
+        type: action.payload[0].list_of_data,
+        error: action.payload,
+      };
+    case GET_LIST_OF_DATA_DELETE:
+      return { result: [] };
     default:
       return state;
   }

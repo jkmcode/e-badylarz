@@ -163,3 +163,9 @@ onChange={e => setHeight(e.target.value)}
 };
 
 export default ResizeableImageUploader;
+
+Edit:
+Czy ujednolicić pobieranie odpowiednich rekorów z DB, żeby wpisać defaultowe wartości przy edytowaniu.
+ogarnąc ten błąd odnośnie defaultowych wartości !!!
+
+https://www.figma.com/file/jK5MiXnvALVxpV67o78lDT/Foodu---Food-Delivery-App-UI-Kit-(Community)?node-id=0%3A1&t=higqwlhZoAC2n4DA-0
