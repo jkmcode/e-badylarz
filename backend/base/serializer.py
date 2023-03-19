@@ -82,6 +82,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'     
 
 class ProductsSerializer(serializers.ModelSerializer):
+    #id_product_subtype = ProductTypeSerializer()
     list_of_data = serializers.CharField(default='list of product')
     class Meta:
         model = Product

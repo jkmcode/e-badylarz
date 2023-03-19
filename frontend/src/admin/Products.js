@@ -4,12 +4,12 @@ import TableComponent from "./TableComponent";
 import DotsLoader from "../component/DotsLoader";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 import SelectOption from "./SelectOption";
+import SearchFilter from "./SearchFilter";
 import language from "../language";
 import useResponsive from "../component/useResponsive";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
+import { Link, useNavigate } from "react-router-dom";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -32,13 +32,14 @@ import {
 function Products() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { windowWidth } = useResponsive();
 
   //variables
   const [radioValue, setRadioValue] = useState(ONE);
-  const [currentProductList, setCurrentProductList] = useState([]);
   const [catObj, setCatObj] = useState({});
   const [updateStatus, setUpdateStatus] = useState("");
+  const [currentProductList, setCurrentProductList] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
@@ -87,8 +88,7 @@ function Products() {
   };
 
   const editHandler = (id) => {
-    console.log("działa editHandler");
-    // navigate(`${id}/edit`);
+    navigate(`${id}/edit`);
   };
 
   const confirmYes = () => {
@@ -101,12 +101,26 @@ function Products() {
     setConfirm(false);
   };
 
+  const changeHandler = (str) => {
+    setCurrentProductList(str);
+    console.log("str", str);
+  };
+
+  // useEffect(() => {
+  //   if (result.length !== 0) {
+  //     console.log("spełniam warunek");
+
+  //   }
+  // }, [result.length]);
+
   //Comment
   // fetching list of product from DB
   useEffect(() => {
     if (result.length === EMPTY_LIST) {
       const typeActivity = LIST_OF_PRODUCTS;
       dispatch(getListOfData(typeActivity));
+    } else {
+      setCurrentProductList(result);
     }
   }, [result.length]);
 
@@ -118,7 +132,7 @@ function Products() {
   // This helps to avoid errors and ensures that the products list is properly displayed to the user.
   // The hook is triggered by changes to both the radioValue and subproductCatList state variables.
   useEffect(() => {
-    if (result) {
+    if (result.length !== EMPTY_LIST) {
       if (radioValue === ONE) {
         setCurrentProductList(
           result.filter((subcat) => subcat.is_active === true)
@@ -131,7 +145,7 @@ function Products() {
     } else {
       setCurrentProductList(result);
     }
-  }, [radioValue, result]);
+  }, [radioValue, result.length]);
 
   //Comment
   // dispatch function for active and unactive product
@@ -252,6 +266,7 @@ function Products() {
     label: "language",
     optionsList: language,
     defaultValue: "Select an option",
+    disabled: false,
   };
 
   const selectLngHandler = (option) => {
@@ -277,7 +292,6 @@ function Products() {
           context={t("Confirmation_alert_unactive_product")}
         />
       )}
-
       {showAlert && updateStatus === ACTIVE && (
         <InfoAlertComponent
           confirmYes={confirmYes}
@@ -334,30 +348,16 @@ function Products() {
             defaultValue={input.defaultValue}
             optionsList={input.optionsList}
             emptyValueError={emptyValueError}
+            disabled={input.disabled}
             onChange={selectLngHandler}
           />
         </div>
       </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#E8E8E8",
-          marginTop: "1.5rem",
-          padding: "0.5rem",
-          color: "#888888",
-        }}
-      >
-        <Icon
-          icon="carbon:search"
-          color="#888888"
-          width="24"
-          height="24"
-          style={{ marginRight: "1rem" }}
-        />
-        <input style={{ width: "100%" }} placeholder="Search a product" />
-      </div>
+      <SearchFilter
+        onChange={changeHandler}
+        listOfData={result}
+        radioValue={radioValue}
+      />
       {loadingGetListOfData ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />

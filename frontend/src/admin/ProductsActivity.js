@@ -3,9 +3,15 @@ import FormInput from "./FormInput";
 import BackButton from "./BackButton";
 import UploadImage from "../component/UploadImage";
 import SelectOption from "./SelectOption";
+import ImageDisplayer from "./ImageDisplayer";
 import language from "../language";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
-import { addSingleInstance } from "../actions/adminActions";
+import {
+  addSingleInstance,
+  InsertImage2,
+  getSingleInstance,
+} from "../actions/adminActions";
+import { DELETE_IMAGE_REDUX } from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -24,6 +30,7 @@ function ProductsActivity() {
   const params = useParams();
   const dispatch = useDispatch();
   const activity = params.activity;
+  const editProductId = Number(params.id);
   const newId = uuidv4();
 
   const [values, setValues] = useState({
@@ -31,13 +38,16 @@ function ProductsActivity() {
   });
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [switcher, setSwitcher] = useState(false);
+  const [editSwitcher, setEditSwitcher] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
   const [subcategoryId, setSubcategoryId] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
   const [currentProductCatList, setCurrentProductCatList] = useState([]);
   const [addSwitcher, setAddSwitcher] = useState(false);
   const [uniqueId, setUniqueId] = useState("");
+  const [imageRender, setImageRender] = useState(false);
 
+  // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -49,6 +59,16 @@ function ProductsActivity() {
   );
   const { subproductCatList } = subproductSubcatListRedux;
 
+  const imageRedux = useSelector((state) => state.saveImage);
+  const { imageUpload, isImage } = imageRedux;
+
+  const newProduct = useSelector((state) => state.addSingleInstance);
+  const { success: successNewProduct, result: newProductResult } = newProduct;
+
+  const singleSingleRedux = useSelector((state) => state.getSingleInstance);
+  const { result: resultSingleInstance, success: successSingleInstance } =
+    singleSingleRedux;
+
   //Handlers
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,10 +77,10 @@ function ProductsActivity() {
       setUniqueId(newId);
     }
 
-    // if (activity === EDIT) {
-    //   setEditSwitcher(true);
-    //   setUniqueId(newId);
-    // }
+    if (activity === EDIT) {
+      setEditSwitcher(true);
+      setUniqueId(newId);
+    }
   };
 
   const onChange = (name, value) => {
@@ -92,12 +112,12 @@ function ProductsActivity() {
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductsActivity_name_label"),
       pattern: "^[A-Za-z]{3,16}$",
-      //   defaultValue:
-      //     activity === "add"
-      //       ? ""
-      //       : successSingleInstance && activity === EDIT
-      //       ? result.name
-      //       : "",
+      defaultValue:
+        activity === ADD
+          ? ""
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.name
+          : "",
       required: true,
     },
     {
@@ -147,7 +167,21 @@ function ProductsActivity() {
       setAddSwitcher(false);
       dispatch(addSingleInstance(insertData));
     }
-  }, [addSwitcher]);
+
+    if (editSwitcher) {
+      // const insertData = {
+      //   name: !values.name ? successSingleInstance.name : values.name,
+      //   modifier: userInfo.id,
+      //   uniqueId: uniqueId,
+      //   editSubcategoryId: editSubcategoryId,
+      // };
+      console.log("działa mechanizm");
+
+      // setEditSwitcher(false);
+
+      // dispatch(updateSubcategory(insertData));
+    }
+  }, [addSwitcher, editSwitcher]);
 
   // fetching list of product categories from DB
   useEffect(() => {
@@ -173,12 +207,39 @@ function ProductsActivity() {
     }
   }, [dispatch, switcher]);
 
-  // useEffect(() => {
-  //   if (switcher) {
-  //     setSwitcher(false);
-  //     console.log("działa switcher i jest spełniony warunek");
-  //   }
-  // }, [dispatch, switcher]);
+  //Comment
+  // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
+  // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
+  // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
+  useEffect(() => {
+    if (successNewProduct) {
+      if (isImage) {
+        dispatch(
+          InsertImage2({
+            imageUpload: imageUpload,
+            uniqueId: newProductResult.id,
+            type: PRODUCT,
+          })
+        );
+      }
+    }
+  }, [successNewProduct]);
+
+  // Comment
+  // Use effect to fetch subcategory data from the database when editing,
+  // Only runs once on component mount due to empty dependency array.
+  useEffect(() => {
+    dispatch({ type: DELETE_IMAGE_REDUX });
+    setImageRender(true);
+    if (activity === EDIT) {
+      dispatch(
+        getSingleInstance({
+          Id: editProductId,
+          typeActivity: "PRODUCT",
+        })
+      );
+    }
+  }, []);
 
   return (
     <div
@@ -231,9 +292,11 @@ function ProductsActivity() {
           })}
         </FormLayout>
         <UploadImage />
-        {/* {imageRender && activity === EDIT && result.photo !== null && (
-          <ImageDisplayer imageSrc={result.photo} />
-        )} */}
+        {imageRender &&
+          activity === EDIT &&
+          resultSingleInstance.photo !== null && (
+            <ImageDisplayer imageSrc={resultSingleInstance.photo} />
+          )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           {activity === EDIT ? (
             <button type="submit" style={changeBtn}>

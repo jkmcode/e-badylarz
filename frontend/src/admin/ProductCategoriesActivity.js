@@ -16,6 +16,7 @@ import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import {
   SET_FLAG_ADD_TRUE,
   DELETE_IMAGE_REDUX,
+  ADD_IMAGE_RESET,
 } from "../constants/adminConstans";
 import { GET_PRODUCT_CAT_LIST_DELETE } from "../constants/productConstans";
 import { v4 as uuidv4 } from "uuid";
@@ -27,8 +28,6 @@ import {
   ADD,
   PRODUCT_CAT,
 } from "../constants/environmentConstans";
-
-import { ADD_IMAGE_RESET } from "../constants/adminConstans";
 
 function ProductCategoriesActivity() {
   const { t } = useTranslation();
@@ -86,8 +85,6 @@ function ProductCategoriesActivity() {
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
-
-  //UseEffect
 
   // Comment
   // save data to DB

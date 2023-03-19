@@ -71,7 +71,6 @@ import {
   ADD_SINGLE_INSTANCE_REQUEST,
   ADD_SINGLE_INSTANCE_SUCCESS,
   ADD_SINGLE_INSTANCE_FAIL,
-  ADD_SINGLE_INSTANCE_DELETE,
 } from "../constants/adminConstans";
 
 // Save image in redax

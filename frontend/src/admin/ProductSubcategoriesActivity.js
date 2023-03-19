@@ -175,7 +175,6 @@ function ProductSubcategoriesActivity() {
   //Comment
   // This useEffect hook dispatches a Redux action to insert an image if the 'success' or 'successEditsubcatProduct' state variables are true and the 'isImage' variable is also true.
   // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT_SUBCAT'.
-  // If we edit photo we need current uniqueId for the specific
   // If we edit photo we need current unique Id for the specific product Subcategories
   // If we create image for new subcategory we are creating new unique Id
   useEffect(() => {
