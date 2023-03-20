@@ -22,7 +22,7 @@ class Districts(models.Model):
 # Descriptions Districts
 class Descriptions(models.Model):
     id_district = models.ForeignKey(Districts, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -50,7 +50,7 @@ class Citis(models.Model):
 # Descriptions Cities
 class CitiesDescriptions(models.Model):
     id_city = models.ForeignKey(Citis, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -79,7 +79,7 @@ class ProductTypes(models.Model):
 #Product types description
 class ProductTypesDescriptions(models.Model):
     id_product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -104,7 +104,7 @@ class ProductSubTypes(models.Model):
 #Product subtypes description
 class ProductSubtypesDescriptions(models.Model):
     id_product_subtype = models.ForeignKey(ProductSubTypes, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -128,7 +128,7 @@ class Product(models.Model):
 #Product Genera description
 class ProductDescriptions(models.Model):
     id_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -191,7 +191,7 @@ class ShopsARC(models.Model):
 #Shops_description
 class ShopsDescriptions(models.Model):
     id_shops = models.ForeignKey(Shops, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField( null=True,blank=True)
@@ -251,7 +251,7 @@ class ShopsSpotARC(models.Model):
 #Shops Spot description
 class ShopsSpotDescriptions(models.Model):
     id_shops_spot = models.ForeignKey(ShopsSpot, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -266,7 +266,7 @@ class ShopsContact(models.Model):
     surname = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=512)
     date_of_entry = models.DateTimeField(auto_now_add=True)   
     creator = models.CharField(max_length=5)
     is_active = models.BooleanField()
@@ -282,7 +282,7 @@ class ShopsContactARC(models.Model):
     surname = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=512)
     date_of_entry = models.DateTimeField()   
     creator = models.CharField(max_length=5)
     is_active = models.BooleanField()
@@ -336,7 +336,7 @@ class MyProductsPhotosARC(models.Model):
 # dla sprzedawanego produktu
 class MyProductsDescriptions(models.Model):
     id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -346,7 +346,7 @@ class MyProductsDescriptions(models.Model):
 # Archiwizacja wszelkich zmian w tabeli - MyProductsDescriptions
 class MyProductsDescriptionsARC(models.Model):
     id_my_product = models.IntegerField()
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField()
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -411,7 +411,7 @@ class AreasARC(models.Model):
 # Descriptions Areas
 class AreasDescriptions(models.Model):
     id_area = models.ForeignKey(Areas, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -441,7 +441,7 @@ class AreaContactARC(models.Model):
     surname = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=512)
     date_of_entry = models.DateTimeField()   
     creator = models.CharField(max_length=5)
     is_active = models.BooleanField()
@@ -495,7 +495,7 @@ class AreasSpotARC(models.Model):
 # Descriptions spot Areas
 class AreasSpotDescriptions(models.Model):
     id_area_spot = models.ForeignKey(AreasSpot, on_delete=models.CASCADE, null=True)
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
@@ -505,7 +505,7 @@ class AreasSpotDescriptions(models.Model):
 # Descriptions spot Areas
 class AreasSpotDescriptionsARC(models.Model):
     id_area_spot = models.IntegerField()
-    description =  models.CharField(max_length=255, null=True, blank=True)
+    description =  models.CharField(max_length=512, null=True, blank=True)
     language = models.CharField(max_length=2)
     date_of_entry = models.DateTimeField()
     date_of_change= models.DateTimeField(null=True,blank=True)
