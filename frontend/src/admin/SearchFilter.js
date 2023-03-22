@@ -1,27 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { ONE, ZERO } from "../constants/environmentConstans";
 
 function SearchFilter({ onChange, listOfData, radioValue }) {
   const [items, setItems] = useState();
   const [filterItems, setFilterItems] = useState([]);
+
+  console.log("radioValue", radioValue);
 
   const handleChange = (event) => {
     setItems(event.target.value);
   };
 
   useEffect(() => {
-    if (items) {
-      const lowerCaseStr = items.toLowerCase();
-      setFilterItems(
-        listOfData.filter((item) =>
-          item.name.toLowerCase().includes(lowerCaseStr)
-        )
-      );
-    } else {
-      setFilterItems(listOfData);
+    if (radioValue === ONE) {
+      if (items) {
+        const lowerCaseStr = items.toLowerCase();
+        setFilterItems(
+          listOfData.filter(
+            (item) =>
+              item.name.toLowerCase().includes(lowerCaseStr) &&
+              item.is_active === true
+          )
+        );
+      } else {
+        setFilterItems(listOfData.filter((item) => item.is_active === true));
+      }
+      onChange(filterItems);
     }
-    onChange(filterItems);
-  }, [items, filterItems.length]);
+
+    if (radioValue === ZERO) {
+      if (items) {
+        const lowerCaseStr = items.toLowerCase();
+        setFilterItems(
+          listOfData.filter(
+            (item) =>
+              item.name.toLowerCase().includes(lowerCaseStr) &&
+              item.is_active === false
+          )
+        );
+      } else {
+        setFilterItems(listOfData.filter((item) => item.is_active === false));
+      }
+      onChange(filterItems);
+    }
+  }, [items, filterItems.length, radioValue, listOfData.length]);
 
   return (
     <div

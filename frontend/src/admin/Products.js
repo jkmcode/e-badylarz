@@ -7,6 +7,7 @@ import SelectOption from "./SelectOption";
 import SearchFilter from "./SearchFilter";
 import language from "../language";
 import useResponsive from "../component/useResponsive";
+import noImage from "../images/noImage.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -40,6 +41,7 @@ function Products() {
   const [catObj, setCatObj] = useState({});
   const [updateStatus, setUpdateStatus] = useState("");
   const [currentProductList, setCurrentProductList] = useState([]);
+  const [testArr, setTestArr] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
@@ -103,15 +105,7 @@ function Products() {
 
   const changeHandler = (str) => {
     setCurrentProductList(str);
-    console.log("str", str);
   };
-
-  // useEffect(() => {
-  //   if (result.length !== 0) {
-  //     console.log("spełniam warunek");
-
-  //   }
-  // }, [result.length]);
 
   //Comment
   // fetching list of product from DB
@@ -123,29 +117,6 @@ function Products() {
       setCurrentProductList(result);
     }
   }, [result.length]);
-
-  // Comment
-  // This useEffect hook updates the current product list based on the selected radio button value.
-  // If the result array is not empty, the hook filters and sets the list to display
-  // either active or inactive products based on the selected radio button value. If the result array is empty,
-  // the hook sets the current product list to the empty currentProductList array.
-  // This helps to avoid errors and ensures that the products list is properly displayed to the user.
-  // The hook is triggered by changes to both the radioValue and subproductCatList state variables.
-  useEffect(() => {
-    if (result.length !== EMPTY_LIST) {
-      if (radioValue === ONE) {
-        setCurrentProductList(
-          result.filter((subcat) => subcat.is_active === true)
-        );
-      } else {
-        setCurrentProductList(
-          result.filter((subcat) => subcat.is_active === false)
-        );
-      }
-    } else {
-      setCurrentProductList(result);
-    }
-  }, [radioValue, result.length]);
 
   //Comment
   // dispatch function for active and unactive product
@@ -220,7 +191,23 @@ function Products() {
 
   const dataSubcategoryTable = currentProductList.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: (
+      <>
+        {item.photo ? (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={item.photo}
+          />
+        ) : (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={noImage}
+          />
+        )}
+
+        {item.name}
+      </>
+    ),
     status: (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <>

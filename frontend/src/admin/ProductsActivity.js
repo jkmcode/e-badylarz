@@ -125,24 +125,42 @@ function ProductsActivity() {
       name: t("ProductsActivity_input_name_language"),
       label: t("ProductsActivity_input_label_language"),
       optionsList: language,
-      defaultValue: t("default_option_lng"),
-      disabled: values.name.length < 4 && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_lng")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.id_product_type.language
+          : "",
+      disabled: activity === ADD && values.name.length < 4 && true,
+      disabled: activity === EDIT,
     },
     {
       id: "3",
       name: t("ProductsActivity_input_name_product_cat"),
       label: t("ProductsActivity_input_label_product_cat"),
       optionsList: currentProductCatList,
-      defaultValue: t("default_option_product_cat"),
-      disabled: !selectedLgn && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_product_cat")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.id_product_type.name
+          : "",
+      disabled: activity === ADD && !selectedLgn && true,
+      disabled: activity === EDIT,
     },
     {
       id: "4",
       name: t("ProductsActivity_input_name_product_subcat"),
       label: t("ProductsActivity_input_label_product_subcat"),
       optionsList: subproductCatList,
-      defaultValue: t("default_option_product_cat"),
-      disabled: !categoryId && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_product_cat")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.name
+          : "",
+      disabled: activity === ADD && !categoryId && true,
+      disabled: activity === EDIT,
     },
   ];
 
@@ -212,18 +230,20 @@ function ProductsActivity() {
   // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
   // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
   useEffect(() => {
-    if (successNewProduct) {
+    if (successNewProduct || successSingleInstance) {
       if (isImage) {
         dispatch(
           InsertImage2({
             imageUpload: imageUpload,
-            uniqueId: newProductResult.id,
+            uniqueId: successNewProduct
+              ? newProductResult.id
+              : resultSingleInstance.id,
             type: PRODUCT,
           })
         );
       }
     }
-  }, [successNewProduct]);
+  }, [successNewProduct, successSingleInstance]);
 
   // Comment
   // Use effect to fetch subcategory data from the database when editing,

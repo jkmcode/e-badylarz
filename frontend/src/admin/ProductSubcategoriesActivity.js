@@ -165,9 +165,7 @@ function ProductSubcategoriesActivity() {
         uniqueId: uniqueId,
         editSubcategoryId: editSubcategoryId,
       };
-
       setEditSwitcher(false);
-
       dispatch(updateSubcategory(insertData));
     }
   }, [addSwitcher, editSwitcher]);
