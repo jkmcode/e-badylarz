@@ -30,6 +30,7 @@ import {
   getShopContacts,
   getShops,
   getShopSpots,
+  addShopSpot,
 } from "../actions/adminActions";
 import { unOrActiveList } from "../actions/adminActions";
 import { Icon } from "@iconify/react";
@@ -183,6 +184,33 @@ function AddContact() {
     setEditContact(false);
     setNewContact(!newContact);
   };
+
+  const hendlerSpotCopyData = () => {
+    console.log('straszan dupa')
+    shopList.map((shop) => {
+      if (shop.id === shopId) {
+        const insertData = {
+          add: true,
+          id_shops: shopId,
+          name: shop.name,
+          city: shop.city,
+          street: shop.street,
+          no_building: shop.no_building,
+          postCode: shop.post_code,
+          post: shop.post,
+          latitude: shop.latitude,
+          longitude: shop.longitude,
+          creator: userInfo.id,
+          is_active: "True",
+          delivery: "False",
+          range: "0",
+          kind: "1",
+          pick_up: "False",
+        }
+        dispatch(addShopSpot(insertData));
+      }
+    })
+  }
 
   const newHendlerSpot = () => {
     navigate(`/dashboard/shops/spot/${shopId}/add`);
@@ -402,6 +430,10 @@ function AddContact() {
   const btnShowUnactive = {
     ...btn,
     color: "red",
+  };
+  const btnCopyData = {
+    ...btn,
+    color: "blue",
   };
 
   /************************FORM*****************************/
@@ -905,8 +937,8 @@ function AddContact() {
                     {!newContact
                       ? t("AddContact_btn_add")
                       : editContact
-                      ? t("AddContact_btn_close_edit")
-                      : t("AddContact_btn_close")}
+                        ? t("AddContact_btn_close_edit")
+                        : t("AddContact_btn_close")}
                   </button>
 
                   <button
@@ -1027,9 +1059,17 @@ function AddContact() {
                     {!newSpot
                       ? t("AddContact_btn_add_spot")
                       : editSpot
-                      ? t("AddContact_btn_close_edit_spot")
-                      : t("AddContact_btn_close_spot")}
+                        ? t("AddContact_btn_close_edit_spot")
+                        : t("AddContact_btn_close_spot")}
                   </button>
+                  {shopSpotList.length === 0 ?
+                    <button
+                      style={btnCopyData}
+                      onClick={() => hendlerSpotCopyData()}
+                    >
+                      {t("AddContact_copy_data")}
+                    </button>
+                    : null}
 
                   <button
                     style={btnShowUnactive}

@@ -178,7 +178,7 @@
   "DistrictAddDescription_selected_lng": "You have chosen a language",
   "DistrictAddDescription_success": "Description correctly changed",
   "DistrictAddDescription_error_message_requred": "Required field",
-  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 250",
+  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 510",
   "DistrictAddDescription_option_placeholder": "Select an option",
   "AddCiti_title": "Add city for districts : ",
   "AddCiti_label_name": "City name",
@@ -431,23 +431,19 @@
   "product_category_add": "Add Category",
   "Product_category_edit_title": "Edit Category",
   "Product_category_add_title": "Add Category",
-
   "Products_name": "name",
   "Products_status": "status",
-
   "ProductsActivity_add_title": "Add product",
   "ProductsActivity_edit_title": "Edit product",
   "ProductsActivity_name_placeholder": "Enter the name of product ...",
   "ProductsActivity_name_error_message": "Product name should be 3-30 characters and shouldn't include any special character!",
   "ProductsActivity_name_label": "Name of product",
-
   "ProductsActivity_input_name_language": "language",
   "ProductsActivity_input_label_language": "Languages",
   "ProductsActivity_input_name_product_cat": "ProductCategory",
   "ProductsActivity_input_label_product_cat": "Product category",
   "ProductsActivity_input_name_product_subcat": "ProductSubcategory",
   "ProductsActivity_input_label_product_subcat": "Product subcategory",
-
   "ProductSubcategories_title": "Product subcategory",
   "Products_add_subproduct_btn": "Add subcategory",
   "AddProductSubcategories_title": "Add subcategory",
@@ -458,7 +454,6 @@
   "Confirmation_alert_active_product_subcategory": "Are you sure you want to active product subcategory?",
   "Confirmation_alert_unactive_product": "Are you sure you want to unactive product?",
   "Confirmation_alert_active_product": "Are you sure you want to active product?",
-
   "Products_title": "List of Products",
   "Products_add_product_btn": "Add Product",
   "sidebar_navlink_districts": "Districts",
@@ -473,6 +468,9 @@
   "ShopsSpot_kind_agent": "Agent",
   "ShopsSpot_label_kindSpot": "Kind spot's",
   "ShopsSpot_select_placeholder": "Select options ...",
-
-  "Error_404_title": "no connection to internet"
+  "Error_404_title": "no connection to internet",
+  "Pick_up": "Pick-up spot supported",
+  "No_pick_up": "No pick-up spot",
+  "ShopsSpot_kind_only_pick_up": "Only Pick-up spot",
+  "AddContact_copy_data": "Copy data"
 }

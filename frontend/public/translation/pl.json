@@ -177,7 +177,7 @@
   "DistrictAddDescription_selected_lng": "Wybrany język",
   "DistrictAddDescription_success": "Opis został prawidłowo zmieniony",
   "DistrictAddDescription_error_message_requred": "Pole wymagane",
-  "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 250",
+  "DistrictAddDescription_error_message_too_long": "Tekst jest za długi. Maksymalna ilość znaków wynosi 510",
   "AddCiti_title": "Dodaj miejscowość dla powiatu : ",
   "AddCiti_label_name": "Nazwa miejscowości",
   "AddCiti_name_placeholder": "Podaj nazwę miejscowosci ...",
@@ -429,25 +429,21 @@
   "product_category_add": "Dodaj kategorie",
   "Product_category_edit_title": "Zmień kategorie",
   "Product_category_add_title": "dodaj kategorie",
-
   "Products_title": "Lista Produktów",
   "Products_add_product_btn": "Dodaj Produkt",
   "Products_name": "nazwa",
   "Products_status": "status",
-
   "ProductsActivity_add_title": "Dodawanie produktu",
   "ProductsActivity_edit_title": "Edycja produktu",
   "ProductsActivity_name_placeholder": "Wpisz nazwe produktu ...",
   "ProductsActivity_name_error_message": "Nazwa produktu powinna mieć od 3 do 30 znaków i nie powinna zawierać żadnych znaków specjalnych!",
   "ProductsActivity_name_label": "Nazwa produktu",
-
   "ProductsActivity_input_name_language": "language",
   "ProductsActivity_input_label_language": "Języki",
   "ProductsActivity_input_name_product_cat": "ProductCategory",
   "ProductsActivity_input_label_product_cat": "Kategoria produktów",
   "ProductsActivity_input_name_product_subcat": "ProductSubcategory",
   "ProductsActivity_input_label_product_subcat": "Podkategoria produktów",
-
   "ProductSubcategories_title": "Podkategorie produktów",
   "Products_add_subproduct_btn": "Dodaj podkategorie",
   "AddProductSubcategories_title": "Dodaj podkategorie",
@@ -458,7 +454,6 @@
   "Confirmation_alert_active_product_subcategory": "Czy na pewno chcerz aktywować podkategorie?",
   "Confirmation_alert_unactive_product": "Czy na pewno chcerz dezaktywować produkt?",
   "Confirmation_alert_active_product": "Czy na pewno chcerz aktywować produkt?",
-
   "sidebar_navlink_districts": "Powiaty",
   "sidebar_navlink_shops": "Sklepy",
   "sidebar_navlink_areas": "Obszary",
@@ -471,5 +466,9 @@
   "ShopsSpot_kind_agent": "Pośrednik",
   "ShopsSpot_label_kindSpot": "Rodzaj punktu sprzedaży",
   "ShopsSpot_select_placeholder": "Wybierz opcję ...",
-  "Error_404_title": "brak połączenia z internetem"
+  "Error_404_title": "brak połączenia z internetem",
+  "Pick_up": "Punkt odbioru obsługiwany",
+  "No_pick_up": "Brak punktu odbioru",
+  "ShopsSpot_kind_only_pick_up": "Tylko punkt odbioru",
+  "AddContact_copy_data": "Kopiuj dane"
 }

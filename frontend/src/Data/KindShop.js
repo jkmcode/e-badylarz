@@ -23,6 +23,10 @@ export function useKindShopSpots() {
       id: "5",
       name: t("ShopsSpot_kind_agent"),
     },
+    {
+      id: "6",
+      name: t("ShopsSpot_kind_only_pick_up"),
+    },
   ];
   return kindSpots;
 }

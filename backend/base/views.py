@@ -523,7 +523,8 @@ def addShopSpot(request):
             is_active=data['is_active'],
             delivery=data['delivery'],
             range=data['range'],
-            kind=data['kind']
+            kind=data['kind'],
+            pick_up_point=data['pick_up']
         )
     else:
         spot = ShopsSpot.objects.get(id=data['id_spot'])
@@ -550,6 +551,7 @@ def addShopSpot(request):
         range = spot.range,
         type_of_change = spot.type_of_change,
         kind=spot.kind,
+        pick_up_point=spot.pick_up_point,
         archiver = data['creator']
         )
         # change data
@@ -567,6 +569,7 @@ def addShopSpot(request):
         spot.range = data['range']
         spot.type_of_change = 'Edit - change data'
         spot.kind = data['kind']
+        spot.pick_up_point=data['pick_up']
 
         spot.save()
 
@@ -770,7 +773,7 @@ def addCiti(request):
             latitude = data['lat'],
             longitude = data['lng'],
             is_active=True,
-            country = data['country']
+            language = data['country']
         )
         newdciti=Citis.objects.filter(name=data['name'], id_district=data['desc_id'])
         seriaziler = CitiesSerializer(newdciti, many=True)

@@ -70,6 +70,7 @@ function AddShopsSpot() {
   const [selectedKindSpot, setSelectedKindSpot] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
+  const [valuePickUp, setValuePickUp] = useState(false);
   const [values, setValues] = useState({
     spotName: "",
     range: "",
@@ -153,7 +154,6 @@ function AddShopsSpot() {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(true);
     setObjId(i.id);
-    console.log("JESTEM w opisie --->>>", i);
   };
 
   const onChange = (name, value) => {
@@ -168,6 +168,10 @@ function AddShopsSpot() {
 
   const handleBtnValue = (e) => {
     setRadioValue(e.target.value);
+  };
+
+  const handleBtnValuePickUP = (e) => {
+    setValuePickUp(!valuePickUp);
   };
 
   const handleSubmit = (event) => {
@@ -192,6 +196,7 @@ function AddShopsSpot() {
           delivery: radioValue === "1" ? "False" : "True",
           range: radioValue === "1" ? "0" : values.range,
           kind: values.kindSpot,
+          pick_up: valuePickUp,
         };
         dispatch(addShopSpot(insertData));
       } else {
@@ -220,9 +225,10 @@ function AddShopsSpot() {
           radioValue === "1"
             ? "0"
             : !values.range
-            ? spotDetails.range
-            : values.range,
+              ? spotDetails.range
+              : values.range,
         kind: !values.kindSpot ? spotDetails.kind : values.kindSpot,
+        pick_up: valuePickUp,
       };
       dispatch(updateShopSpot(insertData));
     }
@@ -292,6 +298,13 @@ function AddShopsSpot() {
     }
   }, [dispatch, successInsertImage]);
 
+  // is or not pick-up spot
+  useEffect(() => {
+    if (successGetSpot) {
+      setValuePickUp(spotDetails.pick_up_point);
+    }
+  }, [dispatch, successGetSpot]);
+
   //style
   const background = {
     backgroundImage:
@@ -331,29 +344,6 @@ function AddShopsSpot() {
     backgroundImage: `linear-gradient(90deg, rgba(203, 197, 48, 1) 0%, rgba(151, 142, 12, 1) 100%)`,
   };
 
-  //List of kind Spots
-  // const kindSpots = [
-  //   {
-  //     id: "1",
-  //     name: t("ShopsSpot_kind_shop"),
-  //   },
-  //   {
-  //     id: "2",
-  //     name: t("ShopsSpot_kind_farmer"),
-  //   },
-  //   {
-  //     id: "3",
-  //     name: t("ShopsSpot_kind_manufacturer"),
-  //   },
-  //   {
-  //     id: "4",
-  //     name: t("ShopsSpot_kind_wholesaler"),
-  //   },
-  //   {
-  //     id: "5",
-  //     name: t("ShopsSpot_kind_agent"),
-  //   },
-  // ];
   const kindSpots = useKindShopSpots();
 
   //List of inputs
@@ -381,7 +371,7 @@ function AddShopsSpot() {
         SpotParam === "add"
           ? t("ShopsSpot_select_placeholder")
           : successGetSpot &&
-            kindSpots.filter((i) => spotDetails.kind == i.id)[0].name,
+          kindSpots.filter((i) => spotDetails.kind == i.id)[0].name,
       disabled: SpotParam === "edit" ? false : false,
     },
     {
@@ -501,10 +491,10 @@ function AddShopsSpot() {
   return (
     <>
       {loading ||
-      spotLoading ||
-      addSpotLoading ||
-      loadingInsertImage ||
-      loadingUpdate ? (
+        spotLoading ||
+        addSpotLoading ||
+        loadingInsertImage ||
+        loadingUpdate ? (
         <Loader />
       ) : (
         <div style={background}>
@@ -590,7 +580,16 @@ function AddShopsSpot() {
               </FormLayout>
             </>
           )}
-
+          <Divider backgroundColor="grey" />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {valuePickUp ? t("Pick_up") : t("No_pick_up")}
+            <button
+              style={btnEdit}
+              onClick={() => handleBtnValuePickUP()}
+            >
+              {t("btn-change")}
+            </button>
+          </div>
           <Divider backgroundColor="grey" />
           <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
           <form onSubmit={handleSubmit}>
@@ -665,9 +664,9 @@ function AddShopsSpot() {
             <div>
               {imageRender
                 ? SpotParam === "edit" &&
-                  spotDetails.photo !== null && (
-                    <ImageDisplayer imageSrc={spotDetails.photo} />
-                  )
+                spotDetails.photo !== null && (
+                  <ImageDisplayer imageSrc={spotDetails.photo} />
+                )
                 : null}
               <UploadImage />
             </div>
