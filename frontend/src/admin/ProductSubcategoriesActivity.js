@@ -114,8 +114,7 @@ function ProductSubcategoriesActivity() {
   //it schedules two dispatch actions to occur after a specified delay using the setTimeout method.
   //The first dispatched action sets the SET_FLAG_ADD_TRUE flag in the Redux store (it trigger other useEffet which navigate to the main dashoboard),
   //and the second dispatched action triggers a state update to ADD_PRODUCT_SUBCAT_DELETE in the Redux store.
-  //If the success state is true, the function dispatches the ADD_PRODUCT_SUBCAT_DELETE action.
-  //If the successEditsubcatProduct state is true, the function dispatches the EDIT_PRODUCT_SUBCAT_DELETE action.
+
   useEffect(() => {
     if (success || successEditsubcatProduct) {
       setTimeout(() => {
@@ -165,9 +164,7 @@ function ProductSubcategoriesActivity() {
         uniqueId: uniqueId,
         editSubcategoryId: editSubcategoryId,
       };
-
       setEditSwitcher(false);
-
       dispatch(updateSubcategory(insertData));
     }
   }, [addSwitcher, editSwitcher]);
@@ -175,7 +172,6 @@ function ProductSubcategoriesActivity() {
   //Comment
   // This useEffect hook dispatches a Redux action to insert an image if the 'success' or 'successEditsubcatProduct' state variables are true and the 'isImage' variable is also true.
   // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT_SUBCAT'.
-  // If we edit photo we need current uniqueId for the specific
   // If we edit photo we need current unique Id for the specific product Subcategories
   // If we create image for new subcategory we are creating new unique Id
   useEffect(() => {
@@ -253,7 +249,7 @@ function ProductSubcategoriesActivity() {
           );
         })}
         <UploadImage />
-        {imageRender && activity === EDIT && result.photo !== null && (
+        {imageRender && activity === EDIT && result.photo && (
           <ImageDisplayer imageSrc={result.photo} />
         )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>

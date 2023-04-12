@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { title, addProdCatBtn } from "./AdminCSS";
 import RadioButtons from "./RadioButtons";
 import DotsLoader from "../component/DotsLoader";
 import RotateCard from "../component/RotateCard";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 import SelectOption from "./SelectOption";
 import language from "../language";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { title, addProdCatBtn } from "./AdminCSS";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link, useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
@@ -372,7 +372,7 @@ function ProductCategories() {
                 }
               })}
         </div>
-        {active === true && (
+        {/* {active === true && (
           <div
             style={{
               display: "flex",
@@ -383,7 +383,7 @@ function ProductCategories() {
               {t("product_category_add")}
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     );
   }
@@ -446,6 +446,16 @@ function ProductCategories() {
           {radioValue === ZERO && <StatusProductCatCard active={false} />}
         </>
       )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Link to="add" style={addProdCatBtn}>
+          {t("product_category_add")}
+        </Link>
+      </div>
     </div>
   );
 }

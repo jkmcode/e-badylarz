@@ -120,6 +120,7 @@ function App() {
           />
           <Route path="products" element={<Products />} />
           <Route path="products/:activity" element={<ProductsActivity />} />
+          <Route path="products/:id/:activity" element={<ProductsActivity />} />
         </Route>
         <Route path="login-admin" element={<LoginAdmin />}></Route>
       </Routes>

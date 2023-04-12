@@ -10,7 +10,7 @@ urlpatterns = [
     
     #upload image 
     path("api/upload-image/", uploadMultiImages),
-    path("api/upload-image2/", uploadMultiImages2),
+    path('api/upload-image2/', uploadMultiImages2),
 
     # district
     path('api/add-district/', addDiscrict),

@@ -114,6 +114,10 @@ import {
   GET_LIST_OF_DATA_SUCCESS,
   GET_LIST_OF_DATA_FAIL,
   GET_LIST_OF_DATA_DELETE,
+  ADD_SINGLE_INSTANCE_REQUEST,
+  ADD_SINGLE_INSTANCE_SUCCESS,
+  ADD_SINGLE_INSTANCE_FAIL,
+  ADD_SINGLE_INSTANCE_DELETE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -546,6 +550,8 @@ export const addDistrictReducer = (state = {}, action) => {
   }
 };
 
+/// TEST
+
 export const getSingleInstanceReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_SINGLE_INSTANCE_REQUEST:
@@ -589,11 +595,27 @@ export const getListOfDataReducer = (
       return {
         loading: false,
         success: false,
+        result: [],
         type: action.payload[0].list_of_data,
         error: action.payload,
       };
     case GET_LIST_OF_DATA_DELETE:
       return { result: [] };
+    default:
+      return state;
+  }
+};
+
+export const addSingleInstanceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_SINGLE_INSTANCE_REQUEST:
+      return { loading: true, success: false };
+    case ADD_SINGLE_INSTANCE_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case ADD_SINGLE_INSTANCE_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case ADD_SINGLE_INSTANCE_DELETE:
+      return {};
     default:
       return state;
   }

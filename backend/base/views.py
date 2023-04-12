@@ -8,11 +8,12 @@ from django.core.files import File
 from PIL import Image
 from io import BytesIO
 from django.http import Http404
+from django.db import IntegrityError
 
 from datetime import datetime
 
 import imp
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 
@@ -147,7 +148,9 @@ def uploadMultiImages2(request):
     if data["type"] == "PRODUCT_SUBCAT":
         image = ProductSubTypes.objects.get(uniqueId=uniqueId)
     elif data["type"] == "PRODUCT_CAT":
-        image = ProductTypes.objects.get(uniqueId=uniqueId)        
+        image = ProductTypes.objects.get(uniqueId=uniqueId)  
+    elif data["type"] == "PRODUCT":
+        image = Product.objects.get(id=uniqueId)               
     else: 
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST) 
@@ -1155,13 +1158,16 @@ def edit_subcategory(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_single_instance(request, Id, typeActivity):
-    
+
     if typeActivity == 'subcategory':
         single_instance = ProductSubTypes.objects.filter(id=Id).first()
         serializer = SubproductTypeSerializer(single_instance)
     elif typeActivity == 'PRODUCT_CAT':
         single_instance = ProductTypes.objects.filter(id=Id).first()
         serializer = ProductTypeSerializer(single_instance)
+    elif typeActivity == 'PRODUCT':
+        single_instance = Product.objects.filter(id=Id).first()
+        serializer = ProductsSerializer(single_instance)        
     else:
         raise Http404('Invalid typeActivity')
 
@@ -1185,29 +1191,21 @@ def get_list_of_data(request, typeActivity):
 @permission_classes([IsAdminUser])
 def add_single_instance(request):
     data = request.data
-    alreadyExists = Product.objects.filter(name=data['name']).exists()
-    if alreadyExists: 
-        content = {"detail": "Product category already exist"}
+
+    try:
+        if data['typeActivity'] == 'PRODUCT':
+            sub_product = ProductSubTypes.objects.get(id=data['subcategoryId'])
+            product = Product.objects.create(
+                id_product_subtype=sub_product,
+                name=data['name'],
+                creator=data['creator'],
+                is_active=True,
+            )
+            seriaziler = ProductsSerializer(product)
+            return Response(seriaziler.data)
+    except ProductSubTypes.DoesNotExist:
+        content = {"detail": "Product subcategory not found"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)            
+    except IntegrityError:
+        content = {"detail": "Product with this name already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        print('działa okey')
-
-
-    return Response('jest okey')
-    # data = request.data
-    # alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
-    # if alreadyExists:
-    #     content = {"detail": "Product category already exist"}
-    #     return Response(content, status=status.HTTP_400_BAD_REQUEST)  
-    # else: 
-    #     productCat = ProductTypes.objects.create(
-    #         name=data['name'],
-    #         creator = data['creator'],
-    #         is_active=True,
-    #         language = data['language'],
-    #         uniqueId = data['uniqueId']
-    #     )   
-
-    #     newProductCat=ProductTypes.objects.filter(name=data['name'])
-    #     seriaziler = ProductTypeSerializer(newProductCat, many=True)
-    #     return Response(seriaziler.data)    

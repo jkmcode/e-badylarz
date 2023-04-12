@@ -34,7 +34,7 @@ function ProductSubcategories() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const subcategoryId = Number(params.id);
+  const categoryId = Number(params.id);
 
   const [radioValue, setRadioValue] = useState(ONE);
   const [currentSubproductList, setCurrentSubproductList] = useState([]);
@@ -185,7 +185,7 @@ function ProductSubcategories() {
   // The hook is triggered by changes to both the dispatch and subproductCatList.length state variables.
   useEffect(() => {
     if (subproductCatList.length === EMPTY_LIST) {
-      dispatch(getSubproductCat({ subcategoryId }));
+      dispatch(getSubproductCat({ categoryId }));
     }
   }, [dispatch, subproductCatList.length]);
 

@@ -3,12 +3,26 @@ import FormInput from "./FormInput";
 import BackButton from "./BackButton";
 import UploadImage from "../component/UploadImage";
 import SelectOption from "./SelectOption";
+import ImageDisplayer from "./ImageDisplayer";
+import ErrorMessage from "../component/ErrorMessage";
 import language from "../language";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
-import { addSingleInstance } from "../actions/adminActions";
+import {
+  addSingleInstance,
+  InsertImage2,
+  getSingleInstance,
+} from "../actions/adminActions";
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
+import {
+  DELETE_IMAGE_REDUX,
+  SET_FLAG_ADD_TRUE,
+  ADD_IMAGE_RESET,
+  GET_LIST_OF_DATA_DELETE,
+} from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import { title, changeBtn, addBtn, FormLayout } from "./AdminCSS";
 import {
   EDIT,
@@ -23,21 +37,30 @@ function ProductsActivity() {
   const params = useParams();
   const dispatch = useDispatch();
   const activity = params.activity;
+  const editProductId = Number(params.id);
+  const newId = uuidv4();
+  const navigate = useNavigate();
 
   const [values, setValues] = useState({
     name: "",
   });
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [switcher, setSwitcher] = useState(false);
+  const [editSwitcher, setEditSwitcher] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
   const [subcategoryId, setSubcategoryId] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
   const [currentProductCatList, setCurrentProductCatList] = useState([]);
   const [addSwitcher, setAddSwitcher] = useState(false);
   const [uniqueId, setUniqueId] = useState("");
+  const [imageRender, setImageRender] = useState(false);
 
+  // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const dflag = useSelector((state) => state.flag);
+  const { addFlag } = dflag;
 
   const productCatListRedux = useSelector((state) => state.productCatList);
   const { loading: loadingProductCat, productCatList } = productCatListRedux;
@@ -47,18 +70,31 @@ function ProductsActivity() {
   );
   const { subproductCatList } = subproductSubcatListRedux;
 
+  const imageRedux = useSelector((state) => state.saveImage);
+  const { imageUpload, isImage } = imageRedux;
+
+  const insertImageReducer = useSelector((state) => state.insertImage);
+  const { successInsertImage } = insertImageReducer;
+
+  const newProduct = useSelector((state) => state.addSingleInstance);
+  const { success: successNewProduct, result: newProductResult } = newProduct;
+
+  const singleSingleRedux = useSelector((state) => state.getSingleInstance);
+  const { result: resultSingleInstance, success: successSingleInstance } =
+    singleSingleRedux;
+
   //Handlers
   const handleSubmit = (e) => {
     e.preventDefault();
     if (activity === ADD) {
       setAddSwitcher(true);
-      // setUniqueId(newId);
+      setUniqueId(newId);
     }
 
-    // if (activity === EDIT) {
-    //   setEditSwitcher(true);
-    //   setUniqueId(newId);
-    // }
+    if (activity === EDIT) {
+      setEditSwitcher(true);
+      setUniqueId(newId);
+    }
   };
 
   const onChange = (name, value) => {
@@ -68,7 +104,6 @@ function ProductsActivity() {
   const selectLngHandler = (option) => {
     setSwitcher(true);
     setSelectedLng(option);
-    console.log("selectLngHandler", option, typeof option);
     setEmptyValueError(false);
   };
 
@@ -91,12 +126,12 @@ function ProductsActivity() {
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductsActivity_name_label"),
       pattern: "^[A-Za-z]{3,16}$",
-      //   defaultValue:
-      //     activity === "add"
-      //       ? ""
-      //       : successSingleInstance && activity === EDIT
-      //       ? result.name
-      //       : "",
+      defaultValue:
+        activity === ADD
+          ? ""
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.name
+          : "",
       required: true,
     },
     {
@@ -104,26 +139,67 @@ function ProductsActivity() {
       name: t("ProductsActivity_input_name_language"),
       label: t("ProductsActivity_input_label_language"),
       optionsList: language,
-      defaultValue: t("default_option_lng"),
-      disabled: values.name.length < 4 && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_lng")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.id_product_type.language
+          : "",
+      disabled: activity === ADD && values.name.length < 4 && true,
+      disabled: activity === EDIT,
     },
     {
       id: "3",
       name: t("ProductsActivity_input_name_product_cat"),
       label: t("ProductsActivity_input_label_product_cat"),
       optionsList: currentProductCatList,
-      defaultValue: t("default_option_product_cat"),
-      disabled: !selectedLgn && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_product_cat")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.id_product_type.name
+          : "",
+      disabled: activity === ADD && !selectedLgn && true,
+      disabled: activity === EDIT,
     },
     {
       id: "4",
       name: t("ProductsActivity_input_name_product_subcat"),
       label: t("ProductsActivity_input_label_product_subcat"),
       optionsList: subproductCatList,
-      defaultValue: t("default_option_product_cat"),
-      disabled: !categoryId && true,
+      defaultValue:
+        activity === ADD
+          ? t("default_option_product_cat")
+          : successSingleInstance && activity === EDIT
+          ? resultSingleInstance.id_product_subtype.name
+          : "",
+      disabled: activity === ADD && !categoryId && true,
+      disabled: activity === EDIT,
     },
   ];
+
+  //Comment
+  //Inside the function, it checks if success is true, and if it is,
+  //it schedules two dispatch actions to occur after a specified delay using the setTimeout method.
+  //The first dispatched action sets the SET_FLAG_ADD_TRUE flag in the Redux store (it trigger other useEffet which navigate to the main dashoboard),
+  useEffect(() => {
+    dispatch({ type: DELETE_IMAGE_REDUX });
+    if (successInsertImage) {
+      setTimeout(() => {
+        dispatch({ type: SET_FLAG_ADD_TRUE });
+        dispatch({ type: ADD_IMAGE_RESET });
+        dispatch({ type: GET_LIST_OF_DATA_DELETE });
+      }, TIME_SET_TIMEOUT);
+    }
+  }, [successInsertImage]);
+
+  //Comment
+  //navigate to main dashboard
+  useEffect(() => {
+    if (addFlag) {
+      navigate(`/dashboard/products`);
+    }
+  }, [addFlag]);
 
   //Comment
   //This code is a React useEffect hook that triggers whenever the value of switcher changes.
@@ -146,7 +222,21 @@ function ProductsActivity() {
       setAddSwitcher(false);
       dispatch(addSingleInstance(insertData));
     }
-  }, [addSwitcher]);
+
+    if (editSwitcher) {
+      // const insertData = {
+      //   name: !values.name ? successSingleInstance.name : values.name,
+      //   modifier: userInfo.id,
+      //   uniqueId: uniqueId,
+      //   editSubcategoryId: editSubcategoryId,
+      // };
+      console.log("działa mechanizm");
+
+      // setEditSwitcher(false);
+
+      // dispatch(updateSubcategory(insertData));
+    }
+  }, [addSwitcher, editSwitcher]);
 
   // fetching list of product categories from DB
   useEffect(() => {
@@ -172,12 +262,41 @@ function ProductsActivity() {
     }
   }, [dispatch, switcher]);
 
-  // useEffect(() => {
-  //   if (switcher) {
-  //     setSwitcher(false);
-  //     console.log("działa switcher i jest spełniony warunek");
-  //   }
-  // }, [dispatch, switcher]);
+  //Comment
+  // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
+  // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
+  // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
+  useEffect(() => {
+    if (successNewProduct || successSingleInstance) {
+      if (isImage) {
+        dispatch(
+          InsertImage2({
+            imageUpload: imageUpload,
+            uniqueId: successNewProduct
+              ? newProductResult.id
+              : resultSingleInstance.id,
+            type: PRODUCT,
+          })
+        );
+      }
+    }
+  }, [successNewProduct, successSingleInstance, editSwitcher]);
+
+  // Comment
+  // Use effect to fetch subcategory data from the database when editing,
+  // Only runs once on component mount due to empty dependency array.
+  useEffect(() => {
+    dispatch({ type: DELETE_IMAGE_REDUX });
+    setImageRender(true);
+    if (activity === EDIT) {
+      dispatch(
+        getSingleInstance({
+          Id: editProductId,
+          typeActivity: "PRODUCT",
+        })
+      );
+    }
+  }, []);
 
   return (
     <div
@@ -188,6 +307,23 @@ function ProductsActivity() {
         minHeight: "50vh",
       }}
     >
+      {successNewProduct && (
+        <ErrorMessage
+          msg={t("ProductCategories_msg_add_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
+      {successInsertImage && (
+        <ErrorMessage
+          msg={t("EditSubProduct_msg_edit_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
+
       <BackButton />
       {activity === EDIT ? (
         <div style={title}>{t("ProductsActivity_edit_title")}</div>
@@ -230,9 +366,9 @@ function ProductsActivity() {
           })}
         </FormLayout>
         <UploadImage />
-        {/* {imageRender && activity === EDIT && result.photo !== null && (
-          <ImageDisplayer imageSrc={result.photo} />
-        )} */}
+        {imageRender && activity === EDIT && resultSingleInstance.photo && (
+          <ImageDisplayer imageSrc={resultSingleInstance.photo} />
+        )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           {activity === EDIT ? (
             <button type="submit" style={changeBtn}>

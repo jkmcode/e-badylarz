@@ -4,12 +4,13 @@ import TableComponent from "./TableComponent";
 import DotsLoader from "../component/DotsLoader";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 import SelectOption from "./SelectOption";
+import SearchFilter from "./SearchFilter";
 import language from "../language";
 import useResponsive from "../component/useResponsive";
+import noImage from "../images/noImage.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
+import { Link, useNavigate } from "react-router-dom";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -18,7 +19,11 @@ import {
   UNACTIVE,
   ACTIVE,
 } from "../constants/environmentConstans";
-import { PRODUCTS, GET_LIST_OF_DATA_DELETE } from "../constants/adminConstans";
+import {
+  PRODUCTS,
+  GET_LIST_OF_DATA_DELETE,
+  SET_FLAG_ADD_FALSE,
+} from "../constants/adminConstans";
 import {
   tableCellNoBorderRight,
   productsStyleHeader,
@@ -32,13 +37,15 @@ import {
 function Products() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { windowWidth } = useResponsive();
 
   //variables
   const [radioValue, setRadioValue] = useState(ONE);
-  const [currentProductList, setCurrentProductList] = useState([]);
   const [catObj, setCatObj] = useState({});
   const [updateStatus, setUpdateStatus] = useState("");
+  const [currentProductList, setCurrentProductList] = useState([]);
+  const [testArr, setTestArr] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
@@ -87,8 +94,7 @@ function Products() {
   };
 
   const editHandler = (id) => {
-    console.log("działa editHandler");
-    // navigate(`${id}/edit`);
+    navigate(`${id}/edit`);
   };
 
   const confirmYes = () => {
@@ -101,37 +107,20 @@ function Products() {
     setConfirm(false);
   };
 
+  const changeHandler = (str) => {
+    setCurrentProductList(str);
+  };
+
   //Comment
   // fetching list of product from DB
   useEffect(() => {
     if (result.length === EMPTY_LIST) {
       const typeActivity = LIST_OF_PRODUCTS;
       dispatch(getListOfData(typeActivity));
-    }
-  }, [result.length]);
-
-  // Comment
-  // This useEffect hook updates the current product list based on the selected radio button value.
-  // If the result array is not empty, the hook filters and sets the list to display
-  // either active or inactive products based on the selected radio button value. If the result array is empty,
-  // the hook sets the current product list to the empty currentProductList array.
-  // This helps to avoid errors and ensures that the products list is properly displayed to the user.
-  // The hook is triggered by changes to both the radioValue and subproductCatList state variables.
-  useEffect(() => {
-    if (result) {
-      if (radioValue === ONE) {
-        setCurrentProductList(
-          result.filter((subcat) => subcat.is_active === true)
-        );
-      } else {
-        setCurrentProductList(
-          result.filter((subcat) => subcat.is_active === false)
-        );
-      }
     } else {
       setCurrentProductList(result);
     }
-  }, [radioValue, result]);
+  }, [result.length]);
 
   //Comment
   // dispatch function for active and unactive product
@@ -172,6 +161,13 @@ function Products() {
     }
   }, [successUnOrActive]);
 
+  //Comment
+  // The dispatch function updates the state with the SET_FLAG_ADD_FALSE action type.
+  // It unable to run UseEffect in ProductsActivity to navigate to this component.
+  useEffect(() => {
+    dispatch({ type: SET_FLAG_ADD_FALSE });
+  }, []);
+
   const mainTableContainer = {
     overflowY: "auto",
     maxHeight: "50vh",
@@ -206,7 +202,23 @@ function Products() {
 
   const dataSubcategoryTable = currentProductList.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: (
+      <>
+        {item.photo ? (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={item.photo}
+          />
+        ) : (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={noImage}
+          />
+        )}
+
+        {item.name}
+      </>
+    ),
     status: (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <>
@@ -252,6 +264,7 @@ function Products() {
     label: "language",
     optionsList: language,
     defaultValue: "Select an option",
+    disabled: false,
   };
 
   const selectLngHandler = (option) => {
@@ -277,7 +290,6 @@ function Products() {
           context={t("Confirmation_alert_unactive_product")}
         />
       )}
-
       {showAlert && updateStatus === ACTIVE && (
         <InfoAlertComponent
           confirmYes={confirmYes}
@@ -334,30 +346,16 @@ function Products() {
             defaultValue={input.defaultValue}
             optionsList={input.optionsList}
             emptyValueError={emptyValueError}
+            disabled={input.disabled}
             onChange={selectLngHandler}
           />
         </div>
       </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#E8E8E8",
-          marginTop: "1.5rem",
-          padding: "0.5rem",
-          color: "#888888",
-        }}
-      >
-        <Icon
-          icon="carbon:search"
-          color="#888888"
-          width="24"
-          height="24"
-          style={{ marginRight: "1rem" }}
-        />
-        <input style={{ width: "100%" }} placeholder="Search a product" />
-      </div>
+      <SearchFilter
+        onChange={changeHandler}
+        listOfData={result}
+        radioValue={radioValue}
+      />
       {loadingGetListOfData ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />

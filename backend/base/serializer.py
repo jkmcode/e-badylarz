@@ -81,17 +81,19 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         model = ProductTypes
         fields = '__all__'     
 
-class ProductsSerializer(serializers.ModelSerializer):
-    list_of_data = serializers.CharField(default='list of product')
-    class Meta:
-        model = Product
-        fields = '__all__'    
-
 class SubproductTypeSerializer(serializers.ModelSerializer):
+    id_product_type = ProductTypeSerializer()
     type_of_instance = serializers.CharField(default='product subcategory')
     class Meta:
         model = ProductSubTypes
-        fields = '__all__'           
+        fields = '__all__'   
+
+class ProductsSerializer(serializers.ModelSerializer):
+    id_product_subtype = SubproductTypeSerializer()
+    list_of_data = serializers.CharField(default='list of product')
+    class Meta:
+        model = Product
+        fields = '__all__'            
 
 class ShopsSerializer(serializers.ModelSerializer):
     class Meta:

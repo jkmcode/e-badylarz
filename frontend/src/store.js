@@ -44,6 +44,7 @@ import {
   citesListAllReducer,
   getSingleInstanceReducer,
   getListOfDataReducer,
+  addSingleInstanceReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -87,6 +88,7 @@ const reducer = combineReducers({
   uploadImage: uploadImageReducers,
   getSingleInstance: getSingleInstanceReducer,
   getListOfData: getListOfDataReducer,
+  addSingleInstance: addSingleInstanceReducer,
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")
