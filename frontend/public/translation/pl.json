@@ -453,6 +453,7 @@
   "AddProductSubcategories_title": "Dodaj podkategorie",
   "EditProductSubcategories_title": "Edit subcategory",
   "EditSubProductCategories_msg_edit_success": "Subcategory został zmieniony",
+  "EditSubProduct_msg_edit_success": "Produkt został zmieniony",
   "Confirmation_alert_unactive_product_subcategory": "Czy na pewno chcerz dezaktywować podkategorie?",
   "Confirmation_alert_active_product_subcategory": "Czy na pewno chcerz aktywować podkategorie?",
   "Confirmation_alert_unactive_product": "Czy na pewno chcerz dezaktywować produkt?",

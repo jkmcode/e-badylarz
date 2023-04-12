@@ -19,7 +19,11 @@ import {
   UNACTIVE,
   ACTIVE,
 } from "../constants/environmentConstans";
-import { PRODUCTS, GET_LIST_OF_DATA_DELETE } from "../constants/adminConstans";
+import {
+  PRODUCTS,
+  GET_LIST_OF_DATA_DELETE,
+  SET_FLAG_ADD_FALSE,
+} from "../constants/adminConstans";
 import {
   tableCellNoBorderRight,
   productsStyleHeader,
@@ -156,6 +160,13 @@ function Products() {
       dispatch({ type: GET_LIST_OF_DATA_DELETE });
     }
   }, [successUnOrActive]);
+
+  //Comment
+  // The dispatch function updates the state with the SET_FLAG_ADD_FALSE action type.
+  // It unable to run UseEffect in ProductsActivity to navigate to this component.
+  useEffect(() => {
+    dispatch({ type: SET_FLAG_ADD_FALSE });
+  }, []);
 
   const mainTableContainer = {
     overflowY: "auto",

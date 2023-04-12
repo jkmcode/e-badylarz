@@ -4,6 +4,7 @@ import BackButton from "./BackButton";
 import UploadImage from "../component/UploadImage";
 import SelectOption from "./SelectOption";
 import ImageDisplayer from "./ImageDisplayer";
+import ErrorMessage from "../component/ErrorMessage";
 import language from "../language";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
 import {
@@ -11,10 +12,16 @@ import {
   InsertImage2,
   getSingleInstance,
 } from "../actions/adminActions";
-import { DELETE_IMAGE_REDUX } from "../constants/adminConstans";
+import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
+import {
+  DELETE_IMAGE_REDUX,
+  SET_FLAG_ADD_TRUE,
+  ADD_IMAGE_RESET,
+  GET_LIST_OF_DATA_DELETE,
+} from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { title, changeBtn, addBtn, FormLayout } from "./AdminCSS";
 import {
@@ -32,6 +39,7 @@ function ProductsActivity() {
   const activity = params.activity;
   const editProductId = Number(params.id);
   const newId = uuidv4();
+  const navigate = useNavigate();
 
   const [values, setValues] = useState({
     name: "",
@@ -51,6 +59,9 @@ function ProductsActivity() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const dflag = useSelector((state) => state.flag);
+  const { addFlag } = dflag;
+
   const productCatListRedux = useSelector((state) => state.productCatList);
   const { loading: loadingProductCat, productCatList } = productCatListRedux;
 
@@ -61,6 +72,9 @@ function ProductsActivity() {
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
+
+  const insertImageReducer = useSelector((state) => state.insertImage);
+  const { successInsertImage } = insertImageReducer;
 
   const newProduct = useSelector((state) => state.addSingleInstance);
   const { success: successNewProduct, result: newProductResult } = newProduct;
@@ -165,6 +179,29 @@ function ProductsActivity() {
   ];
 
   //Comment
+  //Inside the function, it checks if success is true, and if it is,
+  //it schedules two dispatch actions to occur after a specified delay using the setTimeout method.
+  //The first dispatched action sets the SET_FLAG_ADD_TRUE flag in the Redux store (it trigger other useEffet which navigate to the main dashoboard),
+  useEffect(() => {
+    dispatch({ type: DELETE_IMAGE_REDUX });
+    if (successInsertImage) {
+      setTimeout(() => {
+        dispatch({ type: SET_FLAG_ADD_TRUE });
+        dispatch({ type: ADD_IMAGE_RESET });
+        dispatch({ type: GET_LIST_OF_DATA_DELETE });
+      }, TIME_SET_TIMEOUT);
+    }
+  }, [successInsertImage]);
+
+  //Comment
+  //navigate to main dashboard
+  useEffect(() => {
+    if (addFlag) {
+      navigate(`/dashboard/products`);
+    }
+  }, [addFlag]);
+
+  //Comment
   //This code is a React useEffect hook that triggers whenever the value of switcher changes.
   //It defines an insertData object and dispatches an action using the addProductSubcat action creator with insertData as the argument.
   //It also updates the state of switcher to false using setSwitcher(false).
@@ -243,7 +280,7 @@ function ProductsActivity() {
         );
       }
     }
-  }, [successNewProduct, successSingleInstance]);
+  }, [successNewProduct, successSingleInstance, editSwitcher]);
 
   // Comment
   // Use effect to fetch subcategory data from the database when editing,
@@ -270,6 +307,23 @@ function ProductsActivity() {
         minHeight: "50vh",
       }}
     >
+      {successNewProduct && (
+        <ErrorMessage
+          msg={t("ProductCategories_msg_add_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
+      {successInsertImage && (
+        <ErrorMessage
+          msg={t("EditSubProduct_msg_edit_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
+
       <BackButton />
       {activity === EDIT ? (
         <div style={title}>{t("ProductsActivity_edit_title")}</div>
@@ -312,11 +366,9 @@ function ProductsActivity() {
           })}
         </FormLayout>
         <UploadImage />
-        {imageRender &&
-          activity === EDIT &&
-          resultSingleInstance.photo !== null && (
-            <ImageDisplayer imageSrc={resultSingleInstance.photo} />
-          )}
+        {imageRender && activity === EDIT && resultSingleInstance.photo && (
+          <ImageDisplayer imageSrc={resultSingleInstance.photo} />
+        )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           {activity === EDIT ? (
             <button type="submit" style={changeBtn}>

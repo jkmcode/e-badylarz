@@ -453,6 +453,7 @@
   "AddProductSubcategories_title": "Add subcategory",
   "EditProductSubcategories_title": "Edit subcategory",
   "EditSubProductCategories_msg_edit_success": "Subcategory edit correctly",
+  "EditSubProduct_msg_edit_success": "Product edit correctly",
   "Confirmation_alert_unactive_product_subcategory": "Are you sure you want to unactive product subcategory?",
   "Confirmation_alert_active_product_subcategory": "Are you sure you want to active product subcategory?",
   "Confirmation_alert_unactive_product": "Are you sure you want to unactive product?",
