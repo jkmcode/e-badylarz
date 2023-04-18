@@ -32,6 +32,10 @@ import {
   PRODUCT,
 } from "../constants/environmentConstans";
 
+import {
+  LONG_NAME_PATTERN,
+} from "../constants/formValueConstans";
+
 function ProductsActivity() {
   const { t } = useTranslation();
   const params = useParams();
@@ -125,13 +129,13 @@ function ProductsActivity() {
       placeholder: t("ProductsActivity_name_placeholder"),
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductsActivity_name_label"),
-      pattern: "^[A-Za-z]{3,16}$",
+      pattern: LONG_NAME_PATTERN,
       defaultValue:
         activity === ADD
           ? ""
           : successSingleInstance && activity === EDIT
-          ? resultSingleInstance.name
-          : "",
+            ? resultSingleInstance.name
+            : "",
       required: true,
     },
     {
@@ -143,8 +147,8 @@ function ProductsActivity() {
         activity === ADD
           ? t("default_option_lng")
           : successSingleInstance && activity === EDIT
-          ? resultSingleInstance.id_product_subtype.id_product_type.language
-          : "",
+            ? resultSingleInstance.id_product_subtype.id_product_type.language
+            : "",
       disabled: activity === ADD && values.name.length < 4 && true,
       disabled: activity === EDIT,
     },
@@ -157,8 +161,8 @@ function ProductsActivity() {
         activity === ADD
           ? t("default_option_product_cat")
           : successSingleInstance && activity === EDIT
-          ? resultSingleInstance.id_product_subtype.id_product_type.name
-          : "",
+            ? resultSingleInstance.id_product_subtype.id_product_type.name
+            : "",
       disabled: activity === ADD && !selectedLgn && true,
       disabled: activity === EDIT,
     },
@@ -171,8 +175,8 @@ function ProductsActivity() {
         activity === ADD
           ? t("default_option_product_cat")
           : successSingleInstance && activity === EDIT
-          ? resultSingleInstance.id_product_subtype.name
-          : "",
+            ? resultSingleInstance.id_product_subtype.name
+            : "",
       disabled: activity === ADD && !categoryId && true,
       disabled: activity === EDIT,
     },
@@ -357,8 +361,8 @@ function ProductsActivity() {
                     input.name === "language"
                       ? selectLngHandler
                       : input.name === "ProductCategory"
-                      ? selectProductCatHandler
-                      : selectProductSubcatHandler
+                        ? selectProductCatHandler
+                        : selectProductSubcatHandler
                   }
                 />
               );

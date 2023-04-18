@@ -38,6 +38,7 @@ function ProductSubcategories() {
 
   const [radioValue, setRadioValue] = useState(ONE);
   const [currentSubproductList, setCurrentSubproductList] = useState([]);
+  const [currentCat, setCurrentCat] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [updateStatus, setUpdateStatus] = useState("");
   const [confirm, setConfirm] = useState(false);
@@ -51,6 +52,9 @@ function ProductSubcategories() {
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const catProduct = useSelector((state) => state.productCatList);
+  const { productCatList } = catProduct;
 
   const subproductSubcatListRedux = useSelector(
     (state) => state.subproductCatList
@@ -223,6 +227,17 @@ function ProductSubcategories() {
   }, [radioValue, subproductCatList]);
 
   //Comment
+  // data from redax about Category
+
+  // useEffect(() => {
+  //   if (productCatList) {
+  //     productCatList.map((cat) => {
+  //       if (cat.id === categoryId) { setCurrentCat(cat.name) }
+  //     })
+  //   }
+  // }, [productCatList]);
+
+  //Comment
   // dispatch function for active and unactive product category
   useEffect(() => {
     if (confirm && updateStatus === UNACTIVE) {
@@ -236,7 +251,6 @@ function ProductSubcategories() {
         })
       );
     }
-
     if (confirm && updateStatus === ACTIVE) {
       dispatch(
         unOrActiveList({
@@ -334,7 +348,9 @@ function ProductSubcategories() {
           {t("Products_add_subproduct_btn")}
         </Link>
       </div>
-      <div style={title}>{t("ProductSubcategories_title")}</div>
+      <div style={title}>
+        {t("ProductSubcategories_title")}{currentCat}
+      </div>
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />

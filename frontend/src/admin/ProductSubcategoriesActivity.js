@@ -27,6 +27,9 @@ import {
   GET_PRODUCT_SUBCAT_LIST_DELETE,
 } from "../constants/productConstans";
 import { EDIT } from "../constants/environmentConstans";
+import {
+  LONG_NAME_PATTERN,
+} from "../constants/formValueConstans";
 
 function ProductSubcategoriesActivity() {
   const { t } = useTranslation();
@@ -38,6 +41,8 @@ function ProductSubcategoriesActivity() {
   const activity = params.activity;
   const subcategoryId = Number(params.id);
   const editSubcategoryId = Number(params.idSubCat);
+
+  console.log("subcategoryId->", subcategoryId, "editSubcategoryId--->", editSubcategoryId)
 
   const [values, setValues] = useState({
     name: "",
@@ -95,16 +100,16 @@ function ProductSubcategoriesActivity() {
       id: "1",
       name: "name",
       type: "text",
-      placeholder: t("ProductCategories_name_placeholder"),
+      placeholder: t("ProductSubCategories_name_placeholder"),
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductCategories_name_label"),
-      pattern: "^[A-Za-z]{3,16}$",
+      pattern: LONG_NAME_PATTERN,
       defaultValue:
         activity === "add"
           ? ""
           : successSingleInstance && activity === EDIT
-          ? result.name
-          : "",
+            ? result.name
+            : "",
       required: true,
     },
   ];

@@ -28,6 +28,9 @@ import {
   ADD,
   PRODUCT_CAT,
 } from "../constants/environmentConstans";
+import {
+  LONG_NAME_PATTERN,
+} from "../constants/formValueConstans";
 
 function ProductCategoriesActivity() {
   const { t } = useTranslation();
@@ -195,7 +198,7 @@ function ProductCategoriesActivity() {
       placeholder: t("ProductCategories_name_placeholder"),
       errorMessage: t("ProductCategories_name_error_message"),
       label: t("ProductCategories_name_label"),
-      pattern: "^[A-Za-z]{3,16}$",
+      pattern: LONG_NAME_PATTERN,
       required: true,
       defaultValue:
         activity === ADD ? "" : result && activity === EDIT ? result.name : "",
@@ -210,8 +213,8 @@ function ProductCategoriesActivity() {
         activity === ADD
           ? "Select an option"
           : result && activity === EDIT
-          ? result.language
-          : "",
+            ? result.language
+            : "",
       disabled: activity === EDIT && true,
     },
   ];
