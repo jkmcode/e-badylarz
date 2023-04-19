@@ -6,7 +6,7 @@ function SearchFilter({ onChange, listOfData, radioValue }) {
   const [items, setItems] = useState();
   const [filterItems, setFilterItems] = useState([]);
 
-  console.log("radioValue", radioValue);
+  // console.log("radioValue", radioValue);
 
   const handleChange = (event) => {
     setItems(event.target.value);

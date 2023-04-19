@@ -45,6 +45,7 @@ import {
   getSingleInstanceReducer,
   getListOfDataReducer,
   addSingleInstanceReducer,
+  updateSingleInstanceReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
@@ -89,6 +90,7 @@ const reducer = combineReducers({
   getSingleInstance: getSingleInstanceReducer,
   getListOfData: getListOfDataReducer,
   addSingleInstance: addSingleInstanceReducer,
+  updateSingleInstance: updateSingleInstanceReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

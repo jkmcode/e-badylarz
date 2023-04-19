@@ -9,6 +9,7 @@ import language from "../language";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
 import {
   addSingleInstance,
+  updateSingleInstance,
   InsertImage2,
   getSingleInstance,
 } from "../actions/adminActions";
@@ -18,7 +19,8 @@ import {
   SET_FLAG_ADD_TRUE,
   ADD_IMAGE_RESET,
   GET_LIST_OF_DATA_DELETE,
-  ADD_SINGLE_INSTANCE_DELETE
+  ADD_SINGLE_INSTANCE_DELETE,
+  UPDATE_SINGLE_INSTANCE_DELETE
 } from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -82,7 +84,13 @@ function ProductsActivity() {
   const { successInsertImage } = insertImageReducer;
 
   const newProduct = useSelector((state) => state.addSingleInstance);
-  const { success: successNewProduct, result: newProductResult } = newProduct;
+  const {
+    success: successNewProduct,
+    result: newProductResult,
+    loading: loadingNewProduct } = newProduct;
+
+  const updateProduct = useSelector((state) => state.updateSingleInstance);
+  const { success: successUpdateProduct, loading: loadingUpdateProduct } = updateProduct;
 
   const singleSingleRedux = useSelector((state) => state.getSingleInstance);
   const { result: resultSingleInstance, success: successSingleInstance } =
@@ -203,7 +211,14 @@ function ProductsActivity() {
         navigate(`/dashboard/products`);
       }, TIME_SET_TIMEOUT)
     }
-  }, [successInsertImage, successNewProduct]);
+    if (successUpdateProduct) {
+      setTimeout(() => {
+        dispatch({ type: GET_LIST_OF_DATA_DELETE });
+        dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
+        navigate(`/dashboard/products`);
+      }, TIME_SET_TIMEOUT)
+    }
+  }, [successInsertImage, successNewProduct, successUpdateProduct]);
 
   //Comment
   //navigate to main dashboard
@@ -236,17 +251,13 @@ function ProductsActivity() {
     }
 
     if (editSwitcher) {
-      // const insertData = {
-      //   name: !values.name ? successSingleInstance.name : values.name,
-      //   modifier: userInfo.id,
-      //   uniqueId: uniqueId,
-      //   editSubcategoryId: editSubcategoryId,
-      // };
-      console.log("działa mechanizm");
-
-      // setEditSwitcher(false);
-
-      // dispatch(updateSubcategory(insertData));
+      const insertData = {
+        name: values.name,
+        modifier: userInfo.id,
+        Id: editProductId,
+      };
+      setEditSwitcher(false);
+      dispatch(updateSingleInstance(insertData));
     }
   }, [addSwitcher, editSwitcher]);
 
@@ -328,6 +339,14 @@ function ProductsActivity() {
         />
       )}
       {successInsertImage && (
+        <ErrorMessage
+          msg={t("EditSubProduct_msg_edit_success")}
+          timeOut={TIME_SET_TIMEOUT}
+          variant="success"
+          success={true}
+        />
+      )}
+      {successUpdateProduct && (
         <ErrorMessage
           msg={t("EditSubProduct_msg_edit_success")}
           timeOut={TIME_SET_TIMEOUT}

@@ -1209,3 +1209,22 @@ def add_single_instance(request):
     except IntegrityError:
         content = {"detail": "Product with this name already exist"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def update_single_instance(request):
+    data = request.data
+
+    try:
+        product = Product.objects.get(id=data['Id'])
+        product.name=data['name']
+        product.modifier=data['modifier']
+        product.date_of_change=datetime.now()
+        product.save()     
+        return Response("OK")
+    except ProductSubTypes.DoesNotExist:
+        content = {"detail": "Product not found"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)            
+    except IntegrityError:
+        content = {"detail": "Product with this name already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)

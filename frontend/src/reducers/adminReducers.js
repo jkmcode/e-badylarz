@@ -118,6 +118,10 @@ import {
   ADD_SINGLE_INSTANCE_SUCCESS,
   ADD_SINGLE_INSTANCE_FAIL,
   ADD_SINGLE_INSTANCE_DELETE,
+  UPDATE_SINGLE_INSTANCE_REQUEST,
+  UPDATE_SINGLE_INSTANCE_SUCCESS,
+  UPDATE_SINGLE_INSTANCE_FAIL,
+  UPDATE_SINGLE_INSTANCE_DELETE,
 } from "../constants/adminConstans";
 
 // Inser image
@@ -615,6 +619,21 @@ export const addSingleInstanceReducer = (state = {}, action) => {
     case ADD_SINGLE_INSTANCE_FAIL:
       return { loading: false, error: action.payload, success: false };
     case ADD_SINGLE_INSTANCE_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const updateSingleInstanceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_SINGLE_INSTANCE_REQUEST:
+      return { loading: true, success: false };
+    case UPDATE_SINGLE_INSTANCE_SUCCESS:
+      return { loading: false, success: true, result: action.payload };
+    case UPDATE_SINGLE_INSTANCE_FAIL:
+      return { loading: false, error: action.payload, success: false };
+    case UPDATE_SINGLE_INSTANCE_DELETE:
       return {};
     default:
       return state;

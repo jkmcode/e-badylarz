@@ -71,6 +71,10 @@ import {
   ADD_SINGLE_INSTANCE_REQUEST,
   ADD_SINGLE_INSTANCE_SUCCESS,
   ADD_SINGLE_INSTANCE_FAIL,
+  UPDATE_SINGLE_INSTANCE_REQUEST,
+  UPDATE_SINGLE_INSTANCE_SUCCESS,
+  UPDATE_SINGLE_INSTANCE_FAIL,
+
 } from "../constants/adminConstans";
 
 // Save image in redax
@@ -776,7 +780,7 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
   }
 };
 
-//TEST
+
 
 export const addSingleInstance = (insertData) => async (dispatch, getState) => {
   try {
@@ -804,6 +808,40 @@ export const addSingleInstance = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_SINGLE_INSTANCE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const updateSingleInstance = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: UPDATE_SINGLE_INSTANCE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/update-single-instance/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_SINGLE_INSTANCE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_SINGLE_INSTANCE_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail
