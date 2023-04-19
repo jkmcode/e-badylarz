@@ -229,13 +229,13 @@ function ProductSubcategories() {
   //Comment
   // data from redax about Category
 
-  // useEffect(() => {
-  //   if (productCatList) {
-  //     productCatList.map((cat) => {
-  //       if (cat.id === categoryId) { setCurrentCat(cat.name) }
-  //     })
-  //   }
-  // }, [productCatList]);
+  useEffect(() => {
+    if (productCatList) {
+      productCatList.map((cat) => {
+        if (cat.id === categoryId) { setCurrentCat(cat.name) }
+      })
+    }
+  }, [productCatList]);
 
   //Comment
   // dispatch function for active and unactive product category
@@ -349,7 +349,7 @@ function ProductSubcategories() {
         </Link>
       </div>
       <div style={title}>
-        {t("ProductSubcategories_title")}{currentCat}
+        {t("ProductSubcategories_title")} : {currentCat}
       </div>
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>

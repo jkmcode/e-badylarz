@@ -195,7 +195,13 @@ function ProductsActivity() {
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
       }, TIME_SET_TIMEOUT);
     }
-  }, [successInsertImage]);
+    if (successNewProduct) {
+      setTimeout(() => {
+        dispatch({ type: GET_LIST_OF_DATA_DELETE });
+        navigate(`/dashboard/products`);
+      }, TIME_SET_TIMEOUT)
+    }
+  }, [successInsertImage, successNewProduct]);
 
   //Comment
   //navigate to main dashboard
