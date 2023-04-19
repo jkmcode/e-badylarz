@@ -18,6 +18,7 @@ import {
   SET_FLAG_ADD_TRUE,
   ADD_IMAGE_RESET,
   GET_LIST_OF_DATA_DELETE,
+  ADD_SINGLE_INSTANCE_DELETE
 } from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -198,6 +199,7 @@ function ProductsActivity() {
     if (successNewProduct) {
       setTimeout(() => {
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
+        dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
         navigate(`/dashboard/products`);
       }, TIME_SET_TIMEOUT)
     }
