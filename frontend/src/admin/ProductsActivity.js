@@ -165,7 +165,7 @@ function ProductsActivity() {
       id: "3",
       name: t("ProductsActivity_input_name_product_cat"),
       label: t("ProductsActivity_input_label_product_cat"),
-      optionsList: currentProductCatList,
+      optionsList: currentProductCatList.filter((i) => i.is_active === true),
       defaultValue:
         activity === ADD
           ? t("default_option_product_cat")
@@ -179,7 +179,7 @@ function ProductsActivity() {
       id: "4",
       name: t("ProductsActivity_input_name_product_subcat"),
       label: t("ProductsActivity_input_label_product_subcat"),
-      optionsList: subproductCatList,
+      optionsList: subproductCatList.filter((i) => i.is_active === true),
       defaultValue:
         activity === ADD
           ? t("default_option_product_cat")
