@@ -40,6 +40,10 @@ import {
   LONG_NAME_PATTERN,
 } from "../constants/formValueConstans";
 
+import {
+  GET_PRODUCT_SUBCAT_LIST_DELETE
+} from "../constants/productConstans"
+
 function ProductsActivity() {
   const { t } = useTranslation();
   const params = useParams();
@@ -318,6 +322,7 @@ function ProductsActivity() {
   // Only runs once on component mount due to empty dependency array.
   useEffect(() => {
     dispatch({ type: DELETE_IMAGE_REDUX });
+    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });
     setImageRender(true);
     if (activity === EDIT) {
       dispatch(

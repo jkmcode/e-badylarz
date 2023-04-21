@@ -1192,7 +1192,7 @@ def get_list_of_data(request, typeActivity):
 def add_single_instance(request):
     data = request.data
 
-    alreadyExists = Product.objects.get(id=data['name']).exists()
+    alreadyExists = Product.objects.get(name=data['name']).exists()
 
     if alreadyExists:
         content = {"detail": "Product with this name already exist"}
@@ -1200,7 +1200,7 @@ def add_single_instance(request):
 
     try:
         if data['typeActivity'] == 'PRODUCT':
-            sub_product = ProductSubTypes.objects.get(id=data['subcategoryId'])
+            sub_product = ProductSubTypes.objects.filter(id=data['subcategoryId'])
             product = Product.objects.create(
                 id_product_subtype=sub_product,
                 name=data['name'],
@@ -1221,7 +1221,7 @@ def add_single_instance(request):
 def update_single_instance(request):
     data = request.data
         
-    alreadyExists = Product.objects.get(id=data['name']).exists()
+    alreadyExists = Product.objects.filter(name=data['name']).exists()
 
     if alreadyExists:
         content = {"detail": "Product with this name already exist"}
