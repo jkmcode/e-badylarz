@@ -1192,7 +1192,7 @@ def get_list_of_data(request, typeActivity):
 def add_single_instance(request):
     data = request.data
 
-    alreadyExists = Product.objects.get(name=data['name']).exists()
+    alreadyExists = Product.objects.filter(name=data['name']).exists()
 
     if alreadyExists:
         content = {"detail": "Product with this name already exist"}
