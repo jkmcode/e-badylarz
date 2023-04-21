@@ -14,6 +14,7 @@
   "ErrorMessage_no_type_object": "Changing the active flag - no object type",
   "ErrorMessage_product_type_already_exist": "Product type already exist",
   "ErrorMessage_area_already_exist": "Sales area with this name already exist",
+  "ErrorMessage_product_already_exist": "Product with this name already exist",
   "latitude_placeholder": "Enter latitude ...",
   "latitude_error_message": "Latitute contains only digits in format: xx.xxx in range of -90 to 90!",
   "label_latitude": "Latitude",
@@ -473,5 +474,8 @@
   "Pick_up": "Pick-up spot supported",
   "No_pick_up": "No pick-up spot",
   "ShopsSpot_kind_only_pick_up": "Only Pick-up spot",
-  "AddContact_copy_data": "Copy data"
+  "AddContact_copy_data": "Copy data",
+  "SerachFilter_placeholder": "Search of product",
+  "Select_opions": "Select opions",
+  "Product_lng_label": "language"
 }

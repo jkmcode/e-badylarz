@@ -261,9 +261,9 @@ function Products() {
   const input = {
     id: "1",
     name: "language",
-    label: "language",
+    label: t("Product_lng_label"),
     optionsList: language,
-    defaultValue: "Select an option",
+    defaultValue: t("Select_opions"),
     disabled: false,
   };
 

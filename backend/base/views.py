@@ -1192,6 +1192,12 @@ def get_list_of_data(request, typeActivity):
 def add_single_instance(request):
     data = request.data
 
+    alreadyExists = Product.objects.get(id=data['name']).exists()
+
+    if alreadyExists:
+        content = {"detail": "Product with this name already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         if data['typeActivity'] == 'PRODUCT':
             sub_product = ProductSubTypes.objects.get(id=data['subcategoryId'])
@@ -1214,6 +1220,12 @@ def add_single_instance(request):
 @permission_classes([IsAdminUser])
 def update_single_instance(request):
     data = request.data
+        
+    alreadyExists = Product.objects.get(id=data['name']).exists()
+
+    if alreadyExists:
+        content = {"detail": "Product with this name already exist"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         product = Product.objects.get(id=data['Id'])

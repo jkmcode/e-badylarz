@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { ONE, ZERO } from "../constants/environmentConstans";
+import { useTranslation } from "react-i18next";
 
 function SearchFilter({ onChange, listOfData, radioValue }) {
+
+  const { t } = useTranslation();
   const [items, setItems] = useState();
   const [filterItems, setFilterItems] = useState([]);
 
@@ -68,7 +71,7 @@ function SearchFilter({ onChange, listOfData, radioValue }) {
         onChange={handleChange}
         type="search"
         style={{ width: "100%" }}
-        placeholder="Search a product"
+        placeholder={t("SerachFilter_placeholder")}
       />
     </div>
   );

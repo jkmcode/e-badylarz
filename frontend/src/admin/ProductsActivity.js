@@ -6,6 +6,7 @@ import SelectOption from "./SelectOption";
 import ImageDisplayer from "./ImageDisplayer";
 import ErrorMessage from "../component/ErrorMessage";
 import language from "../language";
+import DotsLoader from "../component/DotsLoader";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
 import {
   addSingleInstance,
@@ -70,31 +71,38 @@ function ProductsActivity() {
   const { addFlag } = dflag;
 
   const productCatListRedux = useSelector((state) => state.productCatList);
-  const { loading: loadingProductCat, productCatList } = productCatListRedux;
+  const { loading: loadingProductCat, productCatList, error: errorproductCatList } = productCatListRedux;
+
 
   const subproductSubcatListRedux = useSelector(
-    (state) => state.subproductCatList
-  );
-  const { subproductCatList } = subproductSubcatListRedux;
+    (state) => state.subproductCatList);
+  const { subproductCatList, loading: loadingSubCat, errer: errorSubCat } = subproductSubcatListRedux;
 
   const imageRedux = useSelector((state) => state.saveImage);
   const { imageUpload, isImage } = imageRedux;
 
   const insertImageReducer = useSelector((state) => state.insertImage);
-  const { successInsertImage } = insertImageReducer;
+  const { successInsertImage, loading: loadingInsertImage, error: errorInsertImage } = insertImageReducer;
 
   const newProduct = useSelector((state) => state.addSingleInstance);
   const {
     success: successNewProduct,
     result: newProductResult,
-    loading: loadingNewProduct } = newProduct;
+    loading: loadingNewProduct,
+    error: errorNewProduct } = newProduct;
 
   const updateProduct = useSelector((state) => state.updateSingleInstance);
-  const { success: successUpdateProduct, loading: loadingUpdateProduct } = updateProduct;
+  const {
+    success: successUpdateProduct,
+    loading: loadingUpdateProduct,
+    error: errorUpdateProduct } = updateProduct;
 
   const singleSingleRedux = useSelector((state) => state.getSingleInstance);
-  const { result: resultSingleInstance, success: successSingleInstance } =
-    singleSingleRedux;
+  const {
+    result: resultSingleInstance,
+    success: successSingleInstance,
+    loading: loadingSingleInstance,
+    error: errorSingleInstance } = singleSingleRedux;
 
   //Handlers
   const handleSubmit = (e) => {
@@ -321,6 +329,16 @@ function ProductsActivity() {
     }
   }, []);
 
+  //Loaders
+  if (loadingProductCat || loadingNewProduct || loadingUpdateProduct
+    || loadingSubCat || loadingInsertImage || loadingSingleInstance) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <DotsLoader />
+      </div>
+    )
+  }
+
   return (
     <div
       style={{
@@ -353,6 +371,24 @@ function ProductsActivity() {
           variant="success"
           success={true}
         />
+      )}
+      {errorSubCat && (
+        <ErrorMessage msg={errorSubCat} timeOut={TIME_SET_TIMEOUT} />
+      )}
+      {errorInsertImage && (
+        <ErrorMessage msg={errorInsertImage} timeOut={TIME_SET_TIMEOUT} />
+      )}
+      {errorSingleInstance && (
+        <ErrorMessage msg={errorSingleInstance} timeOut={TIME_SET_TIMEOUT} />
+      )}
+      {errorUpdateProduct && (
+        <ErrorMessage msg={errorUpdateProduct} timeOut={TIME_SET_TIMEOUT} />
+      )}
+      {errorNewProduct && (
+        <ErrorMessage msg={errorNewProduct} timeOut={TIME_SET_TIMEOUT} />
+      )}
+      {errorproductCatList && (
+        <ErrorMessage msg={errorproductCatList} timeOut={TIME_SET_TIMEOUT} />
       )}
 
       <BackButton />
@@ -401,13 +437,14 @@ function ProductsActivity() {
           <ImageDisplayer imageSrc={resultSingleInstance.photo} />
         )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          {activity === EDIT ? (
-            <button type="submit" style={changeBtn}>
-              {t("btn-change")}
-            </button>
-          ) : (
-            <button style={addBtn}>{t("btn-add")}</button>
-          )}
+          {successUpdateProduct || successNewProduct ? null :
+            activity === EDIT ? (
+              <button type="submit" style={changeBtn}>
+                {t("btn-change")}
+              </button>
+            ) : (
+              <button style={addBtn}>{t("btn-add")}</button>
+            )}
         </div>
       </form>
     </div>

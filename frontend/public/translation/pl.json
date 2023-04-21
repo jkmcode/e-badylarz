@@ -13,6 +13,7 @@
   "ErrorMessage_store_already_exist": "Sklep z taką nazwą już istneje",
   "ErrorMessage_nip_already_exist": "Podany NIP juz istnieje",
   "ErrorMessage_area_already_exist": "Obszar sprzedaży o podanej nazwie już istneje",
+  "ErrorMessage_product_already_exist": "Product o podanej nazwie już istnieje",
   "latitude_placeholder": "Wprowadź warotść ...",
   "latitude_error_message": "Szerokość geograficzna zawiera tylko cyfry w formacie: xx.xxx w zakresie od -90 do 90!",
   "label_latitude": "Szerokość geograficzna",
@@ -471,5 +472,8 @@
   "Pick_up": "Punkt odbioru obsługiwany",
   "No_pick_up": "Brak punktu odbioru",
   "ShopsSpot_kind_only_pick_up": "Tylko punkt odbioru",
-  "AddContact_copy_data": "Kopiuj dane"
+  "AddContact_copy_data": "Kopiuj dane",
+  "SerachFilter_placeholder": "Wyszukaj produkt",
+  "Select_opions": "Wybierz z listy",
+  "Product_lng_label": "język"
 }
