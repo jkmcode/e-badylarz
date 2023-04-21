@@ -237,6 +237,22 @@ function Products() {
               style={{ ...btnEdit, marginRight: "1rem" }}
               onClick={() => editHandler(item.id)}
             >
+              {t("btn_info")}
+            </button>
+          )}
+          {radioValue === ONE && (
+            <button
+              style={{ ...btnEdit, marginRight: "1rem" }}
+              onClick={() => editHandler(item.id)}
+            >
+              {t("btn_description")}
+            </button>
+          )}
+          {radioValue === ONE && (
+            <button
+              style={{ ...btnEdit, marginRight: "1rem" }}
+              onClick={() => editHandler(item.id)}
+            >
               {t("btn_edit")}
             </button>
           )}

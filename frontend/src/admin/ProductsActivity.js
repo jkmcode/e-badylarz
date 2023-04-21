@@ -335,14 +335,18 @@ function ProductsActivity() {
   }, []);
 
   //Loaders
-  if (loadingProductCat || loadingNewProduct || loadingUpdateProduct
-    || loadingSubCat || loadingInsertImage || loadingSingleInstance) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <DotsLoader />
-      </div>
-    )
-  }
+  // useEffect(() => {
+  //   if (loadingProductCat || loadingNewProduct || loadingUpdateProduct
+  //     || loadingSubCat || loadingInsertImage || loadingSingleInstance) {
+  //     return (
+  //       <div style={{ display: "flex", justifyContent: "center" }}>
+  //         <DotsLoader />
+  //       </div>
+  //     )
+  //   }
+
+  // }, [loadingProductCat, loadingNewProduct, loadingUpdateProduct,
+  //   loadingSubCat, loadingInsertImage, loadingSingleInstance])
 
   return (
     <div
