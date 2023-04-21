@@ -1200,7 +1200,7 @@ def add_single_instance(request):
 
     try:
         if data['typeActivity'] == 'PRODUCT':
-            sub_product = ProductSubTypes.objects.filter(id=data['subcategoryId'])
+            sub_product = ProductSubTypes.objects.get(id=data['subcategoryId'])
             product = Product.objects.create(
                 id_product_subtype=sub_product,
                 name=data['name'],
