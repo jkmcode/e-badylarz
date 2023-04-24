@@ -32,6 +32,8 @@ import {
   btnEdit,
   btnUnactive,
   btnActive,
+  btnInfo,
+  btnDescription
 } from "./AdminCSS";
 
 function Products() {
@@ -193,11 +195,18 @@ function Products() {
       styleHeader: productsStyleHeader,
     },
     {
+      key: "category",
+      label: t("Products_categorySubcategory"),
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: productsStyleHeader,
+    },
+    {
       key: "status",
       label: t("Products_status"),
       styleTableCell: tableCellNoBorderRight,
       styleHeader: productsStyleHeader,
     },
+
   ];
 
   const dataSubcategoryTable = currentProductList.map((item) => ({
@@ -219,6 +228,11 @@ function Products() {
         {item.name}
       </>
     ),
+    category: (
+      <>
+        {item.id_product_subtype.id_product_type.name} - {item.id_product_subtype.name}
+      </>
+    ),
     status: (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <>
@@ -234,7 +248,7 @@ function Products() {
         <div>
           {radioValue === ONE && (
             <button
-              style={{ ...btnEdit, marginRight: "1rem" }}
+              style={{ ...btnInfo, marginRight: "1rem" }}
               onClick={() => editHandler(item.id)}
             >
               {t("btn_info")}
@@ -242,7 +256,7 @@ function Products() {
           )}
           {radioValue === ONE && (
             <button
-              style={{ ...btnEdit, marginRight: "1rem" }}
+              style={{ ...btnDescription, marginRight: "1rem" }}
               onClick={() => editHandler(item.id)}
             >
               {t("btn_description")}

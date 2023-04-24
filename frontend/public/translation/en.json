@@ -435,6 +435,7 @@
   "Product_category_add_title": "Add Category",
   "Products_name": "name",
   "Products_status": "status",
+  "Products_categorySubcategory": "category-subcategory",
   "ProductsActivity_add_title": "Add product",
   "ProductsActivity_edit_title": "Edit product",
   "ProductsActivity_name_placeholder": "Enter the name of product ...",

@@ -78,6 +78,14 @@ export const btnEdit = {
   ...btnTable,
   color: "#dec314",
 };
+export const btnInfo = {
+  ...btnTable,
+  color: "blue",
+};
+export const btnDescription = {
+  ...btnTable,
+  color: "green",
+};
 
 export const btnActive = {
   ...btnTable,
