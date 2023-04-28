@@ -1,6 +1,7 @@
 export const DISCTRICT_DESCRIPTION = "DISTRICT";
 export const CITY_DESCRIPTION = "CITY";
 export const PRODUCT_TYPE_DESCRIPTION = "PROUCT_TYPE";
+export const PRODUCT_DESCRIPTION = "PROUCT";
 export const SHOP_DESCRIPTION = "SHOP";
 export const SPOT_DESCRIPTION = "SPOT";
 export const AREA_DESCRIPTION = "AREA";

@@ -11,6 +11,9 @@ import noImage from "../images/noImage.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import AddDescription from "./AddDescription";
+import InfoComponent from "../component/infoComponent";
+import Divider from "./Divider";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -23,6 +26,11 @@ import {
   PRODUCTS,
   GET_LIST_OF_DATA_DELETE,
   SET_FLAG_ADD_FALSE,
+  SET_FLAG_DESC_FALSE,
+  SET_FLAG_DESC_TRUE,
+  PRODUCT_DESCRIPTION,
+  SET_FLAG_INFO_FALSE,
+  SET_FLAG_INFO_TRUE
 } from "../constants/adminConstans";
 import {
   tableCellNoBorderRight,
@@ -52,6 +60,9 @@ function Products() {
   const [confirm, setConfirm] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
   const [switcher, setSwitcher] = useState(false);
+  const [selectedProductID, setSelectedProductID] = useState(0)
+  const [selectedProductInfo, setSelectedProductInfo] = useState(0)
+  const [selectedProductName, setSelectedProductName] = useState("")
   const [emptyValueError, setEmptyValueError] = useState(false);
 
   const radios = [
@@ -62,6 +73,9 @@ function Products() {
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const dflag = useSelector((state) => state.flag);
+  const { descFlag, infoFlag } = dflag;
 
   const productListRedux = useSelector((state) => state.getListOfData);
   const {
@@ -97,6 +111,19 @@ function Products() {
 
   const editHandler = (id) => {
     navigate(`${id}/edit`);
+  };
+  const descriptionHandler = (i) => {
+    setSelectedProductID(i.id)
+    setSelectedProductName(i.name)
+    dispatch({ type: SET_FLAG_DESC_TRUE });
+  }
+  const infoHandler = (i) => {
+    setSelectedProductInfo(i)
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+  }
+
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
   };
 
   const confirmYes = () => {
@@ -168,7 +195,14 @@ function Products() {
   // It unable to run UseEffect in ProductsActivity to navigate to this component.
   useEffect(() => {
     dispatch({ type: SET_FLAG_ADD_FALSE });
+    dispatch({ type: SET_FLAG_DESC_FALSE });
   }, []);
+
+  // useEffect(() => {
+  //   if (selectedProductID > 0) {
+  //     dispatch({ type: SET_FLAG_INFO_TRUE });
+  //   }
+  // }, [selectedProductID])
 
   const mainTableContainer = {
     overflowY: "auto",
@@ -249,7 +283,7 @@ function Products() {
           {radioValue === ONE && (
             <button
               style={{ ...btnInfo, marginRight: "1rem" }}
-              onClick={() => editHandler(item.id)}
+              onClick={() => infoHandler(item)}
             >
               {t("btn_info")}
             </button>
@@ -257,7 +291,7 @@ function Products() {
           {radioValue === ONE && (
             <button
               style={{ ...btnDescription, marginRight: "1rem" }}
-              onClick={() => editHandler(item.id)}
+              onClick={() => descriptionHandler(item)}
             >
               {t("btn_description")}
             </button>
@@ -327,6 +361,14 @@ function Products() {
           context={t("Confirmation_alert_active_product")}
         />
       )}
+      {infoFlag ? (
+        <InfoComponent
+          title={t("InfoComponent_title_product")}
+          obj={selectedProductInfo}
+          typeObj={PRODUCT_DESCRIPTION}
+          closeInfoHandler={closeInfoHandler}
+        />
+      ) : null}
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div
           style={{
@@ -380,12 +422,37 @@ function Products() {
             onChange={selectLngHandler}
           />
         </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: windowWidth > 430 ? "-1rem" : "1rem",
+          }}
+        >
+          <SelectOption
+            key={input.id}
+            label={input.label}
+            defaultValue={input.defaultValue}
+            optionsList={input.optionsList}
+            emptyValueError={emptyValueError}
+            disabled={input.disabled}
+            onChange={selectLngHandler}
+          />
+        </div>
       </div>
       <SearchFilter
         onChange={changeHandler}
         listOfData={result}
         radioValue={radioValue}
       />
+      {descFlag ? (
+        <>
+          <Divider backgroundColor="gray" />
+          {t("Product_description_title")}{selectedProductName}
+          <AddDescription objId={selectedProductID} descType={PRODUCT_DESCRIPTION} />
+          <Divider backgroundColor="gray" />
+        </>
+      ) : null}
       {loadingGetListOfData ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />

@@ -70,6 +70,11 @@ class ShopSpotDescSerializer(serializers.ModelSerializer):
         model = ShopsSpotDescriptions
         fields = ["description","language","id"]
 
+class ProductDescSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductDescriptions
+        fields = ["description","language","id"]
+
 class DistrictsDescSerializer(serializers.ModelSerializer):
     class Meta:
         model = Descriptions

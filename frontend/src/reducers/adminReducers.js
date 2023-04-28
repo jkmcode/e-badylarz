@@ -388,7 +388,7 @@ export const flagReducer = (state = {}, action) => {
     case SET_FLAG_INFO_TRUE:
       return { infoFlag: true, cityFlag: true };
     case SET_FLAG_DESC_FALSE:
-      return { descFlag: false };
+      return { descFlag: false, addFlag: false };
     case SET_FLAG_DESC_TRUE:
       return { descFlag: true };
     case SET_FLAG_ADD_DESC_FALSE:

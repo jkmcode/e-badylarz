@@ -895,6 +895,9 @@ def getFullDescriptionsDesc(request, Id, obj_type):
     elif obj_type=='SPOT':
         descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id)
         seriaziler = ShopSpotDescSerializer(descrition, many=True)
+    elif obj_type=='PROUCT':
+        descrition = ProductDescriptions.objects.filter(id_product = Id)
+        seriaziler = ProductDescSerializer(descrition, many=True)
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -964,6 +967,20 @@ def addDesc(request):
             descrip.date_of_change=datetime.now()
             descrip.modifier=data['id']
             descrip.save()
+    elif data['objType']== "PROUCT":
+        if data["addDesc"]:
+            product_obj= Product.objects.get(id=data['objId'])
+            desc = ProductDescriptions.objects.create(
+            description=data['desc'],
+            language=data['lng'],
+            id_product=product_obj,
+            creator=data['id'])
+        else:
+            descrip = ProductDescriptions.objects.get(id=data['descId'])
+            descrip.description=data['desc']
+            descrip.date_of_change=datetime.now()
+            descrip.modifier=data['id']
+            descrip.save()
     else:
         content = {"detail": "Changing the active flag - no object type"}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -993,6 +1010,10 @@ def getDiscrictDesc(request, Id, lng, obj_type):
     elif obj_type=='AREA':
         descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
         seriaziler = ShopSpotDescSerializer(descrition, many=True)
+        return Response(seriaziler.data)
+    elif obj_type=='PROUCT':
+        descrition = ProductDescriptions.objects.filter(id_product = Id, language=lng)
+        seriaziler = ProductDescSerializer(descrition, many=True)
         return Response(seriaziler.data)
     else:
         content = {"detail": "Changing the active flag - no object type"}
