@@ -437,6 +437,8 @@
   "Products_add_product_btn": "Dodaj Produkt",
   "Products_name": "nazwa",
   "Products_status": "status",
+  "Product_category_label": "Kategoria",
+  "Product_subcategory_label": "Podkategoria",
   "Products_categorySubcategory": "kategoria-podkategoria",
   "ProductsActivity_add_title": "Dodawanie produktu",
   "ProductsActivity_edit_title": "Edycja produktu",

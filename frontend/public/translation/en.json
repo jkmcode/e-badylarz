@@ -436,6 +436,8 @@
   "Product_category_add_title": "Add Category",
   "Products_name": "name",
   "Products_status": "status",
+  "Product_category_label": "Category",
+  "Product_subcategory_label": "Subcategory",
   "Product_description_title": "Description of product : ",
   "Products_categorySubcategory": "category-subcategory",
   "ProductsActivity_add_title": "Add product",

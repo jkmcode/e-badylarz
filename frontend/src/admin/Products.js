@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
 import Divider from "./Divider";
+import { getProductCat, getSubproductCat } from "../actions/productActions";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -32,6 +33,10 @@ import {
   SET_FLAG_INFO_FALSE,
   SET_FLAG_INFO_TRUE
 } from "../constants/adminConstans";
+import {
+  GET_PRODUCT_CAT_LIST_DELETE,
+  GET_PRODUCT_SUBCAT_LIST_DELETE
+} from "../constants/productConstans"
 import {
   tableCellNoBorderRight,
   productsStyleHeader,
@@ -58,11 +63,16 @@ function Products() {
   const [testArr, setTestArr] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [selectedLgn, setSelectedLng] = useState(0);
+  const [selectedLgn, setSelectedLng] = useState("0");
   const [switcher, setSwitcher] = useState(false);
   const [selectedProductID, setSelectedProductID] = useState(0)
   const [selectedProductInfo, setSelectedProductInfo] = useState(0)
   const [selectedProductName, setSelectedProductName] = useState("")
+  const [selectedProductCategory, setSelectedProductCategory] = useState(0)
+  const [selectedProductCategoryList, setSelectedProductCategoryList] = useState([])
+  const [selectedProductSubCategory, setSelectedProductSubCategory] = useState(0)
+  const [selectedProductSubCategoryList, setSelectedProductSubCategoryList] = useState([])
+  const [newProductList, setNewProductList] = useState([])
   const [emptyValueError, setEmptyValueError] = useState(false);
 
   const radios = [
@@ -76,6 +86,22 @@ function Products() {
 
   const dflag = useSelector((state) => state.flag);
   const { descFlag, infoFlag } = dflag;
+
+  const productCatListRedux = useSelector((state) => state.productCatList);
+  const {
+    loading: loadingProductCat,
+    productCatList,
+    error: errorproductCatList,
+    success: successproductCatList
+  } = productCatListRedux;
+
+  const subProductCatListRedux = useSelector((state) => state.subproductCatList);
+  const {
+    loading: subLoadingProductCat,
+    subproductCatList,
+    error: errorSubProductCatList,
+    success: successSubProductCatList
+  } = subProductCatListRedux;
 
   const productListRedux = useSelector((state) => state.getListOfData);
   const {
@@ -92,9 +118,18 @@ function Products() {
     error: errorUnOrActive,
   } = unOrActive;
 
-  //RadioButtons functions
+  //RadioButtons functions 
   const handleBtnValue = (e) => {
     setRadioValue(e.target.value);
+  };
+
+  const clearHandler = () => {
+    setSelectedLng("0")
+    setSelectedProductCategory(0)
+    setSelectedProductCategoryList([])
+    setSelectedProductSubCategory(0)
+    setSelectedProductSubCategoryList([])
+    setNewProductList(result)
   };
 
   const unActiveHandler = (id) => {
@@ -140,6 +175,28 @@ function Products() {
     setCurrentProductList(str);
   };
 
+  const selectLngHandler = (option) => {
+    setSwitcher(true);
+    setSelectedLng(option);
+    setSelectedProductCategory(0)
+    setSelectedProductSubCategoryList([])
+    setSelectedProductSubCategory(0)
+    setSelectedProductSubCategoryList([])
+    setEmptyValueError(false);
+  };
+
+  const selectCategoryHandler = (option) => {
+    setSwitcher(true);
+    setSelectedProductCategory(option);
+    setEmptyValueError(false);
+  };
+
+  const selectSubCategoryHandler = (option) => {
+    setSwitcher(true);
+    setSelectedProductSubCategory(option);
+    setEmptyValueError(false);
+  };
+
   //Comment
   // fetching list of product from DB
   useEffect(() => {
@@ -148,6 +205,7 @@ function Products() {
       dispatch(getListOfData(typeActivity));
     } else {
       setCurrentProductList(result);
+      setNewProductList(result)
     }
   }, [result.length]);
 
@@ -188,7 +246,28 @@ function Products() {
     if (successUnOrActive) {
       dispatch({ type: GET_LIST_OF_DATA_DELETE });
     }
-  }, [successUnOrActive]);
+  }, [dispatch, successUnOrActive]);
+
+  //Comment
+  // The dispatch function updates product
+  // gdy zostaną wybrane łacznie lib rozdzielnie język, kategoria i podkategoria
+  useEffect(() => {
+    if (selectedProductSubCategory > 0) {
+      setNewProductList(
+        result.filter((product) =>
+          Number(product.id_product_subtype.id)
+          === Number(selectedProductSubCategory)))
+    } else if (selectedProductCategory > 0) {
+      setNewProductList(
+        result.filter((product) =>
+          Number(product.id_product_subtype.id_product_type.id)
+          === Number(selectedProductCategory)))
+    } else if (selectedLgn !== "0") {
+      setNewProductList(
+        result.filter((product) =>
+          product.id_product_subtype.id_product_type.language === selectedLgn))
+    }
+  }, [selectedProductSubCategory, selectedProductCategory, selectedLgn]);
 
   //Comment
   // The dispatch function updates the state with the SET_FLAG_ADD_FALSE action type.
@@ -198,11 +277,38 @@ function Products() {
     dispatch({ type: SET_FLAG_DESC_FALSE });
   }, []);
 
-  // useEffect(() => {
-  //   if (selectedProductID > 0) {
-  //     dispatch({ type: SET_FLAG_INFO_TRUE });
-  //   }
-  // }, [selectedProductID])
+  useEffect(() => {
+    if (selectedLgn !== "0") {
+      dispatch(getProductCat());
+    }
+  }, [dispatch, selectedLgn]);
+
+  useEffect(() => {
+    if (successproductCatList) {
+      setSelectedProductCategoryList(
+        productCatList.filter((cat) => cat.language === selectedLgn)
+      );
+      dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE })
+    }
+  }, [dispatch, successproductCatList]);
+
+  useEffect(() => {
+    if (selectedLgn !== "0" && selectedProductCategory !== 0) {
+      dispatch(getSubproductCat(selectedProductCategory));
+    }
+  }, [dispatch, selectedLgn, selectedProductCategory]);
+
+  useEffect(() => {
+    if (successSubProductCatList) {
+      setSelectedProductSubCategoryList(subproductCatList)
+      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE })
+    }
+  }, [dispatch, successSubProductCatList]);
+
+  // console.log("1. Lista kategorii-->>", selectedProductCategoryList)
+  // console.log("2. Wybrana kategoria->", selectedProductCategory)
+  // console.log("3. Lista podkategorii---->", selectedProductSubCategoryList)
+  // console.log("4. Wybrana Podkategoria->", selectedProductSubCategory)
 
   const mainTableContainer = {
     overflowY: "auto",
@@ -330,12 +436,23 @@ function Products() {
     defaultValue: t("Select_opions"),
     disabled: false,
   };
-
-  const selectLngHandler = (option) => {
-    setSwitcher(true);
-    setSelectedLng(option);
-    setEmptyValueError(false);
+  const inputCategory = {
+    id: "1",
+    name: "Category",
+    label: t("Product_category_label"),
+    optionsList: selectedProductCategoryList,
+    defaultValue: t("Select_opions"),
+    disabled: false,
   };
+  const inputSubCategory = {
+    id: "1",
+    name: "subCategory",
+    label: t("Product_subcategory_label"),
+    optionsList: selectedProductSubCategoryList,
+    defaultValue: t("Select_opions"),
+    disabled: false,
+  };
+
 
   return (
     <div
@@ -430,19 +547,43 @@ function Products() {
           }}
         >
           <SelectOption
-            key={input.id}
-            label={input.label}
-            defaultValue={input.defaultValue}
-            optionsList={input.optionsList}
+            key={inputCategory.id}
+            label={inputCategory.label}
+            defaultValue={inputCategory.defaultValue}
+            optionsList={inputCategory.optionsList}
             emptyValueError={emptyValueError}
-            disabled={input.disabled}
-            onChange={selectLngHandler}
+            disabled={inputCategory.disabled}
+            onChange={selectCategoryHandler}
           />
         </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: windowWidth > 430 ? "-1rem" : "1rem",
+          }}
+        >
+          <SelectOption
+            key={inputSubCategory.id}
+            label={inputSubCategory.label}
+            defaultValue={inputSubCategory.defaultValue}
+            optionsList={inputSubCategory.optionsList}
+            emptyValueError={emptyValueError}
+            disabled={inputSubCategory.disabled}
+            onChange={selectSubCategoryHandler}
+          />
+        </div>
+        <button
+          style={{ ...btnInfo, marginRight: "1rem" }}
+          onClick={() => clearHandler()}
+        >
+          {t("btn_clear")}
+        </button>
       </div>
+
       <SearchFilter
         onChange={changeHandler}
-        listOfData={result}
+        listOfData={newProductList}
         radioValue={radioValue}
       />
       {descFlag ? (

@@ -127,42 +127,44 @@ export const getProductCat = () => async (dispatch, getState) => {
 };
 
 export const getSubproductCat =
-  ({ categoryId }) =>
-  async (dispatch, getState) => {
-    try {
-      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
+  (categoryId) =>
+    async (dispatch, getState) => {
+      try {
+        dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
 
-      const {
-        userLogin: { userInfo },
-      } = getState();
+        const {
+          userLogin: { userInfo },
+        } = getState();
 
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
+        console.log("Znacznik id --->>", categoryId);
 
-      const { data } = await axios.get(
-        `/api/${categoryId}/get-product-subcategories/`,
-        config
-      );
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
 
-      dispatch({
-        type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: GET_PRODUCT_SUBCAT_LIST_FAIL,
-        payload:
-          error.response && error.response.data.detail
-            ? error.response.data.detail
-            : error.message,
-      });
-      console.log(error);
-    }
-  };
+        const { data } = await axios.get(
+          `/api/${categoryId}/get-product-subcategories/`,
+          config
+        );
+
+        dispatch({
+          type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+          payload: data,
+        });
+      } catch (error) {
+        dispatch({
+          type: GET_PRODUCT_SUBCAT_LIST_FAIL,
+          payload:
+            error.response && error.response.data.detail
+              ? error.response.data.detail
+              : error.message,
+        });
+        console.log(error);
+      }
+    };
 
 export const addProductSubcat = (insertData) => async (dispatch, getState) => {
   try {

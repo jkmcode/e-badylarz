@@ -284,7 +284,7 @@ function ProductsActivity() {
   useEffect(() => {
     if (switcher && categoryId) {
       setSwitcher(false);
-      dispatch(getSubproductCat({ categoryId }));
+      dispatch(getSubproductCat(categoryId));
     }
   }, [dispatch, categoryId, switcher]);
 
