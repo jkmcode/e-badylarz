@@ -207,11 +207,11 @@ function ProductCategoriesActivity() {
     {
       id: "2",
       name: "language",
-      label: "language",
+      label: t("Product_lng_label"),
       optionsList: language,
       defaultValue:
         activity === ADD
-          ? "Select an option"
+          ? t("default_option_lng")
           : result && activity === EDIT
             ? result.language
             : "",

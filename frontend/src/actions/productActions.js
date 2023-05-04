@@ -136,8 +136,6 @@ export const getSubproductCat =
           userLogin: { userInfo },
         } = getState();
 
-        console.log("Znacznik id --->>", categoryId);
-
         const config = {
           headers: {
             "Content-type": "application/json",

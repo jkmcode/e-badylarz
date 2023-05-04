@@ -10,12 +10,19 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ONE, EMPTY_LIST, EMPTY } from "../constants/environmentConstans";
 import { getSubproductCat } from "../actions/productActions";
+import AddDescription from "./AddDescription";
+import InfoComponent from "../component/infoComponent";
+import Divider from "./Divider";
+import noImage from "../images/noImage.png";
 import { unOrActiveList } from "../actions/adminActions";
 import {
   UNACTIVE,
   ACTIVE,
   PRODUCT_SUBCAT_DESCRIPTION,
   SET_FLAG_ADD_FALSE,
+  SET_FLAG_DESC_TRUE,
+  SET_FLAG_INFO_FALSE,
+  SET_FLAG_INFO_TRUE
 } from "../constants/adminConstans";
 import { GET_PRODUCT_SUBCAT_LIST_DELETE } from "../constants/productConstans";
 import {
@@ -27,6 +34,8 @@ import {
   tableCellNoBorderRight,
   styleHeader,
   title,
+  btnInfo,
+  btnDescription
 } from "./AdminCSS";
 
 function ProductSubcategories() {
@@ -43,6 +52,9 @@ function ProductSubcategories() {
   const [updateStatus, setUpdateStatus] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [catObj, setCatObj] = useState({});
+  const [selectedSubCategoryID, setSelectedSubCategoryID] = useState(0)
+  const [selectedSubCategoryInfo, setSelectedSubCategoryInfo] = useState(0)
+  const [selectedSubCategoryName, setSelectedSubCategoryName] = useState("")
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -52,6 +64,9 @@ function ProductSubcategories() {
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const dflag = useSelector((state) => state.flag);
+  const { descFlag, infoFlag } = dflag;
 
   const catProduct = useSelector((state) => state.productCatList);
   const { productCatList } = catProduct;
@@ -111,6 +126,19 @@ function ProductSubcategories() {
     setShowAlert(true);
     setUpdateStatus(ACTIVE);
   };
+  const descriptionHandler = (i) => {
+    setSelectedSubCategoryID(i.id)
+    setSelectedSubCategoryName(i.name)
+    dispatch({ type: SET_FLAG_DESC_TRUE });
+  }
+  const infoHandler = (i) => {
+    setSelectedSubCategoryInfo(i)
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+  }
+
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+  };
 
   const editHandler = (id) => {
     navigate(`${id}/edit`);
@@ -143,7 +171,23 @@ function ProductSubcategories() {
 
   const dataSubcategoryTable = currentSubproductList.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: (
+      <>
+        {item.photo ? (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={item.photo}
+          />
+        ) : (
+          <img
+            style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+            src={noImage}
+          />
+        )}
+
+        {item.name}
+      </>
+    ),
     status: (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <>
@@ -157,6 +201,22 @@ function ProductSubcategories() {
         </>
 
         <div>
+          {radioValue === ONE && (
+            <button
+              style={{ ...btnInfo, marginRight: "1rem" }}
+              onClick={() => infoHandler(item)}
+            >
+              {t("btn_info")}
+            </button>
+          )}
+          {radioValue === ONE && (
+            <button
+              style={{ ...btnDescription, marginRight: "1rem" }}
+              onClick={() => descriptionHandler(item)}
+            >
+              {t("btn_description")}
+            </button>
+          )}
           {radioValue === ONE && (
             <button
               style={{ ...btnEdit, marginRight: "1rem" }}
@@ -189,7 +249,7 @@ function ProductSubcategories() {
   // The hook is triggered by changes to both the dispatch and subproductCatList.length state variables.
   useEffect(() => {
     if (subproductCatList.length === EMPTY_LIST) {
-      dispatch(getSubproductCat({ categoryId }));
+      dispatch(getSubproductCat(categoryId));
     }
   }, [dispatch, subproductCatList.length]);
 
@@ -323,6 +383,14 @@ function ProductSubcategories() {
           context={t("Confirmation_alert_active_product_subcategory")}
         />
       )}
+      {infoFlag ? (
+        <InfoComponent
+          title={t("InfoComponent_title_subcategory")}
+          obj={selectedSubCategoryInfo}
+          typeObj={PRODUCT_SUBCAT_DESCRIPTION}
+          closeInfoHandler={closeInfoHandler}
+        />
+      ) : null}
       <BackButton />
       <div
         style={{
@@ -351,6 +419,14 @@ function ProductSubcategories() {
       <div style={title}>
         {t("ProductSubcategories_title")} : {currentCat}
       </div>
+      {descFlag ? (
+        <>
+          <Divider backgroundColor="gray" />
+          {t("Product_description_title")}{selectedSubCategoryName}
+          <AddDescription objId={selectedSubCategoryID} descType={PRODUCT_SUBCAT_DESCRIPTION} />
+          <Divider backgroundColor="gray" />
+        </>
+      ) : null}
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />

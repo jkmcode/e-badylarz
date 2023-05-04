@@ -198,6 +198,8 @@
   "InfoComponent_title_shop": "Description of Shop:",
   "InfoComponent_title_spot": "Description of Spot:",
   "InfoComponent_title_product": "Description of product:",
+  "InfoComponent_title_category": "Description of product category:",
+  "InfoComponent_title_subcategory": "Description of product subcategory:",
   "CityDistrict_title_1": "Description city :",
   "CityDistrict_title_2": ", district",
   "AdminAddProducts_title": "Add product",

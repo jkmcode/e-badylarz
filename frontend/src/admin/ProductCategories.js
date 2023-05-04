@@ -11,6 +11,9 @@ import { title, addProdCatBtn } from "./AdminCSS";
 import { unOrActiveList } from "../actions/adminActions";
 import { Link, useNavigate } from "react-router-dom";
 import { getProductCat, sortByLng } from "../actions/productActions";
+import AddDescription from "./AddDescription";
+import InfoComponent from "../component/infoComponent";
+import Divider from "./Divider";
 import { ONE, ZERO, EMPTY, EMPTY_LIST } from "../constants/environmentConstans";
 import {
   SET_FLAG_ADD_FALSE,
@@ -18,6 +21,11 @@ import {
   UNACTIVE,
   ACTIVE,
   ACTIVE_DESCRIPTION_DELETE,
+  SET_FLAG_INFO_FALSE,
+  PRODUCT_TYPE_DESCRIPTION,
+  SET_FLAG_INFO_TRUE,
+  SET_FLAG_DESC_FALSE,
+  SET_FLAG_DESC_TRUE,
 } from "../constants/adminConstans";
 import {
   ADD_PRODUCT_CAT_DELETE,
@@ -32,6 +40,7 @@ import {
   activeBtn,
   subcategoryBtn,
   editBtn,
+  btnDescription2
 } from "./AdminCSS";
 
 function ProductCategories() {
@@ -53,6 +62,9 @@ function ProductCategories() {
   const [selectedLgn, setSelectedLng] = useState(0);
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [switcher, setSwitcher] = useState(false);
+  const [selectedProductCategoryInfo, setSelectedProductCategoryInfo] = useState(0)
+  const [selectedCategoryID, setSelectedCategoryID] = useState("");
+  const [selectedCategoryName, setSelectedCategoryName] = useState(0);
 
   //RadioButtons functions
   const handleBtnValue = (e) => {
@@ -78,7 +90,7 @@ function ProductCategories() {
   const { sortedProductCatList } = sortetProductCatListRedux;
 
   const dflag = useSelector((state) => state.flag);
-  const { addFlag } = dflag;
+  const { addFlag, descFlag, infoFlag } = dflag;
 
   const newProductCat = useSelector((state) => state.addProduct);
   const { loading, error, success, result } = newProductCat;
@@ -176,11 +188,26 @@ function ProductCategories() {
     setConfirm(false);
   };
 
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+  };
+
+  const infoHandler = (i) => {
+    setSelectedProductCategoryInfo(i)
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+  }
+
+  const descriptionHandler = (i) => {
+    setSelectedCategoryID(i.id)
+    setSelectedCategoryName(i.name)
+    dispatch({ type: SET_FLAG_DESC_TRUE });
+  }
+
   // input
   const input = {
     id: "1",
     name: "language",
-    label: "language",
+    label: t("Product_lng_label"),
     optionsList: language,
     defaultValue: t("default_option_lng"),
   };
@@ -261,6 +288,24 @@ function ProductCategories() {
         ),
         btnActive: false,
       },
+      {
+        id: 5,
+        btn: (
+          <button onClick={() => infoHandler(cat)} style={subcategoryBtn}>
+            {t("btn_info")}
+          </button>
+        ),
+        btnActive: false,
+      },
+      {
+        id: 6,
+        btn: (
+          <button onClick={() => descriptionHandler(cat)} style={btnDescription2}>
+            {t("btn_description")}
+          </button>
+        ),
+        btnActive: false,
+      },
     ],
   }));
 
@@ -312,65 +357,80 @@ function ProductCategories() {
           border: "3px solid rgb(66, 66, 74)",
         }}
       >
+        {infoFlag ? (
+          <InfoComponent
+            title={t("InfoComponent_title_category")}
+            obj={selectedProductCategoryInfo}
+            typeObj={PRODUCT_TYPE_DESCRIPTION}
+            closeInfoHandler={closeInfoHandler}
+          />
+        ) : null}
+        {descFlag ? (
+          <>
+            {t("Product_description_title")}{selectedCategoryName}
+            <AddDescription objId={selectedCategoryID} descType={PRODUCT_TYPE_DESCRIPTION} />
+            <Divider backgroundColor="gray" />
+          </>
+        ) : null}
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {sortedProductCatList.length === 0
             ? productCatList.map((category) => {
-                if (category.is_active && radioValue === ONE) {
-                  return (
-                    <RotateCard
-                      key={category.id}
-                      name={category.name}
-                      photo={category.photo}
-                      id={category.id}
-                      objects={objects}
-                      isActive={true}
-                    />
-                  );
-                }
-              })
+              if (category.is_active && radioValue === ONE) {
+                return (
+                  <RotateCard
+                    key={category.id}
+                    name={category.name}
+                    photo={category.photo}
+                    id={category.id}
+                    objects={objects}
+                    isActive={true}
+                  />
+                );
+              }
+            })
             : sortedProductCatList.map((category) => {
-                if (category.is_active && radioValue === ONE) {
-                  return (
-                    <RotateCard
-                      key={category.id}
-                      name={category.name}
-                      photo={category.photo}
-                      id={category.id}
-                      objects={objects}
-                      isActive={true}
-                    />
-                  );
-                }
-              })}
+              if (category.is_active && radioValue === ONE) {
+                return (
+                  <RotateCard
+                    key={category.id}
+                    name={category.name}
+                    photo={category.photo}
+                    id={category.id}
+                    objects={objects}
+                    isActive={true}
+                  />
+                );
+              }
+            })}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {sortedProductCatList.length === 0
             ? productCatList.map((category) => {
-                if (!category.is_active && radioValue === ZERO) {
-                  return (
-                    <RotateCard
-                      key={category.id}
-                      name={category.name}
-                      id={category.id}
-                      objects={objects}
-                      isActive={false}
-                    />
-                  );
-                }
-              })
+              if (!category.is_active && radioValue === ZERO) {
+                return (
+                  <RotateCard
+                    key={category.id}
+                    name={category.name}
+                    id={category.id}
+                    objects={objects}
+                    isActive={false}
+                  />
+                );
+              }
+            })
             : sortedProductCatList.map((category) => {
-                if (!category.is_active && radioValue === ZERO) {
-                  return (
-                    <RotateCard
-                      key={category.id}
-                      name={category.name}
-                      id={category.id}
-                      objects={objects}
-                      isActive={false}
-                    />
-                  );
-                }
-              })}
+              if (!category.is_active && radioValue === ZERO) {
+                return (
+                  <RotateCard
+                    key={category.id}
+                    name={category.name}
+                    id={category.id}
+                    objects={objects}
+                    isActive={false}
+                  />
+                );
+              }
+            })}
         </div>
         {/* {active === true && (
           <div

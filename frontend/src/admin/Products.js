@@ -305,11 +305,6 @@ function Products() {
     }
   }, [dispatch, successSubProductCatList]);
 
-  // console.log("1. Lista kategorii-->>", selectedProductCategoryList)
-  // console.log("2. Wybrana kategoria->", selectedProductCategory)
-  // console.log("3. Lista podkategorii---->", selectedProductSubCategoryList)
-  // console.log("4. Wybrana Podkategoria->", selectedProductSubCategory)
-
   const mainTableContainer = {
     overflowY: "auto",
     maxHeight: "50vh",

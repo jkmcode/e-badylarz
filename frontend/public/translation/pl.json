@@ -196,6 +196,8 @@
   "InfoComponent_title_shop": "Opis dla sklepu:",
   "InfoComponent_title_spot": "Opis dla punktu sprzedaży:",
   "InfoComponent_title_product": "Opis dla produktu:",
+  "InfoComponent_title_category": "Opis dla kategorii produktów:",
+  "InfoComponent_title_subcategory": "Opis dla podkategorii produktów:",
   "CityDistrict_title_1": "Opis miejscowości :",
   "CityDistrict_title_2": ", powiat",
   "AdminAddProducts_title": "Dodaj produkt",

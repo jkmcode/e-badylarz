@@ -87,6 +87,11 @@ export const btnDescription = {
   color: "green",
 };
 
+export const btnDescription2 = {
+  ...btn,
+  backgroundImage: `linear-gradient(173deg, rgba(56, 168, 48, 1) 0%, rgba(69, 141, 43, 1))`,
+};
+
 export const btnActive = {
   ...btnTable,
   color: "green",

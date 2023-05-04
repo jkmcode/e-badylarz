@@ -96,9 +96,6 @@ function LocationFormScreen() {
     }
   }, [success]);
 
-  console.log("cityFlag", cityFlag);
-  console.log("citiesList", citiesList);
-
   const infoMsg = {
     backgroundColor: "#EAFEE1",
     marginTop: "0.5rem",
@@ -193,10 +190,10 @@ function LocationFormScreen() {
                     </option>
                     {cityFlag
                       ? citiesList.map((city) => (
-                          <option key={city.id} value={city.id}>
-                            {city.name}
-                          </option>
-                        ))
+                        <option key={city.id} value={city.id}>
+                          {city.name}
+                        </option>
+                      ))
                       : null}
                   </Form.Select>
                   <div className="invalid-feedback fst-italic">
