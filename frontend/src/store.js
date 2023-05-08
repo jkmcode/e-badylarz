@@ -13,6 +13,7 @@ import {
   addSubproductCatListReducer,
   getSubproductCatReducer,
   editSubproductCatReducer,
+  searchProductReducer,
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -90,7 +91,8 @@ const reducer = combineReducers({
   getSingleInstance: getSingleInstanceReducer,
   getListOfData: getListOfDataReducer,
   addSingleInstance: addSingleInstanceReducer,
-  updateSingleInstance: updateSingleInstanceReducer
+  updateSingleInstance: updateSingleInstanceReducer,
+  searchProduct: searchProductReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

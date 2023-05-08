@@ -236,6 +236,8 @@ function ProductsActivity() {
   //navigate to main dashboard
   useEffect(() => {
     if (addFlag) {
+      dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
+      dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
       navigate(`/dashboard/products`);
     }
   }, [addFlag]);
@@ -441,10 +443,6 @@ function ProductsActivity() {
             }
           })}
         </FormLayout>
-        <UploadImage />
-        {imageRender && activity === EDIT && resultSingleInstance.photo && (
-          <ImageDisplayer imageSrc={resultSingleInstance.photo} />
-        )}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           {successUpdateProduct || successNewProduct ? null :
             activity === EDIT ? (
@@ -455,6 +453,10 @@ function ProductsActivity() {
               <button style={addBtn}>{t("btn-add")}</button>
             )}
         </div>
+        {imageRender && activity === EDIT && resultSingleInstance.photo && (
+          <ImageDisplayer imageSrc={resultSingleInstance.photo} />
+        )}
+        <UploadImage />
       </form>
     </div>
   );

@@ -24,6 +24,9 @@ import {
   GET_PRODUCT_LIST_REQUEST,
   GET_PRODUCT_LIST_SUCCESS,
   GET_PRODUCT_LIST_FAIL,
+  SEARCH_SELECTED_LNG,
+  SEARCH_SELECTED_CATEGORY,
+  SEARCH_SELECTED_SUBCATEGORY,
 } from "../constants/productConstans";
 
 export const addProductCat = (insertData) => async (dispatch, getState) => {
@@ -301,4 +304,28 @@ export const getProductList = () => async (dispatch, getState) => {
     });
     console.log(error);
   }
+};
+
+export const selectedCat = (item) => async (dispatch) => {
+  try {
+    if (item.kind === "lang") {
+      dispatch({
+        type: SEARCH_SELECTED_LNG,
+        payload: item,
+      });
+    }
+    if (item.kind === "Category") {
+      dispatch({
+        type: SEARCH_SELECTED_CATEGORY,
+        payload: item,
+      });
+    }
+    if (item.kind === "Subcategory") {
+      dispatch({
+        type: SEARCH_SELECTED_SUBCATEGORY,
+        payload: item,
+      });
+    }
+
+  } catch (error) { console.log(error) }
 };

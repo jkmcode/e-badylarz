@@ -28,6 +28,10 @@ import {
   EDIT_PRODUCT_SUBCAT_SUCCESS,
   EDIT_PRODUCT_SUBCAT_FAIL,
   EDIT_PRODUCT_SUBCAT_DELETE,
+  SEARCH_SELECTED_LNG,
+  SEARCH_SELECTED_DELETE,
+  SEARCH_SELECTED_CATEGORY,
+  SEARCH_SELECTED_SUBCATEGORY,
 } from "../constants/productConstans";
 
 export const addProductReducer = (state = {}, action) => {
@@ -216,6 +220,36 @@ export const editSubproductCatReducer = (state = {}, action) => {
     case EDIT_PRODUCT_SUBCAT_FAIL:
       return { loading: false, error: action.payload, success: false };
     case EDIT_PRODUCT_SUBCAT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const searchProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SEARCH_SELECTED_LNG:
+      return {
+        flagLng: true,
+        flagCategory: false,
+        flagSubcategory: false,
+        selected2: action.payload
+      };
+    case SEARCH_SELECTED_CATEGORY:
+      return {
+        flagLng: true,
+        flagCategory: true,
+        flagSubcategory: false,
+        selected2: action.payload
+      };
+    case SEARCH_SELECTED_SUBCATEGORY:
+      return {
+        flagLng: true,
+        flagCategory: true,
+        flagSubcategory: true,
+        selected2: action.payload
+      };
+    case SEARCH_SELECTED_DELETE:
       return {};
     default:
       return state;

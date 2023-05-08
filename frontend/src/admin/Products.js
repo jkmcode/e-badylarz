@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
 import Divider from "./Divider";
-import { getProductCat, getSubproductCat } from "../actions/productActions";
+import { getProductCat, getSubproductCat, selectedCat } from "../actions/productActions";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -35,7 +35,8 @@ import {
 } from "../constants/adminConstans";
 import {
   GET_PRODUCT_CAT_LIST_DELETE,
-  GET_PRODUCT_SUBCAT_LIST_DELETE
+  GET_PRODUCT_SUBCAT_LIST_DELETE,
+  SEARCH_SELECTED_DELETE
 } from "../constants/productConstans"
 import {
   tableCellNoBorderRight,
@@ -87,6 +88,11 @@ function Products() {
   const dflag = useSelector((state) => state.flag);
   const { descFlag, infoFlag } = dflag;
 
+  const searchFlag = useSelector((state) => state.searchProduct);
+  const { flagLng, flagCategory, flagSubcategory, selected2 } = searchFlag;
+
+  // console.log("Wybory--->>", selected2)
+
   const productCatListRedux = useSelector((state) => state.productCatList);
   const {
     loading: loadingProductCat,
@@ -124,10 +130,9 @@ function Products() {
   };
 
   const clearHandler = () => {
-    setSelectedLng("0")
+    dispatch({ type: SEARCH_SELECTED_DELETE });
     setSelectedProductCategory(0)
     setSelectedProductCategoryList([])
-    setSelectedProductSubCategory(0)
     setSelectedProductSubCategoryList([])
     setNewProductList(result)
   };
@@ -176,26 +181,56 @@ function Products() {
   };
 
   const selectLngHandler = (option) => {
-    setSwitcher(true);
-    setSelectedLng(option);
-    setSelectedProductCategory(0)
-    setSelectedProductSubCategoryList([])
-    setSelectedProductSubCategory(0)
+
+    dispatch(selectedCat({
+      kind: "lang",
+      lng: option,
+      lng_name: language.filter((item) =>
+        item.code === option)[0].name,
+      category: 0,
+      subcategory: 0
+    }));
+    setSelectedProductCategoryList([])
     setSelectedProductSubCategoryList([])
     setEmptyValueError(false);
   };
 
   const selectCategoryHandler = (option) => {
-    setSwitcher(true);
-    setSelectedProductCategory(option);
+
+    dispatch(selectedCat({
+      kind: "Category",
+      lng: selected2.lng,
+      lng_name: selected2.lng_name,
+      category: option,
+      category_name: selectedProductCategoryList.filter((item) =>
+        Number(item.id) === Number(option))[0].name,
+      subcategory: 0,
+      category_list: selectedProductCategoryList,
+    }));
+    setSelectedProductSubCategoryList([])
     setEmptyValueError(false);
   };
 
   const selectSubCategoryHandler = (option) => {
-    setSwitcher(true);
-    setSelectedProductSubCategory(option);
+    dispatch(selectedCat({
+      kind: "Subcategory",
+      lng: selected2.lng,
+      lng_name: selected2.lng_name,
+      category: selected2.category,
+      category_name: selected2.category_name,
+      subcategory: option,
+      subcategory_name: flagSubcategory ? selected2.subcategory_list.filter((item) =>
+        Number(item.id === Number(option)))[0].name
+        : selectedProductSubCategoryList.filter((item) =>
+          Number(item.id) === Number(option))[0].name,
+      subcategory_list: selectedProductSubCategoryList,
+    }));
+    if (flagSubcategory) {
+      setSelectedProductSubCategoryList(selected2.subcategory_list)
+    }
     setEmptyValueError(false);
   };
+
 
   //Comment
   // fetching list of product from DB
@@ -249,25 +284,47 @@ function Products() {
   }, [dispatch, successUnOrActive]);
 
   //Comment
-  // The dispatch function updates product
+  // The dispatch function updates product list
   // gdy zostaną wybrane łacznie lib rozdzielnie język, kategoria i podkategoria
   useEffect(() => {
-    if (selectedProductSubCategory > 0) {
+    if (flagSubcategory) {
       setNewProductList(
         result.filter((product) =>
           Number(product.id_product_subtype.id)
-          === Number(selectedProductSubCategory)))
-    } else if (selectedProductCategory > 0) {
+          === Number(selected2.subcategory)))
+    } else if (flagCategory) {
       setNewProductList(
         result.filter((product) =>
           Number(product.id_product_subtype.id_product_type.id)
-          === Number(selectedProductCategory)))
-    } else if (selectedLgn !== "0") {
+          === Number(selected2.category)))
+    } else if (flagLng) {
       setNewProductList(
         result.filter((product) =>
-          product.id_product_subtype.id_product_type.language === selectedLgn))
+          product.id_product_subtype.id_product_type.language === selected2.lng))
     }
-  }, [selectedProductSubCategory, selectedProductCategory, selectedLgn]);
+  }, [selected2, flagLng, flagCategory, flagSubcategory]);
+
+
+  useEffect(() => {
+    if (success) {
+      // console.log("GFajnie ->", result.filter((product) => product.is_active === true))
+      if (flagSubcategory) {
+        setNewProductList(
+          result.filter((product) =>
+            Number(product.id_product_subtype.id)
+            === Number(selected2.subcategory)))
+      } else if (flagCategory) {
+        setNewProductList(
+          result.filter((product) =>
+            Number(product.id_product_subtype.id_product_type.id)
+            === Number(selected2.category)))
+      } else if (flagLng) {
+        setNewProductList(
+          result.filter((product) =>
+            product.id_product_subtype.id_product_type.language === selected2.lng))
+      }
+    } else { setNewProductList(result) }
+  }, [success]);
 
   //Comment
   // The dispatch function updates the state with the SET_FLAG_ADD_FALSE action type.
@@ -278,29 +335,35 @@ function Products() {
   }, []);
 
   useEffect(() => {
-    if (selectedLgn !== "0") {
+    // if (selectedLgn !== "0") {
+    if (flagLng & !flagCategory & !flagSubcategory) {
       dispatch(getProductCat());
     }
-  }, [dispatch, selectedLgn]);
+  }, [dispatch, selected2]);
+
+  // console.log("??????--->>>", selectedProductCategoryList)
+  // console.log("selectedProductSubCategoryList ---->", selectedProductSubCategoryList)
 
   useEffect(() => {
     if (successproductCatList) {
       setSelectedProductCategoryList(
-        productCatList.filter((cat) => cat.language === selectedLgn)
+        productCatList.filter((cat) => cat.language === selected2.lng
+          & cat.is_active === true)
       );
       dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE })
     }
   }, [dispatch, successproductCatList]);
 
   useEffect(() => {
-    if (selectedLgn !== "0" && selectedProductCategory !== 0) {
-      dispatch(getSubproductCat(selectedProductCategory));
+    if (flagLng & flagCategory & !flagSubcategory) {
+      dispatch(getSubproductCat(selected2.category));
     }
-  }, [dispatch, selectedLgn, selectedProductCategory]);
+  }, [dispatch, selectedLgn, selected2]);
 
   useEffect(() => {
     if (successSubProductCatList) {
-      setSelectedProductSubCategoryList(subproductCatList)
+      setSelectedProductSubCategoryList(subproductCatList.filter((subCat) =>
+        subCat.is_active === true))
       dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE })
     }
   }, [dispatch, successSubProductCatList]);
@@ -428,7 +491,10 @@ function Products() {
     name: "language",
     label: t("Product_lng_label"),
     optionsList: language,
-    defaultValue: t("Select_opions"),
+    defaultValue: flagLng ?
+      selected2.lng_name
+      // language.filter((item) => item.code === selected2.lng).name
+      : t("Select_opions"),
     disabled: false,
   };
   const inputCategory = {
@@ -436,15 +502,18 @@ function Products() {
     name: "Category",
     label: t("Product_category_label"),
     optionsList: selectedProductCategoryList,
-    defaultValue: t("Select_opions"),
+    defaultValue: flagCategory ? selected2.category_name
+      : t("Select_opions"),
     disabled: false,
   };
   const inputSubCategory = {
     id: "1",
     name: "subCategory",
     label: t("Product_subcategory_label"),
-    optionsList: selectedProductSubCategoryList,
-    defaultValue: t("Select_opions"),
+    optionsList: flagSubcategory ? selected2.subcategory_list
+      : selectedProductSubCategoryList,
+    defaultValue: flagSubcategory ? selected2.subcategory_name
+      : t("Select_opions"),
     disabled: false,
   };
 
