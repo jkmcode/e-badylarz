@@ -332,6 +332,8 @@ function Products() {
   useEffect(() => {
     dispatch({ type: SET_FLAG_ADD_FALSE });
     dispatch({ type: SET_FLAG_DESC_FALSE });
+    dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE });
+    console.log("Jestem")
   }, []);
 
   useEffect(() => {
@@ -346,10 +348,17 @@ function Products() {
 
   useEffect(() => {
     if (successproductCatList) {
-      setSelectedProductCategoryList(
-        productCatList.filter((cat) => cat.language === selected2.lng
-          & cat.is_active === true)
-      );
+      if (flagLng) {
+        setSelectedProductCategoryList(
+          productCatList.filter((cat) => cat.language === selected2.lng
+            & cat.is_active === true)
+        );
+      } else {
+        setSelectedProductCategoryList(
+          productCatList.filter((cat) => cat.is_active === true)
+        );
+      }
+
       dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE })
     }
   }, [dispatch, successproductCatList]);
