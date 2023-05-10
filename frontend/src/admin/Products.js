@@ -560,20 +560,22 @@ function Products() {
         >
           {t("Products_title")}
         </div>
-        <Link
-          to="add"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            border: "none",
-            borderRadius: "0.2rem",
-            backgroundColor: "#26A65B",
-            padding: "0.5rem 1.5rem",
-            color: "white",
-          }}
-        >
-          {t("Products_add_product_btn")}
-        </Link>
+        {radioValue === ONE ?
+          <Link
+            to="add"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "none",
+              borderRadius: "0.2rem",
+              backgroundColor: "#26A65B",
+              padding: "0.5rem 1.5rem",
+              color: "white",
+            }}
+          >
+            {t("Products_add_product_btn")}
+          </Link>
+          : null}
       </div>
       <div
         style={{
