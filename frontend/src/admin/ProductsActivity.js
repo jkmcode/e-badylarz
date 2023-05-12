@@ -233,6 +233,26 @@ function ProductsActivity() {
   }, [successInsertImage, successNewProduct, successUpdateProduct]);
 
   //Comment
+  // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
+  // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
+  // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
+  useEffect(() => {
+    if (successNewProduct || successSingleInstance) {
+      if (isImage) {
+        dispatch(
+          InsertImage2({
+            imageUpload: imageUpload,
+            uniqueId: successNewProduct
+              ? newProductResult.id
+              : resultSingleInstance.id,
+            type: PRODUCT,
+          })
+        );
+      }
+    }
+  }, [successNewProduct, successSingleInstance, editSwitcher]);
+
+  //Comment
   //navigate to main dashboard
   useEffect(() => {
     if (addFlag) {
@@ -298,26 +318,6 @@ function ProductsActivity() {
       );
     }
   }, [dispatch, switcher]);
-
-  //Comment
-  // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
-  // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
-  // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
-  useEffect(() => {
-    if (successNewProduct || successSingleInstance) {
-      if (isImage) {
-        dispatch(
-          InsertImage2({
-            imageUpload: imageUpload,
-            uniqueId: successNewProduct
-              ? newProductResult.id
-              : resultSingleInstance.id,
-            type: PRODUCT,
-          })
-        );
-      }
-    }
-  }, [successNewProduct, successSingleInstance, editSwitcher]);
 
   // Comment
   // Use effect to fetch subcategory data from the database when editing,

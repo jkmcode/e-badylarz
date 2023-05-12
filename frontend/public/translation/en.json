@@ -179,7 +179,7 @@
   "DistrictAddDescription_selected_lng": "You have chosen a language",
   "DistrictAddDescription_success": "Description correctly changed",
   "DistrictAddDescription_error_message_requred": "Required field",
-  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 510",
+  "DistrictAddDescription_error_message_too_long": "The text is too long. The maximum number of characters is 1000",
   "DistrictAddDescription_option_placeholder": "Select an option",
   "AddCiti_title": "Add city for districts : ",
   "AddCiti_label_name": "City name",

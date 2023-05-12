@@ -333,7 +333,6 @@ function Products() {
     dispatch({ type: SET_FLAG_ADD_FALSE });
     dispatch({ type: SET_FLAG_DESC_FALSE });
     dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE });
-    console.log("Jestem")
   }, []);
 
   useEffect(() => {

@@ -30,7 +30,7 @@ function Description(props) {
 
     if (value.length === 0) {
       setErrorMessage(t("DistrictAddDescription_error_message_requred"));
-    } else if (value.length > 510) {
+    } else if (value.length > 1010) {
       setErrorMessage(t("DistrictAddDescription_error_message_too_long"));
     } else {
       dispatch({ type: DISTRICT_ADD_DESC_DELETE });
