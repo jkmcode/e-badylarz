@@ -4,10 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Divider from "../admin/Divider";
 import ErrorMessage from "../component/ErrorMessage";
 
+import { Icon } from "@iconify/react";
+
 import { getFullDescriptions } from "../actions/adminActions";
 
 import { GET_FULL_DESCRIPTION_DELETE } from "../constants/adminConstans";
 import { TIME_AUT_ERROR } from "../constants/environmentConstans";
+
+import { btnEdit, } from "../admin/AdminCSS";
 
 function InfoComponent(props) {
   const { t } = useTranslation();
@@ -19,7 +23,13 @@ function InfoComponent(props) {
 
   const [isDescription, setIsDescription] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [selectedDescID, setSelectedDescID] = useState(0);
 
+  const descriptionHandler = (i) => {
+    if (selectedDescID > 0) {
+      setSelectedDescID(0)
+    } else { setSelectedDescID(i.id) }
+  }
   useEffect(() => {
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
     dispatch(
@@ -47,7 +57,7 @@ function InfoComponent(props) {
     backgroundColor: "whitesmoke",
     width: "80%",
     maxWidth: "600px",
-    height: "60vh",
+    height: "70vh",
   };
 
   const modalOverlay = {
@@ -75,13 +85,24 @@ function InfoComponent(props) {
     fontSize: "1.5rem",
     fontWeight: "500",
     textAlign: "center",
-    marginTop: "1rem",
+    marginTop: "0.5rem",
   };
+
+  const titleLanguage = {
+    color: "black",
+    fontSize: "1rem",
+    fontWeight: "400",
+    textAlign: "left",
+    margin: "0rem",
+    marginLeft: "1rem",
+    marginTop: "0rem",
+  }
 
   const body = {
     textAlign: "left",
-    marginLeft: "3rem",
-    marginRight: "3rem",
+    fontSize: "0.8rem",
+    marginLeft: "1rem",
+    marginRight: "1rem",
     fontWeight: "400",
   };
 
@@ -92,9 +113,9 @@ function InfoComponent(props) {
     transform: `translatex(-50%)`,
     backgroundImage: `linear-gradient(171deg, rgba(234, 17, 59, 1) 45%, rgba(202, 71, 130, 1) 89%)`,
     border: "none",
-    padding: "0.7rem",
-    minWidth: "250px",
-    borderRadius: "1rem",
+    padding: "0.5rem",
+    minWidth: "150px",
+    borderRadius: "0.5rem",
     color: "white",
     textTransform: "uppercase",
     fontWeight: "500",
@@ -116,9 +137,46 @@ function InfoComponent(props) {
               {success ? (
                 isDescription ? (
                   desc.map((i) => (
-                    <p style={body} key={i.id}>
-                      {i.description}
-                    </p>
+                    <>
+
+                      {selectedDescID == i.id ?
+                        <>
+                          <p>
+                            <button
+                              style={{ ...btnEdit, color: "red", }}
+                              onClick={() => descriptionHandler(i)}
+                            >
+                              <Icon
+                                icon="ic:outline-keyboard-arrow-up"
+                                width="24"
+                                height="24"
+                              />
+                              {i.language}
+                            </button>
+
+                          </p>
+
+                          <p style={body} key={i.id}>
+                            {i.description}
+                          </p>
+                        </>
+                        : <p>
+                          <button
+                            style={{ ...btnEdit, color: "red", }}
+                            onClick={() => descriptionHandler(i)}
+                          >
+                            <Icon
+                              icon="ic:baseline-keyboard-arrow-down"
+                              width="24"
+                              height="24"
+                            />
+                            {i.language}
+                          </button>
+                        </p>
+                      }
+
+                    </>
+
                   ))
                 ) : (
                   <p style={body}>{t("No_data")}</p>
