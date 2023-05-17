@@ -6,7 +6,6 @@ import SelectOption from "./SelectOption";
 import ImageDisplayer from "./ImageDisplayer";
 import ErrorMessage from "../component/ErrorMessage";
 import language from "../language";
-import DotsLoader from "../component/DotsLoader";
 import { getProductCat, getSubproductCat } from "../actions/productActions";
 import {
   addSingleInstance,
@@ -17,13 +16,10 @@ import {
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import {
   DELETE_IMAGE_REDUX,
-  SET_FLAG_ADD_TRUE,
-  SET_FLAG_ADD_FALSE,
   ADD_IMAGE_RESET,
   GET_LIST_OF_DATA_DELETE,
   ADD_SINGLE_INSTANCE_DELETE,
   UPDATE_SINGLE_INSTANCE_DELETE,
-  GET_SINGLE_INSTANCE_CAT_DELETE
 } from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -217,7 +213,6 @@ function ProductsActivity() {
     if (successInsertImage) {
       setTimeout(() => {
         dispatch({ type: DELETE_IMAGE_REDUX });
-        dispatch({ type: SET_FLAG_ADD_TRUE });
         dispatch({ type: ADD_IMAGE_RESET });
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
         navigate(`/dashboard/products`);
@@ -231,8 +226,6 @@ function ProductsActivity() {
         if (!isImage) {
           navigate(`/dashboard/products`);
         }
-        // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
-        // navigate(`/dashboard/products`);
       }, TIME_SET_TIMEOUT)
     }
     if (successUpdateProduct) {
@@ -240,43 +233,21 @@ function ProductsActivity() {
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
         dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
         dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
-        // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
         if (!isImage) {
           navigate(`/dashboard/products`);
         }
-        //
       }, TIME_SET_TIMEOUT)
     }
   }, [successInsertImage, successNewProduct, successUpdateProduct]);
 
-  //Comment - 2 useEffect's
+  //Comment 
   // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
   // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
   // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
-  // If product is added
-  // useEffect(() => {
-  //   console.log("PIERWSZY--->", isImage)
-  //   if (successNewProduct) {
-  //     console.log("Po sukcesie-->>", isImage)
-  //     if (isImage) {
-  //       console.log("Ostatni if ->>>", isImage)
-  //       dispatch(
-  //         InsertImage2({
-  //           imageUpload: imageUpload,
-  //           uniqueId: newProductResult.id,
-  //           type: PRODUCT,
-  //         })
-  //       );
-  //     }
-  //   }
-  // }, [successNewProduct]);
 
   useEffect(() => {
-    console.log("PIERWSZY--->", isImage)
     if (successNewProduct || successSingleInstance) {
-      console.log("Po sukcesie -->> 1.", successNewProduct, " 2.--->", successSingleInstance)
       if (isImage) {
-        console.log("Ostatni if ->>>", isImage)
         dispatch(
           InsertImage2({
             imageUpload: imageUpload,
@@ -291,21 +262,6 @@ function ProductsActivity() {
   }, [successNewProduct, successSingleInstance, imageSwitcher]);
 
   //Comment
-  //navigate to main dashboard
-  // console.log("addFlag-->>", addFlag)
-  // useEffect(() => {
-  //   if (addFlag) {
-  //     console.log("Po sukcesie successNewProduct-->>", successNewProduct)
-  //     console.log("successSingleInstance-->>", successSingleInstance)
-  //     dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
-  //     dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
-  //     dispatch({ type: SET_FLAG_ADD_FALSE });
-  //     // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
-  //     navigate(`/dashboard/products`);
-  //   }
-  // }, [addFlag]);
-
-  //Comment
   //This code is a React useEffect hook that triggers whenever the value of switcher changes.
   //It defines an insertData object and dispatches an action using the addProductSubcat action creator with insertData as the argument.
   //It also updates the state of switcher to false using setSwitcher(false).
@@ -318,6 +274,7 @@ function ProductsActivity() {
         name: values.name,
         creator: userInfo.id,
         uniqueId: uniqueId,
+        lng: selectedLgn,
         categoryId: categoryId,
         subcategoryId: subcategoryId,
         typeActivity: PRODUCT,
@@ -331,6 +288,7 @@ function ProductsActivity() {
       const insertData = {
         name: values.name,
         modifier: userInfo.id,
+        lng: resultSingleInstance.id_product_subtype.id_product_type.language,
         Id: editProductId,
       };
       setEditSwitcher(false);

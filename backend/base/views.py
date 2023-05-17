@@ -1248,11 +1248,16 @@ def get_list_of_data(request, typeActivity):
 def add_single_instance(request):
     data = request.data
 
+    # , id_product_subtype.id_product_type.language=data['lng']
+
     alreadyExists = Product.objects.filter(name=data['name']).exists()
 
     if alreadyExists:
-        content = {"detail": "Product with this name already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        existProduct = Product.objects.filter(name=data['name'])
+        for i in existProduct:
+            if i.id_product_subtype.id_product_type.language == data['lng']:
+                content = {"detail": "Product with this name already exist"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         if data['typeActivity'] == 'PRODUCT':
@@ -1280,8 +1285,11 @@ def update_single_instance(request):
     alreadyExists = Product.objects.filter(name=data['name']).exists()
 
     if alreadyExists:
-        content = {"detail": "Product with this name already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        existProduct = Product.objects.filter(name=data['name'])
+        for i in existProduct:
+            if i.id_product_subtype.id_product_type.language == data['lng']:
+                content = {"detail": "Product with this name already exist"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         product = Product.objects.get(id=data['Id'])
