@@ -349,6 +349,16 @@ function ProductCategories() {
       );
     }
 
+    const body = {
+      textAlign: "center",
+      fontSize: "1.2rem",
+      marginLeft: "1rem",
+      marginRight: "1rem",
+      color: "red",
+      fontWeight: "600",
+      textTransform: "uppercase",
+    };
+
     return (
       <div
         style={{
@@ -374,20 +384,10 @@ function ProductCategories() {
         ) : null}
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {sortedProductCatList.length === 0
-            ? productCatList.map((category) => {
-              if (category.is_active && radioValue === ONE) {
-                return (
-                  <RotateCard
-                    key={category.id}
-                    name={category.name}
-                    photo={category.photo}
-                    id={category.id}
-                    objects={objects}
-                    isActive={true}
-                  />
-                );
-              }
-            })
+            ? <p style={body}>
+              {t("default_option_lng")}
+            </p>
+
             : sortedProductCatList.map((category) => {
               if (category.is_active && radioValue === ONE) {
                 return (
@@ -405,19 +405,7 @@ function ProductCategories() {
         </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {sortedProductCatList.length === 0
-            ? productCatList.map((category) => {
-              if (!category.is_active && radioValue === ZERO) {
-                return (
-                  <RotateCard
-                    key={category.id}
-                    name={category.name}
-                    id={category.id}
-                    objects={objects}
-                    isActive={false}
-                  />
-                );
-              }
-            })
+            ? null
             : sortedProductCatList.map((category) => {
               if (!category.is_active && radioValue === ZERO) {
                 return (
