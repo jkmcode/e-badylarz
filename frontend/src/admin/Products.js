@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
 import Divider from "./Divider";
+import { Icon } from "@iconify/react";
 import { getProductCat, getSubproductCat, selectedCat } from "../actions/productActions";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
@@ -651,6 +652,7 @@ function Products() {
           style={{ ...btnInfo, marginRight: "1rem" }}
           onClick={() => clearHandler()}
         >
+          <Icon icon="mdi:close-thick" width="32" height="32" color="red" />
           {t("btn_clear")}
         </button>
       </div>

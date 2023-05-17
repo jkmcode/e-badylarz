@@ -426,6 +426,7 @@
   "Table_empty_list": "Empty list",
   "ProductCategories_title": "Product categories",
   "ProductCategories_msg_add_success": "Product category correctly added",
+  "Product_msg_add_success": "Product correctly added",
   "ProductCategories_msg_image_edit_success": "Image has been changed",
   "ProductCategories_name_label": "Product category name",
   "ProductCategories_name_placeholder": "Enter the name of product category ...",

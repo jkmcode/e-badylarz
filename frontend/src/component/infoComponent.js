@@ -27,7 +27,9 @@ function InfoComponent(props) {
 
   const descriptionHandler = (i) => {
     if (selectedDescID > 0) {
-      setSelectedDescID(0)
+      if (i.id === selectedDescID) {
+        setSelectedDescID(0)
+      } else { setSelectedDescID(i.id) }
     } else { setSelectedDescID(i.id) }
   }
   useEffect(() => {
@@ -143,7 +145,7 @@ function InfoComponent(props) {
                         <>
                           <p>
                             <button
-                              style={{ ...btnEdit, color: "red", }}
+                              style={{ ...btnEdit, color: "red", textTransform: "uppercase" }}
                               onClick={() => descriptionHandler(i)}
                             >
                               <Icon
@@ -162,7 +164,7 @@ function InfoComponent(props) {
                         </>
                         : <p>
                           <button
-                            style={{ ...btnEdit, color: "red", }}
+                            style={{ ...btnEdit, color: "red", textTransform: "uppercase" }}
                             onClick={() => descriptionHandler(i)}
                           >
                             <Icon

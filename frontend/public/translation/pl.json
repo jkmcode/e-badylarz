@@ -424,6 +424,7 @@
   "Table_empty_list": "Pusta lista",
   "ProductCategories_title": "Kategorie produktów",
   "ProductCategories_msg_add_success": "Kategoria produktu dodana prawidłowo",
+  "Product_msg_add_success": "Produkt dodany prawidłowo",
   "ProductCategories_msg_image_edit_success": "Zdjęcie zostało zmienione",
   "ProductCategories_name_label": "Nazwa kategorii produktu",
   "ProductCategories_name_placeholder": "Wpisz nazwe kategorii produktu ...",

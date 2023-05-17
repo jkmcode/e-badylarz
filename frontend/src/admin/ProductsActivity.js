@@ -18,10 +18,12 @@ import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import {
   DELETE_IMAGE_REDUX,
   SET_FLAG_ADD_TRUE,
+  SET_FLAG_ADD_FALSE,
   ADD_IMAGE_RESET,
   GET_LIST_OF_DATA_DELETE,
   ADD_SINGLE_INSTANCE_DELETE,
-  UPDATE_SINGLE_INSTANCE_DELETE
+  UPDATE_SINGLE_INSTANCE_DELETE,
+  GET_SINGLE_INSTANCE_CAT_DELETE
 } from "../constants/adminConstans";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -59,6 +61,7 @@ function ProductsActivity() {
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [switcher, setSwitcher] = useState(false);
   const [editSwitcher, setEditSwitcher] = useState(false);
+  const [imageSwitcher, setImageSwitcher] = useState(false);
   const [selectedLgn, setSelectedLng] = useState(0);
   const [subcategoryId, setSubcategoryId] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
@@ -117,8 +120,11 @@ function ProductsActivity() {
     }
 
     if (activity === EDIT) {
-      setEditSwitcher(true);
-      setUniqueId(newId);
+      if (values.name !== resultSingleInstance.name) {
+        setEditSwitcher(true);
+        setUniqueId(newId);
+      }
+      setImageSwitcher(true)
     }
   };
 
@@ -208,37 +214,69 @@ function ProductsActivity() {
   //it schedules two dispatch actions to occur after a specified delay using the setTimeout method.
   //The first dispatched action sets the SET_FLAG_ADD_TRUE flag in the Redux store (it trigger other useEffet which navigate to the main dashoboard),
   useEffect(() => {
-    dispatch({ type: DELETE_IMAGE_REDUX });
     if (successInsertImage) {
       setTimeout(() => {
+        dispatch({ type: DELETE_IMAGE_REDUX });
         dispatch({ type: SET_FLAG_ADD_TRUE });
         dispatch({ type: ADD_IMAGE_RESET });
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
+        navigate(`/dashboard/products`);
       }, TIME_SET_TIMEOUT);
     }
     if (successNewProduct) {
       setTimeout(() => {
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
         dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
-        navigate(`/dashboard/products`);
+        dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
+        if (!isImage) {
+          navigate(`/dashboard/products`);
+        }
+        // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
+        // navigate(`/dashboard/products`);
       }, TIME_SET_TIMEOUT)
     }
     if (successUpdateProduct) {
       setTimeout(() => {
         dispatch({ type: GET_LIST_OF_DATA_DELETE });
         dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
-        navigate(`/dashboard/products`);
+        dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
+        // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
+        if (!isImage) {
+          navigate(`/dashboard/products`);
+        }
+        //
       }, TIME_SET_TIMEOUT)
     }
   }, [successInsertImage, successNewProduct, successUpdateProduct]);
 
-  //Comment
+  //Comment - 2 useEffect's
   // This useEffect hook dispatches a Redux action to insert an image if the 'successNewProduct' state variables are true and the 'isImage' variable is also true.
   // It passes the 'imageUpload' and 'uniqueId' values to the InsertImage2 action creator along with the 'type' parameter set to 'PRODUCT'.
   // If we create image for new product we are creating, our uniqueId is id from created product (newProductResult).
+  // If product is added
+  // useEffect(() => {
+  //   console.log("PIERWSZY--->", isImage)
+  //   if (successNewProduct) {
+  //     console.log("Po sukcesie-->>", isImage)
+  //     if (isImage) {
+  //       console.log("Ostatni if ->>>", isImage)
+  //       dispatch(
+  //         InsertImage2({
+  //           imageUpload: imageUpload,
+  //           uniqueId: newProductResult.id,
+  //           type: PRODUCT,
+  //         })
+  //       );
+  //     }
+  //   }
+  // }, [successNewProduct]);
+
   useEffect(() => {
+    console.log("PIERWSZY--->", isImage)
     if (successNewProduct || successSingleInstance) {
+      console.log("Po sukcesie -->> 1.", successNewProduct, " 2.--->", successSingleInstance)
       if (isImage) {
+        console.log("Ostatni if ->>>", isImage)
         dispatch(
           InsertImage2({
             imageUpload: imageUpload,
@@ -250,17 +288,22 @@ function ProductsActivity() {
         );
       }
     }
-  }, [successNewProduct, successSingleInstance, editSwitcher]);
+  }, [successNewProduct, successSingleInstance, imageSwitcher]);
 
   //Comment
   //navigate to main dashboard
-  useEffect(() => {
-    if (addFlag) {
-      dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
-      dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
-      navigate(`/dashboard/products`);
-    }
-  }, [addFlag]);
+  // console.log("addFlag-->>", addFlag)
+  // useEffect(() => {
+  //   if (addFlag) {
+  //     console.log("Po sukcesie successNewProduct-->>", successNewProduct)
+  //     console.log("successSingleInstance-->>", successSingleInstance)
+  //     dispatch({ type: ADD_SINGLE_INSTANCE_DELETE });
+  //     dispatch({ type: UPDATE_SINGLE_INSTANCE_DELETE });
+  //     dispatch({ type: SET_FLAG_ADD_FALSE });
+  //     // dispatch({ type: GET_SINGLE_INSTANCE_CAT_DELETE });
+  //     navigate(`/dashboard/products`);
+  //   }
+  // }, [addFlag]);
 
   //Comment
   //This code is a React useEffect hook that triggers whenever the value of switcher changes.
@@ -359,30 +402,22 @@ function ProductsActivity() {
         minHeight: "50vh",
       }}
     >
-      {successNewProduct && (
+      {successNewProduct ? (
         <ErrorMessage
-          msg={t("ProductCategories_msg_add_success")}
+          msg={t("Product_msg_add_success")}
           timeOut={TIME_SET_TIMEOUT}
           variant="success"
           success={true}
         />
-      )}
-      {successInsertImage && (
-        <ErrorMessage
-          msg={t("EditSubProduct_msg_edit_success")}
-          timeOut={TIME_SET_TIMEOUT}
-          variant="success"
-          success={true}
-        />
-      )}
-      {successUpdateProduct && (
-        <ErrorMessage
-          msg={t("EditSubProduct_msg_edit_success")}
-          timeOut={TIME_SET_TIMEOUT}
-          variant="success"
-          success={true}
-        />
-      )}
+      ) :
+        successInsertImage || successUpdateProduct ? (
+          <ErrorMessage
+            msg={t("EditSubProduct_msg_edit_success")}
+            timeOut={TIME_SET_TIMEOUT}
+            variant="success"
+            success={true}
+          />
+        ) : null}
       {errorSubCat && (
         <ErrorMessage msg={errorSubCat} timeOut={TIME_SET_TIMEOUT} />
       )}
