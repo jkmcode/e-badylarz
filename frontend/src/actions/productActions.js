@@ -1,4 +1,5 @@
 import axios from "axios";
+import { errorHandling } from "./errorHandling";
 import {
   SORT_BY_LNG_REQUEST,
   SORT_BY_LNG_SUCCESS,
@@ -57,10 +58,7 @@ export const addProductCat = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_PRODUCT_CAT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -89,10 +87,7 @@ export const sortByLng = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: SORT_BY_LNG_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -121,10 +116,7 @@ export const getProductCat = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_PRODUCT_CAT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -158,10 +150,7 @@ export const getSubproductCat =
       } catch (error) {
         dispatch({
           type: GET_PRODUCT_SUBCAT_LIST_FAIL,
-          payload:
-            error.response && error.response.data.detail
-              ? error.response.data.detail
-              : error.message,
+          payload: errorHandling(error)
         });
         console.log(error);
       }
@@ -195,10 +184,7 @@ export const addProductSubcat = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_PRODUCT_SUBCAT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -229,10 +215,7 @@ export const getSubcategory = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_PRODUCT_SUBCAT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -265,10 +248,7 @@ export const updateSubcategory = (insertData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: EDIT_PRODUCT_SUBCAT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
   }
 };
@@ -297,12 +277,8 @@ export const getProductList = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorHandling(error)
     });
-    console.log(error);
   }
 };
 

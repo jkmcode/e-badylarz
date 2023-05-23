@@ -884,25 +884,25 @@ def activeList(request):
 def getFullDescriptionsDesc(request, Id, obj_type):
     
     if obj_type=='DISTRICT':
-        descrition = Descriptions.objects.filter(id_district = Id) 
+        descrition = Descriptions.objects.filter(id_district = Id).order_by('language') 
         seriaziler = DistrictsDescSerializer(descrition, many=True)
     elif obj_type=='CITY':
-        descrition = CitiesDescriptions.objects.filter(id_city = Id)
+        descrition = CitiesDescriptions.objects.filter(id_city = Id).order_by('language')
         seriaziler = CitiesDescSerializer(descrition, many=True)
     elif obj_type=='SHOP':
-        descrition = ShopsDescriptions.objects.filter(id_shops = Id)
+        descrition = ShopsDescriptions.objects.filter(id_shops = Id).order_by('language')
         seriaziler = ShopDescSerializer(descrition, many=True)
     elif obj_type=='SPOT':
-        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id)
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id).order_by('language')
         seriaziler = ShopSpotDescSerializer(descrition, many=True)
     elif obj_type=='PROUCT':
-        descrition = ProductDescriptions.objects.filter(id_product = Id)
+        descrition = ProductDescriptions.objects.filter(id_product = Id).order_by('language')
         seriaziler = ProductDescSerializer(descrition, many=True)
     elif obj_type=='PROUCT_TYPE':
-        descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id)
+        descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id).order_by('language')
         seriaziler = ProductTypesDescSerializer(descrition, many=True)
     elif obj_type=='PRODUCT_SUBCAT':
-        descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id)
+        descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id).order_by('language')
         seriaziler = ProductSubTypesDescSerializer(descrition, many=True)
     else:
         content = {"detail": "Changing the active flag - no object type"}
@@ -1135,20 +1135,23 @@ def addProductCat(request):
     data = request.data
     alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
     if alreadyExists:
-        content = {"detail": "Product category already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
-    else: 
-        productCat = ProductTypes.objects.create(
-            name=data['name'],
-            creator = data['creator'],
-            is_active=True,
-            language = data['language'],
-            uniqueId = data['uniqueId']
-        )   
+        existCategory = ProductTypes.objects.filter(name=data['name'])
+        for i in existCategory:
+            if i.language == data['language']:
+                content = {"detail": "Product category already exist"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    
+    productCat = ProductTypes.objects.create(
+        name=data['name'],
+        creator = data['creator'],
+        is_active=True,
+        language = data['language'],
+        uniqueId = data['uniqueId']
+    )   
 
-        newProductCat=ProductTypes.objects.filter(name=data['name'])
-        seriaziler = ProductTypeSerializer(newProductCat, many=True)
-        return Response(seriaziler.data)
+    newProductCat=ProductTypes.objects.filter(name=data['name'])
+    seriaziler = ProductTypeSerializer(newProductCat, many=True)
+    return Response(seriaziler.data)
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -1176,22 +1179,27 @@ def addProductSubcat(request):
     data = request.data
     alreadyExists = ProductSubTypes.objects.filter(name=data['name']).exists()
     productCat = ProductTypes.objects.all().order_by('name')
+    # productCat = ProductTypes.objects.get(id==data['subcategoryId'])
+
+    for i in productCat :
+        if data['subcategoryId'] == i.id :
+            subCat = i
 
     if alreadyExists:
-        content = {"detail": "Product subcategory already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
-    else: 
-        for i in productCat :
-            if data['subcategoryId'] == i.id :
-                subCat = i
-        productSubcat = ProductSubTypes.objects.create(
-            name=data['name'],
-            creator = data['creator'],
-            uniqueId = data['uniqueId'],
-            is_active=True,
-            id_product_type_id = subCat.id
-        )   
-        return Response("okey")
+        existSubcategory = ProductSubTypes.objects.filter(name=data['name'])
+        for i in existSubcategory:
+            if i.id_product_type.language == subCat.language:
+                content = {"detail": "Product subcategory already exist"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)   
+
+    productSubcat = ProductSubTypes.objects.create(
+        name=data['name'],
+        creator = data['creator'],
+        uniqueId = data['uniqueId'],
+        is_active=True,
+        id_product_type_id = subCat.id
+    )   
+    return Response("okey")
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
