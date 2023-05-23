@@ -93,7 +93,15 @@ function AddShopsSpot() {
     { name: t("Radio_delivery"), value: "0" },
   ];
 
-  // data from redux
+  const [showDescription, setShowDescription] = useState(false)
+  const [showPickUP, setShowPickUP] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
+  const [showMyProduct, setShowMyProduct] = useState(false)
+  const [showOffers, setShowOffers] = useState(false)
+
+
+  // data from redux 
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -314,7 +322,7 @@ function AddShopsSpot() {
     boxShadow: "-9px 8px 34px -13px rgba(66, 68, 90, 1)",
     borderRadius: ".25rem",
     padding: "2rem",
-    width: windowWidth > 800 ? "80%" : "100%",
+    width: windowWidth > 800 ? "90%" : "100%",
     margin: "auto",
   };
   const btnTable = {
@@ -527,6 +535,7 @@ function AddShopsSpot() {
           </Link>
           {successGetSpot && successGetShop && (
             <div style={{ textAlign: "center" }}>
+              {t("ShopsSpot_Edit_subtitle")} -{" "}
               {shopDetails.name}, {shopDetails.city}, {shopDetails.street}{" "}
               {shopDetails.no_building}
             </div>
@@ -534,10 +543,148 @@ function AddShopsSpot() {
           <div
             style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}
           >
-            {SpotParam === "edit"
-              ? t("ShopsSpot_Edit_title")
+            {SpotParam === "edit" && successGetShop
+              ? <>{t("ShopsSpot_Edit_title")} - {spotDetails.name}</>
               : t("ShopsSpot_Add_title")}
           </div>
+          <Divider backgroundColor="grey" />
+          {SpotParam === "edit" && (
+            showMyProduct ?
+              <>
+                <button
+                  style={{
+                    ...btnEdit,
+                    color: "red",
+                    textTransform: "uppercase",
+                    marginRight: "1rem"
+                  }}
+                  onClick={() => setShowMyProduct(!showMyProduct)}
+                >
+                  <Icon
+                    icon="ic:outline-keyboard-arrow-up"
+                    width="24"
+                    height="24"
+                  />
+                  {t("btn_myproduct")}
+                </button>
+                <p>
+                  TUTAJ MY PRODUCT
+                </p>
+              </>
+              :
+              <button
+                style={{
+                  ...btnEdit,
+                  color: "red",
+                  textTransform: "uppercase",
+                  marginRight: "1rem"
+                }}
+                onClick={() => setShowMyProduct(!showMyProduct)}
+              >
+                <Icon
+                  icon="ic:outline-keyboard-arrow-down"
+                  width="24"
+                  height="24"
+                />
+                {t("btn_myproduct")}
+              </button>
+          )}
+
+          {SpotParam === "edit" && (
+            showOffers ?
+              <>
+                <button
+                  style={{
+                    ...btnEdit,
+                    color: "red",
+                    textTransform: "uppercase",
+                    marginRight: "1rem"
+                  }}
+                  onClick={() => setShowOffers(!showOffers)}
+                >
+                  <Icon
+                    icon="ic:outline-keyboard-arrow-up"
+                    width="24"
+                    height="24"
+                  />
+                  {t("btn_offers")}
+                </button>
+                <p>
+                  TUTAJ OFERTY
+                </p>
+              </>
+              :
+              <button
+                style={{
+                  ...btnEdit,
+                  color: "red",
+                  textTransform: "uppercase",
+                  marginRight: "1rem"
+                }}
+                onClick={() => setShowOffers(!showOffers)}
+              >
+                <Icon
+                  icon="ic:outline-keyboard-arrow-down"
+                  width="24"
+                  height="24"
+                />
+                {t("btn_offers")}
+              </button>
+          )}
+
+          {SpotParam === "edit" && (
+
+            <>{
+              showDescription ?
+                <>
+                  <button
+                    style={{
+                      ...btnEdit,
+                      color: "red",
+                      textTransform: "uppercase",
+                    }}
+                    onClick={() => setShowDescription(!showDescription)}
+                  >
+                    <Icon
+                      icon="ic:outline-keyboard-arrow-up"
+                      width="24"
+                      height="24"
+                    />
+                    {t("btn_description")}
+                  </button>
+                  <Divider backgroundColor="grey" />
+                  <FormLayout col={TWO}>
+                    <button
+                      style={{ ...btnDescription, marginTop: "1rem" }}
+                      onClick={() => descriptionHandler(spotDetails)}
+                    >
+                      {t("btn_description")}
+                    </button>
+                    <button
+                      style={{ ...btnEdit, marginTop: "1rem" }}
+                      onClick={() => infoHandler(spotDetails)}
+                    >
+                      {t("btn_info")}
+                    </button>
+                  </FormLayout>
+                  <Divider backgroundColor="grey" />
+                </>
+                :
+                <button
+                  style={{ ...btnEdit, color: "red", textTransform: "uppercase" }}
+                  onClick={() => setShowDescription(!showDescription)}
+                >
+                  <Icon
+                    icon="ic:baseline-keyboard-arrow-down"
+                    width="24"
+                    height="24"
+                  />
+                  {t("btn_description")}
+                </button>
+
+            }
+            </>
+          )}
           {helper && cityDescFlag && (
             <div
               style={{
@@ -561,130 +708,292 @@ function AddShopsSpot() {
               </div>
             </div>
           )}
-          {SpotParam === "edit" && (
+          {showPickUP ?
             <>
+              <button
+                style={{
+                  ...btnEdit,
+                  color: "red",
+                  textTransform: "uppercase",
+                  marginRight: "1rem",
+                  marginLeft: "1rem"
+                }}
+                onClick={() => setShowPickUP(!showPickUP)}
+              >
+                <Icon
+                  icon="ic:baseline-keyboard-arrow-up"
+                  width="24"
+                  height="24"
+                />
+                {t("btn_pick_up")}
+              </button>
               <Divider backgroundColor="grey" />
-              <FormLayout col={TWO}>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {valuePickUp ? t("Pick_up") : t("No_pick_up")}
                 <button
-                  style={btnDescription}
-                  onClick={() => descriptionHandler(spotDetails)}
+                  style={{ ...btnEdit, marginLeft: "1rem" }}
+                  onClick={() => handleBtnValuePickUP()}
                 >
-                  {t("btn_description")}
-                </button>
-                <button
-                  style={btnEdit}
-                  onClick={() => infoHandler(spotDetails)}
-                >
-                  {t("btn_info")}
-                </button>
-              </FormLayout>
-            </>
-          )}
-          <Divider backgroundColor="grey" />
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {valuePickUp ? t("Pick_up") : t("No_pick_up")}
-            <button
-              style={btnEdit}
-              onClick={() => handleBtnValuePickUP()}
-            >
-              {t("btn-change")}
-            </button>
-          </div>
-          <Divider backgroundColor="grey" />
-          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-          <form onSubmit={handleSubmit}>
-            <FormLayout col={THREE}>
-              {inputs.map((input, index) => {
-                if (index === 0) {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-              {inputs.map((input, index) => {
-                if (index === 1) {
-                  return (
-                    <SelectOption
-                      key={kindSpots.id}
-                      optionsList={kindSpots}
-                      label={input.label}
-                      defaultValue={input.defaultValue}
-                      emptyValueError={emptyValueError}
-                      onChange={selectKindHandler}
-                      {...input}
-                    />
-                  );
-                }
-              })}
-              {inputs.map((input, index) => {
-                if (index === 2 && radioValue === "0") {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-            </FormLayout>
-            <Divider backgroundColor="grey" />
-
-            <div style={{ fontWeight: 500 }}>
-              {t("ShopsSpot_title_address")}
-            </div>
-            <FormLayout col={TWO}>
-              {inputs.map((input, index) => {
-                if (index === 4 || index === 3) {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-            </FormLayout>
-            <FormLayout col={THREE}>
-              {inputs.map((input, index) => {
-                if (index === 7 || index === 5 || index === 6) {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-            </FormLayout>
-            <Divider backgroundColor="grey" />
-            <div style={{ fontWeight: 500 }}>
-              {t("ShopsSpot_title_geolocation")}
-            </div>
-
-            <FormLayout col={TWO}>
-              {inputs.map((input, index) => {
-                if (index === 9 || index === 8) {
-                  return (
-                    <FormInput key={input.id} {...input} onChange={onChange} />
-                  );
-                }
-              })}
-            </FormLayout>
-            <div>
-              {imageRender
-                ? SpotParam === "edit" &&
-                spotDetails.photo !== null && (
-                  <ImageDisplayer imageSrc={spotDetails.photo} />
-                )
-                : null}
-              <UploadImage />
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {SpotParam === "edit" ? (
-                <button type="submit" style={changeBtn}>
                   {t("btn-change")}
                 </button>
-              ) : (
-                <button type="submit" style={addBtn}>
-                  {t("btn-add")}
+              </div>
+              <Divider backgroundColor="grey" />
+            </>
+            :
+            <>
+              <button
+                style={{
+                  ...btnEdit,
+                  color: "red",
+                  textTransform: "uppercase",
+                  marginRight: "1rem",
+                  marginLeft: "1rem"
+                }}
+                onClick={() => setShowPickUP(!showPickUP)}
+              >
+                <Icon
+                  icon="ic:baseline-keyboard-arrow-down"
+                  width="24"
+                  height="24"
+                />
+                {t("btn_pick_up")}
+              </button>
+            </>
+          }
+          {SpotParam === "edit" ?
+            showEdit ?
+              <>
+                <button
+                  style={{
+                    ...btnEdit,
+                    color: "red",
+                    textTransform: "uppercase",
+                    marginRight: "1rem",
+                  }}
+                  onClick={() => setShowEdit(!showEdit)}
+                >
+                  <Icon
+                    icon="ic:baseline-keyboard-arrow-up"
+                    width="24"
+                    height="24"
+                  />
+                  {t("btn_edit")}
                 </button>
-              )}
-            </div>
-          </form>
-        </div>
-      )}
+                <Divider backgroundColor="grey" />
+                <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+                < form onSubmit={handleSubmit}>
+
+                  <FormLayout col={THREE}>
+                    {inputs.map((input, index) => {
+                      if (index === 0) {
+                        return (
+                          <FormInput key={input.id} {...input} onChange={onChange} />
+                        );
+                      }
+                    })}
+                    {inputs.map((input, index) => {
+                      if (index === 1) {
+                        return (
+                          <SelectOption
+                            key={kindSpots.id}
+                            optionsList={kindSpots}
+                            label={input.label}
+                            defaultValue={input.defaultValue}
+                            emptyValueError={emptyValueError}
+                            onChange={selectKindHandler}
+                            {...input}
+                          />
+                        );
+                      }
+                    })}
+                    {inputs.map((input, index) => {
+                      if (index === 2 && radioValue === "0") {
+                        return (
+                          <FormInput key={input.id} {...input} onChange={onChange} />
+                        );
+                      }
+                    })}
+                  </FormLayout>
+                  <Divider backgroundColor="grey" />
+
+                  <div style={{ fontWeight: 500 }}>
+                    {t("ShopsSpot_title_address")}
+                  </div>
+                  <FormLayout col={TWO}>
+                    {inputs.map((input, index) => {
+                      if (index === 4 || index === 3) {
+                        return (
+                          <FormInput key={input.id} {...input} onChange={onChange} />
+                        );
+                      }
+                    })}
+                  </FormLayout>
+                  <FormLayout col={THREE}>
+                    {inputs.map((input, index) => {
+                      if (index === 7 || index === 5 || index === 6) {
+                        return (
+                          <FormInput key={input.id} {...input} onChange={onChange} />
+                        );
+                      }
+                    })}
+                  </FormLayout>
+                  <Divider backgroundColor="grey" />
+                  <div style={{ fontWeight: 500 }}>
+                    {t("ShopsSpot_title_geolocation")}
+                  </div>
+
+                  <FormLayout col={TWO}>
+                    {inputs.map((input, index) => {
+                      if (index === 9 || index === 8) {
+                        return (
+                          <FormInput key={input.id} {...input} onChange={onChange} />
+                        );
+                      }
+                    })}
+                  </FormLayout>
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    {SpotParam === "edit" ? (
+                      <button type="submit" style={{ ...addBtn, marginTop: "1rem" }}>
+                        {t("btn-change")}
+                      </button>
+                    ) : (
+                      <button type="submit" style={{ ...addBtn, marginTop: "1rem" }}>
+                        {t("btn-add")}
+                      </button>
+                    )}
+                  </div>
+                  <div>
+                    {imageRender
+                      ? SpotParam === "edit" &&
+                      spotDetails.photo !== null && (
+                        <ImageDisplayer imageSrc={spotDetails.photo} />
+                      )
+                      : null}
+                    <UploadImage />
+                  </div>
+
+
+                </form>
+              </>
+              :
+              <>
+                <button
+                  style={{
+                    ...btnEdit,
+                    color: "red",
+                    textTransform: "uppercase",
+                    marginRight: "1rem",
+                  }}
+                  onClick={() => setShowEdit(!showEdit)}
+                >
+                  <Icon
+                    icon="ic:baseline-keyboard-arrow-down"
+                    width="24"
+                    height="24"
+                  />
+                  {t("btn_edit")}
+                </button>
+              </>
+            :
+            <>
+              <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+              < form onSubmit={handleSubmit}>
+                <FormLayout col={THREE}>
+                  {inputs.map((input, index) => {
+                    if (index === 0) {
+                      return (
+                        <FormInput key={input.id} {...input} onChange={onChange} />
+                      );
+                    }
+                  })}
+                  {inputs.map((input, index) => {
+                    if (index === 1) {
+                      return (
+                        <SelectOption
+                          key={kindSpots.id}
+                          optionsList={kindSpots}
+                          label={input.label}
+                          defaultValue={input.defaultValue}
+                          emptyValueError={emptyValueError}
+                          onChange={selectKindHandler}
+                          {...input}
+                        />
+                      );
+                    }
+                  })}
+                  {inputs.map((input, index) => {
+                    if (index === 2 && radioValue === "0") {
+                      return (
+                        <FormInput key={input.id} {...input} onChange={onChange} />
+                      );
+                    }
+                  })}
+                </FormLayout>
+                <Divider backgroundColor="grey" />
+
+                <div style={{ fontWeight: 500 }}>
+                  {t("ShopsSpot_title_address")}
+                </div>
+                <FormLayout col={TWO}>
+                  {inputs.map((input, index) => {
+                    if (index === 4 || index === 3) {
+                      return (
+                        <FormInput key={input.id} {...input} onChange={onChange} />
+                      );
+                    }
+                  })}
+                </FormLayout>
+                <FormLayout col={THREE}>
+                  {inputs.map((input, index) => {
+                    if (index === 7 || index === 5 || index === 6) {
+                      return (
+                        <FormInput key={input.id} {...input} onChange={onChange} />
+                      );
+                    }
+                  })}
+                </FormLayout>
+                <Divider backgroundColor="grey" />
+                <div style={{ fontWeight: 500 }}>
+                  {t("ShopsSpot_title_geolocation")}
+                </div>
+
+                <FormLayout col={TWO}>
+                  {inputs.map((input, index) => {
+                    if (index === 9 || index === 8) {
+                      return (
+                        <FormInput key={input.id} {...input} onChange={onChange} />
+                      );
+                    }
+                  })}
+                </FormLayout>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  {SpotParam === "edit" ? (
+                    <button type="submit" style={changeBtn}>
+                      {t("btn-change")}
+                    </button>
+                  ) : (
+                    <button type="submit" style={{ ...addBtn, marginTop: "1rem" }}>
+                      {t("btn-add")}
+                    </button>
+                  )}
+                </div>
+                <div>
+                  {imageRender
+                    ? SpotParam === "edit" &&
+                    spotDetails.photo !== null && (
+                      <ImageDisplayer imageSrc={spotDetails.photo} />
+                    )
+                    : null}
+                  <UploadImage />
+                </div>
+
+
+              </form>
+            </>
+          }
+        </div >
+      )
+      }
     </>
   );
 }

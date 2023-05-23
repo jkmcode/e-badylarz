@@ -629,7 +629,7 @@ function AddContact() {
     ),
     btnEdit: activeSpot && (
       <button style={btnEdit} onClick={() => editSpotHandler(item.id)}>
-        {t("btn_edit")}
+        {t("btn_panel")}
       </button>
     ),
     btnInfo: activeSpot && (

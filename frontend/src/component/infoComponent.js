@@ -155,7 +155,6 @@ function InfoComponent(props) {
                               />
                               {i.language}
                             </button>
-
                           </p>
 
                           <p style={body} key={i.id}>
