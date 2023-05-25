@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
-import language from "../language";
+import language from "../Data/country";
 import { getDesc } from "../actions/adminActions";
 import BackToLogin from "./BackToLogin";
 import { Icon } from "@iconify/react";

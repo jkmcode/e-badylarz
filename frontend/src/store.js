@@ -14,6 +14,7 @@ import {
   getSubproductCatReducer,
   editSubproductCatReducer,
   searchProductReducer,
+  getMyProductsReducer,
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -92,7 +93,8 @@ const reducer = combineReducers({
   getListOfData: getListOfDataReducer,
   addSingleInstance: addSingleInstanceReducer,
   updateSingleInstance: updateSingleInstanceReducer,
-  searchProduct: searchProductReducer
+  searchProduct: searchProductReducer,
+  getMyProducts: getMyProductsReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

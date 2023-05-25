@@ -42,6 +42,7 @@ import ProductSubcategories from "./admin/ProductSubcategories";
 import ProductSubcategoriesActivity from "./admin/ProductSubcategoriesActivity";
 import Products from "./admin/Products";
 import ProductsActivity from "./admin/ProductsActivity";
+import MyProducts from "./admin/MyProducts";
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -85,6 +86,10 @@ function App() {
           <Route
             path="shops/spot/:id/:add/:idSpot"
             element={<ShopSpotActivity />}
+          />
+          <Route
+            path="shops/:idShop/add-my-products/:idSpot"
+            element={<MyProducts />}
           />
           <Route path="areas" element={<AdminAreas />} />
           <Route path="areas/:add" element={<AreaActivity />} />

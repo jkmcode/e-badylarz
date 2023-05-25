@@ -490,5 +490,9 @@
   "AddContact_copy_data": "Copy data",
   "SerachFilter_placeholder": "Search of product",
   "Select_opions": "Select opions",
-  "Product_lng_label": "language"
+  "Product_lng_label": "language",
+  "Myproduct_name": "Product",
+  "Myproduct_category": "Category",
+  "Myproduct_subcategory": "Subcategory",
+  "MyProducts_title": "Add to my products list"
 }

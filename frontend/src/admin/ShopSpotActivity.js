@@ -10,13 +10,14 @@ import ImageDisplayer from "../component/ImageDisplayerComponent";
 import RadioButtons from "./RadioButtons";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
+import TableComponent from "./TableComponent";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
 import { TWO, THREE, FOUR } from "../constants/environmentConstans";
 import { Icon } from "@iconify/react";
 import { useKindShopSpots } from "../Data/KindShop";
+import { getMyproduct } from "../actions/productActions"
 import {
   addShopSpot,
   getShop,
@@ -53,6 +54,14 @@ import {
   POST_FORMAT,
   ONLY_NUMBER,
 } from "../constants/formValueConstans";
+
+import {
+  FormLayout,
+  tableCell,
+  tableCellNoBorderRight,
+  styleHeader,
+  changeBtn, addBtn
+} from "./AdminCSS";
 
 function AddShopsSpot() {
   const { t } = useTranslation();
@@ -99,7 +108,6 @@ function AddShopsSpot() {
   const [showMyProduct, setShowMyProduct] = useState(false)
   const [showOffers, setShowOffers] = useState(false)
 
-
   // data from redux 
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -110,6 +118,14 @@ function AddShopsSpot() {
 
   const infoFlag12 = useSelector((state) => state.flag);
   const { infoFlag } = infoFlag12;
+
+  const myproductsRedux = useSelector((state) => state.getMyProducts);
+  const {
+    result,
+    success: successC,
+    loading: resultLoading,
+    error: resultError,
+  } = myproductsRedux;
 
   const spotRedux = useSelector((state) => state.getSpot);
   const {
@@ -148,6 +164,18 @@ function AddShopsSpot() {
   } = shopSpotUpdateRedux;
 
   // Handlers
+
+  const clearHendler = () => {
+    setShowDescription(false)
+    setShowPickUP(false)
+    setShowEdit(false)
+    setShowMyProduct(false)
+    setShowOffers(false)
+  }
+
+  const addMyProduct = () => {
+    navigate(`/dashboard/shops/${shopId}/add-my-products/${spotId}`);
+  }
 
   const infoHandler = (i) => {
     dispatch({ type: SET_FLAG_INFO_TRUE });
@@ -254,6 +282,7 @@ function AddShopsSpot() {
     }
     if (spotId) {
       dispatch(getSpot({ Id: spotId, type: "shop" }));
+      dispatch(getMyproduct(spotId))
     }
   }, []);
 
@@ -496,6 +525,64 @@ function AddShopsSpot() {
     },
   ];
 
+  // table style
+  const mainTableContainer = {
+    overflowY: "auto",
+    height: "200px",
+    marginTop: "1rem",
+  };
+
+  const tableStyle = {
+    width: "100%",
+    color: "white",
+    backgroundImage: `linear-gradient(178deg, rgba(89, 131, 252, 1) 35%, rgba(41, 53, 86, 1) 100%)`,
+    marginTop: "1rem",
+  };
+
+  // table of myproduct
+
+  const tableMyproductStyle = {
+    ...tableStyle,
+    color: "black",
+    backgroundImage: `linear-gradient(183deg, rgb(236, 181, 26) 0%, rgb(217, 196, 33) 100%)`,
+  };
+
+  const tableMyproductcolumns = [
+    {
+      key: "name",
+      label: t("Myproduct_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "phone",
+      label: t("Myproduct_category"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "email",
+      label: t("Myproduct_subcategory"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnDelete",
+      label: "",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+  ];
+
+  let currentStatusContactList = [];
+
+  const dataMyproductTable = currentStatusContactList.map((item) => ({
+    id: item.id,
+    name: item.name + " " + item.surname,
+    phone: item.phone,
+    email: item.email,
+  }));
+
   return (
     <>
       {loading ||
@@ -548,6 +635,26 @@ function AddShopsSpot() {
               : t("ShopsSpot_Add_title")}
           </div>
           <Divider backgroundColor="grey" />
+          {
+            SpotParam === "edit" && (
+              <button
+                style={{
+                  ...btnEdit,
+                  color: "black",
+                  textTransform: "uppercase",
+                  marginRight: "1rem"
+                }}
+                onClick={() => clearHendler()}
+              >
+                <Icon
+                  icon="mdi:close-thick"
+                  width="24"
+                  height="24"
+                />
+                {t("btn_clear")}
+              </button>
+            )
+          }
           {SpotParam === "edit" && (
             showMyProduct ?
               <>
@@ -568,7 +675,18 @@ function AddShopsSpot() {
                   {t("btn_myproduct")}
                 </button>
                 <p>
-                  TUTAJ MY PRODUCT
+                  <button
+                    style={{ ...addBtn, marginTop: "1rem" }}
+                    onClick={() => addMyProduct()}
+                  >
+                    {t("btn-add")}
+                  </button>
+                  <TableComponent
+                    data={dataMyproductTable}
+                    columns={tableMyproductcolumns}
+                    tableStyle={tableMyproductStyle}
+                    mainTableContainer={mainTableContainer}
+                  />
                 </p>
               </>
               :
@@ -598,7 +716,7 @@ function AddShopsSpot() {
                     ...btnEdit,
                     color: "red",
                     textTransform: "uppercase",
-                    marginRight: "1rem"
+                    marginRight: "1rem",
                   }}
                   onClick={() => setShowOffers(!showOffers)}
                 >

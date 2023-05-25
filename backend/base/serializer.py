@@ -167,3 +167,10 @@ class AreasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Areas
         fields = '__all__' 
+
+
+class MyProductsSerializer(serializers.ModelSerializer):
+    id_product=ProductsSerializer()
+    class Meta:
+        model = MyProducts
+        fields = '__all__'

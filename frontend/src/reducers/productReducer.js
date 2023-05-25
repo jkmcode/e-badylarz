@@ -32,7 +32,34 @@ import {
   SEARCH_SELECTED_DELETE,
   SEARCH_SELECTED_CATEGORY,
   SEARCH_SELECTED_SUBCATEGORY,
+  GET_MYPRODUCT_LIST_REQUEST,
+  GET_MYPRODUCT_LIST_SUCCESS,
+  GET_MYPRODUCT_LIST_FAIL,
+  GET_MYPRODUCT_LIST_DELETE
 } from "../constants/productConstans";
+
+export const getMyProductsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_MYPRODUCT_LIST_REQUEST:
+      return { loading: true, success: false };
+    case GET_MYPRODUCT_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case GET_MYPRODUCT_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case GET_MYPRODUCT_LIST_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const addProductReducer = (state = {}, action) => {
   switch (action.type) {

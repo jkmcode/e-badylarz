@@ -488,5 +488,9 @@
   "AddContact_copy_data": "Kopiuj dane",
   "SerachFilter_placeholder": "Wyszukaj produkt",
   "Select_opions": "Wybierz z listy",
-  "Product_lng_label": "język"
+  "Product_lng_label": "język",
+  "Myproduct_name": "Produkt",
+  "Myproduct_category": "Kategoria",
+  "Myproduct_subcategory": "Podkategoria",
+  "MyProducts_title": "Dodaj do lista moich produktów"
 }

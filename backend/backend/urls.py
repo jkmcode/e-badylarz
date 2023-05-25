@@ -5,6 +5,7 @@ from django.conf import settings
 from base.views import *
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -63,5 +64,9 @@ urlpatterns = [
     path('api/add-single-instance/', add_single_instance),
     path('api/update-single-instance/', update_single_instance),
     path('api/<str:typeActivity>/get-list-of-data/', get_list_of_data),
+
+    # panel
+    path('api/<str:IdSpot>/get-myproduct/', get_myproduct)
+
 ]
 

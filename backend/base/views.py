@@ -20,6 +20,7 @@ from django.http import HttpResponse
 from .models import Districts
 from .books import books
 from base.serializer import *
+from base.views_panel import *
 
 from rest_framework import status
 
