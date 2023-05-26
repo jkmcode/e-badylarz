@@ -85,6 +85,11 @@ class ProductSubTypesDescSerializer(serializers.ModelSerializer):
         model = ProductSubtypesDescriptions
         fields = ["description","language","id"]
 
+class MyProductDescSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyProductsDescriptions
+        fields = ["description","language","id"]
+
 class DistrictsDescSerializer(serializers.ModelSerializer):
     class Meta:
         model = Descriptions

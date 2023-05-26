@@ -53,6 +53,10 @@ urlpatterns = [
     path('api/get-desc/full/<str:Id>/<str:obj_type>', getFullDescriptionsDesc, name="get-full-descriptions"),
     path('api/desc-active/', activeList, name="activeList"),
 
+    # panel
+    path('api/add-myproduct/', add_myproduct),
+    path('api/<str:IdSpot>/get-myproduct/', get_myproduct),
+
     # product
     path('api/add-product-cat/', addProductCat),
     path('api/get-product-categories/', getProductCategories),
@@ -64,9 +68,6 @@ urlpatterns = [
     path('api/add-single-instance/', add_single_instance),
     path('api/update-single-instance/', update_single_instance),
     path('api/<str:typeActivity>/get-list-of-data/', get_list_of_data),
-
-    # panel
-    path('api/<str:IdSpot>/get-myproduct/', get_myproduct)
 
 ]
 

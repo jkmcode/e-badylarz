@@ -8,7 +8,10 @@ import { Icon } from "@iconify/react";
 
 import { getFullDescriptions } from "../actions/adminActions";
 
-import { GET_FULL_DESCRIPTION_DELETE } from "../constants/adminConstans";
+import {
+  GET_FULL_DESCRIPTION_DELETE,
+  MY_PRODUCT_DESCRIPTION
+} from "../constants/adminConstans";
 import { TIME_AUT_ERROR } from "../constants/environmentConstans";
 
 import { btnEdit, } from "../admin/AdminCSS";
@@ -132,7 +135,16 @@ function InfoComponent(props) {
           {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
           <div style={mainContainer}>
             <div style={title}>
-              {props.title} {props.obj.name}
+              {props.typeObj === MY_PRODUCT_DESCRIPTION ?
+                <>
+                  {props.title} {props.obj.id_product.name}
+                </>
+                :
+                <>
+                  {props.title} {props.obj.name}
+                </>
+              }
+
             </div>
             <Divider />
             <div>
@@ -143,9 +155,9 @@ function InfoComponent(props) {
 
                       {selectedDescID == i.id ?
                         <>
-                          <p>
+                          <>
                             <button
-                              style={{ ...btnEdit, color: "red", textTransform: "uppercase" }}
+                              style={{ ...btnEdit, color: "red", textTransform: "uppercase", marginRight: "1rem" }}
                               onClick={() => descriptionHandler(i)}
                             >
                               <Icon
@@ -155,15 +167,15 @@ function InfoComponent(props) {
                               />
                               {i.language}
                             </button>
-                          </p>
+                          </>
 
                           <p style={body} key={i.id}>
                             {i.description}
                           </p>
                         </>
-                        : <p>
+                        : <>
                           <button
-                            style={{ ...btnEdit, color: "red", textTransform: "uppercase" }}
+                            style={{ ...btnEdit, color: "bleck", textTransform: "uppercase", marginRight: "1rem" }}
                             onClick={() => descriptionHandler(i)}
                           >
                             <Icon
@@ -173,7 +185,7 @@ function InfoComponent(props) {
                             />
                             {i.language}
                           </button>
-                        </p>
+                        </>
                       }
 
                     </>

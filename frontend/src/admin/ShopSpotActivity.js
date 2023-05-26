@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { TWO, THREE, FOUR } from "../constants/environmentConstans";
 import { Icon } from "@iconify/react";
+import noImage from "../images/noImage.png";
 import { useKindShopSpots } from "../Data/KindShop";
 import { getMyproduct } from "../actions/productActions"
 import {
@@ -35,6 +36,8 @@ import {
   EDIT_SHOP_SPOT_DELETE,
   SET_CITY_FLAG_DESC_TRUE,
   SPOT_DESCRIPTION,
+  PRODUCT_DESCRIPTION,
+  MY_PRODUCT_DESCRIPTION,
   SET_FLAG_INFO_TRUE,
   SET_FLAG_INFO_FALSE,
 } from "../constants/adminConstans";
@@ -60,7 +63,9 @@ import {
   tableCell,
   tableCellNoBorderRight,
   styleHeader,
-  changeBtn, addBtn
+  changeBtn,
+  addBtn,
+  btnInfo
 } from "./AdminCSS";
 
 function AddShopsSpot() {
@@ -71,6 +76,7 @@ function AddShopsSpot() {
   const { windowWidth } = useResponsive();
 
   const [helper, setHelper] = useState(false);
+  const [helperDesc, setHelperDesc] = useState(false);
   const [objId, setObjId] = useState("");
   const [objInfo, setObjInfo] = useState({});
 
@@ -107,6 +113,7 @@ function AddShopsSpot() {
   const [showEdit, setShowEdit] = useState(false)
   const [showMyProduct, setShowMyProduct] = useState(false)
   const [showOffers, setShowOffers] = useState(false)
+  const [infoKind, setInfoKind] = useState("")
 
   // data from redux 
 
@@ -121,10 +128,10 @@ function AddShopsSpot() {
 
   const myproductsRedux = useSelector((state) => state.getMyProducts);
   const {
-    result,
-    success: successC,
-    loading: resultLoading,
-    error: resultError,
+    result: myProductsList,
+    success: successMyProductList,
+    loading: myProductListLoading,
+    error: myProductListError,
   } = myproductsRedux;
 
   const spotRedux = useSelector((state) => state.getSpot);
@@ -171,15 +178,30 @@ function AddShopsSpot() {
     setShowEdit(false)
     setShowMyProduct(false)
     setShowOffers(false)
+    setHelper(false);
+    setHelperDesc(false)
   }
 
   const addMyProduct = () => {
     navigate(`/dashboard/shops/${shopId}/add-my-products/${spotId}`);
   }
 
+  const infoHandlerProduct = (i) => {
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
+    setInfoKind(PRODUCT_DESCRIPTION)
+  };
+
+  const infoHandlerMyProduct = (i) => {
+    dispatch({ type: SET_FLAG_INFO_TRUE });
+    setObjInfo(i);
+    setInfoKind(MY_PRODUCT_DESCRIPTION)
+  };
+
   const infoHandler = (i) => {
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
+    setInfoKind(SPOT_DESCRIPTION)
   };
 
   const closeInfoHandler = () => {
@@ -189,6 +211,14 @@ function AddShopsSpot() {
   const descriptionHandler = (i) => {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(true);
+    setHelperDesc(false)
+    setObjId(i.id);
+  };
+
+  const infoHandlerMyDesc = (i) => {
+    dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
+    setHelper(false);
+    setHelperDesc(true)
     setObjId(i.id);
   };
 
@@ -555,33 +585,136 @@ function AddShopsSpot() {
       styleHeader: styleHeader,
     },
     {
-      key: "phone",
-      label: t("Myproduct_category"),
+      key: "category",
+      label: t("Products_categorySubcategory"),
       styleTableCell: tableCell,
       styleHeader: styleHeader,
     },
     {
-      key: "email",
-      label: t("Myproduct_subcategory"),
-      styleTableCell: tableCell,
-      styleHeader: styleHeader,
-    },
-    {
-      key: "btnDelete",
-      label: "",
+      key: "btnDescription",
+      label: t("My_descriptions"),
       styleTableCell: tableCellNoBorderRight,
       styleHeader: styleHeader,
     },
+    // {
+    //   key: "btnPhoto",
+    //   label: t("My_descriptions"),
+    //   styleTableCell: tableCellNoBorderRight,
+    //   styleHeader: styleHeader,
+    // },
+    // {
+    //   key: "btnDelete",
+    //   label: "",
+    //   styleTableCell: tableCellNoBorderRight,
+    //   styleHeader: styleHeader,
+    // }
   ];
 
-  let currentStatusContactList = [];
+  let dataMyproductTable = [];
+  if (successMyProductList) {
+    dataMyproductTable = myProductsList.map((item) => ({
+      id: item.id,
+      name: (
+        <>
+          {item.id_product.photo ? (
+            <img
+              style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+              src={item.id_product.photo}
+            />
+          ) : (
+            <img
+              style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+              src={noImage}
+            />
+          )}
 
-  const dataMyproductTable = currentStatusContactList.map((item) => ({
-    id: item.id,
-    name: item.name + " " + item.surname,
-    phone: item.phone,
-    email: item.email,
-  }));
+          {item.id_product.name}
+          <button
+            style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem" }}
+            onClick={() => infoHandlerProduct(item.id_product)}
+          >
+            {t("btn_info")}
+          </button>
+        </>
+      ),
+      category: (
+        <>
+          {item.id_product.id_product_subtype.id_product_type.name} - {item.id_product.id_product_subtype.name}
+        </>
+      ),
+      btnDescription: (
+        <>
+          <button
+            style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
+            onClick={() => infoHandlerMyProduct(item)}
+          >
+            {/* {t("btn_my_info")} */}
+            <Icon
+              icon="teenyicons:info-circle-outline"
+              width="24"
+              height="24"
+            />
+
+          </button>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
+            onClick={() => infoHandlerMyDesc(item)}
+          >
+            <Icon
+              icon="teenyicons:text-document-outline"
+              width="24"
+              height="24"
+            />
+            {/* {t("btn_my_description")} */}
+          </button>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
+            onClick={() => infoHandlerMyDesc(item)}
+          >
+            <Icon
+              icon="teenyicons:image-outline"
+              width="24"
+              height="24"
+            />
+
+            {/* {t("btn_my_description")} */}
+          </button>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "red" }}
+            onClick={() => infoHandlerMyDesc(item)}
+          >
+            <Icon
+              icon="teenyicons:x-circle-outline"
+              width="24"
+              height="24"
+            />
+            {/* {t("btn_my_description")} */}
+          </button>
+        </>
+      ),
+      // btnPhoto: (
+      //   <>
+      //     <button
+      //       style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
+      //       onClick={() => infoHandlerMyProduct(item)}
+      //     >
+      //       {t("btn_my_info")}
+      //     </button>
+      //   </>
+      // ),
+      // btnDelete: (
+      //   <>
+      //     <button
+      //       style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
+      //       onClick={() => infoHandlerMyProduct(item)}
+      //     >
+      //       {t("btn_my_info")}
+      //     </button>
+      //   </>
+      // )
+    }));
+  }
+
 
   return (
     <>
@@ -595,9 +728,16 @@ function AddShopsSpot() {
         <div style={background}>
           {infoFlag ? (
             <InfoComponent
-              title={t("InfoComponent_title_spot")}
+              title={
+                infoKind === PRODUCT_DESCRIPTION ?
+                  t("InfoComponent_title_product")
+                  :
+                  infoKind === MY_PRODUCT_DESCRIPTION ?
+                    t("InfoComponent_title_my_product")
+                    :
+                    t("InfoComponent_title_spot")}
               obj={objInfo}
-              typeObj={SPOT_DESCRIPTION}
+              typeObj={infoKind}
               closeInfoHandler={closeInfoHandler}
             />
           ) : null}
@@ -655,6 +795,29 @@ function AddShopsSpot() {
               </button>
             )
           }
+          {helperDesc && cityDescFlag && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#4d4d4d",
+                  padding: "0.4rem",
+                  width: "80%",
+                  margin: "0.4rem",
+                }}
+              >
+                <AddDescription
+                  objId={objId}
+                  descType={MY_PRODUCT_DESCRIPTION}
+                  return={true}
+                />
+              </div>
+            </div>
+          )}
           {SpotParam === "edit" && (
             showMyProduct ?
               <>
@@ -681,12 +844,17 @@ function AddShopsSpot() {
                   >
                     {t("btn-add")}
                   </button>
-                  <TableComponent
-                    data={dataMyproductTable}
-                    columns={tableMyproductcolumns}
-                    tableStyle={tableMyproductStyle}
-                    mainTableContainer={mainTableContainer}
-                  />
+                  {successMyProductList ?
+                    <TableComponent
+                      data={dataMyproductTable}
+                      columns={tableMyproductcolumns}
+                      tableStyle={tableMyproductStyle}
+                      mainTableContainer={mainTableContainer}
+                    />
+                    : null
+
+                  }
+
                 </p>
               </>
               :

@@ -15,7 +15,12 @@ import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
 import Divider from "./Divider";
 import { Icon } from "@iconify/react";
-import { getProductCat, getSubproductCat, selectedCat } from "../actions/productActions";
+import {
+  getProductCat,
+  getSubproductCat,
+  selectedCat,
+  addMyproduct
+} from "../actions/productActions";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
@@ -58,7 +63,7 @@ function MyProducts() {
   const params = useParams();
   const { windowWidth } = useResponsive();
 
-  const shopId = params.id;
+  const shopId = params.idShop;
   const spotId = params.idSpot;
 
   //variables
@@ -158,6 +163,12 @@ function MyProducts() {
   //   navigate(`${id}/edit`);
   // };
   const addHandler = (i) => {
+
+    dispatch(addMyproduct({
+      idProduct: i.id,
+      idSpot: spotId,
+      idUser: userInfo.id
+    }))
 
     console.log('Dodaje--', i)
 
@@ -419,7 +430,7 @@ function MyProducts() {
 
   ];
 
-  const dataSubcategoryTable = currentProductList.map((item) => ({
+  const dataMyProductsTable = currentProductList.map((item) => ({
     id: item.id,
     name: (
       <>
@@ -672,7 +683,7 @@ function MyProducts() {
         </div>
       ) : (
         <TableComponent
-          data={dataSubcategoryTable}
+          data={dataMyProductsTable}
           columns={tableConatctcolumns}
           tableStyle={tableSubcatProductStyle}
           mainTableContainer={mainTableContainer}

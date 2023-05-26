@@ -30,8 +30,44 @@ import {
   SEARCH_SELECTED_SUBCATEGORY,
   GET_MYPRODUCT_LIST_REQUEST,
   GET_MYPRODUCT_LIST_SUCCESS,
-  GET_MYPRODUCT_LIST_FAIL
+  GET_MYPRODUCT_LIST_FAIL,
+  ADD_MYPRODUCT_REQUEST,
+  ADD_MYPRODUCT_SUCCESS,
+  ADD_MYPRODUCT_FAIL
 } from "../constants/productConstans";
+
+export const addMyproduct = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_MYPRODUCT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/add-myproduct/`,
+      insertData,
+      config
+    )
+    console.log("Data--->>>", data)
+
+    dispatch({
+      type: ADD_MYPRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_MYPRODUCT_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
 
 export const getMyproduct = (spotId) => async (dispatch, getState) => {
   try {

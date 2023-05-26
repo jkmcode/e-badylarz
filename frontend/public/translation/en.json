@@ -69,6 +69,8 @@
   "btn_edit": "EDIT",
   "btn_contact": "CONTACT",
   "btn_info": "INFO",
+  "btn_my_info": "INFO",
+  "btn_my_description": "DESC...",
   "btn-login": "Login",
   "btn_add_description": "Add description",
   "btn_submit": "Submit",
@@ -494,5 +496,7 @@
   "Myproduct_name": "Product",
   "Myproduct_category": "Category",
   "Myproduct_subcategory": "Subcategory",
-  "MyProducts_title": "Add to my products list"
+  "MyProducts_title": "Add to my products list",
+  "My_descriptions": "My data",
+  "InfoComponent_title_my_product": "My description of product :"
 }
