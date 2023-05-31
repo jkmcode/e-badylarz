@@ -43,6 +43,7 @@ import ProductSubcategoriesActivity from "./admin/ProductSubcategoriesActivity";
 import Products from "./admin/Products";
 import ProductsActivity from "./admin/ProductsActivity";
 import MyProducts from "./admin/MyProducts";
+import MyProductPhotos from "./admin/MyProductPhotos"
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -90,6 +91,10 @@ function App() {
           <Route
             path="shops/:idShop/add-my-products/:idSpot"
             element={<MyProducts />}
+          />
+          <Route
+            path="shops/:idShop/my-products-photo/:idSpot/:productName/:idMyProd"
+            element={<MyProductPhotos />}
           />
           <Route path="areas" element={<AdminAreas />} />
           <Route path="areas/:add" element={<AreaActivity />} />

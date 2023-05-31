@@ -113,7 +113,7 @@ class ProductsSerializer(serializers.ModelSerializer):
     list_of_data = serializers.CharField(default='list of product')
     class Meta:
         model = Product
-        fields = '__all__'            
+        fields = '__all__'          
 
 class ShopsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -173,6 +173,11 @@ class AreasSerializer(serializers.ModelSerializer):
         model = Areas
         fields = '__all__' 
 
+
+class MyProductsPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyProductsPhotos
+        fields = '__all__'
 
 class MyProductsSerializer(serializers.ModelSerializer):
     id_product=ProductsSerializer()

@@ -222,6 +222,15 @@ function AddShopsSpot() {
     setObjId(i.id);
   };
 
+  const infoHandlerMyDelete = (i) => {
+    console.log("Jestem w delte ---??>", i)
+  };
+
+  const infoHandlerMyPhoto = (i) => {
+    console.log("Jestem w dupie ---??>", i.id)
+    navigate(`/dashboard/shops/${shopId}/my-products-photo/${spotId}/${i.id_product.name}/${i.id}`);
+  };
+
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
@@ -669,7 +678,7 @@ function AddShopsSpot() {
           </button>
           <button
             style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
-            onClick={() => infoHandlerMyDesc(item)}
+            onClick={() => infoHandlerMyPhoto(item)}
           >
             <Icon
               icon="teenyicons:image-outline"
@@ -681,7 +690,7 @@ function AddShopsSpot() {
           </button>
           <button
             style={{ ...btnInfo, marginRight: "1rem", color: "red" }}
-            onClick={() => infoHandlerMyDesc(item)}
+            onClick={() => infoHandlerMyDelete(item)}
           >
             <Icon
               icon="teenyicons:x-circle-outline"

@@ -498,5 +498,9 @@
   "Myproduct_subcategory": "Subcategory",
   "MyProducts_title": "Add to my products list",
   "My_descriptions": "My data",
-  "InfoComponent_title_my_product": "My description of product :"
+  "InfoComponent_title_my_product": "My description of product :",
+  "MyProductPhotos_title": "My photos for the product : ",
+  "My_image_name": "Photo",
+  "my_photo": "Selected photo",
+  "show_my_photo": "Select photo"
 }

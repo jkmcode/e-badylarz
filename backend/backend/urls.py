@@ -11,7 +11,11 @@ urlpatterns = [
     
     #upload image 
     path("api/upload-image/", uploadMultiImages),
+    path("api/upload-my-image/", uploadMyImages),
     path('api/upload-image2/', uploadMultiImages2),
+    path('api/add-myproduct-image/', addMyImage),
+    path('api/<str:Id>/get-my-image/', getMyImage),
+    path('api/delete-my-image/', deleteMyImage),
 
     # district
     path('api/add-district/', addDiscrict),

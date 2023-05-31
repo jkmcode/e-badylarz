@@ -293,6 +293,7 @@ class ShopsContactARC(models.Model):
     archiver = models.CharField(max_length=5, null=True, blank=True)
 
 # AreasSpotsShops - przypisanie produktu do sklepu( rolnika itp.)
+# archiwizacja zmian poprzez zmianę flagi "is_delete" na true i dodanie daty zmiany
 class MyProducts(models.Model):
     id_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     id_shops_spot = models.ForeignKey(ShopsSpot, on_delete=models.CASCADE, null=True)
@@ -300,37 +301,41 @@ class MyProducts(models.Model):
     date_of_change= models.DateTimeField(null=True,blank=True)
     creator = models.CharField(max_length=5)
     modifier = models.CharField(max_length=5, null=True, blank=True)
+    is_delete = models.BooleanField(default=False,null=True,blank=True)
 
 # Archiwizacja wszelkich zmian w tabeli - MyProducts 
-class MyProductsARC(models.Model):
-    id_product = models.IntegerField()
-    id_shops_spot = models.IntegerField()
-    date_of_entry = models.DateTimeField()
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    creator = models.CharField(max_length=5)
-    modifier = models.CharField(max_length=5, null=True, blank=True)
-    date_of_archiv = models.DateTimeField(auto_now=True)
-    archiver = models.CharField(max_length=5)
+# class MyProductsARC(models.Model):
+#     id_product = models.IntegerField()
+#     id_shops_spot = models.IntegerField()
+#     date_of_entry = models.DateTimeField()
+#     date_of_change= models.DateTimeField(null=True,blank=True)
+#     creator = models.CharField(max_length=5)
+#     modifier = models.CharField(max_length=5, null=True, blank=True)
+#     date_of_archiv = models.DateTimeField(auto_now=True)
+#     archiver = models.CharField(max_length=5)
 
 # MyProductsPhotos - dodatkowe zdjecia produktu robione przrz sklep ( rolnika itp.)
+# archiwizacja zmian poprzez zmianę flagi "is_delete" na true i dodanie daty zmiany
 class MyProductsPhotos(models.Model):
     id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
     photo = models.ImageField()
     date_of_entry = models.DateTimeField(auto_now_add=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     creator = models.CharField(max_length=5)
+    unique_date = models.DateTimeField(null=True,blank=True)
+    is_delete = models.BooleanField(default=False,null=True,blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
 # Archiwizacja wszelkich zmian w tabeli - MyProductsPhotos
-class MyProductsPhotosARC(models.Model):
-    id_my_product = models.IntegerField()
-    photo = models.ImageField()
-    date_of_entry = models.DateTimeField()
-    date_of_change= models.DateTimeField(null=True,blank=True)
-    creator = models.CharField(max_length=5)
-    modifier = models.CharField(max_length=5, null=True, blank=True)
-    date_of_archiv = models.DateTimeField(auto_now=True)
-    archiver = models.CharField(max_length=5)
+# class MyProductsPhotosARC(models.Model):
+#     id_my_product = models.IntegerField()
+#     photo = models.ImageField()
+#     date_of_entry = models.DateTimeField()
+#     date_of_change= models.DateTimeField(null=True,blank=True)
+#     creator = models.CharField(max_length=5)
+#     modifier = models.CharField(max_length=5, null=True, blank=True)
+#     date_of_archiv = models.DateTimeField(auto_now=True)
+#     archiver = models.CharField(max_length=5)
 
 # MyProductsDescriptions - dodatkowy opis robiony przez sklep( rolnika itp.)
 # dla sprzedawanego produktu

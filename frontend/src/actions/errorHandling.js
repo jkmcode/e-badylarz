@@ -8,6 +8,8 @@ export const errorHandling = (er) => {
     console.log('Status-->', er.response.request.status)
   }
 
+  if (er.response.request.status == 404) { }
+
 
   if (er.response && er.response.data.detail) {
     return (er.response.data.detail)

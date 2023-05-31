@@ -35,8 +35,117 @@ import {
   GET_MYPRODUCT_LIST_REQUEST,
   GET_MYPRODUCT_LIST_SUCCESS,
   GET_MYPRODUCT_LIST_FAIL,
-  GET_MYPRODUCT_LIST_DELETE
+  GET_MYPRODUCT_LIST_DELETE,
+  ADD_MY_IMAGE_REQUEST,
+  ADD_IMAGE_MY_SUCCESS,
+  ADD_IMAGE_MY_FAIL,
+  ADD_IMAGE_MY_DELETE,
+  UPDATE_MY_IMAGE_REQUEST,
+  UPDATE_IMAGE_MY_SUCCESS,
+  UPDATE_IMAGE_MY_FAIL,
+  UPDATE_IMAGE_MY_DELETE,
+  GET_MY_IMAGE_REQUEST,
+  GET_MY_IMAGE_SUCCESS,
+  GET_MY_IMAGE_FAIL,
+  GET_MY_IMAGE_DELETE,
+  DELETE_MY_IMAGE_REQUEST,
+  DELETE_MY_IMAGE_SUCCESS,
+  DELETE_MY_IMAGE_FAIL,
+  DELETE_MY_IMAGE_DELETE,
+
 } from "../constants/productConstans";
+
+export const deleteMyImageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_MY_IMAGE_REQUEST:
+      return { loading: true, success: false };
+    case DELETE_MY_IMAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case DELETE_MY_IMAGE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case DELETE_MY_IMAGE_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getMyImageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_MY_IMAGE_REQUEST:
+      return { loading: true, success: false };
+    case GET_MY_IMAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case GET_MY_IMAGE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case GET_MY_IMAGE_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const uploadMyImageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_MY_IMAGE_REQUEST:
+      return { loading: true, success: false };
+    case UPDATE_IMAGE_MY_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case UPDATE_IMAGE_MY_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case UPDATE_IMAGE_MY_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const addMyImageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_MY_IMAGE_REQUEST:
+      return { loading: true, success: false };
+    case ADD_IMAGE_MY_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case ADD_IMAGE_MY_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case ADD_IMAGE_MY_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const getMyProductsReducer = (state = {}, action) => {
   switch (action.type) {

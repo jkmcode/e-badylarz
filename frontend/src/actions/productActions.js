@@ -33,8 +33,144 @@ import {
   GET_MYPRODUCT_LIST_FAIL,
   ADD_MYPRODUCT_REQUEST,
   ADD_MYPRODUCT_SUCCESS,
-  ADD_MYPRODUCT_FAIL
+  ADD_MYPRODUCT_FAIL,
+  ADD_MY_IMAGE_REQUEST,
+  ADD_IMAGE_MY_SUCCESS,
+  ADD_IMAGE_MY_FAIL,
+  UPDATE_MY_IMAGE_REQUEST,
+  UPDATE_IMAGE_MY_SUCCESS,
+  UPDATE_IMAGE_MY_FAIL,
+  GET_MY_IMAGE_REQUEST,
+  GET_MY_IMAGE_SUCCESS,
+  GET_MY_IMAGE_FAIL,
+  DELETE_MY_IMAGE_REQUEST,
+  DELETE_MY_IMAGE_SUCCESS,
+  DELETE_MY_IMAGE_FAIL,
 } from "../constants/productConstans";
+
+export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) => {
+  try {
+
+    dispatch({ type: DELETE_MY_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api//delete-my-image/`, insertData, config);
+
+    dispatch({
+      type: DELETE_MY_IMAGE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_MY_IMAGE_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
+
+export const getImageMyProduct = (myProductId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_MY_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/${myProductId}/get-my-image/`, config);
+
+    dispatch({
+      type: GET_MY_IMAGE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_MY_IMAGE_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
+
+export const addImageMyProduct = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_MY_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/add-myproduct-image/`,
+      insertData,
+      config
+    );
+
+    dispatch({
+      type: ADD_IMAGE_MY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_IMAGE_MY_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
+
+export const InsertImageMyProduct = (insertData) => async (dispatch, getState) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", insertData.imageUpload);
+    formData.append("IdFhoto", insertData.IdFhoto);
+    formData.append("Id", insertData.Id);
+
+    dispatch({ type: UPDATE_MY_IMAGE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/upload-my-image/`, formData, config);
+
+    dispatch({
+      type: UPDATE_IMAGE_MY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_IMAGE_MY_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
 
 export const addMyproduct = (insertData) => async (dispatch, getState) => {
   try {
@@ -55,7 +191,6 @@ export const addMyproduct = (insertData) => async (dispatch, getState) => {
       insertData,
       config
     )
-    console.log("Data--->>>", data)
 
     dispatch({
       type: ADD_MYPRODUCT_SUCCESS,
