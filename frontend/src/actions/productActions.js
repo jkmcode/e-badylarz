@@ -28,6 +28,7 @@ import {
   SEARCH_SELECTED_LNG,
   SEARCH_SELECTED_CATEGORY,
   SEARCH_SELECTED_SUBCATEGORY,
+  SEARCH_SELECTED_DELETE_NO_LNG,
   GET_MYPRODUCT_LIST_REQUEST,
   GET_MYPRODUCT_LIST_SUCCESS,
   GET_MYPRODUCT_LIST_FAIL,
@@ -46,6 +47,9 @@ import {
   DELETE_MY_IMAGE_REQUEST,
   DELETE_MY_IMAGE_SUCCESS,
   DELETE_MY_IMAGE_FAIL,
+  DELETE_MY_PRODUCT_REQUEST,
+  DELETE_MY_PRODUCT_SUCCESS,
+  DELETE_MY_PRODUCT_FAIL,
 } from "../constants/productConstans";
 
 export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) => {
@@ -72,6 +76,35 @@ export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) =
   } catch (error) {
     dispatch({
       type: DELETE_MY_IMAGE_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
+
+export const deleteMyProduct = (insertData) => async (dispatch, getState) => {
+  try {
+
+    dispatch({ type: DELETE_MY_PRODUCT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api//delete-my-product/`, insertData, config);
+
+    dispatch({
+      type: DELETE_MY_PRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_MY_PRODUCT_FAIL,
       payload: errorHandling(error)
     });
   }
@@ -500,6 +533,12 @@ export const selectedCat = (item) => async (dispatch) => {
     if (item.kind === "Subcategory") {
       dispatch({
         type: SEARCH_SELECTED_SUBCATEGORY,
+        payload: item,
+      });
+    }
+    if (item.kind === "clear") {
+      dispatch({
+        type: SEARCH_SELECTED_DELETE_NO_LNG,
         payload: item,
       });
     }

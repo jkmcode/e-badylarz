@@ -10,6 +10,7 @@ import ImageDisplayer from "../component/ImageDisplayerComponent";
 import RadioButtons from "./RadioButtons";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
+import InfoAlertComponent from "../component/InfoAlertComponent";
 import TableComponent from "./TableComponent";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +19,7 @@ import { TWO, THREE, FOUR } from "../constants/environmentConstans";
 import { Icon } from "@iconify/react";
 import noImage from "../images/noImage.png";
 import { useKindShopSpots } from "../Data/KindShop";
-import { getMyproduct } from "../actions/productActions"
+import { getMyproduct, deleteMyProduct } from "../actions/productActions"
 import {
   addShopSpot,
   getShop,
@@ -26,6 +27,8 @@ import {
   updateShopSpot,
   InsertImage,
 } from "../actions/adminActions";
+
+import { GET_MYPRODUCT_LIST_DELETE } from "../constants/productConstans"
 
 import {
   DELETE_IMAGE_REDUX,
@@ -44,6 +47,7 @@ import {
 
 import {
   TIME_AUT_ERROR,
+  EMPTY_LIST,
   TIME_AUT_SUCCESS,
 } from "../constants/environmentConstans";
 
@@ -113,7 +117,11 @@ function AddShopsSpot() {
   const [showEdit, setShowEdit] = useState(false)
   const [showMyProduct, setShowMyProduct] = useState(false)
   const [showOffers, setShowOffers] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [confirm, setConfirm] = useState(false);
   const [infoKind, setInfoKind] = useState("")
+  const [myProductId, setMyProductId] = useState(0)
+  const [myProductCurrentList, setMyProductCurrentList] = useState([])
 
   // data from redux 
 
@@ -133,6 +141,14 @@ function AddShopsSpot() {
     loading: myProductListLoading,
     error: myProductListError,
   } = myproductsRedux;
+
+  const deleteMyproductsRedux = useSelector((state) => state.deleteMyProduct);
+  const {
+    result: deleteMyProductsList,
+    success: successDeleteMyProductList,
+    loading: deleteMyProductListLoading,
+    error: deleteMyProductListError,
+  } = deleteMyproductsRedux;
 
   const spotRedux = useSelector((state) => state.getSpot);
   const {
@@ -183,6 +199,7 @@ function AddShopsSpot() {
   }
 
   const addMyProduct = () => {
+    dispatch({ type: GET_MYPRODUCT_LIST_DELETE });
     navigate(`/dashboard/shops/${shopId}/add-my-products/${spotId}`);
   }
 
@@ -222,12 +239,28 @@ function AddShopsSpot() {
     setObjId(i.id);
   };
 
+  const confirmYes = () => {
+    setShowAlert(false);
+    setConfirm(true);
+  };
+
+  const confirmNo = () => {
+    setShowAlert(false);
+    setConfirm(false);
+    setMyProductId(0)
+  };
+
+  const offerHendler = (i) => {
+    console.log("Jestem w ofercie --->", i)
+    navigate(`/dashboard/shops/${shopId}/my-products-offer/${spotId}/${i.id_product.name}/${i.id}`);
+  }
+
   const infoHandlerMyDelete = (i) => {
-    console.log("Jestem w delte ---??>", i)
+    setShowAlert(true);
+    setMyProductId(i.id)
   };
 
   const infoHandlerMyPhoto = (i) => {
-    console.log("Jestem w dupie ---??>", i.id)
     navigate(`/dashboard/shops/${shopId}/my-products-photo/${spotId}/${i.id_product.name}/${i.id}`);
   };
 
@@ -321,9 +354,28 @@ function AddShopsSpot() {
     }
     if (spotId) {
       dispatch(getSpot({ Id: spotId, type: "shop" }));
-      dispatch(getMyproduct(spotId))
     }
   }, []);
+
+  useEffect(() => {
+    if (myProductListError) { }
+    else {
+      if (!successMyProductList & !myProductListLoading) { dispatch(getMyproduct(spotId)) }
+    }
+  }, [myProductListError, successMyProductList]);
+
+  useEffect(() => {
+    if (successDeleteMyProductList) {
+      setMyProductCurrentList(deleteMyProductsList)
+    }
+    else {
+      if (successMyProductList) {
+        setMyProductCurrentList(myProductsList)
+      }
+    }
+  }, [successDeleteMyProductList, successMyProductList]);
+
+
 
   // add photo
   useEffect(() => {
@@ -380,6 +432,20 @@ function AddShopsSpot() {
       setValuePickUp(spotDetails.pick_up_point);
     }
   }, [dispatch, successGetSpot]);
+
+  // delete my product 
+  useEffect(() => {
+    if (confirm) {
+      dispatch({ type: GET_MYPRODUCT_LIST_DELETE });
+
+      setConfirm(false)
+      dispatch(deleteMyProduct({
+        Id: myProductId,
+        user: userInfo.id,
+        IdSpot: spotId,
+      }))
+    }
+  }, [dispatch, confirm]);
 
   //style
   const background = {
@@ -600,28 +666,22 @@ function AddShopsSpot() {
       styleHeader: styleHeader,
     },
     {
+      key: "btnOffered",
+      label: t("Products_offer"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
       key: "btnDescription",
       label: t("My_descriptions"),
       styleTableCell: tableCellNoBorderRight,
       styleHeader: styleHeader,
     },
-    // {
-    //   key: "btnPhoto",
-    //   label: t("My_descriptions"),
-    //   styleTableCell: tableCellNoBorderRight,
-    //   styleHeader: styleHeader,
-    // },
-    // {
-    //   key: "btnDelete",
-    //   label: "",
-    //   styleTableCell: tableCellNoBorderRight,
-    //   styleHeader: styleHeader,
-    // }
   ];
 
   let dataMyproductTable = [];
-  if (successMyProductList) {
-    dataMyproductTable = myProductsList.map((item) => ({
+  if (successMyProductList || successDeleteMyProductList) {
+    dataMyproductTable = myProductCurrentList.map((item) => ({
       id: item.id,
       name: (
         <>
@@ -651,13 +711,26 @@ function AddShopsSpot() {
           {item.id_product.id_product_subtype.id_product_type.name} - {item.id_product.id_product_subtype.name}
         </>
       ),
+      btnOffered: (
+        <>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
+            onClick={() => offerHendler(item)}
+          >
+            <Icon
+              icon="guidance:currency-exchange"
+              width="24"
+              height="24"
+            />
+          </button>
+        </>
+      ),
       btnDescription: (
         <>
           <button
             style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
             onClick={() => infoHandlerMyProduct(item)}
           >
-            {/* {t("btn_my_info")} */}
             <Icon
               icon="teenyicons:info-circle-outline"
               width="24"
@@ -674,8 +747,8 @@ function AddShopsSpot() {
               width="24"
               height="24"
             />
-            {/* {t("btn_my_description")} */}
           </button>
+
           <button
             style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
             onClick={() => infoHandlerMyPhoto(item)}
@@ -685,8 +758,6 @@ function AddShopsSpot() {
               width="24"
               height="24"
             />
-
-            {/* {t("btn_my_description")} */}
           </button>
           <button
             style={{ ...btnInfo, marginRight: "1rem", color: "red" }}
@@ -697,30 +768,9 @@ function AddShopsSpot() {
               width="24"
               height="24"
             />
-            {/* {t("btn_my_description")} */}
           </button>
         </>
       ),
-      // btnPhoto: (
-      //   <>
-      //     <button
-      //       style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
-      //       onClick={() => infoHandlerMyProduct(item)}
-      //     >
-      //       {t("btn_my_info")}
-      //     </button>
-      //   </>
-      // ),
-      // btnDelete: (
-      //   <>
-      //     <button
-      //       style={{ ...btnInfo, marginLeft: "1rem", marginRight: "1rem", color: "green" }}
-      //       onClick={() => infoHandlerMyProduct(item)}
-      //     >
-      //       {t("btn_my_info")}
-      //     </button>
-      //   </>
-      // )
     }));
   }
 
@@ -731,6 +781,7 @@ function AddShopsSpot() {
         spotLoading ||
         addSpotLoading ||
         loadingInsertImage ||
+        myProductListLoading ||
         loadingUpdate ? (
         <Loader />
       ) : (
@@ -750,6 +801,12 @@ function AddShopsSpot() {
               closeInfoHandler={closeInfoHandler}
             />
           ) : null}
+          {showAlert ?
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={t("Confirmation_alert_delete_my_product")}
+            /> : null}
           {errorInsertImage ? (
             <ErrorMessage msg={errorInsertImage} timeOut={TIME_AUT_ERROR} />
           ) : null}

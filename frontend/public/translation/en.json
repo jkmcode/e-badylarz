@@ -502,5 +502,9 @@
   "MyProductPhotos_title": "My photos for the product : ",
   "My_image_name": "Photo",
   "my_photo": "Selected photo",
-  "show_my_photo": "Select photo"
+  "show_my_photo": "Select photo",
+  "My_product_pages": "Pages",
+  "Products_offer": "Offer",
+  "Confirmation_alert_delete_my_product": "Are you sure you want to delete product?",
+  "MyProductOffer_title": "Offer for the product : "
 }

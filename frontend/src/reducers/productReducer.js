@@ -32,6 +32,7 @@ import {
   SEARCH_SELECTED_DELETE,
   SEARCH_SELECTED_CATEGORY,
   SEARCH_SELECTED_SUBCATEGORY,
+  SEARCH_SELECTED_DELETE_NO_LNG,
   GET_MYPRODUCT_LIST_REQUEST,
   GET_MYPRODUCT_LIST_SUCCESS,
   GET_MYPRODUCT_LIST_FAIL,
@@ -52,8 +53,63 @@ import {
   DELETE_MY_IMAGE_SUCCESS,
   DELETE_MY_IMAGE_FAIL,
   DELETE_MY_IMAGE_DELETE,
+  DELETE_MY_PRODUCT_REQUEST,
+  DELETE_MY_PRODUCT_SUCCESS,
+  DELETE_MY_PRODUCT_FAIL,
+  DELETE_MY_PRODUCT_DELETE,
+  ADD_MYPRODUCT_REQUEST,
+  ADD_MYPRODUCT_SUCCESS,
+  ADD_MYPRODUCT_FAIL,
+  ADD_MYPRODUCT_DELETE,
 
 } from "../constants/productConstans";
+
+
+export const addMyProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_MYPRODUCT_REQUEST:
+      return { loading: true, success: false };
+    case ADD_MYPRODUCT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case ADD_MYPRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case ADD_MYPRODUCT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const deleteMyProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_MY_PRODUCT_REQUEST:
+      return { loading: true, success: false };
+    case DELETE_MY_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case DELETE_MY_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case DELETE_MY_PRODUCT_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const deleteMyImageReducer = (state = {}, action) => {
   switch (action.type) {
@@ -72,7 +128,9 @@ export const deleteMyImageReducer = (state = {}, action) => {
         success: false,
       };
     case DELETE_MY_IMAGE_DELETE:
-      return {};
+      return {
+        result: {}
+      };
     default:
       return state;
   }
@@ -383,6 +441,10 @@ export const searchProductReducer = (state = {}, action) => {
         flagLng: true,
         flagCategory: true,
         flagSubcategory: true,
+        selected2: action.payload
+      };
+    case SEARCH_SELECTED_DELETE_NO_LNG:
+      return {
         selected2: action.payload
       };
     case SEARCH_SELECTED_DELETE:

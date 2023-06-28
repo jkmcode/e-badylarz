@@ -500,5 +500,9 @@
   "MyProductPhotos_title": "Moje zdjęcia dla produktu : ",
   "My_image_name": "Zdjęcie",
   "my_photo": "Wybrane zdjęcie",
-  "show_my_photo": "Wybierz zdjęcie"
+  "show_my_photo": "Wybierz zdjęcie",
+  "My_product_pages": "Strony",
+  "Products_offer": "Oferuj",
+  "Confirmation_alert_delete_my_product": "Napewno chcesz skasować swój produkt",
+  "MyProductOffer_title": "Oferta dla produktu : "
 }

@@ -19,12 +19,13 @@ import {
   getProductCat,
   getSubproductCat,
   selectedCat,
-  addMyproduct
+  addMyproduct,
+  getMyproduct
 } from "../actions/productActions";
 import { getListOfData, unOrActiveList } from "../actions/adminActions";
 import {
   ONE,
-  LIST_OF_PRODUCTS,
+  LIST_OF_MY_PRODUCTS,
   EMPTY_LIST,
   UNACTIVE,
   ACTIVE,
@@ -42,7 +43,10 @@ import {
 import {
   GET_PRODUCT_CAT_LIST_DELETE,
   GET_PRODUCT_SUBCAT_LIST_DELETE,
-  SEARCH_SELECTED_DELETE
+  SEARCH_SELECTED_DELETE,
+  SEARCH_SELECTED_LNG,
+  ADD_MYPRODUCT_DELETE,
+  GET_MYPRODUCT_LIST_DELETE
 } from "../constants/productConstans"
 import {
   tableCellNoBorderRight,
@@ -74,7 +78,7 @@ function MyProducts() {
   const [testArr, setTestArr] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [selectedLgn, setSelectedLng] = useState("0");
+  const [selectedLgn, setSelectedLgn] = useState(null);
   const [switcher, setSwitcher] = useState(false);
   const [selectedProductID, setSelectedProductID] = useState(0)
   const [selectedProductInfo, setSelectedProductInfo] = useState(0)
@@ -85,6 +89,8 @@ function MyProducts() {
   const [selectedProductSubCategoryList, setSelectedProductSubCategoryList] = useState([])
   const [newProductList, setNewProductList] = useState([])
   const [emptyValueError, setEmptyValueError] = useState(false);
+
+  const [elements, setElements] = useState([]);
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -125,43 +131,37 @@ function MyProducts() {
     error,
     success,
     result,
+    pages,
+    current_page
   } = productListRedux;
 
-  const unOrActive = useSelector((state) => state.unOrActiveDescription);
+  const myproductsRedux = useSelector((state) => state.getMyProducts);
   const {
-    loading: loadingUnOrActive,
-    success: successUnOrActive,
-    error: errorUnOrActive,
-  } = unOrActive;
+    result: myProductsList,
+    success: successMyProductList,
+    loading: myProductListLoading,
+    error: myProductListError,
+  } = myproductsRedux;
 
-  //RadioButtons functions 
-  // const handleBtnValue = (e) => {
-  //   setRadioValue(e.target.value);
-  // };
+  const addMyproductsRedux = useSelector((state) => state.addMyProduct);
+  const {
+    success: successAddMyProduct,
+    loading: addMyProductLoading,
+    error: addMyProductError,
+  } = addMyproductsRedux;
+
+
+  // Hendlers
 
   const clearHandler = () => {
     dispatch({ type: SEARCH_SELECTED_DELETE });
+    setSelectedLgn(null)
     setSelectedProductCategory(0)
     setSelectedProductCategoryList([])
     setSelectedProductSubCategoryList([])
     setNewProductList(result)
   };
 
-  // const unActiveHandler = (id) => {
-  //   setCatObj(id);
-  //   setShowAlert(true);
-  //   setUpdateStatus(UNACTIVE);
-  // };
-
-  // const activeHandler = (id) => {
-  //   setCatObj(id);
-  //   setShowAlert(true);
-  //   setUpdateStatus(ACTIVE);
-  // };
-
-  // const editHandler = (id) => {
-  //   navigate(`${id}/edit`);
-  // };
   const addHandler = (i) => {
 
     dispatch(addMyproduct({
@@ -170,12 +170,37 @@ function MyProducts() {
       idUser: userInfo.id
     }))
 
-    console.log('Dodaje--', i)
-
     // setSelectedProductID(i.id)
     // setSelectedProductName(i.name)
     // dispatch({ type: SET_FLAG_DESC_TRUE });
   }
+
+  const pagesHendler = (i) => {
+    if (Number(i) !== Number(current_page)) {
+      setElements([])
+      const searchData = {
+        typeActivity: LIST_OF_MY_PRODUCTS,
+        page: i,
+        lng: flagLng ? selected2.lng : '0',
+        cat: flagCategory ? selected2.category : '0',
+        subcat: flagSubcategory ? selected2.subcategory : '0'
+      }
+      dispatch(getListOfData(searchData));
+    }
+  }
+
+  const searchHandler = () => {
+    setElements([])
+    const searchData = {
+      typeActivity: LIST_OF_MY_PRODUCTS,
+      page: '1',
+      lng: flagLng ? selected2.lng : '0',
+      cat: flagCategory ? selected2.category : '0',
+      subcat: flagSubcategory ? selected2.subcategory : '0'
+    }
+    dispatch(getListOfData(searchData));
+  }
+
   const infoHandler = (i) => {
     setSelectedProductInfo(i)
     dispatch({ type: SET_FLAG_INFO_TRUE });
@@ -184,16 +209,6 @@ function MyProducts() {
   const closeInfoHandler = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
   };
-
-  // const confirmYes = () => {
-  //   setShowAlert(false);
-  //   setConfirm(true);
-  // };
-
-  // const confirmNo = () => {
-  //   setShowAlert(false);
-  //   setConfirm(false);
-  // };
 
   const changeHandler = (str) => {
     setCurrentProductList(str);
@@ -209,6 +224,7 @@ function MyProducts() {
       category: 0,
       subcategory: 0
     }));
+    setSelectedLgn(option)
     setSelectedProductCategoryList([])
     setSelectedProductSubCategoryList([])
     setEmptyValueError(false);
@@ -252,74 +268,68 @@ function MyProducts() {
 
 
   //Comment
-  // fetching list of product from DB
+  // fetching first list of product from DB 
   useEffect(() => {
-    if (result.length === EMPTY_LIST) {
-      const typeActivity = LIST_OF_PRODUCTS;
-      dispatch(getListOfData(typeActivity));
-    } else {
-      setCurrentProductList(result);
-      setNewProductList(result)
+    // if (result.length === EMPTY_LIST) {
+    const searchData = {
+      typeActivity: LIST_OF_MY_PRODUCTS,
+      page: "1",
+      lng: "0",
+      cat: "0",
+      subcat: "0"
     }
-  }, [result.length]);
+    dispatch(getListOfData(searchData));
+    // }
+    dispatch({ type: SEARCH_SELECTED_DELETE })
 
-  //Comment
-  // dispatch function for active and unactive product
+  }, [])
 
-  // useEffect(() => {
-  //   if (confirm && updateStatus === UNACTIVE) {
-  //     dispatch(
-  //       unOrActiveList({
-  //         Id: catObj,
-  //         active: false,
-  //         userId: userInfo.id,
-  //         objType: PRODUCTS,
-  //         kind: "",
-  //       })
-  //     );
-  //   }
+  useEffect(() => {
+    if (successMyProductList) {
+    } else { dispatch(getMyproduct(spotId)) }
+  }, [dispatch, myProductsList])
 
-  //   if (confirm && updateStatus === ACTIVE) {
-  //     dispatch(
-  //       unOrActiveList({
-  //         Id: catObj,
-  //         active: true,
-  //         userId: userInfo.id,
-  //         objType: PRODUCTS,
-  //         kind: "",
-  //       })
-  //     );
-  //   }
-  //   setConfirm(false);
-  // }, [dispatch, confirm, updateStatus]);
+  useEffect(() => {
+    if (successAddMyProduct) {
+      dispatch({ type: ADD_MYPRODUCT_DELETE })
+      dispatch({ type: GET_MYPRODUCT_LIST_DELETE })
+    }
 
-  //Comment
-  //When the successUnOrActive value is truthy,
-  //the component will dispatch an action of type GET_LIST_OF_DATA_DELETE (clean a list of products - result)
-  //it triggers other useEffect which fetch the newest result (the newest list of products).
-  // useEffect(() => {
-  //   if (successUnOrActive) {
-  //     dispatch({ type: GET_LIST_OF_DATA_DELETE });
-  //   }
-  // }, [dispatch, successUnOrActive]);
+  }, [dispatch, successAddMyProduct])
+
+  useEffect(() => {
+    if (pages) {
+      setElements([])
+      for (let i = 1; i <= Number(pages); i++) {
+        setElements(prevElementy => [...prevElementy, i]);
+      }
+    }
+    // wybór wszystkich obiektów z tablicy result, których nie ma w myProductsList
+    if (successMyProductList) {
+      setCurrentProductList(result.filter((el1) => !myProductsList.some((el2) => el1.id === el2.id_product.id)));
+      setNewProductList(result.filter((el1) => !myProductsList.some((el2) => el1.id === el2.id_product.id)))
+    }
+
+  }, [pages, successMyProductList, success]);
 
   //Comment
   // The dispatch function updates product list
-  // gdy zostaną wybrane łacznie lib rozdzielnie język, kategoria i podkategoria
+  // gdy zostaną wybrane łacznie lub rozdzielnie język, kategoria i podkategoria
+
   useEffect(() => {
     if (flagSubcategory) {
       setNewProductList(
-        result.filter((product) =>
+        newProductList.filter((product) =>
           Number(product.id_product_subtype.id)
           === Number(selected2.subcategory)))
     } else if (flagCategory) {
       setNewProductList(
-        result.filter((product) =>
+        newProductList.filter((product) =>
           Number(product.id_product_subtype.id_product_type.id)
           === Number(selected2.category)))
     } else if (flagLng) {
       setNewProductList(
-        result.filter((product) =>
+        newProductList.filter((product) =>
           product.id_product_subtype.id_product_type.language === selected2.lng))
     }
   }, [selected2, flagLng, flagCategory, flagSubcategory]);
@@ -329,17 +339,17 @@ function MyProducts() {
     if (success) {
       if (flagSubcategory) {
         setNewProductList(
-          result.filter((product) =>
+          newProductList.filter((product) =>
             Number(product.id_product_subtype.id)
             === Number(selected2.subcategory)))
       } else if (flagCategory) {
         setNewProductList(
-          result.filter((product) =>
+          newProductList.filter((product) =>
             Number(product.id_product_subtype.id_product_type.id)
             === Number(selected2.category)))
       } else if (flagLng) {
         setNewProductList(
-          result.filter((product) =>
+          newProductList.filter((product) =>
             product.id_product_subtype.id_product_type.language === selected2.lng))
       }
     } else { setNewProductList(result) }
@@ -381,7 +391,7 @@ function MyProducts() {
     if (flagLng & flagCategory & !flagSubcategory) {
       dispatch(getSubproductCat(selected2.category));
     }
-  }, [dispatch, selectedLgn, selected2]);
+  }, [dispatch, selected2]);
 
   useEffect(() => {
     if (successSubProductCatList) {
@@ -483,27 +493,6 @@ function MyProducts() {
               {t("btn-add")}
             </button>
           )}
-          {/* {radioValue === ONE && (
-            <button
-              style={{ ...btnEdit, marginRight: "1rem" }}
-              onClick={() => editHandler(item.id)}
-            >
-              {t("btn_edit")}
-            </button>
-          )} */}
-          {/* {radioValue === ONE ? (
-            <button
-              style={{ ...btnUnactive }}
-              onClick={() => unActiveHandler(item.id)}
-            >
-              {t("btn_unactive")}
-            </button>
-          ) : (
-   
-            <button style={btnActive} onClick={() => activeHandler(item.id)}>
-              {t("btn_active")}
-            </button>
-          )} */}
         </div>
       </div>
     ),
@@ -517,7 +506,6 @@ function MyProducts() {
     optionsList: language,
     defaultValue: flagLng ?
       selected2.lng_name
-      // language.filter((item) => item.code === selected2.lng).name
       : t("Select_opions"),
     disabled: false,
   };
@@ -541,7 +529,6 @@ function MyProducts() {
     disabled: false,
   };
 
-
   return (
     <div
       style={{
@@ -552,20 +539,6 @@ function MyProducts() {
         minHeight: "50vh",
       }}
     >
-      {/* {showAlert && updateStatus === UNACTIVE && (
-        <InfoAlertComponent
-          confirmYes={confirmYes}
-          confirmNo={confirmNo}
-          context={t("Confirmation_alert_unactive_product")}
-        />
-      )}
-      {showAlert && updateStatus === ACTIVE && (
-        <InfoAlertComponent
-          confirmYes={confirmYes}
-          confirmNo={confirmNo}
-          context={t("Confirmation_alert_active_product")}
-        />
-      )} */}
       {infoFlag ? (
         <InfoComponent
           title={t("InfoComponent_title_product")}
@@ -601,9 +574,6 @@ function MyProducts() {
           marginTop: "2rem",
         }}
       >
-        {/* <div>
-          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-        </div> */}
         <div
           style={{
             display: "flex",
@@ -656,11 +626,26 @@ function MyProducts() {
           />
         </div>
         <button
-          style={{ ...btnInfo, marginRight: "1rem" }}
+          style={{
+            ...btnEdit,
+            color: "black",
+            textTransform: "uppercase",
+            marginRight: "1rem"
+          }}
+          onClick={() => searchHandler()}
+        >
+          <Icon icon="bi:search" width="32" height="32" color="black" />
+        </button>
+        <button
+          style={{
+            ...btnEdit,
+            color: "black",
+            textTransform: "uppercase",
+            marginRight: "1rem"
+          }}
           onClick={() => clearHandler()}
         >
           <Icon icon="mdi:close-thick" width="32" height="32" color="red" />
-          {t("btn_clear")}
         </button>
       </div>
 
@@ -677,19 +662,47 @@ function MyProducts() {
           <Divider backgroundColor="gray" />
         </>
       ) : null}
-      {loadingGetListOfData ? (
+      {loadingGetListOfData || myProductListLoading || addMyProductLoading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />
         </div>
       ) : (
-        <TableComponent
-          data={dataMyProductsTable}
-          columns={tableConatctcolumns}
-          tableStyle={tableSubcatProductStyle}
-          mainTableContainer={mainTableContainer}
-        />
-      )}
-    </div>
+        <>
+          <div
+            style={{
+              fontSize: "calc(0.55rem + 0.3vw)",
+              fontWeight: "500",
+              textTransform: "uppercase",
+              margin: "0.4rem",
+            }}>
+            {t("My_product_pages")} :{" "}
+            {pages && elements.length > 0 ? (
+
+              elements.map((el) => (
+                < button
+                  style={{
+                    ...btnEdit,
+                    color: Number(current_page) == Number(el) ? "red" : "black",
+                    textTransform: "uppercase",
+                    marginRight: "0.35rem"
+                  }}
+                  onClick={() => pagesHendler(el)}
+                >
+                  {el}
+                </button>
+              ))
+            ) : null}
+          </div>
+          <TableComponent
+            data={dataMyProductsTable}
+            columns={tableConatctcolumns}
+            tableStyle={tableSubcatProductStyle}
+            mainTableContainer={mainTableContainer}
+          />
+        </>
+      )
+      }
+    </div >
   );
 }
 

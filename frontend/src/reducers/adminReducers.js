@@ -592,8 +592,10 @@ export const getListOfDataReducer = (
       return {
         loading: false,
         success: true,
-        type: action.payload[0].list_of_data,
-        result: action.payload,
+        // type: action.payload[0].list_of_data,
+        pages: action.payload.total_pages,
+        current_page: action.payload.current_page,
+        result: action.payload.data,
       };
     case GET_LIST_OF_DATA_FAIL:
       return {

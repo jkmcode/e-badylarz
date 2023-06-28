@@ -44,6 +44,7 @@ import Products from "./admin/Products";
 import ProductsActivity from "./admin/ProductsActivity";
 import MyProducts from "./admin/MyProducts";
 import MyProductPhotos from "./admin/MyProductPhotos"
+import MyProductOffer from "./admin/MyProductOffer"
 
 //Customer side
 import HomeScreen from "./screens/HomeScreen";
@@ -95,6 +96,10 @@ function App() {
           <Route
             path="shops/:idShop/my-products-photo/:idSpot/:productName/:idMyProd"
             element={<MyProductPhotos />}
+          />
+          <Route
+            path="shops/:idShop/my-products-offer/:idSpot/:productName/:idMyProd"
+            element={<MyProductOffer />}
           />
           <Route path="areas" element={<AdminAreas />} />
           <Route path="areas/:add" element={<AreaActivity />} />

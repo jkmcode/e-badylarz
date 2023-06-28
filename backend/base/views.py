@@ -10,6 +10,8 @@ from io import BytesIO
 from django.http import Http404
 from django.db import IntegrityError
 
+from django.core.paginator import Paginator
+
 from datetime import datetime
 
 import imp
@@ -1064,18 +1066,6 @@ def get_single_instance(request, Id, typeActivity):
 
     return Response(serializer.data)
 
-
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def get_list_of_data(request, typeActivity):
-    
-    if typeActivity == "LIST_OF_PRODUCTS":
-        products = Product.objects.all().order_by('name')
-        seriaziler = ProductsSerializer(products, many=True)
-    else:
-        raise Http404('Invalid typeActivity')
-    
-    return Response(seriaziler.data)      
 
 
 @api_view(['POST'])

@@ -63,7 +63,7 @@ class CitiesDescriptions(models.Model):
 
 # Product type
 class ProductTypes(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     language = models.CharField(max_length=2)
     photo = models.ImageField(null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True)
@@ -303,16 +303,6 @@ class MyProducts(models.Model):
     modifier = models.CharField(max_length=5, null=True, blank=True)
     is_delete = models.BooleanField(default=False,null=True,blank=True)
 
-# Archiwizacja wszelkich zmian w tabeli - MyProducts 
-# class MyProductsARC(models.Model):
-#     id_product = models.IntegerField()
-#     id_shops_spot = models.IntegerField()
-#     date_of_entry = models.DateTimeField()
-#     date_of_change= models.DateTimeField(null=True,blank=True)
-#     creator = models.CharField(max_length=5)
-#     modifier = models.CharField(max_length=5, null=True, blank=True)
-#     date_of_archiv = models.DateTimeField(auto_now=True)
-#     archiver = models.CharField(max_length=5)
 
 # MyProductsPhotos - dodatkowe zdjecia produktu robione przrz sklep ( rolnika itp.)
 # archiwizacja zmian poprzez zmianę flagi "is_delete" na true i dodanie daty zmiany
@@ -326,16 +316,6 @@ class MyProductsPhotos(models.Model):
     is_delete = models.BooleanField(default=False,null=True,blank=True)
     modifier = models.CharField(max_length=5, null=True, blank=True)
 
-# Archiwizacja wszelkich zmian w tabeli - MyProductsPhotos
-# class MyProductsPhotosARC(models.Model):
-#     id_my_product = models.IntegerField()
-#     photo = models.ImageField()
-#     date_of_entry = models.DateTimeField()
-#     date_of_change= models.DateTimeField(null=True,blank=True)
-#     creator = models.CharField(max_length=5)
-#     modifier = models.CharField(max_length=5, null=True, blank=True)
-#     date_of_archiv = models.DateTimeField(auto_now=True)
-#     archiver = models.CharField(max_length=5)
 
 # MyProductsDescriptions - dodatkowy opis robiony przez sklep( rolnika itp.)
 # dla sprzedawanego produktu
@@ -360,7 +340,46 @@ class MyProductsDescriptionsARC(models.Model):
     date_of_archiv = models.DateTimeField(auto_now=True)
     archiver = models.CharField(max_length=5)
 
+##################### Offer ######################################
+
+# MyProductsOffered - główna tabela aktualnych ofert
+class MyProductsOffered(models.Model):
+    id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
+    quantity = models.FloatField()
+    current_quantity = models.FloatField()
+    barrel_bulk = models.CharField(max_length=5)
+    offer_from = models.DateTimeField()
+    offer_to = models.DateTimeField()
+    country_of_origin = models.CharField(max_length=50,null=True, blank=True)
+    term_of_validity = models.DateTimeField()
+    date_of_entry = models.DateTimeField(auto_now=True)
+    date_of_change= models.DateTimeField(null=True,blank=True)
+    creator = models.CharField(max_length=5)
+    modifier = models.CharField(max_length=5, null=True, blank=True)
+    is_active = models.BooleanField()
+
+# MyProductsPrice - szczegóły oferty
+class MyProductsPrice(models.Model):
+    id_my_product_offered = models.ForeignKey(MyProductsOffered, on_delete=models.CASCADE, null=True)
+    price = models.FloatField()
+    sale_price= models.FloatField( null=True, blank=True)
+    price_30_day = models.FloatField( null=True, blank=True)
+    currency = models.CharField(max_length=5, null=True, blank=True)
+    package_size = models.FloatField()
+
+
+# MyProductsOfferedDoc - dokumenty zmian w tabeli głównej
+class MyProductsOfferedDoc(models.Model):
+    id_my_product_offered = models.ForeignKey(MyProductsOffered, on_delete=models.CASCADE, null=True)
+    quantity = models.FloatField()
+    date_of_entry = models.DateTimeField(auto_now=True)
+    creator = models.CharField(max_length=5)
+    type_document = models.CharField(max_length=50, null=True, blank=True)
+    is_add = models.BooleanField()
+
 ## ---------  END SHOP  ------------ ##
+
+
 
 ## ---------  AREA  ------------ ##
 

@@ -77,6 +77,8 @@ function Products() {
   const [newProductList, setNewProductList] = useState([])
   const [emptyValueError, setEmptyValueError] = useState(false);
 
+  const [elements, setElements] = useState([]);
+
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
     { id: 2, name: t("Radio_false"), value: "0" },
@@ -116,6 +118,8 @@ function Products() {
     error,
     success,
     result,
+    pages,
+    current_page
   } = productListRedux;
 
   const unOrActive = useSelector((state) => state.unOrActiveDescription);
@@ -129,6 +133,34 @@ function Products() {
   const handleBtnValue = (e) => {
     setRadioValue(e.target.value);
   };
+
+  //Hendlers
+
+  const pagesHendler = (i) => {
+    if (Number(i) !== Number(current_page)) {
+      setElements([])
+      const searchData = {
+        typeActivity: LIST_OF_PRODUCTS,
+        page: i,
+        lng: flagLng ? selected2.lng : '0',
+        cat: flagCategory ? selected2.category : '0',
+        subcat: flagSubcategory ? selected2.subcategory : '0'
+      }
+      dispatch(getListOfData(searchData));
+    }
+  }
+
+  const searchHandler = () => {
+    setElements([])
+    const searchData = {
+      typeActivity: LIST_OF_PRODUCTS,
+      page: '1',
+      lng: flagLng ? selected2.lng : '0',
+      cat: flagCategory ? selected2.category : '0',
+      subcat: flagSubcategory ? selected2.subcategory : '0'
+    }
+    dispatch(getListOfData(searchData));
+  }
 
   const clearHandler = () => {
     dispatch({ type: SEARCH_SELECTED_DELETE });
@@ -237,13 +269,29 @@ function Products() {
   // fetching list of product from DB
   useEffect(() => {
     if (result.length === EMPTY_LIST) {
-      const typeActivity = LIST_OF_PRODUCTS;
-      dispatch(getListOfData(typeActivity));
+      const searchData = {
+        typeActivity: LIST_OF_PRODUCTS,
+        page: "1",
+        lng: "0",
+        cat: "0",
+        subcat: "0"
+      }
+      dispatch(getListOfData(searchData));
     } else {
       setCurrentProductList(result);
       setNewProductList(result)
     }
-  }, [result.length]);
+  }, []);
+
+  useEffect(() => {
+    if (pages) {
+      for (let i = 1; i <= Number(pages); i++) {
+        setElements(prevElementy => [...prevElementy, i]);
+      }
+    }
+    setCurrentProductList(result);
+    setNewProductList(result)
+  }, [pages]);
 
   //Comment
   // dispatch function for active and unactive product
@@ -649,11 +697,21 @@ function Products() {
           />
         </div>
         <button
+          style={{
+            ...btnEdit,
+            color: "black",
+            textTransform: "uppercase",
+            marginRight: "1rem"
+          }}
+          onClick={() => searchHandler()}
+        >
+          <Icon icon="bi:search" width="32" height="32" color="black" />
+        </button>
+        <button
           style={{ ...btnInfo, marginRight: "1rem" }}
           onClick={() => clearHandler()}
         >
           <Icon icon="mdi:close-thick" width="32" height="32" color="red" />
-          {t("btn_clear")}
         </button>
       </div>
 
@@ -675,12 +733,40 @@ function Products() {
           <DotsLoader />
         </div>
       ) : (
-        <TableComponent
-          data={dataSubcategoryTable}
-          columns={tableConatctcolumns}
-          tableStyle={tableSubcatProductStyle}
-          mainTableContainer={mainTableContainer}
-        />
+        <>
+          <div
+            style={{
+              fontSize: "calc(0.55rem + 0.3vw)",
+              fontWeight: "500",
+              textTransform: "uppercase",
+              margin: "0.4rem",
+            }}>
+            {t("My_product_pages")} :{" "}
+            {pages && elements.length > 0 ? (
+
+              elements.map((el) => (
+                < button
+                  style={{
+                    ...btnEdit,
+                    color: Number(current_page) == Number(el) ? "red" : "black",
+                    textTransform: "uppercase",
+                    marginRight: "0.35rem"
+                  }}
+                  onClick={() => pagesHendler(el)}
+                >
+                  {el}
+                </button>
+              ))
+            ) : null}
+          </div>
+          <TableComponent
+            data={dataSubcategoryTable}
+            columns={tableConatctcolumns}
+            tableStyle={tableSubcatProductStyle}
+            mainTableContainer={mainTableContainer}
+          />
+        </>
+
       )}
     </div>
   );

@@ -60,6 +60,7 @@ urlpatterns = [
     # panel
     path('api/add-myproduct/', add_myproduct),
     path('api/<str:IdSpot>/get-myproduct/', get_myproduct),
+    path('api/delete-my-product/', deleteMyProduct),
 
     # product
     path('api/add-product-cat/', addProductCat),
@@ -71,7 +72,7 @@ urlpatterns = [
     path('api/<str:Id>/<str:typeActivity>/get-single-instance/', get_single_instance),
     path('api/add-single-instance/', add_single_instance),
     path('api/update-single-instance/', update_single_instance),
-    path('api/<str:typeActivity>/get-list-of-data/', get_list_of_data),
+    path('api/<str:typeActivity>/<str:Page>/<str:Lng>/<str:Cat>/<str:Subcat>/get-list-of-data/', get_list_of_data),
 
 ]
 

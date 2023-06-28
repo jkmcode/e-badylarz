@@ -884,7 +884,7 @@ export const getSingleInstance = (insertData) => async (dispatch, getState) => {
   }
 };
 
-export const getListOfData = (typeActivity) => async (dispatch, getState) => {
+export const getListOfData = (searchData) => async (dispatch, getState) => {
   try {
     dispatch({ type: GET_LIST_OF_DATA_REQUEST });
 
@@ -900,7 +900,7 @@ export const getListOfData = (typeActivity) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `/api/${typeActivity}/get-list-of-data/`,
+      `/api/${searchData.typeActivity}/${searchData.page}/${searchData.lng}/${searchData.cat}/${searchData.subcat}/get-list-of-data/`,
       config
     );
 

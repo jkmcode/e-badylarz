@@ -18,7 +18,9 @@ import {
   addMyImageReducer,
   uploadMyImageReducer,
   getMyImageReducer,
-  deleteMyImageReducer
+  deleteMyImageReducer,
+  deleteMyProductReducer,
+  addMyProductReducer
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -102,7 +104,9 @@ const reducer = combineReducers({
   addMyImage: addMyImageReducer,
   uploadMyImage: uploadMyImageReducer,
   getMyImage: getMyImageReducer,
-  deleteMyImage: deleteMyImageReducer
+  deleteMyImage: deleteMyImageReducer,
+  deleteMyProduct: deleteMyProductReducer,
+  addMyProduct: addMyProductReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")
