@@ -52,6 +52,40 @@ import {
   DELETE_MY_PRODUCT_FAIL,
 } from "../constants/productConstans";
 
+export const addOffer = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_MYPRODUCT_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/add-offer/`,
+      insertData,
+      config
+    )
+
+    console.log('Data-->', data)
+
+    dispatch({
+      type: ADD_MYPRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_MYPRODUCT_FAIL,
+      payload: errorHandling(error)
+    });
+  }
+};
+
 export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) => {
   try {
 

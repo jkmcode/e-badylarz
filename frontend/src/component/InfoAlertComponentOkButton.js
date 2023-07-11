@@ -2,7 +2,7 @@ import React from "react";
 import Divider from "../admin/Divider";
 import { useTranslation } from "react-i18next";
 
-function InfoAlertComponent({ confirmYes, confirmNo, context }) {
+function InfoAlertComponentOkButton({ confirmYes, context }) {
   const { t } = useTranslation();
   //styling
   const mainContainer = {
@@ -65,35 +65,22 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
     ...btn,
     backgroundImage: `linear-gradient(171deg, rgba(29, 223, 77, 1) 45%, rgba(60, 128, 46, 1) 89%)`,
     bottom: "5%",
-    right: "5%",
+    right: "42%",
   };
 
-  const yesNo = {
-    ...btn,
-    backgroundImage: `linear-gradient(171deg, rgba(234, 17, 59, 1) 45%, rgba(202, 71, 130, 1) 89%)`,
-    bottom: "5%",
-    left: "5%",
-  };
 
   return (
     <div style={showModalOverlay}>
       <div style={mainContainer}>
-        <div style={title}>{t("Confirmation_title")}</div>
+        <div style={title}>{t("Confirmation_title_form")}</div>
         <Divider backgroundColor="gray" />
         <div style={body}>{context}</div>
         <button style={yesBtn} onClick={(e) => confirmYes(e)}>
-          {t("btn_yes")}
-        </button>
-        <button style={yesNo} onClick={(e) => confirmNo(e)}>
-          {t("btn_no")}
+          {t("btn_ok")}
         </button>
       </div>
     </div>
   );
 }
 
-export default InfoAlertComponent;
-
-
-
-
+export default InfoAlertComponentOkButton;

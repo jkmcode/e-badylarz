@@ -2,7 +2,7 @@ import React from "react";
 import Divider from "../admin/Divider";
 import { useTranslation } from "react-i18next";
 
-function InfoAlertComponent({ confirmYes, confirmNo, context }) {
+function InfoBigAlertComponent({ confirmYes, confirmNo, context }) {
   const { t } = useTranslation();
   //styling
   const mainContainer = {
@@ -10,7 +10,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
     backgroundColor: "whitesmoke",
     width: "80%",
     maxWidth: "600px",
-    height: "40vh",
+    height: "55vh",
     textAlign: "center",
   };
 
@@ -45,8 +45,8 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
     textAlign: "center",
     marginLeft: "3rem",
     marginRight: "3rem",
-    fontWeight: "600",
-    fontSize: "1.3rem",
+    fontWeight: "500",
+    fontSize: "1.1rem",
   };
 
   const btn = {
@@ -78,7 +78,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
   return (
     <div style={showModalOverlay}>
       <div style={mainContainer}>
-        <div style={title}>{t("Confirmation_title")}</div>
+        <div style={title}>{t("Confirmation_title_offer")}</div>
         <Divider backgroundColor="gray" />
         <div style={body}>{context}</div>
         <button style={yesBtn} onClick={(e) => confirmYes(e)}>
@@ -92,7 +92,7 @@ function InfoAlertComponent({ confirmYes, confirmNo, context }) {
   );
 }
 
-export default InfoAlertComponent;
+export default InfoBigAlertComponent;
 
 
 

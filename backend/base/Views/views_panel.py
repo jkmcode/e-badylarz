@@ -2,11 +2,140 @@ from base.serializer import *
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+from rest_framework import status
 
 from datetime  import datetime
+import time
+import random
+import datetime
 
 from django.core.paginator import Paginator
 from django.http import Http404
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def addOffer(request):
+    data = request.data
+    uniqueKey = time.time()*float(data['quantity'])/float(data['price_1'])+random.uniform(0.0, 1.0)
+    currentDate = datetime.datetime.now()
+    currentDate12 = currentDate.replace(hour=12, minute=0, second=0, microsecond=0)
+    startDate = currentDate12 + datetime.timedelta(days=int(data['deltaDateFrom']))
+    endDate = startDate + datetime.timedelta(days=int(data['deltaDateTo']))
+
+    alreadyExists = MyProductsOffered.objects.filter(
+        id_my_product__id=data['myproduct'], is_active = True ).exists()
+    
+    if alreadyExists:
+        content = {"detail": "Offer already exists" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)  
+    try:
+        try:
+            myProduct = MyProducts.objects.get(id=data['myproduct'])
+        except Exception:
+                content = {"detail": "Bad request. Offer not added" }
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        createdOffer = MyProductsOffered.objects.create(
+                id_my_product= myProduct,
+                quantity = data['quantity'],
+                current_quantity = data['quantity'],
+                barrel_bulk = data['bb'],
+                barrel_bulk_short = data['bb_short'],
+                barrel_bulk_long = data['bb_long'],
+                offer_from = startDate,
+                offer_to = endDate,
+                country_of_origin = data['country'],
+                term_of_validity = data['termOfValidity'],
+                date_of_entry = currentDate,
+                creator = data['user'],
+                is_active = True,
+                unique_key = uniqueKey
+            )
+    except Exception:
+                content = {"detail": "Bad request. Offer not added" }
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        myOffer = MyProductsOffered.objects.get(unique_key = uniqueKey)
+    except Exception:
+        content = {"detail": "Bad request. Offer not added" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        createdOffer_doc = MyProductsOfferedDoc.objects.create( 
+            id_my_product_offered = myOffer,
+            quantity = data['quantity'],
+            date_of_entry = currentDate,
+            creator = data['user'],
+            type_document = "NEW OFFER"
+        )
+    except Exception:
+        try:
+            MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+        except Exception as e:
+            content = {"detail": "Bad request. Error DB" + str(e)}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content = {"detail": "Bad request. Offer not added" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        createdOffer_v1 = MyProductsPrice.objects.create( 
+            id_my_product_offered = myOffer,
+            price = data['price_1'],
+            sale_price = data['priceSale_1'],
+            price_30_day = data['price30Day_1'],
+            currency = data['currency_1'],
+            package_size = data['packing_1']
+        )
+    except Exception:
+        try:
+            MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+        except Exception as e:
+            content = {"detail": "Bad request. Error DB" + str(e)}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content = {"detail": "Bad request. Offer not added" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    try:    
+        if data['price_2'] !="0":
+            createdOffer_v2 = MyProductsPrice.objects.create( 
+                id_my_product_offered = myOffer,
+                price = data['price_2'],
+                sale_price = data['priceSale_2'],
+                price_30_day = data['price30Day_2'],
+                currency = data['currency_2'],
+                package_size = data['packing_2']
+            )
+    except Exception:
+        try:
+            MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+        except Exception as e:
+            content = {"detail": "Bad request. Error DB" + str(e)}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content = {"detail": "Bad request. Offer not added" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    try:    
+        if data['price_3'] !="0":
+            createdOffer_v3 = MyProductsPrice.objects.create( 
+                id_my_product_offered = myOffer,
+                price = data['price_3'],
+                sale_price = data['priceSale_3'],
+                price_30_day = data['price30Day_3'],
+                currency = data['currency_3'],
+                package_size = data['packing_3']
+            )
+    except Exception:
+        try:
+            MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+        except Exception as e:
+            content = {"detail": "Bad request. Error DB" + str(e)}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content = {"detail": "Bad request. Offer not added" }
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response("OK")
+ 
 
 @api_view(["PUT","POST"])
 def deleteMyProduct(request):
@@ -15,7 +144,7 @@ def deleteMyProduct(request):
 
     active_object = MyProducts.objects.get(id=data['Id'])
     active_object.is_delete = True
-    active_object.date_of_change = datetime.now()
+    active_object.date_of_change = datetime.datetime.now()
     active_object.modifier = data['user']
     active_object.save()
 
@@ -32,7 +161,7 @@ def deleteMyImage(request):
 
     active_object = MyProductsPhotos.objects.get(id=data['Id'])
     active_object.is_delete = True
-    active_object.date_of_change = datetime.now()
+    active_object.date_of_change = datetime.datetime.now()
     active_object.modifier = data['user']
     active_object.save()
 

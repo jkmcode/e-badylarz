@@ -61,6 +61,7 @@ urlpatterns = [
     path('api/add-myproduct/', add_myproduct),
     path('api/<str:IdSpot>/get-myproduct/', get_myproduct),
     path('api/delete-my-product/', deleteMyProduct),
+    path('api/add-offer/', addOffer),
 
     # product
     path('api/add-product-cat/', addProductCat),

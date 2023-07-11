@@ -346,17 +346,20 @@ class MyProductsDescriptionsARC(models.Model):
 class MyProductsOffered(models.Model):
     id_my_product = models.ForeignKey(MyProducts, on_delete=models.CASCADE, null=True)
     quantity = models.FloatField()
-    current_quantity = models.FloatField()
+    current_quantity = models.FloatField(null=True, blank=True)
     barrel_bulk = models.CharField(max_length=5)
+    barrel_bulk_short = models.CharField(max_length=10,null=True, blank=True)
+    barrel_bulk_long = models.CharField(max_length=15,null=True, blank=True)
     offer_from = models.DateTimeField()
     offer_to = models.DateTimeField()
-    country_of_origin = models.CharField(max_length=50,null=True, blank=True)
-    term_of_validity = models.DateTimeField()
+    country_of_origin = models.CharField(max_length=5,null=True, blank=True)
+    term_of_validity = models.CharField(max_length=50,null=True, blank=True)
     date_of_entry = models.DateTimeField(auto_now=True)
     date_of_change= models.DateTimeField(null=True,blank=True)
     creator = models.CharField(max_length=5)
     modifier = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField()
+    unique_key = models.FloatField(max_length=15,null=True, blank=True)
 
 # MyProductsPrice - szczegóły oferty
 class MyProductsPrice(models.Model):
@@ -375,7 +378,6 @@ class MyProductsOfferedDoc(models.Model):
     date_of_entry = models.DateTimeField(auto_now=True)
     creator = models.CharField(max_length=5)
     type_document = models.CharField(max_length=50, null=True, blank=True)
-    is_add = models.BooleanField()
 
 ## ---------  END SHOP  ------------ ##
 
