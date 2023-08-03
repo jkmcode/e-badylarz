@@ -571,7 +571,10 @@
   "Offer_price30Day_label": "max cena z 30 dni",
   "Offer_label_Currency": "Waluta",
   "Confirmation_alert_blank_form": "Niewypełnione pole formularza",
+  "Confirmation_alert_succes": "Oferta została dodana",
   "Confirmation_title_form": "Błąd formularza",
+  "Confirmation_title_success": "Sukces",
+  "Confirmation_title_error": "Błąd",
   "Confirmation_title_offer": "Potwierdzenie oferty",
   "confirmOffer_1": "Oferuję",
   "confirmOffer_2": "produktu : ",
@@ -592,5 +595,12 @@
   "Offer_label_country": "Kraj pochodzenia",
   "Offer_Country_PL": "Polska",
   "Offer_Country_EN": "Anglia",
-  "Offer_Country_EU": "Unia Europejska"
+  "Offer_Country_EU": "Unia Europejska",
+  "Offer_not_added": "Oferta nie została dodana",
+  "Offer_aleady_exists": "Istnieje aktywna oferta dla tego produktu",
+  "Offer_log_yes": "Tak",
+  "Offer_log_no": "Nie",
+  "Offer_error_code": "Kod błędu",
+  "Offer_error_log": "Log zapisany",
+  "Offer_error_list_myproduct": "Przepraszam, brak zdjęcia produktu"
 }

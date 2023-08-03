@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import FormInput from "./FormInput";
-import TableComponent from "./TableComponent";
-import DotsLoader from "../component/DotsLoader";
 import InfoAlertComponentOkButton from "../component/InfoAlertComponentOkButton";
 import InfoBigAlertComponent from "../component/InfoBigAlertComponent"
 import noImage from "../images/noImage.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { THREE } from "../constants/environmentConstans";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Divider from "./Divider";
 import SelectOption from "./SelectOption";
-import InfoComponent from "../component/infoComponent";
-import UploadImage from "../component/UploadImage";
 import { getMyproduct } from "../actions/productActions"
+import Loader from "../component/Loader";
 import {
   useBarrelBulk,
   useDateFrom,
@@ -30,32 +26,23 @@ import {
 } from "../actions/productActions";
 
 import {
-  SET_FLAG_INFO_TRUE,
-  SET_FLAG_INFO_FALSE,
-} from "../constants/adminConstans";
-import {
-  ADD_IMAGE_MY_DELETE,
-  UPDATE_IMAGE_MY_DELETE,
-  DELETE_MY_IMAGE_DELETE,
-  GET_MY_IMAGE_DELETE
+  ADD_OFFER_DELETE
 } from "../constants/productConstans"
 import {
-  tableCellNoBorderRight,
-  productsStyleHeader,
   FormLayout,
-  btnInfo,
   addBtn
 } from "./AdminCSS";
 import {
   FLOAT_NUMBER,
-  NUMBERS_AND_NATIONAL_LETTERS,
   NUMBERS_AND_NATIONAL_LETTERS_50
 } from "../constants/formValueConstans";
 
 function MyProductPhotos() {
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
 
   const shopId = params.idShop;
   const spotId = params.idSpot;
@@ -77,6 +64,8 @@ function MyProductPhotos() {
   const [contextOffer, setContextOffer] = useState("");
   const [showErrorValue, setShowErrorValue] = useState(false);
   const [errorValueText, setErrorValueText] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dateFlag, setdateFlag] = useState(false);
@@ -122,9 +111,6 @@ function MyProductPhotos() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const infoFlag12 = useSelector((state) => state.flag);
-  const { infoFlag } = infoFlag12;
-
   const myproductsRedux = useSelector((state) => state.getMyProducts);
   const {
     result: myProductsList,
@@ -132,6 +118,13 @@ function MyProductPhotos() {
     loading: myProductListLoading,
     error: myProductListError,
   } = myproductsRedux;
+
+  const myOfferRedux = useSelector((state) => state.addOffer);
+  const {
+    success: successAddOffer,
+    loading: addOfferLoading,
+    error: addOfferError,
+  } = myOfferRedux;
 
 
   // Hendlers
@@ -281,6 +274,17 @@ function MyProductPhotos() {
   const closeErrorHandler = () => {
     setShowErrorValue(false)
     setErrorValueText("")
+  };
+
+  const closeSuccesHandler = () => {
+    dispatch({ type: ADD_OFFER_DELETE });
+    navigate(`/dashboard/shops/spot/${shopId}/edit/${spotId}`);
+  }
+
+  const closeError = () => {
+    setShowError(false)
+    setErrorText("")
+    dispatch({ type: ADD_OFFER_DELETE });
   };
 
   const selectBarrelBulkHandler = (option) => {
@@ -439,8 +443,7 @@ function MyProductPhotos() {
         currency_3: values.price_3 !== "0"
           ? currencyList.filter((i) => i.id === values.currency_3)[0].name : ""
       }
-      // console.log("handleSubmit-->", values)
-      // console.log("insertData-->", insertData)
+
       dispatch(addOffer(insertData))
     }
   }, [goFlag, confirm]);
@@ -451,6 +454,32 @@ function MyProductPhotos() {
       dispatch(getMyproduct(spotId))
     }
   }, [successMyProductList]);
+
+  // Komunikaty błędów
+  // 1. Błąd dodania oferty
+  // 2. Błąd pbrania listy moich produktów
+  useEffect(() => {
+    if (addOfferError) {
+      setShowError(true)
+      let errorDetail = ""
+      let logFlag = ""
+      if (addOfferError.detail === "Bad request. Offer not added") {
+        errorDetail = t("Offer_not_added")
+      } else if (addOfferError.detail === "Bad request. Offer not added - aleady exists") {
+        errorDetail = t("Offer_aleady_exists")
+      }
+      if (addOfferError.log) {
+        logFlag = t("Offer_log_yes")
+      } else { logFlag = t("Offer_log_no") }
+      const text = errorDetail + ".  " + t("Offer_error_code") + ": "
+        + addOfferError.code + ". " + t("Offer_error_log") + ": " + logFlag
+      setErrorText(text)
+    }
+    if (myProductListError) {
+      setShowError(true)
+      setErrorText(t("Offer_error_list_myproduct"))
+    }
+  }, [addOfferError, myProductListError]);
 
   // A. wylicza datę poczatku i końca oferty
   useEffect(() => {
@@ -690,6 +719,18 @@ function MyProductPhotos() {
         <Icon icon="ion:arrow-back" />
         {t("btn-return")}
       </Link>
+      {successAddOffer ?
+        <InfoAlertComponentOkButton
+          confirmYes={closeSuccesHandler}
+          context={t("Confirmation_alert_succes")}
+          succes={true}
+        /> : null}
+      {showError ?
+        <InfoAlertComponentOkButton
+          confirmYes={closeError}
+          context={errorText}
+          errorHTTP={true}
+        /> : null}
       {showErrorValue ?
         <InfoAlertComponentOkButton
           confirmYes={closeErrorHandler}
@@ -732,8 +773,23 @@ function MyProductPhotos() {
         {t("MyProduct_end_Offe")}  {endDate}
       </div>
       <Divider backgroundColor="gray" />
+      <div>
+        {addOfferLoading ?
+          <>
+            <Loader />
+            <Divider backgroundColor="gray" />
+          </>
+          : null}
+      </div>
+      <div>
+        {myProductListLoading ?
+          <>
+            <Loader />
+            <Divider backgroundColor="gray" />
+          </>
+          : null}
+      </div>
       < form onSubmit={handleSubmit}>
-
         <FormLayout col={6}>
           {inputs.map((input, index) => {
             if (index === 0) {

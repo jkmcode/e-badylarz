@@ -359,7 +359,7 @@ class MyProductsOffered(models.Model):
     creator = models.CharField(max_length=5)
     modifier = models.CharField(max_length=5, null=True, blank=True)
     is_active = models.BooleanField()
-    unique_key = models.FloatField(max_length=15,null=True, blank=True)
+    unique_key = models.FloatField(null=True, blank=True)
 
 # MyProductsPrice - szczegóły oferty
 class MyProductsPrice(models.Model):
@@ -583,3 +583,19 @@ class AreasSpotsShopsARC(models.Model):
     archiver = models.CharField(max_length=5)
 
 ## ---------  END AREA  ------------ ##
+
+## ---------  ERORR LOG  ------------ ##
+
+# Archiwizacja błędów po stronie beckendu 
+class ErrorLog(models.Model):
+    data_error = models.DateTimeField(auto_now=True)
+    user = models.CharField(max_length=20, null=True, blank=True)
+    function_name = models.CharField(max_length=30, null=True, blank=True)
+    error_class = models.CharField(max_length=30, null=True, blank=True)
+    error_name = models.CharField(max_length=512, null=True, blank=True)
+    pgcode = models.CharField(max_length=10, null=True, blank=True)
+    pgerror = models.CharField(max_length=512, null=True, blank=True)
+    code_position = models.CharField(max_length=10, null=True, blank=True)
+    text_position = models.CharField(max_length=128, null=True, blank=True)
+
+## ---------  END ERORR LOG  ------------ ##

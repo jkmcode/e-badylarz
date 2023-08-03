@@ -2,7 +2,8 @@ import React from "react";
 import Divider from "../admin/Divider";
 import { useTranslation } from "react-i18next";
 
-function InfoAlertComponentOkButton({ confirmYes, context }) {
+function InfoAlertComponentOkButton({ confirmYes, context,
+  errorHTTP = false, succes = false }) {
   const { t } = useTranslation();
   //styling
   const mainContainer = {
@@ -47,6 +48,7 @@ function InfoAlertComponentOkButton({ confirmYes, context }) {
     marginRight: "3rem",
     fontWeight: "600",
     fontSize: "1.3rem",
+    whiteSpace: "pre-line"
   };
 
   const btn = {
@@ -72,9 +74,13 @@ function InfoAlertComponentOkButton({ confirmYes, context }) {
   return (
     <div style={showModalOverlay}>
       <div style={mainContainer}>
-        <div style={title}>{t("Confirmation_title_form")}</div>
+        <div style={title}>
+          {succes ? t("Confirmation_title_success")
+            : errorHTTP ? t("Confirmation_title_error")
+              : t("Confirmation_title_form")}
+        </div>
         <Divider backgroundColor="gray" />
-        <div style={body}>{context}</div>
+        <div style={body}> {context}</div>
         <button style={yesBtn} onClick={(e) => confirmYes(e)}>
           {t("btn_ok")}
         </button>

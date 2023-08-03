@@ -50,11 +50,14 @@ import {
   DELETE_MY_PRODUCT_REQUEST,
   DELETE_MY_PRODUCT_SUCCESS,
   DELETE_MY_PRODUCT_FAIL,
+  ADD_OFFER_REQUEST,
+  ADD_OFFER_SUCCESS,
+  ADD_OFFER_FAIL
 } from "../constants/productConstans";
 
 export const addOffer = (insertData) => async (dispatch, getState) => {
   try {
-    dispatch({ type: ADD_MYPRODUCT_REQUEST });
+    dispatch({ type: ADD_OFFER_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -72,15 +75,13 @@ export const addOffer = (insertData) => async (dispatch, getState) => {
       config
     )
 
-    console.log('Data-->', data)
-
     dispatch({
-      type: ADD_MYPRODUCT_SUCCESS,
+      type: ADD_OFFER_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: ADD_MYPRODUCT_FAIL,
+      type: ADD_OFFER_FAIL,
       payload: errorHandling(error)
     });
   }

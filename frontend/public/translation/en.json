@@ -573,7 +573,10 @@
   "Offer_price30Day_label": "max price of 30 days",
   "Offer_label_Currency": "Currency",
   "Confirmation_alert_blank_form": "Form field not filled in",
+  "Confirmation_alert_succes": "Offer added",
   "Confirmation_title_form": "Form error",
+  "Confirmation_title_error": "Error",
+  "Confirmation_title_success": "Success",
   "Confirmation_title_offer": "Offer confirmation",
   "confirmOffer_1": "I offer",
   "confirmOffer_2": "product : ",
@@ -594,5 +597,12 @@
   "Offer_label_country": "Country of origin",
   "Offer_Country_PL": "Poland",
   "Offer_Country_EN": "England",
-  "Offer_Country_EU": "European Union"
+  "Offer_Country_EU": "European Union",
+  "Offer_not_added": "Offer not added",
+  "Offer_aleady_exists": "There is an active offer for this product",
+  "Offer_log_yes": "Yes",
+  "Offer_log_no": "No",
+  "Offer_error_code": "Error code",
+  "Offer_error_log": "Log seved ",
+  "Offer_error_list_myproduct": "Sorry, no picture of the product"
 }

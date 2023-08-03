@@ -61,10 +61,34 @@ import {
   ADD_MYPRODUCT_SUCCESS,
   ADD_MYPRODUCT_FAIL,
   ADD_MYPRODUCT_DELETE,
-
+  ADD_OFFER_REQUEST,
+  ADD_OFFER_SUCCESS,
+  ADD_OFFER_FAIL,
+  ADD_OFFER_DELETE
 } from "../constants/productConstans";
 
-
+export const addOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_OFFER_REQUEST:
+      return { loading: true, success: false };
+    case ADD_OFFER_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case ADD_OFFER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case ADD_OFFER_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 export const addMyProductReducer = (state = {}, action) => {
   switch (action.type) {
     case ADD_MYPRODUCT_REQUEST:
