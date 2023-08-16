@@ -598,4 +598,20 @@ class ErrorLog(models.Model):
     code_position = models.CharField(max_length=10, null=True, blank=True)
     text_position = models.CharField(max_length=128, null=True, blank=True)
 
+# Archiwizacja błędów po stronie frontendu 
+class AxiosErrorLog(models.Model):
+    data_error = models.DateTimeField(null=True,blank=True)
+    data_error_saved = models.DateTimeField(auto_now=True)
+    user_error = models.CharField(max_length=20, null=True, blank=True)
+    user_saved = models.CharField(max_length=20, null=True, blank=True)
+    function_name = models.CharField(max_length=30, null=True, blank=True)
+    error_code = models.CharField(max_length=30, null=True, blank=True)
+    error_detail = models.CharField(max_length=50, null=True, blank=True)
+    status = models.CharField(max_length=20, null=True, blank=True)
+    method = models.CharField(max_length=50, null=True, blank=True)
+    url = models.CharField(max_length=256, null=True, blank=True)
+    text = models.CharField(max_length=256, null=True, blank=True)
+    param = models.CharField(max_length=50, null=True, blank=True)
+
+
 ## ---------  END ERORR LOG  ------------ ##

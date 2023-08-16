@@ -63,6 +63,10 @@ urlpatterns = [
     path('api/delete-my-product/', deleteMyProduct),
     path('api/add-offer/', addOffer),
 
+    # error hendling
+    path('api/add-log/', addAxiosError),
+    path('api/<str:userId>/add-log-from-ls/', addAxiosErrorFromLS),
+
     # product
     path('api/add-product-cat/', addProductCat),
     path('api/get-product-categories/', getProductCategories),

@@ -1,5 +1,6 @@
 import axios from "axios";
-import { errorHandling } from "./errorHandling";
+import { errorHandling, addToLS } from "./errorHandling";
+// import { addToLS } from "./errorToLS"
 import {
   SORT_BY_LNG_REQUEST,
   SORT_BY_LNG_SUCCESS,
@@ -52,10 +53,82 @@ import {
   DELETE_MY_PRODUCT_FAIL,
   ADD_OFFER_REQUEST,
   ADD_OFFER_SUCCESS,
-  ADD_OFFER_FAIL
+  ADD_OFFER_FAIL,
+  ADD_LOG_REQUEST,
+  ADD_LOG_SUCCESS,
+  ADD_LOG_FAIL
 } from "../constants/productConstans";
 
+// zapisywanie danych z LS do bazy
+export const addLogErrorFromLS = () => async (dispatch, getState) => {
+  const dataFromLocalStorageJSON = localStorage.getItem("errorLog");
+  let dataFromLocalStorage = [];
+  if (dataFromLocalStorageJSON) {
+    dataFromLocalStorage = JSON.parse(dataFromLocalStorageJSON);
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.put(`/api/${userInfo.id}/add-log-from-ls/`,
+        dataFromLocalStorage,
+        config
+      )
+      localStorage.removeItem("errorLog");
+    } catch (error) { console.log("Błąd errorLS--->", error) }
+  } else { console.log("W LS nic nie ma !!!!") }
+};
+
+// nie wiem co w przypadku gdy funkcję uruchomi gość - na razie nie ma takiego przypadku
+export const addLogError = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_LOG_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/add-log/`,
+      insertData,
+      config
+    )
+
+    dispatch({
+      type: ADD_LOG_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = errorHandling(error)
+    dispatch({
+      type: ADD_LOG_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "text": "próba zapisania błędu axiosa w tabeli przed LS",
+      "function": "addLogError",
+      "param": ""
+    }
+    if (!errorRedux.log) { dispatch(addToLS(errorData)) }
+  }
+};
+
 export const addOffer = (insertData) => async (dispatch, getState) => {
+
+  dispatch(addLogErrorFromLS())
   try {
     dispatch({ type: ADD_OFFER_REQUEST });
 
@@ -80,10 +153,21 @@ export const addOffer = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = errorHandling(error)
     dispatch({
       type: ADD_OFFER_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "text": "dodanie nowej oferty",
+      "function": "addOffer",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

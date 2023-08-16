@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import FormInput from "./FormInput";
 import InfoAlertComponentOkButton from "../component/InfoAlertComponentOkButton";
-import InfoBigAlertComponent from "../component/InfoBigAlertComponent"
+import InfoBigAlertComponent from "../component/InfoBigAlertComponent";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import noImage from "../images/noImage.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +27,7 @@ import {
 } from "../actions/productActions";
 
 import {
-  ADD_OFFER_DELETE
+  ADD_OFFER_DELETE,
 } from "../constants/productConstans"
 import {
   FormLayout,
@@ -37,7 +38,16 @@ import {
   NUMBERS_AND_NATIONAL_LETTERS_50
 } from "../constants/formValueConstans";
 
-function MyProductPhotos() {
+// function errorMessageRedux(err) {
+
+//   const { t } = useTranslation();
+//   if (err.axios_error && err.axios_code === 1) {
+
+//   }
+// }
+
+
+function MyProductOffer() {
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -64,8 +74,9 @@ function MyProductPhotos() {
   const [contextOffer, setContextOffer] = useState("");
   const [showErrorValue, setShowErrorValue] = useState(false);
   const [errorValueText, setErrorValueText] = useState("");
+  const [errorText, setErrorText] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [showErrorMyProduct, setShowErrorMyProduct] = useState(false);
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dateFlag, setdateFlag] = useState(false);
@@ -283,6 +294,7 @@ function MyProductPhotos() {
 
   const closeError = () => {
     setShowError(false)
+    setShowErrorMyProduct(false)
     setErrorText("")
     dispatch({ type: ADD_OFFER_DELETE });
   };
@@ -450,34 +462,20 @@ function MyProductPhotos() {
 
   // 1.jeśli nie ma listy moich produktów to ją pobierz
   useEffect(() => {
-    if (!successMyProductList) {
+    if (!successMyProductList && !myProductListLoading) {
       dispatch(getMyproduct(spotId))
     }
   }, [successMyProductList]);
 
   // Komunikaty błędów
   // 1. Błąd dodania oferty
-  // 2. Błąd pbrania listy moich produktów
+  // 2. Błąd pobrania listy moich produktów
   useEffect(() => {
     if (addOfferError) {
       setShowError(true)
-      let errorDetail = ""
-      let logFlag = ""
-      if (addOfferError.detail === "Bad request. Offer not added") {
-        errorDetail = t("Offer_not_added")
-      } else if (addOfferError.detail === "Bad request. Offer not added - aleady exists") {
-        errorDetail = t("Offer_aleady_exists")
-      }
-      if (addOfferError.log) {
-        logFlag = t("Offer_log_yes")
-      } else { logFlag = t("Offer_log_no") }
-      const text = errorDetail + ".  " + t("Offer_error_code") + ": "
-        + addOfferError.code + ". " + t("Offer_error_log") + ": " + logFlag
-      setErrorText(text)
     }
-    if (myProductListError) {
-      setShowError(true)
-      setErrorText(t("Offer_error_list_myproduct"))
+    else if (myProductListError) {
+      if (!showError) { setShowErrorMyProduct(true) }
     }
   }, [addOfferError, myProductListError]);
 
@@ -726,10 +724,14 @@ function MyProductPhotos() {
           succes={true}
         /> : null}
       {showError ?
-        <InfoAlertComponentOkButton
+        <ErrorMesageRedux
           confirmYes={closeError}
-          context={errorText}
-          errorHTTP={true}
+          error={addOfferError}
+        /> : null}
+      {showErrorMyProduct ?
+        <ErrorMesageRedux
+          confirmYes={closeError}
+          error={myProductListError}
         /> : null}
       {showErrorValue ?
         <InfoAlertComponentOkButton
@@ -1012,4 +1014,4 @@ function MyProductPhotos() {
   );
 }
 
-export default MyProductPhotos;
+export default MyProductOffer;

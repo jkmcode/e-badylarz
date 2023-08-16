@@ -602,7 +602,16 @@
   "Offer_aleady_exists": "There is an active offer for this product",
   "Offer_log_yes": "Yes",
   "Offer_log_no": "No",
-  "Offer_error_code": "Error code",
-  "Offer_error_log": "Log seved ",
-  "Offer_error_list_myproduct": "Sorry, no picture of the product"
+  "Offer_error_code": "Error code :",
+  "Offer_error_log": "Log seved :",
+  "Offer_error_list_myproduct": "Sorry, no picture of the product",
+  "Error_Unauthorized": "No authorization. Please log back in or contact your administrator",
+  "Error_Forbidden": "Access denied. Contact the administrator",
+  "Error_404": "Page not found - error 404",
+  "Error_UNSENT": "The request was not sent",
+  "Error_OPENED": "The request was not sent. The Open() method has been run",
+  "Error_HEADERS_RECEIVED": "Headers received. No data",
+  "Error_LOADING": "Downloading data in progress",
+  "Error_NetworkError": "Network error. Check your internet connection",
+  "Error_OtherError": "Another error. Please contact your administrator"
 }

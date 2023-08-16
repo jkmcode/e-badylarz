@@ -32,7 +32,7 @@ def ErrorHendling(pos, user=None, err=None):
         error_name = error_str[:510] if len(error_str) > 510 else error_str
 
     try:
-        createdOffer = ErrorLog.objects.create(
+        createdNewLog = ErrorLog.objects.create(
         user=user,
         function_name=pos['function_name'], 
         error_class=exception_class,
@@ -75,13 +75,60 @@ def clearOldOffers():
                 content['text'] = "zapisanie nieaktywnych ofert"
                 content['code'] = "0018"
                 return ErrorHendling(content, e)
-    # if flag :
-    #     try:
-    #         offers.save()
-    #     except Exception as e:
-    #         content['text'] = "zapisanie nieaktywnych ofert"
-    #         content['code'] = "0018"
-    #         return ErrorHendling(content, e)
+
+@api_view(["PUT","POST"])
+def addAxiosError(request):
+
+    data = request.data
+    local_timezone = tz.tzlocal()
+
+    try:
+        createdNewLog = AxiosErrorLog.objects.create(
+            data_error=datetime.datetime.now(local_timezone),
+            user_error=data['user'],
+            user_saved=data['user'],
+            function_name=data['function'], 
+            error_code=data['code'],
+            error_detail=data['detail'],
+            status=data['status'],
+            method=data['method'],
+            url=data['url'],
+            text=data['text'],
+            param=data['param']  
+        )
+    except Exception as e:
+        return Response("NOT")
+
+    return Response("OK")
+
+@api_view(["PUT","POST"])
+def addAxiosErrorFromLS(request,userId):
+
+    data = request.data
+
+    print("User-->",userId)
+    print("Dane-->",data)
+
+    for i in data:
+        # try:
+        createdNewLog = AxiosErrorLog.objects.create(
+                data_error=i['data_error'],
+                user_error=i['user_error'],
+                user_saved=userId,
+                function_name=data['function'], 
+                error_code=i['code'],
+                error_detail=i['detail'],
+                status=i['status'],
+                method=i['method'],
+                url=i['url'],
+                text=data['text'],
+                param=data['param']   
+            )
+        # except Exception as e:
+        #     print('Error-->',e)
+        #     return Response("NOT")
+
+    return Response("OK")
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])

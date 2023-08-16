@@ -58,6 +58,8 @@ import {
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
 
+import { addLogErrorFromLS } from "./actions/productActions"
+
 const reducer = combineReducers({
   testListReducer: testListReducer,
   districts: districtReducer,

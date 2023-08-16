@@ -600,7 +600,16 @@
   "Offer_aleady_exists": "Istnieje aktywna oferta dla tego produktu",
   "Offer_log_yes": "Tak",
   "Offer_log_no": "Nie",
-  "Offer_error_code": "Kod błędu",
-  "Offer_error_log": "Log zapisany",
-  "Offer_error_list_myproduct": "Przepraszam, brak zdjęcia produktu"
+  "Offer_error_code": "Kod błędu :",
+  "Offer_error_log": "Log zapisany :",
+  "Offer_error_list_myproduct": "Przepraszam, brak zdjęcia produktu",
+  "Error_Unauthorized": "Brak autoryzacji. Zaloguj sie ponownie lub skontaktuj się z adminstratorem",
+  "Error_Forbidden": "Odmowa dostępu. Skontaktuj się z adminstratotem",
+  "Error_404": "Nie znaleziono strony - error 404",
+  "Error_UNSENT": "Żądanie nie zostało wysłane",
+  "Error_OPENED": "Żądanie nie zostało wysłane. Metoda Open() została uruchomiona",
+  "Error_HEADERS_RECEIVED": "Nagłówki odebrane. Brak danych",
+  "Error_LOADING": "Pobieranie danych w trakcie",
+  "Error_NetworkError": "Błąd sieciowy. Sprawdź połaczenie z internetem",
+  "Error_OtherError": "Inny błąd. Skontaktuj się z administratorem"
 }
