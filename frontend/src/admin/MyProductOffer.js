@@ -38,13 +38,6 @@ import {
   NUMBERS_AND_NATIONAL_LETTERS_50
 } from "../constants/formValueConstans";
 
-// function errorMessageRedux(err) {
-
-//   const { t } = useTranslation();
-//   if (err.axios_error && err.axios_code === 1) {
-
-//   }
-// }
 
 
 function MyProductOffer() {
@@ -74,7 +67,7 @@ function MyProductOffer() {
   const [contextOffer, setContextOffer] = useState("");
   const [showErrorValue, setShowErrorValue] = useState(false);
   const [errorValueText, setErrorValueText] = useState("");
-  const [errorText, setErrorText] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const [showError, setShowError] = useState(false);
   const [showErrorMyProduct, setShowErrorMyProduct] = useState(false);
   const [endDate, setEndDate] = useState("");
@@ -110,7 +103,13 @@ function MyProductOffer() {
     currency_3: "",
     price_1: "0",
     price_2: "0",
-    price_3: "0"
+    price_3: "0",
+    priceSale_1: "0",
+    price30Day_1: "0",
+    priceSale_2: "0",
+    price30Day_2: "0",
+    priceSale_3: "0",
+    price30Day_3: "0"
   });
 
   const [dateDelta, setDateDelta] = useState({
@@ -193,6 +192,8 @@ function MyProductOffer() {
       }
     }
 
+    console.log('values-->', values)
+
     if (values.barrelBulk === "") {
       setEmptyValueError(true)
       setIncompleteOffer(true)
@@ -233,6 +234,46 @@ function MyProductOffer() {
       setEmptyCurrencyValueError3(true)
       setIncompleteOffer(true)
     }
+    else if (isNaN(values.quantity)) {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_quantity"))
+    }
+    else if (isNaN(values.price_1)) {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price_1"))
+    }
+    else if (isNaN(values.priceSale_1) && values.priceSale_1 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_priceSale_1"))
+    }
+    else if (isNaN(values.price30Day_1) && values.price30Day_1 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price30Day_1"))
+    }
+    else if (isNaN(values.price_2) && values.price_2 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price_2"))
+    }
+    else if (isNaN(values.priceSale_2) && values.priceSale_2 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_priceSale_2"))
+    }
+    else if (isNaN(values.price30Day_2) && values.price30Day_2 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price30Day_2"))
+    }
+    else if (isNaN(values.price_3) && values.price_3 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price_3"))
+    }
+    else if (isNaN(values.priceSale_3) && values.priceSale_3 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_priceSale_3"))
+    }
+    else if (isNaN(values.price30Day_3) && values.price30Day_3 !== "0") {
+      setShowErrorValue(true)
+      setErrorValueText(t("Confirmation_alert_wrong_number_price30Day_3"))
+    }
     else if (parseFloat(values.quantity) < bb_value) {
       setShowErrorValue(true)
       setErrorValueText(t("Confirmation_alert_wrong_amount"))
@@ -264,7 +305,7 @@ function MyProductOffer() {
       setShowErrorValue(true)
       setErrorValueText(t("Confirmation_alert_wrong_salePrice_3"))
     }
-    else if (values.priceSale_3 && values.price_3 && !values.price30Day_3) {
+    else if (values.priceSale_3 !== "0" && values.price_3 && !values.price30Day_3) {
       setShowErrorValue(true)
       setErrorValueText(t("Confirmation_alert_wrong_Price30Day_3"))
     }
@@ -349,9 +390,7 @@ function MyProductOffer() {
 
   const selectCountryHandler = (option) => {
     setValues({ ...values, country: option });
-
     setEmptyCountryValueError(false);
-    // setdateFlag(!dateFlag)
   };
 
   const selectDateFromHandler = (option) => {
@@ -475,7 +514,8 @@ function MyProductOffer() {
       setShowError(true)
     }
     else if (myProductListError) {
-      if (!showError) { setShowErrorMyProduct(true) }
+      setShowErrorMyProduct(true)
+      setErrorText(t('Offer_error_list_myproduct'))
     }
   }, [addOfferError, myProductListError]);
 
@@ -729,9 +769,10 @@ function MyProductOffer() {
           error={addOfferError}
         /> : null}
       {showErrorMyProduct ?
-        <ErrorMesageRedux
+        <InfoAlertComponentOkButton
           confirmYes={closeError}
-          error={myProductListError}
+          context={errorText}
+          errorHTTP={true}
         /> : null}
       {showErrorValue ?
         <InfoAlertComponentOkButton

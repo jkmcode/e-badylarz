@@ -64,8 +64,143 @@ import {
   ADD_OFFER_REQUEST,
   ADD_OFFER_SUCCESS,
   ADD_OFFER_FAIL,
-  ADD_OFFER_DELETE
+  ADD_OFFER_DELETE,
+  GET_MYOFFERS_LIST_REQUEST,
+  GET_MYOFFERS_LIST_SUCCESS,
+  GET_MYOFFERS_LIST_FAIL,
+  GET_MYOFFERS_LIST_DELETE,
+  DELETE_MYOFFERS_REQUEST,
+  DELETE_MYOFFERS_SUCCESS,
+  DELETE_MYOFFERS_FAIL,
+  DELETE_MYOFFERS_DELETE,
+  ADD_QUANTITY_OFFER_REQUEST,
+  ADD_QUANTITY_OFFER_SUCCESS,
+  ADD_QUANTITY_OFFER_FAIL,
+  ADD_QUANTITY_OFFER_DELETE,
+  GET_MYOFFER_REQUEST,
+  GET_MYOFFER_SUCCESS,
+  GET_MYOFFER_FAIL,
+  GET_MYOFFER_DELETE,
+  UPDATE_SPOT_PICK_UP_REQUEST,
+  UPDATE_SPOT_PICK_UP_SUCCESS,
+  UPDATE_SPOT_PICK_UP_FAIL,
+  UPDATE_SPOT_PICK_UP_DELETE,
 } from "../constants/productConstans";
+
+export const updateSpotPickUpReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_SPOT_PICK_UP_REQUEST:
+      return { loading: true, success: false };
+    case UPDATE_SPOT_PICK_UP_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case UPDATE_SPOT_PICK_UP_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case UPDATE_SPOT_PICK_UP_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getMyOfferPriceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_MYOFFER_REQUEST:
+      return { loading: true, success: false };
+    case GET_MYOFFER_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case GET_MYOFFER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case GET_MYOFFER_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const addQuantityMyOffersReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_QUANTITY_OFFER_REQUEST:
+      return { loading: true, success: false };
+    case ADD_QUANTITY_OFFER_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case ADD_QUANTITY_OFFER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case ADD_QUANTITY_OFFER_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const deleteMyOffersReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_MYOFFERS_REQUEST:
+      return { loading: true, success: false };
+    case DELETE_MYOFFERS_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case DELETE_MYOFFERS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case DELETE_MYOFFERS_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getMyOffersReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_MYOFFERS_LIST_REQUEST:
+      return { loading: true, success: false };
+    case GET_MYOFFERS_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        result: action.payload,
+      };
+    case GET_MYOFFERS_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
+    case GET_MYOFFERS_LIST_DELETE:
+      return {};
+    default:
+      return state;
+  }
+};
 
 export const addOfferReducer = (state = {}, action) => {
   switch (action.type) {

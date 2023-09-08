@@ -4,13 +4,16 @@ import FormInput from "./FormInput";
 import Divider from "./Divider";
 import Loader from "../component/Loader";
 import SelectOption from "./SelectOption";
-import ErrorMessage from "../component/ErrorMessage";
 import UploadImage from "../component/UploadImage";
 import ImageDisplayer from "../component/ImageDisplayerComponent";
 import RadioButtons from "./RadioButtons";
 import AddDescription from "./AddDescription";
 import InfoComponent from "../component/infoComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
+import AddQuantityOffer from "./AddQuantityOffer"
+import InfoOffer from "./InfoOffer";
+import DateComponent from "../component/DateComponent"
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import TableComponent from "./TableComponent";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +22,13 @@ import { TWO, THREE, FOUR } from "../constants/environmentConstans";
 import { Icon } from "@iconify/react";
 import noImage from "../images/noImage.png";
 import { useKindShopSpots } from "../Data/KindShop";
-import { getMyproduct, deleteMyProduct } from "../actions/productActions"
+import {
+  getMyproduct,
+  deleteMyProduct,
+  getMyOffers,
+  deleteMyOffers,
+  updateSpotPickUp
+} from "../actions/productActions"
 import {
   addShopSpot,
   getShop,
@@ -28,7 +37,14 @@ import {
   InsertImage,
 } from "../actions/adminActions";
 
-import { GET_MYPRODUCT_LIST_DELETE } from "../constants/productConstans"
+import {
+  GET_MYPRODUCT_LIST_DELETE,
+  GET_MYOFFERS_LIST_DELETE,
+  ADD_QUANTITY_OFFER_DELETE,
+  DELETE_MY_PRODUCT_DELETE,
+  DELETE_MYOFFERS_DELETE,
+  UPDATE_SPOT_PICK_UP_DELETE
+} from "../constants/productConstans"
 
 import {
   DELETE_IMAGE_REDUX,
@@ -43,6 +59,9 @@ import {
   MY_PRODUCT_DESCRIPTION,
   SET_FLAG_INFO_TRUE,
   SET_FLAG_INFO_FALSE,
+  GET_SPOT_DELETE,
+  GET_SOPTS_LIST_DELETE,
+  GET_SHOP_DELETE
 } from "../constants/adminConstans";
 
 import {
@@ -72,6 +91,7 @@ import {
   btnInfo
 } from "./AdminCSS";
 
+
 function AddShopsSpot() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -90,6 +110,23 @@ function AddShopsSpot() {
   const [emptyValueError, setEmptyValueError] = useState(false);
   const [radioValue, setRadioValue] = useState("1");
   const [valuePickUp, setValuePickUp] = useState(false);
+  const [showDescription, setShowDescription] = useState(false)
+  const [showPickUP, setShowPickUP] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
+  const [showMyProduct, setShowMyProduct] = useState(false)
+  const [showOffers, setShowOffers] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [showAlertDeleteOffer, setShowAlertDeleteOffer] = useState(false)
+  const [confirm, setConfirm] = useState(false);
+  const [confirmAdd, setConfirmAdd] = useState(false);
+  const [confirmAddInfo, setConfirmAddInfo] = useState(false);
+  const [confirmAddData, setConfirmAddData] = useState({});
+  const [confirmDeleteOffer, setConfirmDeleteOffer] = useState(false);
+  const [infoKind, setInfoKind] = useState("")
+  const [myProductId, setMyProductId] = useState(0)
+  const [myOfferId, setMyOfferId] = useState(0)
+  const [myProductCurrentList, setMyProductCurrentList] = useState([])
+  const [myOffersCurrentList, setMyOffersCurrentList] = useState([])
   const [values, setValues] = useState({
     spotName: "",
     range: "",
@@ -103,6 +140,18 @@ function AddShopsSpot() {
     cityName: "",
   });
 
+  const [showErrorMyProductList, setShowErrorMyProductList] = useState(false);
+  const [showErrorDeleteMyProduct, setShowErrorDeleteMyProduct] = useState(false);
+  const [showErrorGetSpot, setShowErrorGetSpot] = useState(false);
+  const [showErrorGetSpotsList, setShowErrorGetSpotsList] = useState(false);
+  const [showErrorInsertImage, setShowErrorInsertImage] = useState(false);
+  const [showErrorGetShop, setShowErrorGetShop] = useState(false);
+  const [showErrorUpdateSpot, setShowErrorUpdateSpot] = useState(false);
+  const [showErrorMyOfferList, setShowErrorMyOfferList] = useState(false);
+  const [showErrorMyOfferDelete, setShowErrorMyOfferDelete] = useState(false);
+  const [showErrorMyOfferAdd, setShowErrorMyOfferAdd] = useState(false);
+  const [showErrorUpdateSpotPickUp, setShowErrorUpdateSpotPickUp] = useState(false);
+
   const SpotParam = params.add;
   const shopId = params.id;
   const spotId = params.idSpot;
@@ -112,16 +161,6 @@ function AddShopsSpot() {
     { name: t("Radio_delivery"), value: "0" },
   ];
 
-  const [showDescription, setShowDescription] = useState(false)
-  const [showPickUP, setShowPickUP] = useState(false)
-  const [showEdit, setShowEdit] = useState(false)
-  const [showMyProduct, setShowMyProduct] = useState(false)
-  const [showOffers, setShowOffers] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [confirm, setConfirm] = useState(false);
-  const [infoKind, setInfoKind] = useState("")
-  const [myProductId, setMyProductId] = useState(0)
-  const [myProductCurrentList, setMyProductCurrentList] = useState([])
 
   // data from redux 
 
@@ -177,7 +216,12 @@ function AddShopsSpot() {
   } = insertImageRedux;
 
   const getShopRedux = useSelector((state) => state.getShop);
-  const { shopDetails, success: successGetShop, loading } = getShopRedux;
+  const {
+    shopDetails,
+    success: successGetShop,
+    loading,
+    error: errorGetShop
+  } = getShopRedux;
 
   const shopSpotUpdateRedux = useSelector((state) => state.shopSpotUpdate);
   const {
@@ -186,7 +230,85 @@ function AddShopsSpot() {
     success: successUpdate,
   } = shopSpotUpdateRedux;
 
+  const myOfferRedux = useSelector((state) => state.getMyOffers);
+  const {
+    result: myOfferList,
+    loading: loadingMyOfferList,
+    error: errorMyOfferList,
+    success: successMyOfferList,
+  } = myOfferRedux;
+
+  const deleteMyOfferRedux = useSelector((state) => state.deleteMyOffers);
+  const {
+    result: myOfferDelete,
+    loading: loadingMyOfferDelete,
+    error: errorMyOfferDelete,
+    success: successMyOfferDelete,
+  } = deleteMyOfferRedux;
+
+  const addSuccess = useSelector((state) => state.addQuantityMyOffers);
+  const {
+    result: myOfferAdd,
+    success: successmyOfferAdd,
+    error: errormyOfferAdd,
+    loading: loadingmyOfferAdd
+  } = addSuccess;
+
+  const updateSpot = useSelector((state) => state.updateSpotPickUp);
+  const {
+    success: successUdatePickUp,
+    error: errorUdatePickUp,
+    loading: loadingUdatePickUp
+  } = updateSpot;
+
   // Handlers
+
+  const closeError = () => {
+    if (showErrorMyProductList) {
+      dispatch({ type: GET_MYPRODUCT_LIST_DELETE });
+      setShowErrorMyProductList(false)
+    }
+    else if (showErrorDeleteMyProduct) {
+      dispatch({ type: DELETE_MY_PRODUCT_DELETE });
+      setShowErrorDeleteMyProduct(false)
+    }
+    else if (showErrorGetSpot) {
+      dispatch({ type: GET_SPOT_DELETE });
+      setShowErrorGetSpot(false)
+    }
+    else if (showErrorGetSpotsList) {
+      dispatch({ type: GET_SOPTS_LIST_DELETE });
+      setShowErrorGetSpotsList(false)
+    }
+    else if (showErrorInsertImage) {
+      dispatch({ type: ADD_IMAGE_DELETE });
+      setShowErrorInsertImage(false)
+    }
+    else if (showErrorGetShop) {
+      dispatch({ type: GET_SHOP_DELETE });
+      setShowErrorGetShop(false)
+    }
+    else if (showErrorUpdateSpot) {
+      dispatch({ type: EDIT_SHOP_SPOT_DELETE });
+      setShowErrorUpdateSpot(false)
+    }
+    else if (showErrorMyOfferList) {
+      dispatch({ type: GET_MYOFFERS_LIST_DELETE });
+      setShowErrorMyOfferList(false)
+    }
+    else if (showErrorMyOfferDelete) {
+      dispatch({ type: DELETE_MYOFFERS_DELETE });
+      setShowErrorMyOfferDelete(false)
+    }
+    else if (showErrorMyOfferAdd) {
+      dispatch({ type: ADD_QUANTITY_OFFER_DELETE });
+      setShowErrorMyOfferAdd(false)
+    }
+    else if (showErrorUpdateSpotPickUp) {
+      dispatch({ type: UPDATE_SPOT_PICK_UP_DELETE });
+      setShowErrorUpdateSpotPickUp(false)
+    }
+  };
 
   const clearHendler = () => {
     setShowDescription(false)
@@ -250,8 +372,39 @@ function AddShopsSpot() {
     setMyProductId(0)
   };
 
+  const confirmYesAdd = () => {
+    setConfirmAdd(false);
+    if (myOfferAdd == "OK") {
+      dispatch(getMyOffers(spotId))
+    }
+    else {
+      setMyOffersCurrentList(myOfferAdd)
+    }
+    dispatch({ type: ADD_QUANTITY_OFFER_DELETE });
+  };
+
+  const confirmNoAdd = () => {
+    setConfirmAdd(false);
+
+  };
+
+  const confirmInfo = () => {
+    setConfirmAddInfo(false)
+  }
+
+  const confirmYesDeleteOffer = () => {
+    dispatch({ type: GET_MYOFFERS_LIST_DELETE });
+    setShowAlertDeleteOffer(false);
+    setConfirmDeleteOffer(true);
+  };
+
+  const confirmNoDeleteOffer = () => {
+    setShowAlertDeleteOffer(false);
+    setConfirmDeleteOffer(false);
+    setMyOfferId(0)
+  };
+
   const offerHendler = (i) => {
-    console.log("Jestem w ofercie --->", i)
     navigate(`/dashboard/shops/${shopId}/my-products-offer/${spotId}/${i.id_product.name}/${i.id}`);
   }
 
@@ -259,6 +412,19 @@ function AddShopsSpot() {
     setShowAlert(true);
     setMyProductId(i.id)
   };
+
+  const infoHandlerMyOfferAddQuantity = (i) => {
+    setConfirmAdd(true)
+    setConfirmAddData(i)
+  }
+  const infoHandlerAddQuantity = (i) => {
+    setConfirmAddInfo(true)
+    setConfirmAddData(i)
+  }
+  const infoHandlerMyOfferDelete = (i) => {
+    setShowAlertDeleteOffer(true)
+    setMyOfferId(i.id)
+  }
 
   const infoHandlerMyPhoto = (i) => {
     navigate(`/dashboard/shops/${shopId}/my-products-photo/${spotId}/${i.id_product.name}/${i.id}`);
@@ -279,7 +445,13 @@ function AddShopsSpot() {
   };
 
   const handleBtnValuePickUP = (e) => {
-    setValuePickUp(!valuePickUp);
+    const insertData = {
+      user: userInfo.id,
+      Id: spotId,
+      id_shops: shopId,
+      pickUp: !valuePickUp
+    }
+    dispatch(updateSpotPickUp(insertData));
   };
 
   const handleSubmit = (event) => {
@@ -354,6 +526,7 @@ function AddShopsSpot() {
     }
     if (spotId) {
       dispatch(getSpot({ Id: spotId, type: "shop" }));
+      dispatch(getMyOffers(spotId));
     }
   }, []);
 
@@ -375,7 +548,29 @@ function AddShopsSpot() {
     }
   }, [successDeleteMyProductList, successMyProductList]);
 
+  // ustawienie aktualnej listy ofert
+  useEffect(() => {
+    if (successMyOfferList) {
+      setMyOffersCurrentList(myOfferList)
+    }
+  }, [successMyOfferList]);
 
+  // pobranie nowych danych o punkie po aktualizacji punktu odbioru
+  useEffect(() => {
+    if (successUdatePickUp) {
+      dispatch(getSpot({ Id: spotId, type: "shop" }));
+    }
+  }, [successUdatePickUp]);
+
+  // ustawienie aktualnej listy ofert po kasowaniu
+  useEffect(() => {
+    if (successMyOfferDelete) {
+      if (myOfferDelete != "OK") {
+        setMyOffersCurrentList(myOfferDelete)
+      } else { dispatch(getMyOffers(spotId)) }
+    }
+
+  }, [successMyOfferDelete]);
 
   // add photo
   useEffect(() => {
@@ -437,7 +632,8 @@ function AddShopsSpot() {
   useEffect(() => {
     if (confirm) {
       dispatch({ type: GET_MYPRODUCT_LIST_DELETE });
-
+      // to trzeba sprawdzić czy się nie dubluja żądania do bazy
+      // skasowanie listy moze uruchomić jej pobieranie, a równocześnie funkcja deleteMyProduct zwraca te liste
       setConfirm(false)
       dispatch(deleteMyProduct({
         Id: myProductId,
@@ -446,6 +642,67 @@ function AddShopsSpot() {
       }))
     }
   }, [dispatch, confirm]);
+
+  // delete my offer 
+  useEffect(() => {
+    if (confirmDeleteOffer) {
+      setConfirmDeleteOffer(false)
+      dispatch(deleteMyOffers({
+        offerId: myOfferId,
+        user: userInfo.id,
+        spotId: spotId
+      }));
+    }
+  }, [dispatch, confirmDeleteOffer]);
+
+  // set error flags
+  useEffect(() => {
+    if (myProductListError) {
+      setShowErrorMyProductList(true)
+    }
+    else if (deleteMyProductListError) {
+      setShowErrorDeleteMyProduct(true)
+    }
+    else if (spotError) {
+      setShowErrorGetSpot(true)
+    }
+    else if (addSpotError) {
+      setShowErrorGetSpotsList(true)
+    }
+    else if (errorInsertImage) {
+      setShowErrorInsertImage(true)
+    }
+    else if (errorGetShop) {
+      setShowErrorGetShop(true)
+    }
+    else if (errorUpdate) {
+      setShowErrorUpdateSpot(true)
+    }
+    else if (errorMyOfferList) {
+      setShowErrorMyOfferList(true)
+    }
+    else if (errorMyOfferDelete) {
+      setShowErrorMyOfferDelete(true)
+    }
+    else if (errormyOfferAdd) {
+      setShowErrorMyOfferAdd(true)
+    }
+    else if (errorUdatePickUp) {
+      setShowErrorUpdateSpotPickUp(true)
+    }
+  }, [
+    myProductListError,
+    deleteMyProductListError,
+    addSpotError,
+    errorInsertImage,
+    spotError,
+    errorGetShop,
+    errorUpdate,
+    errorMyOfferList,
+    errorMyOfferDelete,
+    errormyOfferAdd,
+    errorUdatePickUp
+  ]);
 
   //style
   const background = {
@@ -644,6 +901,113 @@ function AddShopsSpot() {
     marginTop: "1rem",
   };
 
+  // table of myoffer
+
+  const tableMyOfferStyle = {
+    ...tableStyle,
+    color: "black",
+    backgroundImage: `linear-gradient(183deg, rgb(236, 181, 26) 0%, rgb(217, 196, 33) 100%)`,
+  };
+
+  const tableMyOffercolumns = [
+    {
+      key: "name",
+      label: t("MyOffer_name"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "offerEnd",
+      label: t("MyOffer_end"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "quantity",
+      label: t("MyOffer_quantity"),
+      styleTableCell: tableCell,
+      styleHeader: styleHeader,
+    },
+    {
+      key: "btnDescription",
+      styleTableCell: tableCellNoBorderRight,
+      styleHeader: styleHeader,
+    },
+  ];
+  let dataMyOfferTable = [];
+  if (successMyOfferList || successMyOfferDelete) {
+    dataMyOfferTable = myOffersCurrentList.map((item) => ({
+
+      id: item.id,
+      name: (
+        <>
+          {item.id_my_product.id_product.photo ? (
+            <img
+              style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+              src={item.id_my_product.id_product.photo}
+            />
+          ) : (
+            <img
+              style={{ width: "50px", marginRight: "1rem", borderRadius: "10%" }}
+              src={noImage}
+            />
+          )}
+
+          {item.id_my_product.id_product.name}
+        </>
+      ),
+      offerEnd: (
+        <>
+          <DateComponent
+            dateFromBackend={item.offer_from}
+          />
+          <DateComponent
+            dateFromBackend={item.offer_to}
+          />
+        </>
+      ),
+      quantity: (
+        <>
+          {item.current_quantity}[{item.barrel_bulk_short}]
+        </>
+      ),
+      btnDescription: (
+        <>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
+            onClick={() => infoHandlerAddQuantity(item)}
+          >
+            <Icon
+              icon="teenyicons:info-circle-outline"
+              width="24"
+              height="24"
+            />
+          </button>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "green" }}
+            onClick={() => infoHandlerMyOfferAddQuantity(item)}
+          >
+            <Icon
+              icon="ion:bag-add"
+              width="24"
+              height="24"
+            />
+          </button>
+          <button
+            style={{ ...btnInfo, marginRight: "1rem", color: "red" }}
+            onClick={() => infoHandlerMyOfferDelete(item)}
+          >
+            <Icon
+              icon="teenyicons:x-circle-outline"
+              width="24"
+              height="24"
+            />
+          </button>
+        </>
+      ),
+    }));
+  }
+
   // table of myproduct
 
   const tableMyproductStyle = {
@@ -782,6 +1146,11 @@ function AddShopsSpot() {
         addSpotLoading ||
         loadingInsertImage ||
         myProductListLoading ||
+        loadingMyOfferList ||
+        loadingMyOfferDelete ||
+        deleteMyProductListLoading ||
+        loadingUdatePickUp ||
+        loadingmyOfferAdd ||
         loadingUpdate ? (
         <Loader />
       ) : (
@@ -807,18 +1176,92 @@ function AddShopsSpot() {
               confirmNo={confirmNo}
               context={t("Confirmation_alert_delete_my_product")}
             /> : null}
-          {errorInsertImage ? (
+          {showAlertDeleteOffer ?
+            <InfoAlertComponent
+              confirmYes={confirmYesDeleteOffer}
+              confirmNo={confirmNoDeleteOffer}
+              context={t("Confirmation_alert_delete_my_offer")}
+            /> : null}
+          {confirmAdd ?
+            <AddQuantityOffer
+              confirmYes1={confirmYesAdd}
+              confirmNo={confirmNoAdd}
+              context={confirmAddData}
+              spot={spotId}
+            /> : null}
+          {confirmAddInfo ?
+            <InfoOffer
+              confirm={confirmInfo}
+              context={confirmAddData}
+            /> : null}
+          {showErrorMyProductList ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={myProductListError}
+            />
+            : showErrorDeleteMyProduct ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={deleteMyProductListError}
+              />
+              : showErrorGetSpot ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={spotError}
+                />
+                : showErrorGetSpotsList ?
+                  <ErrorMesageRedux
+                    confirmYes={closeError}
+                    error={addSpotError}
+                  />
+                  : showErrorInsertImage ?
+                    <ErrorMesageRedux
+                      confirmYes={closeError}
+                      error={errorInsertImage}
+                    />
+                    : showErrorGetShop ?
+                      <ErrorMesageRedux
+                        confirmYes={closeError}
+                        error={errorGetShop}
+                      />
+                      : showErrorUpdateSpot ?
+                        <ErrorMesageRedux
+                          confirmYes={closeError}
+                          error={errorUpdate}
+                        />
+                        : showErrorMyOfferList ?
+                          <ErrorMesageRedux
+                            confirmYes={closeError}
+                            error={errorMyOfferList}
+                          />
+                          : showErrorMyOfferDelete ?
+                            <ErrorMesageRedux
+                              confirmYes={closeError}
+                              error={errorMyOfferDelete}
+                            />
+                            : showErrorMyOfferAdd ?
+                              <ErrorMesageRedux
+                                confirmYes={closeError}
+                                error={errormyOfferAdd}
+                              />
+                              : showErrorUpdateSpotPickUp ?
+                                <ErrorMesageRedux
+                                  confirmYes={closeError}
+                                  error={errorUdatePickUp}
+                                />
+                                : null}
+          {/* {errorInsertImage ? (
             <ErrorMessage msg={errorInsertImage} timeOut={TIME_AUT_ERROR} />
-          ) : null}
-          {spotError ? (
+          ) : null} */}
+          {/* {spotError ? (
             <ErrorMessage msg={spotError} timeOut={TIME_AUT_ERROR} />
-          ) : null}
-          {addSpotError ? (
+          ) : null} */}
+          {/* {addSpotError ? (
             <ErrorMessage msg={addSpotError} timeOut={TIME_AUT_ERROR} />
-          ) : null}
-          {errorUpdate ? (
+          ) : null} */}
+          {/* {errorUpdate ? (
             <ErrorMessage msg={errorUpdate} timeOut={TIME_AUT_ERROR} />
-          ) : null}
+          ) : null} */}
           <Link
             to={{ pathname: `/dashboard/shops/${shopId}/contact` }}
             style={{ color: "black" }}
@@ -918,7 +1361,6 @@ function AddShopsSpot() {
                       mainTableContainer={mainTableContainer}
                     />
                     : null
-
                   }
 
                 </p>
@@ -962,7 +1404,20 @@ function AddShopsSpot() {
                   {t("btn_offers")}
                 </button>
                 <p>
-                  TUTAJ OFERTY
+                  {dataMyOfferTable.length > 0 ?
+                    <>
+                      <TableComponent
+                        data={dataMyOfferTable}
+                        columns={tableMyOffercolumns}
+                        tableStyle={tableMyOfferStyle}
+                        mainTableContainer={mainTableContainer}
+                      />
+                    </>
+                    : <>
+                      {t("no_offers")}
+                    </>
+                  }
+
                 </p>
               </>
               :

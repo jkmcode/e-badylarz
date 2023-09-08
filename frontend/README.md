@@ -1,3 +1,153 @@
+# Error Code
+
+- 0000 - "Sprawdzenie czy wpisywana oferta na określony produkt już istnieje"         
+        alreadyExists = MyProductsOffered.objects.filter(id_my_product__id=data['myproduct'], is_active = True ).exists()
+- 0001 - "Wpisywana oferta na określony produkt już istnieje"
+        if alreadyExists:
+- 0002 - "Pobranie obiektu z tabeli MyProducts"
+        myProduct = MyProducts.objects.get(id=data['myproduct'])
+- 0003 - "Dodanie obiektu do tabeli MyProductsOffered"
+        createdOffer = MyProductsOffered.objects.create(...)
+- 0004 - "Pobranie nowoutworzonego obiektu z tabeli MyProductsOffered"
+        myOffer = MyProductsOffered.objects.get(unique_key = uniqueKey)
+- 0005 - "Kasownie nowoutworzonego obiektu z tabeli MyProductsOffered. Błąd wpiasnia dokumentu zmian stanów"
+        MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+- 0006 - "Błąd wpiasnia dokumentu znian stanów do tabeli MyProductsOfferedDoc"
+        createdOffer_doc = MyProductsOfferedDoc.objects.create(...)
+- 0007 - "Kasownie nowoutworzonego obiektu z tabeli MyProductsOffered. Błąd wpiasnia szczegółów oferty wariant 1"
+        MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+- 0008 - "Błąd wpiasnia szczegółów oferty wariant 1"
+        createdOffer_v1 = MyProductsPrice.objects.create(...)
+- 0009 - "Kasownie nowoutworzonego obiektu z tabeli MyProductsOffered. Błąd wpiasnia szczegółów oferty wariant 2"
+        MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+- 0010 - "Błąd wpiasnia szczegółów oferty wariant 2"
+        createdOffer_v2 = MyProductsPrice.objects.create(...)
+- 0011 - "Kasownie nowoutworzonego obiektu z tabeli MyProductsOffered. Błąd wpiasnia szczegółów oferty wariant 3"
+        MyProductsOffered.objects.get(unique_key = uniqueKey).delete()
+- 0012 - "Błąd wpiasnia szczegółów oferty wariant 3"
+        createdOffer_v3 = MyProductsPrice.objects.create(...)
+- 0013 - "Błąd pobrania obiektu z tabeli MyProducts"
+        active_object = MyProducts.objects.get(id=data['Id'])
+- 0014 - "Błąd zapisu danych w tabeli MyProducts"
+        active_object.save()
+- 0015 - "Błąd poboru danych do serializacji z tabeli MyProducts"
+        myproducts=MyProducts.objects.filter(id_shops_spot=data['IdSpot'],is_delete=False)
+- 0016 - "Błąd serializacji danych obiektu myproducts z tabeli MyProducts"
+        seriaziler = MyProductsSerializer(myproducts, many = True)
+- 0017 - "pobranie wszystkich aktywnych offert"
+        offers=MyProductsOffered.objects.filter(is_active = True )
+- 0018 - "Błąd kasowania nieaktywnych ofert"
+        i.save()
+- 0019 - "Błąd przy wpisaniu błędu axiosa do tabeli AxiosErrorLog"
+        createdNewLog = AxiosErrorLog.objects.create(...)
+- 0020 - "Błąd przy wpisaniu błędu axiosa z LS do tabeli AxiosErrorLog"
+        createdNewLog = AxiosErrorLog.objects.create(...)
+- 0021 - "Błąd przy wpisaniu Requesta do tabeli AxiosErrorLogRequest"
+        createdNewLog = AxiosErrorLogRequest.objects.create(...)
+- 0022 - "Pobór danych moich produktów"
+        myproducts = MyProducts.objects.filter(id_shops_spot=IdSpot,is_delete=False).order_by('id_product__name')
+- 0023 - Błąd serializacji danych obiektu myproducts z tabeli MyProducts
+        seriaziler = MyProductsSerializer(myproducts, many=True)
+- 0024 - "Pobór danych, moje aktywne oferty"
+        myofferss = MyProductsOffered.objects.filter(
+            id_my_product__id_shops_spot=IdSpot,is_active=True).order_by('id_my_product__id_product__name')
+- 0025 - "Błąd serializacji danych obiektu myofferss z tabeli MyProductsOffered"
+         seriaziler = MyOffersSerializer(myofferss, many=True)
+- 0026 - "Pobór danych, oferta do kasowania"
+        deletemyoffer = MyProductsOffered.objects.get(id=data['offerId'])
+- 0027 - "Błąd aktualizacji-kasowania obiektu moja oferta"
+        deletemyoffer.save()
+- 0028 - "Błąd dodania dokumentu kasowania do tabeli MyProductsOfferedDoc"
+        addMyOfferDoc=MyProductsOfferedDoc.objects.create(...)
+- 0029 - "Błąd poboru listy aktywnych ofert po kasowaniu"
+        myoffers = MyProductsOffered.objects.filter(
+            id_my_product__id_shops_spot=data['spotId'],is_active=True).order_by('id_my_product__id_product__name') 
+- 0030 - "Błąd serializacji danych obiektu myoffers z tabeli MyProductsOffered po kasowaniu"
+        seriaziler = MyOffersSerializer(myoffers, many=True)
+- 0031 - "Pobór danych, oferta do dodania ilości oferowanego produktu"
+        addQuantitymyoffer = MyProductsOffered.objects.get(id=data['offerId']) 
+- 0032 - "Błąd zapisania zmiany, zwiekszenia ilości "
+        addQuantitymyoffer.save()
+- 0033 - "Błąd dodania dokumentu zwiększenia ilości do tabeli MyProductsOfferedDoc"
+        addMyOfferDoc=MyProductsOfferedDoc.objects.create()
+- 0034 - "Błąd poboru listy aktywnych ofert po dodaniu ilości"
+        myoffers = MyProductsOffered.objects.filter(
+            id_my_product__id_shops_spot=data['spotId'],is_active=True).order_by('id_my_product__id_product__name')
+- 0035 - "Błąd serializacji danych obiektu myoffers z tabeli MyProductsOffered po dodaniu ilości"
+        seriaziler = MyOffersSerializer(myoffers, many=True)
+- 0036 - "Pobór danych, szczegóły wybranej oferty"
+        myofferssPrice = MyProductsPriceSerializer.objects.filter(id_my_product_offered=IdOffer
+- 0037 - "Błąd serializacji danych obiektu myofferssPrice z tabeli MyProductsPrice"
+        seriaziler = MyOffersSerializer(myofferssPrice, many=True)
+- 0038 - "Błąd przy wpisaniu Requesta do tabeli AxiosErrorLogRequest
+        createdNewLog = AxiosErrorLogRequest.objects.create(...)
+- 0039 - "Błąd pobrania obiektu z tabeli ShopsSpot"
+        spot = ShopsSpot.objects.get(id=Id)
+- 0040 - "Błąd serializacji danych z tabeli ShopsSpot"
+        seriaziler = ShopSpotsSerializer(spot, many=False)
+- 0041 -"Błąd poboru dnych z tabeli AreasSpot"
+        spot = AreasSpot.objects.get(id=Id)
+- 0042 -"Błąd serializacji danych z tabeli AreasSpot"
+        seriaziler = ShopSpotsSerializer(spot, many=False)
+- 0043 -"Błąd pobrania obiektów dla okreslonego sklepu z tabeli ShopsSpot"
+        spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
+- 0044 - "Błąd serializacji danych z tabeli ShopsSpot"
+        seriaziler = ShopSpotsSerializer(spots, many=True)
+- 0045 -"Błąd pobrania obiektu do zapisania zdjęcia wariant 1 wiązanie po id"
+        active_object = ShopsSpot.objects.get(id=data['Id'])
+- 0046 -"Błąd pobrania obiektu do zapisania zdjęcia wariant 1 wiązanie po nip"
+        active_object = Shops.objects.get(nip=taxNo)
+- 0047 -"Błąd  zapisania zdjęcia wariant 1"
+        active_object.save()
+- 0048 -"Błąd pobrania obiektu dla wybranego sklepu z tabeli Shops"
+        shop = Shops.objects.get(id = Id)
+- 0049 -"Błąd serializacji danych z tabeli Shops"
+         seriaziler = ShopsSerializer(shop, many=False)
+- 0050 -"Błąd pobrania obiektu z tabeli Shops"
+        shop = Shops.objects.get(id=data['id_shops'])
+- 0051 -"Błąd utworzenia nowego obiektu w tabeli ShopsSpot"
+        spot=ShopsSpot.objects.create(...)
+- 0052 -"Błąd poboru danych obiekt z tabeli ShopsSpot"
+        spot = ShopsSpot.objects.get(id=data['id_spot'])
+- 0053 -"Błąd utworzenia obiektu ARC z tabeli ShopsSpotARC"
+        spotARC = ShopsSpotARC.objects.create(...)
+- 0054 -"Błąd aktualizacji danych w tabeli ShopsSpot"
+        spot.save()
+- 0055 -"Błąd poboru zaktualizowanej listy punktów sprzedaży"
+        spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
+- 0056 -"Błąd serializacji zaktualizowanej listy punktów sprzedaży"
+        seriaziler = ShopSpotsSerializer(spots, many=True)
+- 0057 -"Pobór obiektu do aktualizacji z tabeli ShopsSpot"
+        spot = ShopsSpot.objects.get(id=data['Id'])
+- 0058 -"Błąd utworzenia obiektu ARC w tabeli ShopsSpotARC"
+        spotARC = ShopsSpotARC.objects.create(...)
+- 0059 -"Błąd zapisania zmiany, aktualizacja pick-up "
+        spot.save()
+- 0060 -"Błąd pobrania obiektu z tabeli MyProducts"
+        my_product=MyProducts.objects.get(id=data['Id'])
+- 0061 -"Błąd utworzenia obiektu w tabeli MyProductsPhotos"
+        photo=MyProductsPhotos.objects.create(...)
+- 0062 -"Błąd pobrania nowotworzonego obiektu z tabeli MyProductsPhotos"
+        photos=MyProductsPhotos.objects.filter(unique_date = u_date, id_my_product=data['Id'])
+- 0063 -"Błąd serializacji nowotworzonego obiektu z tabeli MyProductsPhotos"
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
+- 0064 -"Błąd pobrania obiektu z tabeli MyProductsPhotos"
+        active_object = MyProductsPhotos.objects.get(id=data['IdFhoto'])
+- 0065 -"Błąd aktualizacji mojego zdjęcia w tabeli MyProductsPhotos"
+        active_object.save()
+- 0066 -"Błąd poboru listy moich zdjęć z tabeli MyProductsPhotos"
+        photos=MyProductsPhotos.objects.filter(id_my_product=data['Id'],is_delete=False)
+- 0067 -"Błąd serializacji listy moich zdjęć z tabeli MyProductsPhotos"
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
+- 0068 -
+- 0069 -
+- 0070 -
+- 0071 -
+- 0072 -
+- 0073 -
+- 0074 -
+
+
 NavbarComponent
 
 - Composition - write small reusable components

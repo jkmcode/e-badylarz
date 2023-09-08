@@ -1,5 +1,10 @@
 import axios from "axios";
-
+import {
+  errorHandling,
+  addToLS,
+  addLogError,
+  addLogErrorFromLS
+} from "./errorHandling";
 import {
   DISTRICT_ADD_DESC_REQUEST,
   DISTRICT_ADD_DESC_SUCCESS,
@@ -77,9 +82,24 @@ import {
 
 } from "../constants/adminConstans";
 
+import {
+  TIMEOUT_InsertImage,
+  TIMEOUT_getShop,
+  TIMEOUT_getSpot,
+  TIMEOUT_getShopSpots,
+  TIMEOUT_updateShopSpot
+} from "../constants/timeoutConstans"
+
 // Save image in redax
+// w funkcjach InsertImage i InsertImage2 są takie same stałe (ADD_IMAGE_REQUEST itp)
+// nie wiem czy to może przeszkadzać i powodować jakieś błędy
 
 export const InsertImage = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     const formData = new FormData();
     formData.append("image", insertData.imageUpload);
@@ -89,15 +109,12 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
 
     dispatch({ type: ADD_IMAGE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_InsertImage
     };
     const { data } = await axios.put(`/api/upload-image/`, formData, config);
 
@@ -106,13 +123,22 @@ export const InsertImage = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_IMAGE_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Zapisanie zdjęcia wariant 1",
+      "function": "InsertImage",
+      "param": insertData.objType
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -199,16 +225,20 @@ export const updateShop = (insertData) => async (dispatch, getState) => {
 };
 
 export const getShop = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_SHOP_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getShop
     };
 
     const { data } = await axios.get(
@@ -222,13 +252,22 @@ export const getShop = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_SHOP_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobór danych dla wybranego sklepu",
+      "function": "getShop",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -268,16 +307,20 @@ export const getShopContacts = (insertData) => async (dispatch, getState) => {
 };
 
 export const getSpot = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_SPOT_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getSpot
     };
 
     const { data } = await axios.get(
@@ -291,29 +334,40 @@ export const getSpot = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_SPOT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobór danych dla wybranego punktu sprzedaży",
+      "function": "getSpot",
+      "param": insertData.type
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const getShopSpots = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_SOPTS_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getShopSpots
     };
 
     const { data } = await axios.get(
@@ -326,14 +380,22 @@ export const getShopSpots = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_SOPTS_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobór listy punktów sprzedaży danych dla wybranego sklepu",
+      "function": "getSpot",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -474,40 +536,48 @@ export const addShopSpot = (insertData) => async (dispatch, getState) => {
 };
 
 export const updateShopSpot = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: EDIT_SHOP_SPOT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_updateShopSpot
     };
 
-    const { data } = await axios.put(
-      `/api/edit-shop-spot/`,
+    const { data } = await axios.put(`/api/edit-shop-spot/`,
       insertData,
       config
     );
-
-    console.log(data);
 
     dispatch({
       type: EDIT_SHOP_SPOT_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: EDIT_SHOP_SPOT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Edycja punktu sprzedaży",
+      "function": "updateShopSpot",
+      "param": insertData.add ? "add" : "updata"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

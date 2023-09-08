@@ -1,0 +1,15 @@
+export const TIMEOUT_updateSpotPickUp = 5000;
+export const TIMEOUT_deleteMyProduct = 5000;
+export const TIMEOUT_getMyproduct = 5000;
+export const TIMEOUT_getMyOffersPrice = 5000;
+export const TIMEOUT_addQuantityOffer = 5000;
+export const TIMEOUT_deleteMyOffers = 5000;
+export const TIMEOUT_getMyOffers = 8000;
+export const TIMEOUT_addOffer = 7000;
+export const TIMEOUT_InsertImage = 5000;
+export const TIMEOUT_getShop = 5000;
+export const TIMEOUT_getSpot = 5000;
+export const TIMEOUT_getShopSpots = 5000;
+export const TIMEOUT_updateShopSpot = 5000;
+export const TIMEOUT_addImageMyProduct = 5000;
+export const TIMEOUT_InsertImageMyProduct = 5000

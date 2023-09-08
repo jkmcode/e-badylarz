@@ -227,7 +227,7 @@ class ShopsSpotARC(models.Model):
     id_shops = models.IntegerField()
     id_spot = models.IntegerField()
     name = models.CharField(max_length=50)
-    city = models.IntegerField()
+    city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
     no_building = models.CharField(max_length=30)
     post_code = models.CharField(max_length=20)
@@ -613,5 +613,12 @@ class AxiosErrorLog(models.Model):
     text = models.CharField(max_length=256, null=True, blank=True)
     param = models.CharField(max_length=50, null=True, blank=True)
 
+
+# Archiwizacja błędów po stronie frontendu cały request
+# zapisywany gdy powstanie błąd w danych lokalnych klienta
+class AxiosErrorLogRequest(models.Model):
+    data_error_saved = models.DateTimeField(auto_now=True)
+    user_saved = models.CharField(max_length=20, null=True, blank=True)
+    request_text = models.CharField(max_length=2050, null=True, blank=True)
 
 ## ---------  END ERORR LOG  ------------ ##

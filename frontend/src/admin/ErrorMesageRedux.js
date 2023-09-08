@@ -11,7 +11,7 @@ function ErrorMesageRedux({ confirmYes, error }) {
     backgroundColor: "whitesmoke",
     width: "80%",
     maxWidth: "600px",
-    height: "50vh",
+    height: "65vh",
     textAlign: "center",
   };
 
@@ -81,10 +81,14 @@ function ErrorMesageRedux({ confirmYes, error }) {
     switch (error.detail) {
       case "OtherError":
         return setErrorMessage(t("Error_OtherError"));
-      case "NetworkError":
-        return setErrorMessage(t("Error_NetworkError"));
+      case "NetworkError no internet":
+        return setErrorMessage(t("Error_NetworkError1"));
+      case "NetworkError no access to the server":
+        return setErrorMessage(t("Error_NetworkError2"));
       case "LOADING":
         return setErrorMessage(t("Error_LOADING"));
+      case "TIMEOUT":
+        return setErrorMessage(t("Error_TIMEOUT"));
       case "HEADERS_RECEIVED":
         return setErrorMessage(t("Error_HEADERS_RECEIVED"));
       case "OPENED":
@@ -101,6 +105,38 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("Offer_aleady_exists"));
       case "Bad request. Offer not added":
         return setErrorMessage(t("Offer_not_added"));
+      case "Bad request. No my product":
+        return setErrorMessage(t("No_my_product"));
+      case "Bad request. No my offers":
+        return setErrorMessage(t("No_my_offers"));
+      case "Bad request. Change document not saved":
+        return setErrorMessage(t("NoDelete_my_offers_doc"));
+      case "Bad request. No delete my offers":
+        return setErrorMessage(t("NoDelete_my_offers"));
+      case "Bad request. No added quantity to my offer":
+        return setErrorMessage(t("NoAddQuantity_my_offers"));
+      case "Bad request. No data for the selected object in the table ShopsSpot":
+        return setErrorMessage(t("No_ShopsSpot"));
+      case "Bad request. No data for the selected object in the table AreasSpot":
+        return setErrorMessage(t("No_AreasSpot"));
+      case "Bad request. No objects in the table ShopsSpot for the selected shop":
+        return setErrorMessage(t("No_ShopsSpot_List"));
+      case "Bad request. Photo not updated":
+        return setErrorMessage(t("No_photo_updated"));
+      case "Bad request. No objects in the table Shops for the selected shop":
+        return setErrorMessage(t("No_shop"));
+      case "Bad request.No added new spot":
+        return setErrorMessage(t("No_added_spot"));
+      case "Bad request. No updata selected object in the table ShopsSpot":
+        return setErrorMessage(t("No_updata_spot"));
+      case "Bad request. No get new spot list":
+        return setErrorMessage(t("No_updata_spot_getList"));
+      case "Bad request. No update pick-up in Spot":
+        return setErrorMessage(t("No_updata_spot_pickUp"));
+      case "Bad request. No object in table MyProducts":
+        return setErrorMessage(t("No_obj_MyProducts"));
+      case "Bad request. No uploaded my image in table MyProductsPhotos":
+        return setErrorMessage(t("No_uploaded_image"));
       default:
         return setErrorMessage(error.detail);
     }

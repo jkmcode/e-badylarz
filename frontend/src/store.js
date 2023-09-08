@@ -21,7 +21,12 @@ import {
   deleteMyImageReducer,
   deleteMyProductReducer,
   addMyProductReducer,
-  addOfferReducer
+  addOfferReducer,
+  getMyOffersReducer,
+  deleteMyOffersReducer,
+  addQuantityMyOffersReducer,
+  getMyOfferPriceReducer,
+  updateSpotPickUpReducer
 } from "./reducers/productReducer";
 import {
   areaActivityReducer,
@@ -57,8 +62,6 @@ import {
   updateSingleInstanceReducer,
 } from "./reducers/adminReducers";
 import { userLoginReducers } from "./reducers/userReducers";
-
-import { addLogErrorFromLS } from "./actions/productActions"
 
 const reducer = combineReducers({
   testListReducer: testListReducer,
@@ -110,7 +113,12 @@ const reducer = combineReducers({
   deleteMyImage: deleteMyImageReducer,
   deleteMyProduct: deleteMyProductReducer,
   addMyProduct: addMyProductReducer,
-  addOffer: addOfferReducer
+  addOffer: addOfferReducer,
+  getMyOffers: getMyOffersReducer,
+  deleteMyOffers: deleteMyOffersReducer,
+  addQuantityMyOffers: addQuantityMyOffersReducer,
+  getMyOfferPrice: getMyOfferPriceReducer,
+  updateSpotPickUp: updateSpotPickUpReducer
 });
 
 const userIfoFromStorage = localStorage.getItem("userInfo")

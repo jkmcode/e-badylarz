@@ -60,7 +60,12 @@ urlpatterns = [
     # panel
     path('api/add-myproduct/', add_myproduct),
     path('api/<str:IdSpot>/get-myproduct/', get_myproduct),
+    path('api/<str:IdSpot>/get-myoffers/', get_myoffers),
+    path('api/<str:IdOffer>/get-myoffers-price/', get_myoffersPrice),
+    path('api/delete-myoffers/', delete_myoffers),
+    path('api/add-quantity-myoffers/', add_guantity_myoffers),
     path('api/delete-my-product/', deleteMyProduct),
+    path('api/update-pick-up/', updatePickUpSpot),
     path('api/add-offer/', addOffer),
 
     # error hendling

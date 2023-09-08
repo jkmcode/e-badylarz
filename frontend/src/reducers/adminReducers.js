@@ -268,7 +268,7 @@ export const shopSpotUpdateListReducer = (
 
 export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
   switch (action.type) {
-    case GET_SHOPS_LIST_REQUEST:
+    case GET_SOPTS_LIST_REQUEST:/// uwaga tu jest taka sama stała zminiałem nie wiem czy nie będzie błędu
       return {
         loading: true,
         success: false,
@@ -323,7 +323,7 @@ export const shopSpotListReducer = (state = { shopSpotList: [] }, action) => {
 
 export const shopListReducer = (state = { shopList: [] }, action) => {
   switch (action.type) {
-    case GET_SHOPS_LIST_REQUEST:
+    case GET_SHOPS_LIST_REQUEST:/// uwaga tu jest taka sama stała zminiałem nie wiem czy nie będzie błędu
       return { loading: true, success: false, shopList: [] };
     case GET_SHOPS_LIST_SUCCESS:
       return { loading: false, success: true, shopList: action.payload };

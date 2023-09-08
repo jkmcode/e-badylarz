@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { THREE } from "../constants/environmentConstans";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import { Icon } from "@iconify/react";
 import UploadImage from "../component/UploadImage";
 import {
@@ -21,7 +22,7 @@ import {
   ADD_IMAGE_MY_DELETE,
   UPDATE_IMAGE_MY_DELETE,
   DELETE_MY_IMAGE_DELETE,
-  GET_MY_IMAGE_DELETE
+  GET_MY_IMAGE_DELETE,
 } from "../constants/productConstans"
 import {
   tableCellNoBorderRight,
@@ -49,6 +50,9 @@ function MyProductPhotos() {
   const [deletePhotoId, setDeletePhotoId] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [confirm, setConfirm] = useState(false);
+
+  const [showErroraddMyImage, setShowErroraddMyImage] = useState(false);
+  const [showErrorUploadMyImage, setShowErrorUploadMyImage] = useState(false);
 
 
   // data from redux
@@ -90,6 +94,18 @@ function MyProductPhotos() {
     result: resultDeleteMyImage,
   } = delImagetRedux;
 
+  // Handlers
+
+  const closeError = () => {
+    if (showErroraddMyImage) {
+      dispatch({ type: ADD_IMAGE_MY_DELETE });
+      setShowErroraddMyImage(false)
+    }
+    else if (showErrorUploadMyImage) {
+      dispatch({ type: UPDATE_IMAGE_MY_DELETE });
+      setShowErrorUploadMyImage(false)
+    }
+  }
 
   const showMyPhoto = (i) => {
     if (i.id == photoId) {
@@ -130,6 +146,16 @@ function MyProductPhotos() {
       getImageMyProduct(IdMyProduct)
     );
   }, []);
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (errorAddMyImage) {
+      setShowErroraddMyImage(true)
+    }
+    if (errorUploadMyImage) {
+      setShowErrorUploadMyImage(true)
+    }
+  }, [errorAddMyImage, errorUploadMyImage]);
 
   // jeśli jest sukces pobrania danych o zdjęciach dla produktu to
   // 1. ustawienie listy zdjęć
@@ -315,6 +341,18 @@ function MyProductPhotos() {
           context={t("AdminShops_inactivate_shop_InfoWindow_body")}
         />
       )}
+      {showErroraddMyImage ?
+        <ErrorMesageRedux
+          confirmYes={closeError}
+          error={errorAddMyImage}
+        />
+        :
+        showErrorUploadMyImage ?
+          <ErrorMesageRedux
+            confirmYes={closeError}
+            error={errorUploadMyImage}
+          />
+          : null}
       <FormLayout col={THREE}>
         {loadingGetMyImage || loadingUploadMyImage ||
           loadingAddMyImage || loadingDeleteMyImage ? (

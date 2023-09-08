@@ -1,3 +1,20 @@
+import axios from 'axios';
+import {
+  ADD_LOG_REQUEST,
+  ADD_LOG_SUCCESS,
+  ADD_LOG_FAIL,
+} from "../constants/productConstans";
+
+export const exampleRequestToGoogle = async () => {
+  try {
+    const response = await axios.get('https://www.google.com');
+    return true
+  } catch (error) {
+    return false
+  }
+};
+
+
 export const addToLS = (errorRedux) => async (dispatch, getState) => {
   try {
     const dataFromLocalStorageJSON = localStorage.getItem("errorLog");
@@ -35,7 +52,7 @@ export const addToLS = (errorRedux) => async (dispatch, getState) => {
 };
 
 
-export const errorHandling = (er) => {
+export const errorHandling = async (er) => {
 
   console.log('Error-->', er)
 
@@ -128,17 +145,41 @@ export const errorHandling = (er) => {
       "url": er.request.responseURL
     })
   }
+  // błąd timeout
+  else if (er.code === 'ECONNABORTED') {
+    return ({
+      "detail": "TIMEOUT",
+      "axios_error": true,
+      "code": "axiosError - 7",
+      "status": er.request.status,
+      "method": er.request.method,
+      "url": er.request.responseURL
+    })
+  }
   // błąd sieciowy
   else if (er.request) {
-    return ({
-      "detail": "NetworkError",
-      "axios_error": true,
-      "code": "axiosError - 5",
-      "status": er.request.status,
-      "method": er.config.method,
-      "url": er.config.url
+    // publiczny adres on powinien być zawsze dostępny
+    try {
+      const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+      return ({
+        "detail": "NetworkError no access to the server",
+        "axios_error": true,
+        "code": "axiosError - 50",
+        "status": er.request.status,
+        "method": er.config.method,
+        "url": er.config.url
+      })
+    } catch (error) {
+      return ({
+        "detail": "NetworkError no internet",
+        "axios_error": true,
+        "code": "axiosError - 51",
+        "status": er.request.status,
+        "method": er.config.method,
+        "url": er.config.url
+      })
+    }
 
-    })
   }
   // pozostałe błędy Axiosa
   else {
@@ -153,3 +194,68 @@ export const errorHandling = (er) => {
   }
 
 }
+
+export const addLogError = (insertData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ADD_LOG_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/add-log/`,
+      insertData,
+      config
+    )
+
+    dispatch({
+      type: ADD_LOG_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: ADD_LOG_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "text": "próba zapisania błędu axiosa w tabeli przed LS",
+      "function": "addLogError",
+      "param": ""
+    }
+    if (!errorRedux.log) { dispatch(addToLS(errorData)) }
+  }
+};
+
+export const addLogErrorFromLS = () => async (dispatch, getState) => {
+  const dataFromLocalStorageJSON = localStorage.getItem("errorLog");
+  let dataFromLocalStorage = [];
+  if (dataFromLocalStorageJSON) {
+    dataFromLocalStorage = JSON.parse(dataFromLocalStorageJSON);
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.put(`/api/${userInfo.id}/add-log-from-ls/`,
+        dataFromLocalStorage,
+        config
+      )
+      localStorage.removeItem("errorLog");
+    } catch (error) { console.log("Błąd errorLS--->", error) }
+  } else { console.log("W LS nic nie ma !!!!") }
+};

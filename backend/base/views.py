@@ -99,47 +99,41 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-# @api_view(["PUT"])
-# def uploadMultiImages(request):
-    # data = request.data
-    # taxNo = data["taxNo"]
-    # shop = Shops.objects.get(nip=taxNo)
-    
-    # Get the uploaded file
-    # image = request.FILES.get('image')
-    # Get the desired width and height
-    # width = data.get('width',200)
-    # height = data.get('height',200)
-   
-    # if not image:
-    #     return Response("Image not found")
-    # Open image
-    # image = Image.open(BytesIO(image.read()))
-    # Resize the image
-    # image = image.resize((width, height), Image.ANTIALIAS)
-
-    # Save image
-    # image.save(image.name, 'JPEG')
-
-    # Assign the resized image to the shop object
-    # shop.photo = image_file
-    # shop.save()
-
-    # return Response("Image was uploaded")
-
 @api_view(["PUT"])
+# error hendling - OK
 def uploadMultiImages(request):
 
     data = request.data
     objType = data['objType']
     taxNo = data["taxNo"]
-    if objType == 'Spot':
-        active_object = ShopsSpot.objects.get(id=data['Id'])
-    else:
-        active_object = Shops.objects.get(nip=taxNo)
 
-    active_object.photo = request.FILES.get('image')
-    active_object.save()
+    content = {
+        'function_name' : 'uploadMultiImages',
+        'code' : "0045",
+        "detail": "Bad request. Photo not updated",
+        'text' : "Błąd pobrania obiektu do zapisania zdjęcia wariant 1 wiązanie po id"
+    }
+
+    if objType == 'Spot':
+        try:
+            active_object = ShopsSpot.objects.get(id=data['Id'])
+        except Exception as e:
+            return ErrorHendling(content, err=e)
+    else:
+        try:
+            active_object = Shops.objects.get(nip=taxNo)
+        except Exception as e:
+            content['text'] = "Błąd pobrania obiektu do zapisania zdjęcia wariant 1 wiązanie po nip"
+            content['code'] = "0046"
+            return ErrorHendling(content, err=e)
+
+    try:
+        active_object.photo = request.FILES.get('image')
+        active_object.save()
+    except Exception as e:
+        content['text'] = "Błąd  zapisania zdjęcia wariant 1"
+        content['code'] = "0047"
+        return ErrorHendling(content, err=e)
 
     return Response("Image was uploaded")
 
@@ -339,9 +333,26 @@ def updateShop(request, Id):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+# error hendling - OK
 def getShop(request, Id):
-    shop = Shops.objects.get(id = Id) 
-    seriaziler = ShopsSerializer(shop, many=False)
+
+    content = {
+        'function_name' : 'getShop',
+        'code' : "0048",
+        "detail": "Bad request. No objects in the table Shops for the selected shop",
+        'text' : "Błąd pobrania obiektu dla wybranego sklepu z tabeli Shops"
+    }
+    try:
+        shop = Shops.objects.get(id = Id) 
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = ShopsSerializer(shop, many=False)
+    except Exception as e:
+        content['text'] = "Błąd serializacji danych z tabeli Shops"
+        content['code'] = "0049"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)
 
 
@@ -363,26 +374,72 @@ def getAreaContacts(request, Id):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+# error hendling - OK
 def getSpots(request, Id):
-    spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
-    for i in spots:
-        i.city=cleanStr(i.city)
-    seriaziler = ShopSpotsSerializer(spots, many=True)
 
+    content = {
+        'function_name' : 'getSpot',
+        'code' : "0043",
+        "detail": "Bad request. No objects in the table ShopsSpot for the selected shop",
+        'text' : "Błąd pobrania obiektów dla okreslonego sklepu z tabeli ShopsSpot"
+    }
+    try:
+        spots = ShopsSpot.objects.filter(id_shops=Id).order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        for i in spots:
+            i.city=cleanStr(i.city)
+        seriaziler = ShopSpotsSerializer(spots, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji danych z tabeli ShopsSpot"
+        content['code'] = "0044"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)  
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+# error hendling - OK
 def getSpot(request, Id, typeSpot):
 
-    if typeSpot == "shop":
-        spot = ShopsSpot.objects.get(id=Id)
-        spot.city=cleanStr(spot.city)
-        seriaziler = ShopSpotsSerializer(spot, many=False)
+    content = {
+        'function_name' : 'getSpot',
+        'code' : "0039",
+        "detail": "Bad request. No data for the selected object in the table ShopsSpot",
+        'text' : "Błąd pobrania obiektu z tabeli ShopsSpot"
+    }
 
-    if typeSpot == "area":
-        spot = AreasSpot.objects.get(id=Id)
-        seriaziler = AreaSpotsSerializer(spot, many=False)
+    if typeSpot == "shop":
+        try:
+            spot = ShopsSpot.objects.get(id=Id)
+        except Exception as e:
+            return ErrorHendling(content, err=e)
+        try:
+            spot.city=cleanStr(spot.city)
+            seriaziler = ShopSpotsSerializer(spot, many=False)
+        except Exception as e:
+            content['text'] = "Błąd serializacji danych z tabeli ShopsSpot"
+            content['code'] = "0040"
+            return ErrorHendling(content, err=e)
+
+    elif typeSpot == "area":
+        try:
+            spot = AreasSpot.objects.get(id=Id)
+        except Exception as e:
+            content['text'] = "Błąd poboru dnych z tabeli AreasSpot"
+            content['detail'] = "Bad request. No data for the selected object in the table AreasSpot"
+            content['code'] = "0041"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = AreaSpotsSerializer(spot, many=False)
+        except Exception as e:
+            content['text'] = "Błąd serializacji danych z tabeli AreasSpot"
+            content['detail'] = "Bad request. No data for the selected object in the table AreasSpot"
+            content['code'] = "0042"
+            return ErrorHendling(content, err=e)
+    else:
+        pass
 
     return Response(seriaziler.data)
 
@@ -505,82 +562,124 @@ def getShops(request):
 
     return Response(seriaziler.data)
 
-@api_view(['POST', 'PUT'])
+@api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def addShopSpot(request):
     data = request.data
 
+    content = {
+        'function_name' : 'addShopSpot',
+        'code' : "0050",
+        "detail": "Bad request.No added new spot",
+        'text' : "Błąd pobrania obiektu z tabeli Shops"
+    }
+
     if data['add']:
-        shop = Shops.objects.get(id=data['id_shops'])
-
-        spot=ShopsSpot.objects.create(
-            id_shops=shop,
-            name=data['name'],
-            city=data['city'],
-            street=data['street'],
-            no_building=data['no_building'],
-            post_code=data['postCode'],
-            post=data['post'],
-            latitude=data['latitude'],
-            longitude=data['longitude'],
-            creator=data['creator'],
-            is_active=data['is_active'],
-            delivery=data['delivery'],
-            range=data['range'],
-            kind=data['kind'],
-            pick_up_point=data['pick_up']
-        )
+        try:
+            shop = Shops.objects.get(id=data['id_shops'])
+        except Exception as e:
+            return ErrorHendling(content,data['creator'], err=e)
+        try:
+            spot=ShopsSpot.objects.create(
+                id_shops=shop,
+                name=data['name'],
+                city=data['city'],
+                street=data['street'],
+                no_building=data['no_building'],
+                post_code=data['postCode'],
+                post=data['post'],
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                creator=data['creator'],
+                is_active=data['is_active'],
+                delivery=data['delivery'],
+                range=data['range'],
+                kind=data['kind'],
+                pick_up_point=data['pick_up']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia nowego obiektu w tabeli ShopsSpot"
+            content['code'] = "0051"
+            return ErrorHendling(content, data['creator'],err=e)
     else:
-        spot = ShopsSpot.objects.get(id=data['id_spot'])
-    
+        try:
+            spot = ShopsSpot.objects.get(id=data['id_spot'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli ShopsSpot"
+            content['detail'] = "Bad request. No updata selected object in the table ShopsSpot"
+            content['code'] = "0052"
+            return ErrorHendling(content, data['creator'],err=e)
          # add to archiv
-        spotARC = ShopsSpotARC.objects.create(
-        id_shops = data['id_shops'],
-        id_spot = data['id_spot'],
-        name = spot.name,
-        city = spot.city,
-        street = spot.street,
-        no_building = spot.no_building,
-        post_code = spot.post_code,
-        post = spot.post,
-        latitude = spot.latitude,
-        longitude = spot.longitude,
-        date_of_entry = spot.date_of_entry,
-        date_of_change = spot.date_of_change,
-        modifier = spot.modifier,
-        creator = spot.creator,
-        is_active = spot.is_active,
-        photo = spot.photo,
-        delivery = spot.delivery,
-        range = spot.range,
-        type_of_change = spot.type_of_change,
-        kind=spot.kind,
-        pick_up_point=spot.pick_up_point,
-        archiver = data['creator']
-        )
+        try:
+            spotARC = ShopsSpotARC.objects.create(
+                id_shops = data['id_shops'],
+                id_spot = data['id_spot'],
+                name = spot.name,
+                city = spot.city,
+                street = spot.street,
+                no_building = spot.no_building,
+                post_code = spot.post_code,
+                post = spot.post,
+                latitude = spot.latitude,
+                longitude = spot.longitude,
+                date_of_entry = spot.date_of_entry,
+                date_of_change = spot.date_of_change,
+                modifier = spot.modifier,
+                creator = spot.creator,
+                is_active = spot.is_active,
+                photo = spot.photo,
+                delivery = spot.delivery,
+                range = spot.range,
+                type_of_change = spot.type_of_change,
+                kind=spot.kind,
+                pick_up_point=spot.pick_up_point,
+                archiver = data['creator']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu ARC z tabeli ShopsSpotARC"
+            content['detail'] = "Bad request. No updata selected object in the table ShopsSpot"
+            content['code'] = "0053"
+            ErrorHendling(content, data['creator'],err=e)
         # change data
-        spot.name = data['name']
-        spot.city=data['city'],
-        spot.street = data['street']
-        spot.no_building = data['no_building']
-        spot.post_code = data['postCode']
-        spot.post = data['post']
-        spot.latitude = data['latitude']
-        spot.longitude = data['longitude']
-        spot.date_of_change = datetime.now()
-        spot.modifier = data['creator']
-        spot.delivery = data['delivery']
-        spot.range = data['range']
-        spot.type_of_change = 'Edit - change data'
-        spot.kind = data['kind']
-        spot.pick_up_point=data['pick_up']
+        try:
+            spot.name = data['name']
+            spot.city=data['city'],
+            spot.street = data['street']
+            spot.no_building = data['no_building']
+            spot.post_code = data['postCode']
+            spot.post = data['post']
+            spot.latitude = data['latitude']
+            spot.longitude = data['longitude']
+            spot.date_of_change = datetime.now()
+            spot.modifier = data['creator']
+            spot.delivery = data['delivery']
+            spot.range = data['range']
+            spot.type_of_change = 'Edit - change data'
+            spot.kind = data['kind']
+            spot.pick_up_point=data['pick_up']
 
-        spot.save()
-
-    spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
-    for i in spots:
-        i.city=cleanStr(i.city)
-    seriaziler = ShopSpotsSerializer(spots, many=True) 
+            spot.save()
+        except Exception as e:
+            content['text'] = "Błąd aktualizacji danych w tabeli ShopsSpot"
+            content['detail'] = "Bad request. No updata selected object in the table ShopsSpot"
+            content['code'] = "0054"
+            return ErrorHendling(content, data['creator'],err=e)     
+    try:
+        spots=ShopsSpot.objects.filter(id_shops=data['id_shops']).order_by('name')
+    except Exception as e:
+        content['text'] = "Błąd poboru zaktualizowanej listy punktów sprzedaży"
+        content['detail'] = "Bad request. No get new spot list"
+        content['code'] = "0055"
+        return ErrorHendling(content, data['creator'],err=e)
+    try:
+        for i in spots:
+            i.city=cleanStr(i.city)
+        seriaziler = ShopSpotsSerializer(spots, many=True) 
+    except Exception as e:
+        content['text'] = "Błąd serializacji zaktualizowanej listy punktów sprzedaży"
+        content['detail'] = "Bad request. No get new spot list"
+        content['code'] = "0056"
+        return ErrorHendling(content, data['creator'],err=e)
     return Response(seriaziler.data)
 
 @api_view(['POST', 'PUT'])

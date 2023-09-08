@@ -1,6 +1,10 @@
 import axios from "axios";
-import { errorHandling, addToLS } from "./errorHandling";
-// import { addToLS } from "./errorToLS"
+import {
+  errorHandling,
+  addToLS,
+  addLogError,
+  addLogErrorFromLS
+} from "./errorHandling";
 import {
   SORT_BY_LNG_REQUEST,
   SORT_BY_LNG_SUCCESS,
@@ -54,81 +58,344 @@ import {
   ADD_OFFER_REQUEST,
   ADD_OFFER_SUCCESS,
   ADD_OFFER_FAIL,
-  ADD_LOG_REQUEST,
-  ADD_LOG_SUCCESS,
-  ADD_LOG_FAIL
+  GET_MYOFFERS_LIST_REQUEST,
+  GET_MYOFFERS_LIST_SUCCESS,
+  GET_MYOFFERS_LIST_FAIL,
+  DELETE_MYOFFERS_REQUEST,
+  DELETE_MYOFFERS_SUCCESS,
+  DELETE_MYOFFERS_FAIL,
+  ADD_QUANTITY_OFFER_REQUEST,
+  ADD_QUANTITY_OFFER_SUCCESS,
+  ADD_QUANTITY_OFFER_FAIL,
+  GET_MYOFFER_REQUEST,
+  GET_MYOFFER_SUCCESS,
+  GET_MYOFFER_FAIL,
+  UPDATE_SPOT_PICK_UP_REQUEST,
+  UPDATE_SPOT_PICK_UP_SUCCESS,
+  UPDATE_SPOT_PICK_UP_FAIL,
 } from "../constants/productConstans";
 
-// zapisywanie danych z LS do bazy
-export const addLogErrorFromLS = () => async (dispatch, getState) => {
-  const dataFromLocalStorageJSON = localStorage.getItem("errorLog");
-  let dataFromLocalStorage = [];
-  if (dataFromLocalStorageJSON) {
-    dataFromLocalStorage = JSON.parse(dataFromLocalStorageJSON);
-    try {
-      const {
-        userLogin: { userInfo },
-      } = getState();
+import {
+  TIMEOUT_updateSpotPickUp,
+  TIMEOUT_deleteMyProduct,
+  TIMEOUT_getMyproduct,
+  TIMEOUT_getMyOffersPrice,
+  TIMEOUT_addQuantityOffer,
+  TIMEOUT_deleteMyOffers,
+  TIMEOUT_getMyOffers,
+  TIMEOUT_addOffer,
+  TIMEOUT_addImageMyProduct,
+  TIMEOUT_InsertImageMyProduct
+} from "../constants/timeoutConstans"
 
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-      const { data } = await axios.put(`/api/${userInfo.id}/add-log-from-ls/`,
-        dataFromLocalStorage,
-        config
-      )
-      localStorage.removeItem("errorLog");
-    } catch (error) { console.log("Błąd errorLS--->", error) }
-  } else { console.log("W LS nic nie ma !!!!") }
-};
+export const updateSpotPickUp = (insertData) => async (dispatch, getState) => {
 
-// nie wiem co w przypadku gdy funkcję uruchomi gość - na razie nie ma takiego przypadku
-export const addLogError = (insertData) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
-    dispatch({ type: ADD_LOG_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    dispatch({ type: UPDATE_SPOT_PICK_UP_REQUEST });
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_updateSpotPickUp
     };
-
-    const { data } = await axios.put(`/api/add-log/`,
-      insertData,
-      config
-    )
+    const { data } = await axios.put(`/api/update-pick-up/`, insertData, config);
 
     dispatch({
-      type: ADD_LOG_SUCCESS,
+      type: UPDATE_SPOT_PICK_UP_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    const errorRedux = errorHandling(error)
+    const errorRedux = await errorHandling(error)
     dispatch({
-      type: ADD_LOG_FAIL,
+      type: UPDATE_SPOT_PICK_UP_FAIL,
       payload: errorRedux
     });
     const errorData = {
       ...errorRedux,
-      "text": "próba zapisania błędu axiosa w tabeli przed LS",
-      "function": "addLogError",
+      "user": userInfo.id,
+      "text": "Aktualizacja punktu odbioru",
+      "function": "updateSpotPickUp",
       "param": ""
     }
-    if (!errorRedux.log) { dispatch(addToLS(errorData)) }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
+
+export const deleteMyProduct = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+
+    dispatch({ type: DELETE_MY_PRODUCT_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_deleteMyProduct
+    };
+    const { data } = await axios.put(`/api//delete-my-product/`, insertData, config);
+
+    dispatch({
+      type: DELETE_MY_PRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: DELETE_MY_PRODUCT_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Kasowaanie mojego produktu",
+      "function": "deleteMyProduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
+export const getMyproduct = (spotId) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({ type: GET_MYPRODUCT_LIST_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_getMyproduct
+    };
+
+    const { data } = await axios.get(`/api/${spotId}/get-myproduct/`, config);
+
+    dispatch({
+      type: GET_MYPRODUCT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: GET_MYPRODUCT_LIST_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie moich produktów",
+      "function": "getMyproduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
+export const getMyOffersPrice = (spotId) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    dispatch({ type: GET_MYOFFER_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_getMyOffersPrice
+    };
+
+    const { data } = await axios.get(`/api/${spotId}/get-myoffers-price/`, config);
+
+    dispatch({
+      type: GET_MYOFFER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: GET_MYOFFER_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobór cenówki dla wybranej oferty - informacja o ofercie",
+      "function": "getMyOffers",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
+export const addQuantityOffer = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({ type: ADD_QUANTITY_OFFER_REQUEST });
+
+
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_addQuantityOffer
+    };
+
+    const { data } = await axios.put(`/api/add-quantity-myoffers/`, insertData, config);
+
+    dispatch({
+      type: ADD_QUANTITY_OFFER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: ADD_QUANTITY_OFFER_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "text": "zwiekszenie ilosci aktywnej oferty",
+      "function": "addQuantityOffer",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
+export const deleteMyOffers = (insertData) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({ type: DELETE_MYOFFERS_REQUEST });
+
+
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_deleteMyOffers
+    };
+
+    const { data } = await axios.put(`/api/delete-myoffers/`, insertData, config);
+
+    dispatch({
+      type: DELETE_MYOFFERS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: DELETE_MYOFFERS_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Kasowanie manualne oferty",
+      "function": "deleteMyOffers",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
+export const getMyOffers = (spotId) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({ type: GET_MYOFFERS_LIST_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_getMyOffers
+    };
+
+    const { data } = await axios.get(`/api/${spotId}/get-myoffers/`, config);
+
+    dispatch({
+      type: GET_MYOFFERS_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: GET_MYOFFERS_LIST_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobór aktywnych ofert dla okreslonego punktu sprzedaży",
+      "function": "getMyOffers",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
+
 
 export const addOffer = (insertData) => async (dispatch, getState) => {
 
   dispatch(addLogErrorFromLS())
+  const {
+    userLogin: { userInfo },
+  } = getState();
   try {
     dispatch({ type: ADD_OFFER_REQUEST });
 
@@ -141,6 +408,7 @@ export const addOffer = (insertData) => async (dispatch, getState) => {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addOffer
     };
 
     const { data } = await axios.put(`/api/add-offer/`,
@@ -153,13 +421,14 @@ export const addOffer = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    const errorRedux = errorHandling(error)
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_OFFER_FAIL,
       payload: errorRedux
     });
     const errorData = {
       ...errorRedux,
+      "user": userInfo.id,
       "text": "dodanie nowej oferty",
       "function": "addOffer",
       "param": ""
@@ -200,34 +469,6 @@ export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) =
   }
 };
 
-export const deleteMyProduct = (insertData) => async (dispatch, getState) => {
-  try {
-
-    dispatch({ type: DELETE_MY_PRODUCT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const { data } = await axios.put(`/api//delete-my-product/`, insertData, config);
-
-    dispatch({
-      type: DELETE_MY_PRODUCT_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: DELETE_MY_PRODUCT_FAIL,
-      payload: errorHandling(error)
-    });
-  }
-};
 
 export const getImageMyProduct = (myProductId) => async (dispatch, getState) => {
   try {
@@ -259,21 +500,23 @@ export const getImageMyProduct = (myProductId) => async (dispatch, getState) => 
 };
 
 export const addImageMyProduct = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_MY_IMAGE_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addImageMyProduct
     };
 
-    const { data } = await axios.post(
+    const { data } = await axios.put(
       `/api/add-myproduct-image/`,
       insertData,
       config
@@ -284,14 +527,31 @@ export const addImageMyProduct = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_IMAGE_MY_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "dodanie nowego obiektu zdjecia do mojego produktu",
+      "function": "addImageMyProduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const InsertImageMyProduct = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     const formData = new FormData();
     formData.append("image", insertData.imageUpload);
@@ -300,15 +560,13 @@ export const InsertImageMyProduct = (insertData) => async (dispatch, getState) =
 
     dispatch({ type: UPDATE_MY_IMAGE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_InsertImageMyProduct
     };
     const { data } = await axios.put(`/api/upload-my-image/`, formData, config);
 
@@ -317,10 +575,22 @@ export const InsertImageMyProduct = (insertData) => async (dispatch, getState) =
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: UPDATE_IMAGE_MY_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "aktualizacja nowego obiektu zdjecia do mojego produktu",
+      "function": "InsertImageMyProduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -356,34 +626,7 @@ export const addMyproduct = (insertData) => async (dispatch, getState) => {
   }
 };
 
-export const getMyproduct = (spotId) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: GET_MYPRODUCT_LIST_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/${spotId}/get-myproduct/`, config);
-
-    dispatch({
-      type: GET_MYPRODUCT_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: GET_MYPRODUCT_LIST_FAIL,
-      payload: errorHandling(error)
-    });
-  }
-};
 
 export const addProductCat = (insertData) => async (dispatch, getState) => {
   try {

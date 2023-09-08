@@ -184,3 +184,40 @@ class MyProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyProducts
         fields = '__all__'
+
+# class MyProductsPriceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MyProductsPrice
+#         fields = '__all__'
+
+# class MyOffersSerializer(serializers.ModelSerializer):
+#     id_my_product=MyProductsSerializer()
+#     my_product_prices = MyProductsPriceSerializer(many=True, read_only=True)
+#     class Meta:
+#         model = MyProductsOffered
+#         fields = '__all__'
+
+
+class MyProductsPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyProductsPrice
+        fields = '__all__'
+
+class MyOffersSerializer(serializers.ModelSerializer):
+    id_my_product = MyProductsSerializer()
+    #to nie chce działać 
+    my_product_prices = MyProductsPriceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = MyProductsOffered
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        try:
+            return super().to_representation(instance)
+        except Exception as e:
+            # Tutaj możesz obsłużyć błąd według swoich preferencji, na przykład zwracając inny komunikat lub pusty słownik.
+            # response_data = {'error': 'Wystąpił błąd podczas serializacji'}
+            # return response_data
+            print('error-->',e)
+            return super().to_representation(instance)
