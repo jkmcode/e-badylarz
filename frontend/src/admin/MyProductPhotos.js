@@ -53,6 +53,8 @@ function MyProductPhotos() {
 
   const [showErroraddMyImage, setShowErroraddMyImage] = useState(false);
   const [showErrorUploadMyImage, setShowErrorUploadMyImage] = useState(false);
+  const [showErrorGetMyImage, setShowErrorGetMyImage] = useState(false);
+  const [showErrorDeleteMyImage, setShowErrorDeleteMyImage] = useState(false);
 
 
   // data from redux
@@ -105,6 +107,14 @@ function MyProductPhotos() {
       dispatch({ type: UPDATE_IMAGE_MY_DELETE });
       setShowErrorUploadMyImage(false)
     }
+    else if (showErrorGetMyImage) {
+      dispatch({ type: GET_MY_IMAGE_DELETE });
+      setShowErrorGetMyImage(false)
+    }
+    else if (showErrorDeleteMyImage) {
+      dispatch({ type: DELETE_MY_IMAGE_DELETE });
+      setShowErrorDeleteMyImage(false)
+    }
   }
 
   const showMyPhoto = (i) => {
@@ -155,7 +165,13 @@ function MyProductPhotos() {
     if (errorUploadMyImage) {
       setShowErrorUploadMyImage(true)
     }
-  }, [errorAddMyImage, errorUploadMyImage]);
+    if (errorGetMyImage) {
+      setShowErrorGetMyImage(true)
+    }
+    if (errorDeleteMyImage) {
+      setShowErrorGetMyImage(true)
+    }
+  }, [errorAddMyImage, errorUploadMyImage, errorGetMyImage, errorDeleteMyImage]);
 
   // jeśli jest sukces pobrania danych o zdjęciach dla produktu to
   // 1. ustawienie listy zdjęć
@@ -352,7 +368,19 @@ function MyProductPhotos() {
             confirmYes={closeError}
             error={errorUploadMyImage}
           />
-          : null}
+          :
+          showErrorGetMyImage ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={errorGetMyImage}
+            />
+            :
+            showErrorDeleteMyImage ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorDeleteMyImage}
+              />
+              : null}
       <FormLayout col={THREE}>
         {loadingGetMyImage || loadingUploadMyImage ||
           loadingAddMyImage || loadingDeleteMyImage ? (

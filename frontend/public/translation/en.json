@@ -663,5 +663,7 @@
   "No_updata_spot_getList": "Error fetching updated POS list",
   "No_updata_spot_pickUp": "Error Pickup point information not saved",
   "No_obj_MyProducts": "My product object is missing",
-  "No_uploaded_image": "The photo has not been added"
+  "No_uploaded_image": "The photo has not been added",
+  "No_get_image": "Error retrieving the image list for the selected product",
+  "No_delete_my_image": "Error deleting my photo"
 }

@@ -13,3 +13,5 @@ export const TIMEOUT_getShopSpots = 5000;
 export const TIMEOUT_updateShopSpot = 5000;
 export const TIMEOUT_addImageMyProduct = 5000;
 export const TIMEOUT_InsertImageMyProduct = 5000
+export const TIMEOUT_getImageMyProduct = 5000
+export const TIMEOUT_deleteMyProductPhoto = 5000

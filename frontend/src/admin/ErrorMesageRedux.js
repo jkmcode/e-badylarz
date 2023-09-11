@@ -137,6 +137,10 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_obj_MyProducts"));
       case "Bad request. No uploaded my image in table MyProductsPhotos":
         return setErrorMessage(t("No_uploaded_image"));
+      case "Bad request. No my photo list":
+        return setErrorMessage(t("No_get_image"));
+      case "Bad request. My photo product not delete":
+        return setErrorMessage(t("No_delete_my_image"));
       default:
         return setErrorMessage(error.detail);
     }

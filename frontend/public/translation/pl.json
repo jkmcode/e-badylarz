@@ -661,5 +661,7 @@
   "No_updata_spot_getList": "Błąd poboru zaktualizowanej listy punktów sprzedaży",
   "No_updata_spot_pickUp": "Bład informacja o punkcie odbioru nie została zapisana",
   "No_obj_MyProducts": "Brak obiektu mój produkt",
-  "No_uploaded_image": "Zdjęcie nie została dodane"
+  "No_uploaded_image": "Zdjęcie nie została dodane",
+  "No_get_image": "Błąd pobrania listy zdjęć dla wybranego produktu",
+  "No_delete_my_image": "Błąd kasowania mojego zdjęcia"
 }

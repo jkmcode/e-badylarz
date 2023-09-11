@@ -668,26 +668,42 @@ def deleteMyProduct(request):
     return Response(seriaziler.data)
 
 
-@api_view(["PUT","POST"])
+@api_view(["PUT"])
 def deleteMyImage(request):
 
     data = request.data
-    # content = {
-    #     'function_name' : 'addOffer',
-    #     'code' : "0013",
-    #     "detail": "Bad request. My product not delete",
-    #     'text' : "Błąd pobrania obiektu"
-    # }
-
-    active_object = MyProductsPhotos.objects.get(id=data['Id'])
-    active_object.is_delete = True
-    active_object.date_of_change = datetime.datetime.now()
-    active_object.modifier = data['user']
-    active_object.save()
-
-    photos=MyProductsPhotos.objects.filter(id_my_product=data['IdProduct'],is_delete=False)
-    seriaziler = MyProductsPhotoSerializer(photos, many = True)
-
+    content = {
+        'function_name' : 'deleteMyImage',
+        'code' : "0070",
+        "detail": "Bad request. My photo product not delete",
+        'text' : "Błąd pobrania obiektu z tabeli MyProductsPhotos"
+    }
+    try:
+        active_object = MyProductsPhotos.objects.get(id=data['Id'])
+    except Exception as e:
+        return ErrorHendling(content, data['user'], e)
+    try:
+        active_object.is_delete = True
+        active_object.date_of_change = datetime.datetime.now()
+        active_object.modifier = data['user']
+        active_object.save()
+    except Exception as e:
+        content['text'] = "Błąd zapisania zmian - kasowanie mojego zdjecia w tabeli MyProductsPhotos "
+        content['code'] = "0071"
+        return ErrorHendling(content, data['user'], e)
+    try:
+        photos=MyProductsPhotos.objects.filter(id_my_product=data['IdProduct'],is_delete=False)
+    except Exception as e:
+        content['text'] = "Błąd pobrania aktualnej listy moich zdjęc z tabeli MyProductsPhotos "
+        content['code'] = "0072"
+        return ErrorHendling(content, data['user'], e)
+    try:
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji aktualnej listy moich zdjęc z tabeli MyProductsPhotos "
+        content['code'] = "0073"
+        return ErrorHendling(content, data['user'], e)
+    
     return Response(seriaziler.data)
 
 @api_view(["PUT"])
@@ -734,8 +750,22 @@ def addMyImage(request):
 @api_view(["GET"])
 def getMyImage(request,Id):
 
-    photos=MyProductsPhotos.objects.filter(id_my_product=Id, is_delete=False)
-    seriaziler = MyProductsPhotoSerializer(photos, many = True)
+    content = {
+        'function_name' : 'addMyImage',
+        'code' : "0068",
+        "detail": "Bad request. No my photo list",
+        'text' : "Błąd pobrania listy zdjęć z tabeli MyProductsPhotos"
+    }
+    try:
+        photos=MyProductsPhotos.objects.filter(id_my_product=Id, is_delete=False)
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy zdjęć z tabeli MyProductsPhotos"
+        content['code'] = "0069"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)
 

@@ -139,13 +139,34 @@
         photos=MyProductsPhotos.objects.filter(id_my_product=data['Id'],is_delete=False)
 - 0067 -"Błąd serializacji listy moich zdjęć z tabeli MyProductsPhotos"
         seriaziler = MyProductsPhotoSerializer(photos, many = True)
-- 0068 -
-- 0069 -
-- 0070 -
-- 0071 -
-- 0072 -
-- 0073 -
+- 0068 -"Błąd pobrania listy zdjęć z tabeli MyProductsPhotos"
+        photos=MyProductsPhotos.objects.filter(id_my_product=Id, is_delete=False)
+- 0069 -"Błąd serializacji listy zdjęć z tabeli MyProductsPhotos"
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
+- 0070 -"Błąd pobrania obiektu z tabeli MyProductsPhotos"
+        active_object = MyProductsPhotos.objects.get(id=data['Id'])
+- 0071 -"Błąd zapisania zmian - kasowanie mojego zdjecia w tabeli MyProductsPhotos "
+        active_object.save()
+- 0072 -"Błąd pobrania aktualnej listy moich zdjęc z tabeli MyProductsPhotos "
+        photos=MyProductsPhotos.objects.filter(id_my_product=data['IdProduct'],is_delete=False)
+- 0073 -"Błąd serializacji aktualnej listy moich zdjęc z tabeli MyProductsPhotos "
+        seriaziler = MyProductsPhotoSerializer(photos, many = True)
 - 0074 -
+- 0075 -
+- 0076 -
+- 0077 -
+- 0078 -
+- 0079 -
+- 0080 -
+- 0081 -
+- 0082 -
+- 0083 -
+- 0084 -
+- 0085 -
+- 0086 -
+- 0087 -
+- 0088 -
+- 0089 -
 
 
 NavbarComponent

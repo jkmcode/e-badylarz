@@ -85,7 +85,9 @@ import {
   TIMEOUT_getMyOffers,
   TIMEOUT_addOffer,
   TIMEOUT_addImageMyProduct,
-  TIMEOUT_InsertImageMyProduct
+  TIMEOUT_InsertImageMyProduct,
+  TIMEOUT_getImageMyProduct,
+  TIMEOUT_deleteMyProductPhoto
 } from "../constants/timeoutConstans"
 
 export const updateSpotPickUp = (insertData) => async (dispatch, getState) => {
@@ -148,7 +150,7 @@ export const deleteMyProduct = (insertData) => async (dispatch, getState) => {
       },
       timeout: TIMEOUT_deleteMyProduct
     };
-    const { data } = await axios.put(`/api//delete-my-product/`, insertData, config);
+    const { data } = await axios.put(`/api/delete-my-product/`, insertData, config);
 
     dispatch({
       type: DELETE_MY_PRODUCT_SUCCESS,
@@ -441,48 +443,64 @@ export const addOffer = (insertData) => async (dispatch, getState) => {
 };
 
 export const deleteMyProductPhoto = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
 
     dispatch({ type: DELETE_MY_IMAGE_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_deleteMyProductPhoto
     };
-    const { data } = await axios.put(`/api//delete-my-image/`, insertData, config);
+    const { data } = await axios.put(`/api/delete-my-image/`, insertData, config);
 
     dispatch({
       type: DELETE_MY_IMAGE_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: DELETE_MY_IMAGE_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "kasownie zdjecia dla mojego produktu",
+      "function": "deleteMyProductPhoto",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 
 export const getImageMyProduct = (myProductId) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_MY_IMAGE_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getImageMyProduct
     };
 
     const { data } = await axios.get(`/api/${myProductId}/get-my-image/`, config);
@@ -492,10 +510,22 @@ export const getImageMyProduct = (myProductId) => async (dispatch, getState) => 
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_MY_IMAGE_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "pobranie listy moich zdjęć dla produktu",
+      "function": "getImageMyProduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
