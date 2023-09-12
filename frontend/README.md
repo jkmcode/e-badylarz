@@ -151,22 +151,61 @@
         photos=MyProductsPhotos.objects.filter(id_my_product=data['IdProduct'],is_delete=False)
 - 0073 -"Błąd serializacji aktualnej listy moich zdjęc z tabeli MyProductsPhotos "
         seriaziler = MyProductsPhotoSerializer(photos, many = True)
-- 0074 -
-- 0075 -
-- 0076 -
-- 0077 -
-- 0078 -
-- 0079 -
-- 0080 -
-- 0081 -
-- 0082 -
-- 0083 -
-- 0084 -
-- 0085 -
-- 0086 -
-- 0087 -
+- 0074 -"Błąd pobrania obiektu z tabeli Product"
+        product = Product.objects.get(id=data['idProduct'])
+- 0075 -"Błąd pobrania obiektu z tabeli ShopsSpot"
+        spot = ShopsSpot.objects.get(id=data['idSpot'])
+- 0076 -"Błąd dodania obiektu z tabeli MyProducts"
+        createdMyProduct = MyProducts.objects.create(...)
+- 0077 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - brak filtrów"
+        products = Product.objects.all().order_by('name')
+- 0078 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtr: Lng"
+        products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng
+                                              ).order_by('name')
+- 0079 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtry: Lng,Cat"
+        products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
+                                              id_product_subtype__id_product_type__id=Cat
+                                              ).order_by('name'
+- 0080 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtry: Lng,Cat,Subcat"
+        products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
+                                              id_product_subtype__id_product_type__id=Cat,
+                                              id_product_subtype__id=Subcat
+                                              ).order_by('name')
+- 0081 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: brak"
+        products = Product.objects.filter(is_active=True).order_by('name')
+- 0082 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng"
+        products = Product.objects.filter(is_active=True,
+                                              id_product_subtype__id_product_type__language=Lng
+                                              ).order_by('name')
+- 0083 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng,Cat"
+        products = Product.objects.filter(is_active=True,
+                                              id_product_subtype__id_product_type__language=Lng,
+                                              id_product_subtype__id_product_type__id=Cat
+                                              ).order_by('name')
+- 0084 -"Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng,Cat,Subcat"
+        products = Product.objects.filter(is_active=True,
+                                              id_product_subtype__id_product_type__language=Lng,
+                                              id_product_subtype__id_product_type__id=Cat,
+                                              id_product_subtype__id=Subcat
+                                              ).order_by('name')
+- 0085 -"Błąd paginacji listy produktów"
+        paginator = Paginator(products, page_size)
+- 0086 -"Błąd podziału na strony"
+        page_obj = paginator.page(page)
+- 0087 -"Błąd serializacji strony listy produktów"
+        seriaziler = ProductsSerializer(page_obj, many=True)
 - 0088 -
 - 0089 -
+- 0090 -
+- 0091 -
+- 0092 -
+- 0093 -
+- 0094 -
+- 0095 -
+- 0096 -
+- 0097 -
+- 0098 -
+- 0099 -
 
 
 NavbarComponent

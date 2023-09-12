@@ -87,7 +87,8 @@ import {
   TIMEOUT_getShop,
   TIMEOUT_getSpot,
   TIMEOUT_getShopSpots,
-  TIMEOUT_updateShopSpot
+  TIMEOUT_updateShopSpot,
+  TIMEOUT_getListOfData
 } from "../constants/timeoutConstans"
 
 // Save image in redax
@@ -955,18 +956,20 @@ export const getSingleInstance = (insertData) => async (dispatch, getState) => {
 };
 
 export const getListOfData = (searchData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_LIST_OF_DATA_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getListOfData
     };
 
     const { data } = await axios.get(
@@ -979,12 +982,21 @@ export const getListOfData = (searchData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_LIST_OF_DATA_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy produktów",
+      "function": "getListOfData",
+      "param": searchData.typeActivity
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };

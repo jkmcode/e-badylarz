@@ -665,5 +665,7 @@
   "No_obj_MyProducts": "My product object is missing",
   "No_uploaded_image": "The photo has not been added",
   "No_get_image": "Error retrieving the image list for the selected product",
-  "No_delete_my_image": "Error deleting my photo"
+  "No_delete_my_image": "Error deleting my photo",
+  "No_added_my_product": "My product has not been added",
+  "No_get_product_list": "The product list has not been downloaded"
 }

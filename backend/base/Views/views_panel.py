@@ -623,7 +623,7 @@ def addOffer(request):
     return Response("OK")
  
 
-@api_view(["PUT","POST"])
+@api_view(["PUT"])
 # error hendling - OK
 def deleteMyProduct(request):
 
@@ -669,6 +669,7 @@ def deleteMyProduct(request):
 
 
 @api_view(["PUT"])
+# error hendling - OK
 def deleteMyImage(request):
 
     data = request.data
@@ -707,6 +708,7 @@ def deleteMyImage(request):
     return Response(seriaziler.data)
 
 @api_view(["PUT"])
+# error hendling - OK
 def addMyImage(request):
 
     data = request.data
@@ -748,6 +750,7 @@ def addMyImage(request):
     return Response(seriaziler.data)
 
 @api_view(["GET"])
+# error hendling - OK
 def getMyImage(request,Id):
 
     content = {
@@ -770,6 +773,7 @@ def getMyImage(request,Id):
     return Response(seriaziler.data)
 
 @api_view(["PUT"])
+# error hendling - OK
 def uploadMyImages(request):
 
     data = request.data
@@ -809,15 +813,36 @@ def uploadMyImages(request):
 
 @api_view(['PUT'])
 @permission_classes([AllowAny])
+# error hendling - OK
 def add_myproduct(request):
+    
     data = request.data
-    product = Product.objects.get(id=data['idProduct'])
-    spot = ShopsSpot.objects.get(id=data['idSpot'])
-    createdMyProduct = MyProducts.objects.create(
+    content = {
+        'function_name' : 'add_myproduct',
+        'code' : "0074",
+        "detail": "Bad request. No added my product",
+        'text' : "Błąd pobrania obiektu z tabeli Product"
+    }
+    try:
+        product = Product.objects.get(id=data['idProduct'])
+    except Exception as e:
+        return ErrorHendling(content, user=data['idUser'],err=e)
+    try:
+        spot = ShopsSpot.objects.get(id=data['idSpot'])
+    except Exception as e:
+        content['text'] = "Błąd pobrania obiektu z tabeli ShopsSpot"
+        content['code'] = "0075"
+        return ErrorHendling(content, user=data['idUser'],err=e)
+    try:
+        createdMyProduct = MyProducts.objects.create(
             id_product= product,
             id_shops_spot = spot,
             creator = data['idUser'],
         )
+    except Exception as e:
+        content['text'] = "Błąd dodania obiektu z tabeli MyProducts"
+        content['code'] = "0076"
+        return ErrorHendling(content, user=data['idUser'],err=e)
     
     return Response("OK")
 
@@ -825,63 +850,123 @@ def add_myproduct(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_list_of_data(request, typeActivity,Page,Lng,Cat,Subcat):
+
+    content = {
+        'function_name' : 'get_list_of_data',
+        'code' : "0077",
+        "detail": "Bad request. No product list",
+        'text' : "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - brak filtrów"
+    }
     
     if typeActivity == "LIST_OF_PRODUCTS":
 
         if Lng == '0':
-            products = Product.objects.all().order_by('name')
+            try:
+                products = Product.objects.all().order_by('name')
+            except Exception as e:
+                return ErrorHendling(content,err=e)
 
         if Lng !='0' and Cat =='0' and Subcat =='0':
-            products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng
+            try:
+                products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng
                                               ).order_by('name')
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtr: Lng"
+                content['code'] = "0078"
+                return ErrorHendling(content, err=e)
             
         if Lng !='0' and Cat !='0' and Subcat =='0':
-            products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
+            try:
+                products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
                                               id_product_subtype__id_product_type__id=Cat
                                               ).order_by('name')
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtry: Lng,Cat"
+                content['code'] = "0079"
+                return ErrorHendling(content, err=e)
         
         if Lng !='0' and Cat !='0' and Subcat !='0':
-            products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
+            try:
+                products = Product.objects.filter(id_product_subtype__id_product_type__language=Lng,
                                               id_product_subtype__id_product_type__id=Cat,
                                               id_product_subtype__id=Subcat
                                               ).order_by('name')
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_PRODUCTS - filtry: Lng,Cat,Subcat"
+                content['code'] = "0080"
+                return ErrorHendling(content, err=e)
 
     elif typeActivity == "LIST_OF_MY_PRODUCTS":
 
         if Lng == '0':
-            products = Product.objects.filter(is_active=True).order_by('name')
-        
+            try:
+                products = Product.objects.filter(is_active=True).order_by('name')
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: brak"
+                content['code'] = "0081"
+                return ErrorHendling(content, err=e)     
+               
         if Lng !='0' and Cat =='0' and Subcat =='0':
-            products = Product.objects.filter(is_active=True,
+            try:
+                products = Product.objects.filter(is_active=True,
                                               id_product_subtype__id_product_type__language=Lng
                                               ).order_by('name')
-        
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng"
+                content['code'] = "0082"
+                return ErrorHendling(content, err=e)     
+                
         if Lng !='0' and Cat !='0' and Subcat =='0':
-            products = Product.objects.filter(is_active=True,
+            try:
+                products = Product.objects.filter(is_active=True,
                                               id_product_subtype__id_product_type__language=Lng,
                                               id_product_subtype__id_product_type__id=Cat
                                               ).order_by('name')
-        
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng,Cat"
+                content['code'] = "0083"
+                return ErrorHendling(content, err=e)  
+                   
         if Lng !='0' and Cat !='0' and Subcat !='0':
-            products = Product.objects.filter(is_active=True,
+            try:
+                products = Product.objects.filter(is_active=True,
                                               id_product_subtype__id_product_type__language=Lng,
                                               id_product_subtype__id_product_type__id=Cat,
                                               id_product_subtype__id=Subcat
                                               ).order_by('name')
-
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Product, typeActivity = LIST_OF_MY_PRODUCTS - filtry: Lng,Cat,Subcat"
+                content['code'] = "0084"
+                return ErrorHendling(content, err=e)
+            
     else:
         raise Http404('Invalid typeActivity')  
     
     page = request.GET.get('page',int(Page))
     page_size = request.GET.get('page_size',30)
     
-    paginator = Paginator(products, page_size)
-    if paginator.num_pages < int(Page):
-        page = 1
-
-    page_obj = paginator.page(page)
-
-    seriaziler = ProductsSerializer(page_obj, many=True)
+    try:
+        paginator = Paginator(products, page_size)
+        if paginator.num_pages < int(Page):
+            page = 1
+    except Exception as e:
+        content['text'] = "Błąd paginacji listy produktów"
+        content['code'] = "0085"
+        return ErrorHendling(content, err=e)
+    
+    try:
+        page_obj = paginator.page(page)
+    except Exception as e:
+        content['text'] = "Błąd podziału na strony"
+        content['code'] = "0086"
+        return ErrorHendling(content, err=e)
+    
+    try:
+        seriaziler = ProductsSerializer(page_obj, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji strony listy produktów"
+        content['code'] = "0087"
+        return ErrorHendling(content, err=e)
     
     response = {
         'data':seriaziler.data,

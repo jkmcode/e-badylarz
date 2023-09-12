@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import RadioButtons from "./RadioButtons";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import TableComponent from "./TableComponent";
 import DotsLoader from "../component/DotsLoader";
 import InfoAlertComponent from "../component/InfoAlertComponent";
@@ -22,29 +22,24 @@ import {
   addMyproduct,
   getMyproduct
 } from "../actions/productActions";
-import { getListOfData, unOrActiveList } from "../actions/adminActions";
+import { getListOfData } from "../actions/adminActions";
 import {
   ONE,
   LIST_OF_MY_PRODUCTS,
-  EMPTY_LIST,
-  UNACTIVE,
-  ACTIVE,
 } from "../constants/environmentConstans";
 import {
-  PRODUCTS,
-  GET_LIST_OF_DATA_DELETE,
   SET_FLAG_ADD_FALSE,
   SET_FLAG_DESC_FALSE,
-  SET_FLAG_DESC_TRUE,
+
   PRODUCT_DESCRIPTION,
   SET_FLAG_INFO_FALSE,
-  SET_FLAG_INFO_TRUE
+  SET_FLAG_INFO_TRUE,
+  GET_LIST_OF_DATA_DELETE
 } from "../constants/adminConstans";
 import {
   GET_PRODUCT_CAT_LIST_DELETE,
   GET_PRODUCT_SUBCAT_LIST_DELETE,
   SEARCH_SELECTED_DELETE,
-  SEARCH_SELECTED_LNG,
   ADD_MYPRODUCT_DELETE,
   GET_MYPRODUCT_LIST_DELETE
 } from "../constants/productConstans"
@@ -54,8 +49,6 @@ import {
   activeBadge,
   inactiveBadge,
   btnEdit,
-  btnUnactive,
-  btnActive,
   btnInfo,
   btnDescription
 } from "./AdminCSS";
@@ -63,7 +56,6 @@ import {
 function MyProducts() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const params = useParams();
   const { windowWidth } = useResponsive();
 
@@ -72,12 +64,7 @@ function MyProducts() {
 
   //variables
   const [radioValue, setRadioValue] = useState(ONE);
-  const [catObj, setCatObj] = useState({});
-  const [updateStatus, setUpdateStatus] = useState("");
   const [currentProductList, setCurrentProductList] = useState([]);
-  const [testArr, setTestArr] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [confirm, setConfirm] = useState(false);
   const [selectedLgn, setSelectedLgn] = useState(null);
   const [switcher, setSwitcher] = useState(false);
   const [selectedProductID, setSelectedProductID] = useState(0)
@@ -91,6 +78,10 @@ function MyProducts() {
   const [emptyValueError, setEmptyValueError] = useState(false);
 
   const [elements, setElements] = useState([]);
+
+  const [showErrorAddMyProduct, setShowErrorAddMyProduct] = useState(false);
+  const [showErrorGetMyProduct, setShowErrorGetMyProduct] = useState(false);
+  const [showErrorProductList, setShowErrorProductList] = useState(false);
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -153,6 +144,25 @@ function MyProducts() {
 
   // Hendlers
 
+  const closeError = () => {
+    if (showErrorAddMyProduct) {
+      dispatch({ type: ADD_MYPRODUCT_DELETE });
+      setShowErrorAddMyProduct(false)
+    }
+    else if (showErrorGetMyProduct) {
+      dispatch({ type: GET_MYPRODUCT_LIST_DELETE });
+      setShowErrorGetMyProduct(false)
+    }
+    else if (showErrorProductList) {
+      dispatch({ type: GET_LIST_OF_DATA_DELETE });
+      setShowErrorProductList(false)
+    }
+    // else if (showErrorDeleteMyImage) {
+    //   dispatch({ type: DELETE_MY_IMAGE_DELETE });
+    //   setShowErrorDeleteMyImage(false)
+    // }
+  }
+
   const clearHandler = () => {
     dispatch({ type: SEARCH_SELECTED_DELETE });
     setSelectedLgn(null)
@@ -169,10 +179,6 @@ function MyProducts() {
       idSpot: spotId,
       idUser: userInfo.id
     }))
-
-    // setSelectedProductID(i.id)
-    // setSelectedProductName(i.name)
-    // dispatch({ type: SET_FLAG_DESC_TRUE });
   }
 
   const pagesHendler = (i) => {
@@ -283,6 +289,22 @@ function MyProducts() {
     dispatch({ type: SEARCH_SELECTED_DELETE })
 
   }, [])
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (addMyProductError) {
+      setShowErrorAddMyProduct(true)
+    }
+    if (myProductListError) {
+      setShowErrorGetMyProduct(true)
+    }
+    // if (errorGetMyImage) {
+    //   setShowErrorGetMyImage(true)
+    // }
+    // if (errorDeleteMyImage) {
+    //   setShowErrorGetMyImage(true)
+    // }
+  }, [addMyProductError, myProductListError]);
 
   useEffect(() => {
     if (successMyProductList) {
@@ -547,6 +569,18 @@ function MyProducts() {
           closeInfoHandler={closeInfoHandler}
         />
       ) : null}
+      {showErrorAddMyProduct ?
+        <ErrorMesageRedux
+          confirmYes={closeError}
+          error={addMyProductError}
+        />
+        : showErrorGetMyProduct ?
+          <ErrorMesageRedux
+            confirmYes={closeError}
+            error={myProductListError}
+          />
+          :
+          null}
       <Link
         to={{ pathname: `/dashboard/shops/spot/${shopId}/edit/${spotId}` }}
         style={{ color: "black" }}

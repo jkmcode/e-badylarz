@@ -141,6 +141,10 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_get_image"));
       case "Bad request. My photo product not delete":
         return setErrorMessage(t("No_delete_my_image"));
+      case "Bad request. No added my product":
+        return setErrorMessage(t("No_added_my_product"));
+      case "Bad request. No product list":
+        return setErrorMessage(t("No_get_product_list"));
       default:
         return setErrorMessage(error.detail);
     }

@@ -87,7 +87,8 @@ import {
   TIMEOUT_addImageMyProduct,
   TIMEOUT_InsertImageMyProduct,
   TIMEOUT_getImageMyProduct,
-  TIMEOUT_deleteMyProductPhoto
+  TIMEOUT_deleteMyProductPhoto,
+  TIMEOUT_addMyproduct
 } from "../constants/timeoutConstans"
 
 export const updateSpotPickUp = (insertData) => async (dispatch, getState) => {
@@ -625,18 +626,20 @@ export const InsertImageMyProduct = (insertData) => async (dispatch, getState) =
 };
 
 export const addMyproduct = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_MYPRODUCT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addMyproduct
     };
 
     const { data } = await axios.put(`/api/add-myproduct/`,
@@ -649,10 +652,22 @@ export const addMyproduct = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_MYPRODUCT_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "dodanie produktu do listy moich produktów",
+      "function": "addMyproduct",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

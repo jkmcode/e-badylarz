@@ -15,3 +15,5 @@ export const TIMEOUT_addImageMyProduct = 5000;
 export const TIMEOUT_InsertImageMyProduct = 5000
 export const TIMEOUT_getImageMyProduct = 5000
 export const TIMEOUT_deleteMyProductPhoto = 5000
+export const TIMEOUT_addMyproduct = 5000
+export const TIMEOUT_getListOfData = 10000
