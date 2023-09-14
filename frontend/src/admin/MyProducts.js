@@ -82,6 +82,8 @@ function MyProducts() {
   const [showErrorAddMyProduct, setShowErrorAddMyProduct] = useState(false);
   const [showErrorGetMyProduct, setShowErrorGetMyProduct] = useState(false);
   const [showErrorProductList, setShowErrorProductList] = useState(false);
+  const [showErrorSubCatList, setShowErrorSubCatList] = useState(false);
+  const [showErrorCatList, setShowErrorCatList] = useState(false);
 
   const radios = [
     { id: 1, name: t("Radio_true"), value: "1" },
@@ -157,10 +159,14 @@ function MyProducts() {
       dispatch({ type: GET_LIST_OF_DATA_DELETE });
       setShowErrorProductList(false)
     }
-    // else if (showErrorDeleteMyImage) {
-    //   dispatch({ type: DELETE_MY_IMAGE_DELETE });
-    //   setShowErrorDeleteMyImage(false)
-    // }
+    else if (showErrorSubCatList) {
+      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_DELETE });
+      setShowErrorSubCatList(false)
+    }
+    else if (showErrorCatList) {
+      dispatch({ type: GET_PRODUCT_CAT_LIST_DELETE });
+      setShowErrorCatList(false)
+    }
   }
 
   const clearHandler = () => {
@@ -298,13 +304,17 @@ function MyProducts() {
     if (myProductListError) {
       setShowErrorGetMyProduct(true)
     }
-    // if (errorGetMyImage) {
-    //   setShowErrorGetMyImage(true)
-    // }
-    // if (errorDeleteMyImage) {
-    //   setShowErrorGetMyImage(true)
-    // }
-  }, [addMyProductError, myProductListError]);
+    if (error) {
+      setShowErrorProductList(true)
+    }
+    if (errorSubProductCatList) {
+      setShowErrorSubCatList(true)
+    }
+    if (errorproductCatList) {
+      setShowErrorCatList(true)
+    }
+  }, [addMyProductError, myProductListError,
+    error, errorSubProductCatList, errorproductCatList]);
 
   useEffect(() => {
     if (successMyProductList) {
@@ -579,8 +589,23 @@ function MyProducts() {
             confirmYes={closeError}
             error={myProductListError}
           />
-          :
-          null}
+          : showErrorProductList ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
+            : showErrorSubCatList ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorSubProductCatList}
+              />
+              : showErrorCatList ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={errorproductCatList}
+                />
+                :
+                null}
       <Link
         to={{ pathname: `/dashboard/shops/spot/${shopId}/edit/${spotId}` }}
         style={{ color: "black" }}
@@ -696,7 +721,11 @@ function MyProducts() {
           <Divider backgroundColor="gray" />
         </>
       ) : null}
-      {loadingGetListOfData || myProductListLoading || addMyProductLoading ? (
+      {loadingGetListOfData ||
+        myProductListLoading ||
+        addMyProductLoading ||
+        subLoadingProductCat ||
+        loadingProductCat ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <DotsLoader />
         </div>

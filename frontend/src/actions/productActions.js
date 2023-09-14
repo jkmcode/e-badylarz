@@ -88,7 +88,9 @@ import {
   TIMEOUT_InsertImageMyProduct,
   TIMEOUT_getImageMyProduct,
   TIMEOUT_deleteMyProductPhoto,
-  TIMEOUT_addMyproduct
+  TIMEOUT_addMyproduct,
+  TIMEOUT_getSubproductCat,
+  TIMEOUT_getProductCat
 } from "../constants/timeoutConstans"
 
 export const updateSpotPickUp = (insertData) => async (dispatch, getState) => {
@@ -736,18 +738,21 @@ export const sortByLng = (insertData) => async (dispatch, getState) => {
 };
 
 export const getProductCat = () => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_PRODUCT_CAT_LIST_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getProductCat
     };
 
     const { data } = await axios.get(`/api/get-product-categories/`, config);
@@ -757,45 +762,70 @@ export const getProductCat = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_PRODUCT_CAT_LIST_FAIL,
-      payload: errorHandling(error)
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "pobranie listy kategorii produktów",
+      "function": "getProductCat",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
-export const getSubproductCat = (categoryId) =>
-  async (dispatch, getState) => {
-    try {
-      dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
+export const getSubproductCat = (categoryId) => async (dispatch, getState) => {
 
-      const {
-        userLogin: { userInfo },
-      } = getState();
+  const {
+    userLogin: { userInfo },
+  } = getState();
 
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
+  try {
+    dispatch({ type: GET_PRODUCT_SUBCAT_LIST_REQUEST });
 
-      const { data } = await axios.get(
-        `/api/${categoryId}/get-product-subcategories/`,
-        config
-      );
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_getSubproductCat
+    };
 
-      dispatch({
-        type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: GET_PRODUCT_SUBCAT_LIST_FAIL,
-        payload: errorHandling(error)
-      });
+    const { data } = await axios.get(
+      `/api/${categoryId}/get-product-subcategories/`,
+      config
+    );
+
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorRedux = await errorHandling(error)
+    dispatch({
+      type: GET_PRODUCT_SUBCAT_LIST_FAIL,
+      payload: errorRedux
+    });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "pobranie listy podkategorii dla WYBRANEJ KATEGORII",
+      "function": "getSubproductCat",
+      "param": ""
     }
-  };
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
+  }
+};
 
 export const addProductSubcat = (insertData) => async (dispatch, getState) => {
   try {

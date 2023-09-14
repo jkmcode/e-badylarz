@@ -194,18 +194,112 @@
         page_obj = paginator.page(page)
 - 0087 -"Błąd serializacji strony listy produktów"
         seriaziler = ProductsSerializer(page_obj, many=True)
-- 0088 -
-- 0089 -
-- 0090 -
-- 0091 -
-- 0092 -
-- 0093 -
-- 0094 -
-- 0095 -
-- 0096 -
-- 0097 -
-- 0098 -
-- 0099 -
+- 0088 -"Błąd pobrania listy obiektów z tabeli ProductSubTypes"
+        productSubCat = ProductSubTypes.objects.filter(id_product_type=Id).order_by('name')
+- 0089 -"Błąd serializacji listy obiektów z tabeli ProductSubTypes"
+        seriaziler = SubproductTypeSerializer(productSubCat, many=True)
+- 0090 -"Błąd pobrania listy obiektów z tabeli ProductTypes"
+        productCat = ProductTypes.objects.all().order_by('name')
+- 0091 -"Błąd serializacji listy obiektów z tabeli ProductTypes"
+        seriaziler = ProductTypeSerializer(productCat, many=True)
+- 0092 -"Błąd pobrania listy obiektów z tabeli Descriptions"
+        descrition = Descriptions.objects.filter(id_district = Id).order_by('language')
+- 0093 -"Błąd serializacji listy obiektów z tabeli Descriptions"
+        seriaziler = DistrictsDescSerializer(descrition, many=True)
+- 0094 -"Błąd pobrania listy obiektów z tabeli CitiesDescriptions"
+        descrition = CitiesDescriptions.objects.filter(id_city = Id).order_by('language')
+- 0095 - "Błąd serializacji listy obiektów z tabeli CitiesDescriptions"
+        seriaziler = CitiesDescSerializer(descrition, many=True)
+- 0096 -"Błąd pobrania listy obiektów z tabeli ShopsDescriptions"
+        descrition = ShopsDescriptions.objects.filter(id_shops = Id).order_by('language')
+- 0097 -"Błąd serializacji listy obiektów z tabeli ShopsDescription"
+        seriaziler = ShopDescSerializer(descrition, many=True)
+- 0098 -"Błąd pobrania listy obiektów z tabeli ShopsSpotDescriptions"
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id).order_by('language')
+- 0099 -"Błąd serializacji listy obiektów z tabeli ShopsSpotDescriptions"
+        seriaziler = ShopSpotDescSerializer(descrition, many=True)
+- 0100 -"Błąd pobrania listy obiektów z tabeli ProductDescriptions"
+        descrition = ProductDescriptions.objects.filter(id_product = Id).order_by('language')
+- 0101 -"Błąd serializacji listy obiektów z tabeli ProductDescriptions"
+        seriaziler = ProductDescSerializer(descrition, many=True)
+- 0102 -"Błąd pobrania listy obiektów z tabeli ProductTypesDescriptions"
+        descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id).order_by('language')
+- 0103 -"Błąd serializacji listy obiektów z tabeli ProductTypesDescriptions"
+        seriaziler = ProductTypesDescSerializer(descrition, many=True)
+- 0104 -"Błąd pobrania listy obiektów z tabeli ProductSubtypesDescriptions"
+        descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id).order_by('language')
+- 0105 -"Błąd serializacji listy obiektów z tabeli ProductSubtypesDescriptions"
+        seriaziler = ProductSubTypesDescSerializer(descrition, many=True)
+- 0106 -"Błąd pobrania listy obiektów z tabeli MyProductsDescriptions"
+        descrition = MyProductsDescriptions.objects.filter( id_my_product = Id).order_by('language')
+- 0107 -"Błąd serializacji listy obiektów z tabeli MyProductsDescriptions"
+        seriaziler = MyProductDescSerializer(descrition, many=True)
+- 0108 -"Błędna lista parametrów funkcji"
+- 0109 -"Błąd pobrania obiektu z tabeli Districts"
+        disctrict_obj= Districts.objects.get(id=data['objId'])
+- 0110 -"Błąd utworzenia obiektu w tabeli Descriptions"
+        desc = Descriptions.objects.create(...)
+- 0111 -"Błąd pobrania obiektu z tabeli Descriptions"
+        descrip = Descriptions.objects.get(id=data['descId'])
+- 0112 -"Błąd aktualizacji obiektu w tabeli Descriptions
+        descrip.save()
+- 0113 -"Błąd pobrania obiektu z tabeli Citis"
+        city_obj= Citis.objects.get(id=data['objId'])
+- 0114 -"Błąd utworzenia obiektu w tabeli CitiesDescriptions"
+        desc = CitiesDescriptions.objects.create(...)
+- 0115 -"Błąd pobrania obiektu z tabeli CitiesDescriptions"
+        descrip = CitiesDescriptions.objects.get(id=data['descId'])
+- 0116 -"Błąd aktualizacji obiektu w tabeli CitiesDescriptions"
+        descrip.save()
+- 0117 -"Błąd pobrania obiektu z tabeli Shops"
+        shop_obj= Shops.objects.get(id=data['objId'])
+- 0118 -"Błąd utworzenia obiektu w tabeli ShopsDescriptions"
+        desc = ShopsDescriptions.objects.create(...)
+- 0119 -"Błąd pobrania obiektu z tabeli ShopsDescriptions"
+        descrip = ShopsDescriptions.objects.get(id=data['descId'])
+- 0120 -"Błąd aktualizacji obiektu w tabeli ShopsDescriptions"
+        descrip.save()
+- 0121 -"Błąd pobrania obiektu z tabeli ShopsSpot"
+        spot_obj= ShopsSpot.objects.get(id=data['objId'])
+- 0122 -"Błąd utworzenia obiektu w tabeli ShopsSpotDescriptions"
+        desc = ShopsSpotDescriptions.objects.create(...)
+- 0123 -"Błąd pobrania obiektu z tabeli ShopsSpotDescriptions"
+        descrip = ShopsSpotDescriptions.objects.get(id=data['descId'])
+- 0124 -"Błąd aktualizacji obiektu w tabeli ShopsSpotDescriptions"
+        descrip.save()
+- 0125 -"Błąd pobrania obiektu z tabeli Product"
+        product_obj= Product.objects.get(id=data['objId'])
+- 0126 -"Błąd utworzenia obiektu w tabeli ProductDescriptions"
+        desc = ProductDescriptions.objects.create(...)
+- 0127 -"Błąd pobrania obiektu z tabeli ProductDescriptions"
+        descrip = ProductDescriptions.objects.get(id=data['descId'])
+- 0128 -"Błąd aktualizacji obiektu w tabeli ProductDescriptions"
+        descrip.save()
+- 0129 -"Błąd pobrania obiektu z tabeli ProductTypes"
+        product_obj= ProductTypes.objects.get(id=data['objId'])
+- 0130 -"Błąd utworzenia obiektu w tabeli ProductTypesDescriptions"
+        desc = ProductTypesDescriptions.objects.create(...)
+- 0131 -"Błąd pobrania obiektu z tabeli ProductTypesDescriptions"
+        descrip = ProductTypesDescriptions.objects.get(id=data['descId'])
+- 0132 -"Błąd aktualizacji obiektu w tabeli ProductTypesDescriptions"
+        descrip.save()
+- 0133 -
+- 0134 -
+- 0135 -
+- 0136 -
+- 0137 -
+- 0138 -
+- 0139 -
+- 0140 -
+- 0141 -
+- 0142 -
+- 0143 -
+- 0144 -
+- 0145 -
+- 0146 -
+- 0147 -
+- 0148 -
+- 0149 -
 
 
 NavbarComponent

@@ -667,5 +667,9 @@
   "No_get_image": "Error retrieving the image list for the selected product",
   "No_delete_my_image": "Error deleting my photo",
   "No_added_my_product": "My product has not been added",
-  "No_get_product_list": "The product list has not been downloaded"
+  "No_get_product_list": "The product list has not been downloaded",
+  "No_subcategories_list": "Error getting subcategory list",
+  "No_description_info_list": "Description error",
+  "No_object_type": "Invalid function parameter",
+  "No_added_info": "Description not added"
 }

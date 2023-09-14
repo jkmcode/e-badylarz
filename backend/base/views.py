@@ -983,7 +983,6 @@ def activeList(request):
     return Response(data['objType'])
 
 
-
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getDiscrict(request, lat, lng):
@@ -1084,22 +1083,55 @@ def addProductCat(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getProductCategories(request):
-    productCat = ProductTypes.objects.all().order_by('name')
+
+    content = {
+        'function_name' : 'getProductCategories',
+        'code' : "0090",
+        "detail": "Bad request. No categories list",
+        'text' : "Błąd pobrania listy obiektów z tabeli ProductTypes"
+    }
+    try:
+        productCat = ProductTypes.objects.all().order_by('name')
+    except Exception as e:
+        return ErrorHendling(content ,err=e)
 
     for i in productCat : 
         i.name = cleanStr(i.name)
         i.language = cleanStr(i.language)
-
-    seriaziler = ProductTypeSerializer(productCat, many=True)
+    
+    try:
+        seriaziler = ProductTypeSerializer(productCat, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów z tabeli ProductTypes"
+        content['code'] = "0091"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)       
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getProductSubcategories(request, Id):
-    productSubCat = ProductSubTypes.objects.filter(id_product_type=Id).order_by('name')
-    seriaziler = SubproductTypeSerializer(productSubCat, many=True)
 
+    content = {
+        'function_name' : 'getProductSubcategories',
+        'code' : "0088",
+        "detail": "Bad request. No Subcategories list",
+        'text' : "Błąd pobrania listy obiektów z tabeli ProductSubTypes"
+    }
+    try:
+        productSubCat = ProductSubTypes.objects.filter(id_product_type=Id).order_by('name')
+    except Exception as e:
+        return ErrorHendling(content ,err=e)   
+    try: 
+        seriaziler = SubproductTypeSerializer(productSubCat, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów z tabeli ProductSubTypes"
+        content['code'] = "0089"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)  
+
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])

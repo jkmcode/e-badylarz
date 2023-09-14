@@ -665,5 +665,9 @@
   "No_get_image": "Błąd pobrania listy zdjęć dla wybranego produktu",
   "No_delete_my_image": "Błąd kasowania mojego zdjęcia",
   "No_added_my_product": "Mój produkt nie został dodany",
-  "No_get_product_list": "Lista produktów nie została pobrana"
+  "No_get_product_list": "Lista produktów nie została pobrana",
+  "No_subcategories_list": "Błąd pobrania listy podkategorii",
+  "No_description_info_list": "Błąd opisu",
+  "No_object_type": "Błędny parametr funkcji",
+  "No_added_info": "Opis nie został dodany"
 }

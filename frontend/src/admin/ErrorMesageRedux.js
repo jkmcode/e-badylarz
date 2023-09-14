@@ -145,6 +145,14 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_added_my_product"));
       case "Bad request. No product list":
         return setErrorMessage(t("No_get_product_list"));
+      case "Bad request. No Subcategories list":
+        return setErrorMessage(t("No_subcategories_list"));
+      case "Bad request. No info":
+        return setErrorMessage(t("No_description_info_list"));
+      case "Changing the active flag - no object type":
+        return setErrorMessage(t("No_object_type"));
+      case "Bad request. Info no added":
+        return setErrorMessage(t("No_added_info"));
       default:
         return setErrorMessage(error.detail);
     }
