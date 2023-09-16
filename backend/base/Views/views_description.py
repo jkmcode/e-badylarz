@@ -367,46 +367,95 @@ def addDesc(request):
     
     elif data['objType']== "PRODUCT_SUBCAT":
         if data["addDesc"]:
-            product_obj= ProductSubTypes.objects.get(id=data['objId'])
-            desc = ProductSubtypesDescriptions.objects.create(
-            description=data['desc'],
-            language=data['lng'],
-            id_product_subtype=product_obj,
-            creator=data['id'])
+            try:
+                product_obj= ProductSubTypes.objects.get(id=data['objId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli ProductSubTypes"
+                content['code'] = "0133"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                desc = ProductSubtypesDescriptions.objects.create(
+                    description=data['desc'],
+                    language=data['lng'],
+                    id_product_subtype=product_obj,
+                    creator=data['id']
+                )
+            except Exception as e:
+                content['text'] = "Błąd utworzenia obiektu w tabeli ProductSubtypesDescriptions"
+                content['code'] = "0134"
+                return ErrorHendling(content, user=data['id'],err=e)
         else:
-            descrip = ProductSubtypesDescriptions.objects.get(id=data['descId'])
-            descrip.description=data['desc']
-            descrip.date_of_change=datetime.now()
-            descrip.modifier=data['id']
-            descrip.save()
+            try:
+                descrip = ProductSubtypesDescriptions.objects.get(id=data['descId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli ProductSubtypesDescriptions"
+                content['code'] = "0135"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                descrip.description=data['desc']
+                descrip.date_of_change=datetime.now()
+                descrip.modifier=data['id']
+                descrip.save()
+            except Exception as e:
+                content['text'] = "Błąd aktualizacji obiektu w tabeli ProductSubtypesDescriptions"
+                content['code'] = "0136"
+                return ErrorHendling(content, user=data['id'],err=e)
     
     elif data['objType']== "MY_PROUCT":
         if data["addDesc"]:
-            product_obj= MyProducts.objects.get(id=data['objId'])
-            desc = MyProductsDescriptions.objects.create(
-            description = data['desc'],
-            language = data['lng'],
-            id_my_product = product_obj,
-            creator = data['id'])
+            try:
+                product_obj= MyProducts.objects.get(id=data['objId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli MyProducts"
+                content['code'] = "0137"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                desc = MyProductsDescriptions.objects.create(
+                    description = data['desc'],
+                    language = data['lng'],
+                    id_my_product = product_obj,
+                    creator = data['id']
+                )
+            except Exception as e:
+                content['text'] = "Błąd utworzenia obiektu w tabeli MyProductsDescriptions"
+                content['code'] = "0138"
+                return ErrorHendling(content, user=data['id'],err=e)
         else:
-            descrip = MyProductsDescriptions.objects.get(id=data['descId'])
-            descARC = MyProductsDescriptionsARC.objects.create(
-                id_my_product = descrip.id,
-                description =  descrip.description,
-                language = descrip.language,
-                date_of_entry = descrip.date_of_entry,
-                date_of_change= descrip.date_of_change,
-                creator = descrip.creator,
-                modifier = descrip.modifier,
-                archiver = data['id']
-            )
-            descrip.description = data['desc']
-            descrip.date_of_change = datetime.now()
-            descrip.modifier = data['id']
-            descrip.save()
+            try:
+                descrip = MyProductsDescriptions.objects.get(id=data['descId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli MyProductsDescriptions"
+                content['code'] = "0139"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                descARC = MyProductsDescriptionsARC.objects.create(
+                    id_my_product = descrip.id,
+                    description =  descrip.description,
+                    language = descrip.language,
+                    date_of_entry = descrip.date_of_entry,
+                    date_of_change= descrip.date_of_change,
+                    creator = descrip.creator,
+                    modifier = descrip.modifier,
+                    archiver = data['id']
+                )
+            except Exception as e:
+                content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli MyProductsDescriptionsARC"
+                content['code'] = "0140"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                descrip.description = data['desc']
+                descrip.date_of_change = datetime.now()
+                descrip.modifier = data['id']
+                descrip.save()
+            except Exception as e:
+                content['text'] = "Błąd aktualizacji obiektu w tabeli MyProductsDescriptions"
+                content['code'] = "0141"
+                return ErrorHendling(content, user=data['id'],err=e)
     else:
-        content = {"detail": "Changing the active flag - no object type"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content['text'] = "Błędna lista parametrów funkcji"
+        content['code'] = "0108"
+        content['detail'] = "Changing the active flag - no object type"
+        return ErrorHendling(content,user=data['id'], err=e)
     
     return Response("OK")
 
@@ -415,36 +464,130 @@ def addDesc(request):
 @permission_classes([IsAdminUser])
 def getDiscrictDesc(request, Id, lng, obj_type):
 
+    content = {
+        'function_name' : 'getDiscrictDesc',
+        'code' : "00142",
+        "detail": "Bad request. No descriptions",
+        'text' : "Błąd pobrania listy obiektów z tabeli Districts"
+        }
+
     if obj_type == "DISTRICT":
-        descrition = Descriptions.objects.filter(id_district = Id, language=lng) 
-        seriaziler = DistrictsDescSerializer(descrition, many=True)
+        try:
+            descrition = Descriptions.objects.filter(id_district = Id, language=lng)
+        except Exception as e:
+            return ErrorHendling(content,err=e)
+        try: 
+            seriaziler = DistrictsDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli Districts"
+            content['code'] = "0143"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type == "CITY":
-        descrition = CitiesDescriptions.objects.filter(id_city = Id, language=lng) 
-        seriaziler = CitiesDescSerializer(descrition, many=True)
+        try:
+            descrition = CitiesDescriptions.objects.filter(id_city = Id, language=lng) 
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli CitiesDescriptions"
+            content['code'] = "0144"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = CitiesDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli CitiesDescriptions"
+            content['code'] = "0145"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type=='SHOP':
-        descrition = ShopsDescriptions.objects.filter(id_shops = Id, language=lng)
-        seriaziler = ShopDescSerializer(descrition, many=True)
+        try:
+            descrition = ShopsDescriptions.objects.filter(id_shops = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli ShopsDescriptions"
+            content['code'] = "0146"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = ShopDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli ShopsDescriptions"
+            content['code'] = "0147"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type=='SPOT':
-        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
-        seriaziler = ShopSpotDescSerializer(descrition, many=True)
+        try:
+            descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli ShopsSpotDescriptions"
+            content['code'] = "0148"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = ShopSpotDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli ShopsSpotDescriptions"
+            content['code'] = "0149"
+            return ErrorHendling(content, err=e)
+
     elif obj_type=='AREA':
         descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
         seriaziler = ShopSpotDescSerializer(descrition, many=True)
+    
     elif obj_type=='PROUCT':
-        descrition = ProductDescriptions.objects.filter(id_product = Id, language=lng)
-        seriaziler = ProductDescSerializer(descrition, many=True)
+        try:
+            descrition = ProductDescriptions.objects.filter(id_product = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli ProductDescriptions"
+            content['code'] = "0150"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = ProductDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli ProductDescriptions"
+            content['code'] = "0151"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type=='PROUCT_TYPE':
-        descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id, language=lng)
-        seriaziler = ProductTypesDescSerializer(descrition, many=True)
+        try:
+            descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli ProductTypesDescriptions"
+            content['code'] = "0152"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = ProductTypesDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli ProductTypesDescriptions"
+            content['code'] = "0153"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type=='PRODUCT_SUBCAT':
-        descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id, language=lng)
-        seriaziler = ProductSubTypesDescSerializer(descrition, many=True)
+        try:
+            descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli ProductSubtypesDescriptions"
+            content['code'] = "0154"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = ProductSubTypesDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli ProductSubtypesDescriptions"
+            content['code'] = "0155"
+            return ErrorHendling(content, err=e)
     elif obj_type=='MY_PROUCT':
-        descrition = MyProductsDescriptions.objects.filter(id_my_product = Id, language=lng)
-        seriaziler = MyProductDescSerializer(descrition, many=True)
+        try:
+            descrition = MyProductsDescriptions.objects.filter(id_my_product = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli MyProductsDescriptions"
+            content['code'] = "0156"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = MyProductDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli MyProductsDescriptions"
+            content['code'] = "0157"
+            return ErrorHendling(content, err=e)
     else:
-        content = {"detail": "Changing the active flag - no object type"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content['text'] = "Błędna lista parametrów funkcji"
+        content['code'] = "0108"
+        content['detail'] = "Changing the active flag - no object type"
+        return ErrorHendling(content, err=e)
     
     return Response(seriaziler.data)
    

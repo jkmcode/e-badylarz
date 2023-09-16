@@ -18,3 +18,4 @@ export const TIMEOUT_deleteMyProductPhoto = 5000
 export const TIMEOUT_addMyproduct = 5000
 export const TIMEOUT_getListOfData = 10000
 export const TIMEOUT_getSubproductCat = 5000
+export const TIMEOUT_getProductCat = 5000

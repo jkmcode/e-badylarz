@@ -283,23 +283,69 @@
         descrip = ProductTypesDescriptions.objects.get(id=data['descId'])
 - 0132 -"Błąd aktualizacji obiektu w tabeli ProductTypesDescriptions"
         descrip.save()
-- 0133 -
-- 0134 -
-- 0135 -
-- 0136 -
-- 0137 -
-- 0138 -
-- 0139 -
-- 0140 -
-- 0141 -
-- 0142 -
-- 0143 -
-- 0144 -
-- 0145 -
-- 0146 -
-- 0147 -
-- 0148 -
-- 0149 -
+- 0133 -"Błąd pobrania obiektu z tabeli ProductSubTypes"
+        product_obj= ProductSubTypes.objects.get(id=data['objId'])
+- 0134 -"Błąd utworzenia obiektu w tabeli ProductSubtypesDescriptions"
+        desc = ProductSubtypesDescriptions.objects.create(...)
+- 0135 -"Błąd pobrania obiektu z tabeli ProductSubtypesDescriptions"
+        descrip = ProductSubtypesDescriptions.objects.get(id=data['descId'])
+- 0136 -"Błąd aktualizacji obiektu w tabeli ProductSubtypesDescriptions"
+        descrip.save()
+- 0137 -"Błąd pobrania obiektu z tabeli MyProducts"
+        product_obj= MyProducts.objects.get(id=data['objId'])
+- 0138 -"Błąd utworzenia obiektu w tabeli MyProductsDescriptions"
+        desc = MyProductsDescriptions.objects.create(...)
+- 0139 -"Błąd pobrania obiektu z tabeli MyProductsDescriptions"
+        descrip = MyProductsDescriptions.objects.get(id=data['descId'])
+- 0140 - "Błąd utworzenia obiektu archiwalnego w tabeli MyProductsDescriptionsARC"
+        descARC = MyProductsDescriptionsARC.objects.create(...)
+- 0141 -"Błąd aktualizacji obiektu w tabeli MyProductsDescriptions"
+        descrip.save()
+- 0142 -"Błąd pobrania listy obiektów z tabeli Districts"
+        descrition = Descriptions.objects.filter(id_district = Id, language=lng)
+- 0143 -"Błąd serializacji listy obiektów z tabeli Districts"
+        seriaziler = DistrictsDescSerializer(descrition, many=True)
+- 0144 -"Błąd pobrania listy obiektów z tabeli CitiesDescriptions"
+        CitiesDescriptions.objects.filter(id_city = Id, language=lng
+- 0145 -"Błąd serializacji listy obiektów z tabeli CitiesDescriptions"
+        seriaziler = CitiesDescSerializer(descrition, many=True)
+- 0146 - "Błąd pobrania listy obiektów z tabeli ShopsDescriptions"
+        descrition = ShopsDescriptions.objects.filter(id_shops = Id, language=lng)
+- 0147 -"Błąd serializacji listy obiektów z tabeli ShopsDescriptions"
+        seriaziler = ShopDescSerializer(descrition, many=True)
+- 0148 -"Błąd pobrania listy obiektów z tabeli ShopsSpotDescriptions"
+        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
+- 0149 -"Błąd serializacji listy obiektów z tabeli ShopsSpotDescriptions"
+        seriaziler = ShopSpotDescSerializer(descrition, many=True)
+- 0150 - "Błąd pobrania listy obiektów z tabeli ProductDescriptions"
+        descrition = ProductDescriptions.objects.filter(id_product = Id, language=lng)
+- 0151 -"Błąd serializacji listy obiektów z tabeli ProductDescriptions"
+        seriaziler = ProductDescSerializer(descrition, many=True)
+- 0152 -"Błąd pobrania listy obiektów z tabeli ProductTypesDescriptions"
+        descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id, language=lng)
+- 0153 -"Błąd serializacji listy obiektów z tabeli ProductTypesDescriptions"
+        seriaziler = ProductTypesDescSerializer(descrition, many=True)
+- 0154 -"Błąd pobrania listy obiektów z tabeli ProductSubtypesDescriptions"
+        descrition = ProductSubtypesDescriptions.objects.filter(id_product_subtype = Id, language=lng)
+- 0155 -"Błąd serializacji listy obiektów z tabeli ProductSubtypesDescriptions"
+        seriaziler = ProductSubTypesDescSerializer(descrition, many=True)
+- 0156 -"Błąd pobrania listy obiektów z tabeli MyProductsDescriptions"
+        descrition = MyProductsDescriptions.objects.filter(id_my_product = Id, language=lng)
+- 0157 -"Błąd serializacji listy obiektów z tabeli MyProductsDescriptions"
+        seriaziler = MyProductDescSerializer(descrition, many=True)
+- 0158 -
+- 0159 -
+- 0160 - 
+        
+- 0161 -
+- 0162 -
+- 0163 -
+- 0164 -
+- 0165 -
+- 0166 -
+- 0167 -
+- 0168 -
+- 0169 -
 
 
 NavbarComponent

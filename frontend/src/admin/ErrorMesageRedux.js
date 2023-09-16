@@ -153,6 +153,8 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_object_type"));
       case "Bad request. Info no added":
         return setErrorMessage(t("No_added_info"));
+      case "Bad request. No descriptions":
+        return setErrorMessage(t("No_descriptions_info"));
       default:
         return setErrorMessage(error.detail);
     }

@@ -671,5 +671,6 @@
   "No_subcategories_list": "Error getting subcategory list",
   "No_description_info_list": "Description error",
   "No_object_type": "Invalid function parameter",
-  "No_added_info": "Description not added"
+  "No_added_info": "Description not added",
+  "No_descriptions_info": "Description information not retrieved"
 }

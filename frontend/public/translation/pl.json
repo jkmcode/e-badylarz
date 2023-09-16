@@ -669,5 +669,6 @@
   "No_subcategories_list": "Błąd pobrania listy podkategorii",
   "No_description_info_list": "Błąd opisu",
   "No_object_type": "Błędny parametr funkcji",
-  "No_added_info": "Opis nie został dodany"
+  "No_added_info": "Opis nie został dodany",
+  "No_descriptions_info": "Informacje o opisie nie zostały pobrane"
 }
