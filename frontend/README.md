@@ -333,19 +333,53 @@
         descrition = MyProductsDescriptions.objects.filter(id_my_product = Id, language=lng)
 - 0157 -"Błąd serializacji listy obiektów z tabeli MyProductsDescriptions"
         seriaziler = MyProductDescSerializer(descrition, many=True)
-- 0158 -
-- 0159 -
-- 0160 - 
-        
-- 0161 -
-- 0162 -
-- 0163 -
-- 0164 -
-- 0165 -
-- 0166 -
-- 0167 -
-- 0168 -
-- 0169 -
+- 0158 -"Błąd pobrania listy obiektów dla wybranego sklepu z tabeli ShopsContact"
+        contacts = ShopsContact.objects.filter(id_shops=Id).order_by('name')
+- 0159 -"Błąd serializacji listy obiektów dla wybranego sklepu z tabeli ShopsContact"
+        seriaziler = ShopsContactSerializer(contacts, many=True)
+- 0160 -"Błąd pobrania obiektu z tabeli Shops"
+        shop = Shops.objects.get(id=data['shop_id'])       
+- 0161 -"Błąd pobrania obiektu z tabeli ShopsContact"
+        shop_contact_editing = ShopsContact.objects.get(id=data['Id'])
+- 0162 -"Błąd utworzenia obiektu archiwalnego w tabeli ShopsContactARC"
+        ShopsContactARC.objects.create(...)
+- 0163 -"Błąd aktualizacji obiektu w tabeli ShopsContact"
+        shop_contact_editing.save()
+- 0164 -"Błąd utworzenia obiektu w tabeli ShopsContact"
+        shop_contact = ShopsContact.objects.create(...)
+- 0165 -"Błąd pobrania zaktualizowanej listy kontaktów z tabeli ShopsContact"
+        shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
+- 0166 -"Błąd serializacji zaktualizowanej listy kontaktów z tabeli ShopsContact"
+        seriaziler = ShopsContactSerializer(shop_contacts, many=True)
+- 0167 -"Błąd poboru danych obiekt z tabeli ShopsContact"
+        descrip = ShopsContact.objects.get(id=data['Id'])
+- 0168 -"Błąd utworzenia obiektu archiwalnego w tabeli ShopsContactARC"
+        ShopsContactARC.objects.create(...)
+- 0169 -"Błąd aktualizacji obiektu dla przypadku : " + data['objType']
+        descrip.save()
+- 0170 - "Błąd pobrania obiektów z tabeli Shops"
+        shops = Shops.objects.all().order_by('name')        
+- 0171 -"Błąd serializacji listy sklepów"
+        seriaziler = ShopsSerializer(shops, many=True)
+- 0172 -
+- 0173 -
+- 0174 -
+- 0175 -
+- 0176 -
+- 0177 -
+- 0178 -
+- 0179 -
+
+- 0180 -        
+- 0181 -
+- 0182 -
+- 0183 -
+- 0184 -
+- 0185 -
+- 0186 -
+- 0187 -
+- 0188 -
+- 0189 -
 
 
 NavbarComponent

@@ -670,5 +670,12 @@
   "No_description_info_list": "Błąd opisu",
   "No_object_type": "Błędny parametr funkcji",
   "No_added_info": "Opis nie został dodany",
-  "No_descriptions_info": "Informacje o opisie nie zostały pobrane"
+  "No_descriptions_info": "Informacje o opisie nie zostały pobrane",
+  "No_contactList_shop": "Błąd pobrania listy kontaktów dla wybranego sklepu",
+  "No_updateAdd_contactList_shop": "Kontakt nie został dadany lub zmieniony",
+  "No_update_contactList_shop": "Kontakt nie został zmieniony",
+  "No_add_contactList_shop": "Kontakt nie został dodany",
+  "No_new_contactList_shop": "Zaktualizowana lista kontaktów nie została pobrana",
+  "No_active_flag": "Aktywność nie została zmieniona",
+  "No_shop_list": "Lista sklepów nie została pobrana"
 }

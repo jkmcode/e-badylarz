@@ -88,7 +88,15 @@ import {
   TIMEOUT_getSpot,
   TIMEOUT_getShopSpots,
   TIMEOUT_updateShopSpot,
-  TIMEOUT_getListOfData
+  TIMEOUT_getListOfData,
+  TIMEOUT_getFullDescriptions,
+  TIMEOUT_addDesc,
+  TIMEOUT_getDesc,
+  TIMEOUT_getShopContacts,
+  TIMEOUT_addContact,
+  TIMEOUT_unOrActiveList,
+  TIMEOUT_getShops,
+  TIMEOUT_addShopSpot
 } from "../constants/timeoutConstans"
 
 // Save image in redax
@@ -273,18 +281,20 @@ export const getShop = (insertData) => async (dispatch, getState) => {
 };
 
 export const getShopContacts = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_CONTACT_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getShopContacts
     };
 
     const { data } = await axios.get(
@@ -297,13 +307,22 @@ export const getShopContacts = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_CONTACT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy kontaktów dla wybranego sklepu",
+      "function": "getShopContacts",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -390,7 +409,7 @@ export const getShopSpots = (insertData) => async (dispatch, getState) => {
       ...errorRedux,
       "user": userInfo.id,
       "text": "Pobór listy punktów sprzedaży danych dla wybranego sklepu",
-      "function": "getSpot",
+      "function": "getShopSpots",
       "param": ""
     }
     if (!errorRedux.log) {
@@ -401,20 +420,22 @@ export const getShopSpots = (insertData) => async (dispatch, getState) => {
 };
 
 export const addContact = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_CONTACT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addContact
     };
-    const { data } = await axios.post(
+    const { data } = await axios.put(
       `/api/add-shop-contact/`,
       insertData,
       config
@@ -425,29 +446,40 @@ export const addContact = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_CONTACT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodanie nowego kontaktu do sklepu",
+      "function": "addContact",
+      "param": insertData.editing ? "editing" : "add"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const getShops = () => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_SHOPS_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getShops
     };
 
     const { data } = await axios.get(`/api/get-shops/`, config);
@@ -457,14 +489,22 @@ export const getShops = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_SHOPS_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy sklepów",
+      "function": "getShops",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -501,18 +541,20 @@ export const addShop = (insertData) => async (dispatch, getState) => {
 };
 
 export const addShopSpot = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_SHOP_SPOT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addShopSpot
     };
 
     const { data } = await axios.post(
@@ -526,13 +568,22 @@ export const addShopSpot = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_SHOP_SPOT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodanie nowego punktu sprzedaży",
+      "function": "addShopSpot",
+      "param": insertData.add ? "add" : "update"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -715,18 +766,20 @@ export const addCiti = (insertData) => async (dispatch, getState) => {
 };
 
 export const unOrActiveList = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ACTIVE_DESCRIPTION_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_unOrActiveList
     };
 
     const { data } = await axios.put(`/api/desc-active/`, insertData, config);
@@ -736,28 +789,41 @@ export const unOrActiveList = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ACTIVE_DESCRIPTION_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Zmiana flagi obiektu z na anktywny <-> nieaktywny",
+      "function": "unOrActiveList",
+      "param": insertData.objType + " - " + insertData.kind
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const getFullDescriptions =
   (insertData) => async (dispatch, getState) => {
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
     try {
       dispatch({ type: GET_FULL_DESCRIPTION_REQUEST });
-      const {
-        userLogin: { userInfo },
-      } = getState();
+
       const config = {
         headers: {
           "Content-type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
+        timeout: TIMEOUT_getFullDescriptions
       };
 
       const { data } = await axios.get(
@@ -771,29 +837,40 @@ export const getFullDescriptions =
         payload: data,
       });
     } catch (error) {
+      const errorRedux = await errorHandling(error)
       dispatch({
         type: GET_FULL_DESCRIPTION_FAIL,
-        payload:
-          error.response && error.response.data.detail
-            ? error.response.data.detail
-            : error.message,
+        payload: errorRedux
       });
+      const errorData = {
+        ...errorRedux,
+        "user": userInfo.id,
+        "text": "Pobranie listy opisów wielojęzykowych dla obiektu",
+        "function": "getFullDescriptions",
+        "param": ""
+      }
+      if (!errorRedux.log) {
+        dispatch(addToLS(errorData))
+        dispatch(addLogError(errorData))
+      }
     }
   };
 
 export const addDesc = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_DESC_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addDesc
     };
 
     if (insertData.addDesc) {
@@ -807,27 +884,40 @@ export const addDesc = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_DESC_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodawanie lub aktualizacja opisu",
+      "function": "addDesc",
+      "param": insertData.addDesc ? "add" : "updata"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const getDesc = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
   try {
     dispatch({ type: DISTRICT_ADD_DESC_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    ;
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getDesc
     };
 
     const { data } = await axios.get(
@@ -841,13 +931,22 @@ export const getDesc = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: DISTRICT_ADD_DESC_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux,
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobieranie wybranego opisu",
+      "function": "getDesc",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

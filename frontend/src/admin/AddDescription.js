@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
 import language from "../Data/country";
 import { getDesc } from "../actions/adminActions";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import BackToLogin from "./BackToLogin";
 import { Icon } from "@iconify/react";
 import {
@@ -38,6 +39,16 @@ function AddDescription(props) {
   const params = useParams();
   const navigate = useNavigate();
 
+  const [activeDesc, setActiveDesc] = useState(false);
+  const [isAddDesc, setIsAddDesc] = useState(false);
+  const [lngDesc, setLngDesc] = useState("");
+  const [lngName, setLngName] = useState("");
+  const [lngCode, setLngCode] = useState("");
+  const [descText, setDescText] = useState("");
+
+  const [showError, setShowError] = useState(false);
+  const [showErrorAdd, setShowErrorAdd] = useState(false);
+
   // data from redux
   const districtDesc = useSelector((state) => state.addDistrictDesc);
   const { loading, success, desc, error } = districtDesc;
@@ -52,12 +63,19 @@ function AddDescription(props) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const [activeDesc, setActiveDesc] = useState(false);
-  const [isAddDesc, setIsAddDesc] = useState(false);
-  const [lngDesc, setLngDesc] = useState("");
-  const [lngName, setLngName] = useState("");
-  const [lngCode, setLngCode] = useState("");
-  const [descText, setDescText] = useState("");
+  // Handlers
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: DISTRICT_ADD_DESC_DELETE });
+      dispatch({ type: SET_CITY_FLAG_DESC_FALSE })
+      setShowError(false)
+    }
+    else if (showErrorAdd) {
+      dispatch({ type: ADD_DESC_DELETE });
+      dispatch({ type: SET_CITY_FLAG_DESC_FALSE })
+      setShowErrorAdd(false)
+    }
+  }
 
   const selectHandler = (e) => {
     dispatch({ type: DISTRICT_ADD_DESC_DELETE });
@@ -70,6 +88,16 @@ function AddDescription(props) {
       }
     });
   };
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+    if (adderror) {
+      setShowErrorAdd(true)
+    }
+  }, [error, adderror]);
 
   // recognition adding or modification of description
   useEffect(() => {
@@ -118,7 +146,8 @@ function AddDescription(props) {
       dispatch({ type: USER_LOGOUT });
       navigate("/login-admin");
     }
-    if (error || adderror || addsuccess) {
+    // if (error || adderror || addsuccess) {
+    if (addsuccess) {
       setTimeout(() => {
         setActiveDesc(false)
         dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
@@ -127,7 +156,8 @@ function AddDescription(props) {
       dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
 
     }
-  }, [error, adderror, addsuccess]);
+  }, [addsuccess]);
+  // }, [error, adderror, addsuccess]);
 
   //styling
 
@@ -146,7 +176,7 @@ function AddDescription(props) {
   const handleCloseDesc = () => {
     dispatch({ type: SET_CITY_FLAG_DESC_FALSE });
   };
-
+  console.log('showFalag-->', showErrorAdd)
   return (
     <>
       <BackToLogin />
@@ -154,12 +184,22 @@ function AddDescription(props) {
         <Loader />
       ) : (
         <div style={mainContainer}>
-          {error ? (
-            <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
-          ) : null}
-          {adderror ? (
+          {showError ? (
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
+          )
+            : showErrorAdd ? (
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={adderror}
+              />
+            )
+              : null}
+          {/* {adderror ? (
             <ErrorMessage msg={adderror} timeOut={TIME_SET_TIMEOUT} />
-          ) : null}
+          ) : null} */}
           {addsuccess ? (
             <ErrorMessage
               msg={t("DistrictAddDescription_success")}

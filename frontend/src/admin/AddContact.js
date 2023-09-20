@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import InfoComponent from "../component/infoComponent";
 import TableComponent from "./TableComponent";
 import { addContact } from "../actions/adminActions";
@@ -46,6 +47,8 @@ import {
   SET_FLAG_INFO_TRUE,
   SET_FLAG_INFO_FALSE,
   SET_CITY_FLAG_DESC_TRUE,
+  ACTIVE_DESCRIPTION_DELETE,
+  GET_SHOPS_LIST_DELETE
 } from "../constants/adminConstans";
 
 import {
@@ -96,7 +99,13 @@ function AddContact() {
   // if contactOrSpot is true -> contact else - spot
   const [contactOrSpot, setContactOrSpot] = useState(true);
 
+  const [showError, setShowError] = useState(false);
+  const [showActiveError, setShowActiveError] = useState(false);
+  const [showSpotListError, setShowSpotListError] = useState(false);
+  const [showShopListError, setShowShopListError] = useState(false);
+
   // data from redux
+
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact, loading, error } = contactListRedux;
 
@@ -120,7 +129,6 @@ function AddContact() {
   const spotListRedux = useSelector((state) => state.shopSpotsList);
   const {
     shopSpotList,
-    successAdd,
     loading: spotListLoading,
     error: spotListError,
   } = spotListRedux;
@@ -128,16 +136,31 @@ function AddContact() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  // const shopFlagVar = useSelector((state) => state.windowFlag);
-  // const { windowFlag } = shopFlagVar;
-
   const infoFlagRedux = useSelector((state) => state.flag);
   const { cityDescFlag } = infoFlagRedux;
 
   //Handlers
 
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: GET_CONTACT_LIST_DELETE });
+      setShowError(false)
+    }
+    else if (showActiveError) {
+      dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+      setShowActiveError(false)
+    }
+    else if (showShopListError) {
+      dispatch({ type: GET_SHOPS_LIST_DELETE });
+      setShowShopListError(false)
+    }
+    else if (showSpotListError) {
+      dispatch({ type: GET_SOPTS_LIST_DELETE });
+      setShowSpotListError(false)
+    }
+  }
+
   const infoHandler = (i) => {
-    console.log("Info--->>>", i);
     setInfoShop(true);
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
@@ -186,7 +209,6 @@ function AddContact() {
   };
 
   const hendlerSpotCopyData = () => {
-    console.log('straszan dupa')
     shopList.map((shop) => {
       if (shop.id === shopId) {
         const insertData = {
@@ -299,6 +321,7 @@ function AddContact() {
     }
   };
 
+
   // Ensure that useState editContactObj assign edit object in Time.
   // UseSate is async which means is possible that condition in Inputs array will be executed elier than useState editContactObj
   useEffect(() => {
@@ -340,6 +363,22 @@ function AddContact() {
 
     setConfirm(false);
   }, [dispatch, confirm]);
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+    if (activeError) {
+      setShowActiveError(true)
+    }
+    if (shopListError) {
+      setShowShopListError(true)
+    }
+    if (spotListError) {
+      setShowSpotListError(true)
+    }
+  }, [error, activeError, shopListError, spotListError]);
 
   // Delete contact list after activation or deactivation
   useEffect(() => {
@@ -771,8 +810,8 @@ function AddContact() {
                   : t("AdminShops_inactivate_shop_InfoWindow_body")
               }
             />
-          )}
-
+          )
+          }
           {showAlert && !contactOrSpot ? (
             <InfoAlertComponent
               confirmYes={confirmYes}
@@ -787,7 +826,28 @@ function AddContact() {
           <FormLayout col={TWO} ratio={ONE_TO_TWO}>
             {/* Main Data About Company */}
             <div style={contactContainer}>
-              {error ? (
+              {showError ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={error}
+                />
+                : showActiveError ?
+                  <ErrorMesageRedux
+                    confirmYes={closeError}
+                    error={activeError}
+                  />
+                  : showShopListError ?
+                    <ErrorMesageRedux
+                      confirmYes={closeError}
+                      error={shopListError}
+                    />
+                    : showSpotListError ?
+                      <ErrorMesageRedux
+                        confirmYes={closeError}
+                        error={spotListError}
+                      />
+                      : null}
+              {/* {error ? (
                 <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
               ) : activeError ? (
                 <ErrorMessage msg={activeError} timeOut={TIME_SET_TIMEOUT} />
@@ -795,7 +855,7 @@ function AddContact() {
                 <ErrorMessage msg={shopListError} timeOut={TIME_SET_TIMEOUT} />
               ) : spotListError ? (
                 <ErrorMessage msg={spotListError} timeOut={TIME_SET_TIMEOUT} />
-              ) : null}
+              ) : null} */}
 
               {/* Main Data */}
               <>

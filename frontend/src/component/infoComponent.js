@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Divider from "../admin/Divider";
 import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "../admin/ErrorMesageRedux"
 
 import { Icon } from "@iconify/react";
 
@@ -24,10 +25,20 @@ function InfoComponent(props) {
   const descriptions = useSelector((state) => state.fullDescriptions);
   const { loading, desc, error, success } = descriptions;
 
+  //variables
   const [isDescription, setIsDescription] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedDescID, setSelectedDescID] = useState(0);
 
+  const [showError, setShowError] = useState(false);
+
+  // Hendlers
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
+      setShowError(false)
+    }
+  }
   const descriptionHandler = (i) => {
     if (selectedDescID > 0) {
       if (i.id === selectedDescID) {
@@ -35,6 +46,13 @@ function InfoComponent(props) {
       } else { setSelectedDescID(i.id) }
     } else { setSelectedDescID(i.id) }
   }
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+  }, [error]);
+
   useEffect(() => {
     dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
     dispatch(
@@ -132,7 +150,12 @@ function InfoComponent(props) {
         <div></div>
       ) : (
         <div style={showModalOverlay}>
-          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
+          {showError ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            /> : null
+          }
           <div style={mainContainer}>
             <div style={title}>
               {props.typeObj === MY_PRODUCT_DESCRIPTION ?

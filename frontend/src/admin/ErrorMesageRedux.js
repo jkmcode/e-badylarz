@@ -155,6 +155,20 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_added_info"));
       case "Bad request. No descriptions":
         return setErrorMessage(t("No_descriptions_info"));
+      case "Bad request. No objects in the ShopsContact Shops for the selected shop":
+        return setErrorMessage(t("No_contactList_shop"));
+      case "Bad request. No add or update contact":
+        return setErrorMessage(t("No_updateAdd_contactList_shop"));
+      case "Bad request. No update contact":
+        return setErrorMessage(t("No_update_contactList_shop"));
+      case "Bad request. No add contact":
+        return setErrorMessage(t("No_add_contactList_shop"));
+      case "Bad request. No get new list of contacts":
+        return setErrorMessage(t("No_new_contactList_shop"));
+      case "Bad request. No change active flag":
+        return setErrorMessage(t("No_active_flag"))
+      case "Bad request. No shops list":
+        return setErrorMessage(t("No_shop_list"))
       default:
         return setErrorMessage(error.detail);
     }

@@ -672,5 +672,12 @@
   "No_description_info_list": "Description error",
   "No_object_type": "Invalid function parameter",
   "No_added_info": "Description not added",
-  "No_descriptions_info": "Description information not retrieved"
+  "No_descriptions_info": "Description information not retrieved",
+  "No_contactList_shop": "Error downloading the contact list for the selected shop",
+  "No_updateAdd_contactList_shop": "The contact has not been added or changed",
+  "No_update_contactList_shop": "The contact has not been changed",
+  "No_add_contactList_shop": "The contact has not been added",
+  "No_new_contactList_shop": "The updated contact list has not been downloaded",
+  "No_active_flag": "The activity has not been changed",
+  "No_shop_list": "The shop list has not been downloaded"
 }

@@ -134,7 +134,7 @@ def getFullDescriptionsDesc(request, Id, obj_type):
         content['text'] = "Błędna lista parametrów funkcji"
         content['code'] = "0108"
         content['detail'] = "Changing the active flag - no object type"
-        return ErrorHendling(content, err=e)
+        return ErrorHendling(content)
 
     return Response(seriaziler.data)
 
@@ -177,7 +177,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -213,7 +213,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -249,7 +249,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -285,7 +285,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -321,7 +321,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -357,7 +357,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -393,7 +393,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description=data['desc']
-                descrip.date_of_change=datetime.now()
+                descrip.date_of_change=datetime.datetime.now()
                 descrip.modifier=data['id']
                 descrip.save()
             except Exception as e:
@@ -444,7 +444,7 @@ def addDesc(request):
                 return ErrorHendling(content, user=data['id'],err=e)
             try:
                 descrip.description = data['desc']
-                descrip.date_of_change = datetime.now()
+                descrip.date_of_change = datetime.datetime.now()
                 descrip.modifier = data['id']
                 descrip.save()
             except Exception as e:
@@ -455,7 +455,7 @@ def addDesc(request):
         content['text'] = "Błędna lista parametrów funkcji"
         content['code'] = "0108"
         content['detail'] = "Changing the active flag - no object type"
-        return ErrorHendling(content,user=data['id'], err=e)
+        return ErrorHendling(content,user=data['id'])
     
     return Response("OK")
 
@@ -570,6 +570,7 @@ def getDiscrictDesc(request, Id, lng, obj_type):
             content['text'] = "Błąd serializacji listy obiektów z tabeli ProductSubtypesDescriptions"
             content['code'] = "0155"
             return ErrorHendling(content, err=e)
+    
     elif obj_type=='MY_PROUCT':
         try:
             descrition = MyProductsDescriptions.objects.filter(id_my_product = Id, language=lng)
@@ -587,7 +588,7 @@ def getDiscrictDesc(request, Id, lng, obj_type):
         content['text'] = "Błędna lista parametrów funkcji"
         content['code'] = "0108"
         content['detail'] = "Changing the active flag - no object type"
-        return ErrorHendling(content, err=e)
+        return ErrorHendling(content)
     
     return Response(seriaziler.data)
    

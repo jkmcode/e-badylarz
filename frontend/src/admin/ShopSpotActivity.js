@@ -533,7 +533,12 @@ function AddShopsSpot() {
   useEffect(() => {
     if (myProductListError) { }
     else {
-      if (!successMyProductList & !myProductListLoading) { dispatch(getMyproduct(spotId)) }
+      if (SpotParam === "add") { }
+      else {
+        if (!successMyProductList & !myProductListLoading) {
+          dispatch(getMyproduct(spotId))
+        }
+      }
     }
   }, [myProductListError, successMyProductList]);
 

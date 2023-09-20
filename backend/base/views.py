@@ -358,9 +358,25 @@ def getShop(request, Id):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+# error hendling - OK
 def getContacts(request, Id):
-    contacts = ShopsContact.objects.filter(id_shops=Id).order_by('name')
-    seriaziler = ShopsContactSerializer(contacts, many=True)
+
+    content = {
+        'function_name' : 'getContacts',
+        'code' : "0158",
+        "detail": "Bad request. No objects in the ShopsContact Shops for the selected shop",
+        'text' : "Błąd pobrania listy obiektów dla wybranego sklepu z tabeli ShopsContact"
+    }
+    try:
+        contacts = ShopsContact.objects.filter(id_shops=Id).order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = ShopsContactSerializer(contacts, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów dla wybranego sklepu z tabeli ShopsContact"
+        content['code'] = "0159"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)
 
@@ -444,58 +460,101 @@ def getSpot(request, Id, typeSpot):
     return Response(seriaziler.data)
 
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def addShopContacts(request):
     data = request.data
-    shop = Shops.objects.get(id=data['shop_id'])
+
+    content = {
+        'function_name' : 'addShopContacts',
+        'code' : "0160",
+        "detail": "Bad request. No add or update contact",
+        'text' : "Błąd pobrania obiektu z tabeli Shops"
+    }
+    try:
+        shop = Shops.objects.get(id=data['shop_id'])
+    except Exception as e:
+            return ErrorHendling(content, user=data['creator'], err=e)
     
     if data['editing']:
-        shop_contact_editing = ShopsContact.objects.get(id=data['Id'])
+        try:
+            shop_contact_editing = ShopsContact.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd pobrania obiektu z tabeli ShopsContact"
+            content['detail'] = "Bad request. No update contact"
+            content['code'] = "0161"
+            return ErrorHendling(content,user=data['creator'], err=e)
 
         # Saving archive data
-        ShopsContactARC.objects.create(
-            id_shops = data['shop_id'],
-            name = data['firstName'],
-            surname = data['surname'],
-            email = data['email'],
-            phone = data['phone'],
-            description = data['description'],
-            date_of_entry = shop_contact_editing.date_of_entry,
-            creator = shop_contact_editing.creator,
-            is_active = shop_contact_editing.is_active,
-            date_of_change = shop_contact_editing.date_of_change,
-            type_of_change = shop_contact_editing.type_of_change,
-            modifier = shop_contact_editing.modifier,
-            id_contact = data['Id'],
-            archiver = data['creator']
-        )
+        try:
+            ShopsContactARC.objects.create(
+                id_shops = data['shop_id'],
+                name = data['firstName'],
+                surname = data['surname'],
+                email = data['email'],
+                phone = data['phone'],
+                description = data['description'],
+                date_of_entry = shop_contact_editing.date_of_entry,
+                creator = shop_contact_editing.creator,
+                is_active = shop_contact_editing.is_active,
+                date_of_change = shop_contact_editing.date_of_change,
+                type_of_change = shop_contact_editing.type_of_change,
+                modifier = shop_contact_editing.modifier,
+                id_contact = data['Id'],
+                archiver = data['creator']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli ShopsContactARC"
+            content['code'] = "0162"
+            ErrorHendling(content,user=data['creator'], err=e)
 
         # Data change
-        shop_contact_editing.name = data['firstName']
-        shop_contact_editing.surname = data['surname']
-        shop_contact_editing.email = data['email']
-        shop_contact_editing.phone = data['phone']
-        shop_contact_editing.description = data['description']
-        shop_contact_editing.date_of_change = datetime.now()
-        shop_contact_editing.modifier = data['creator']
-        shop_contact_editing.type_of_change = "Data change"
-
-        shop_contact_editing.save()
+        try:
+            shop_contact_editing.name = data['firstName']
+            shop_contact_editing.surname = data['surname']
+            shop_contact_editing.email = data['email']
+            shop_contact_editing.phone = data['phone']
+            shop_contact_editing.description = data['description']
+            shop_contact_editing.date_of_change = datetime.now()
+            shop_contact_editing.modifier = data['creator']
+            shop_contact_editing.type_of_change = "Data change"
+            shop_contact_editing.save()
+        except Exception as e:
+            content['text'] = "Błąd aktualizacji obiektu w tabeli ShopsContact"
+            content['code'] = "0163"
+            return ErrorHendling(content,user=data['creator'], err=e)
+    
     else:
-        shop_contact = ShopsContact.objects.create(
-            id_shops=shop,
-            name=data['firstName'],
-            surname = data['surname'],
-            email = data['email'],
-            phone = data['phone'],
-            creator = data['creator'],
-            description =data['description'],
-            is_active=True
-        )
-
-    shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
-    seriaziler = ShopsContactSerializer(shop_contacts, many=True)
+        try:
+            shop_contact = ShopsContact.objects.create(
+                id_shops=shop,
+                name=data['firstName'],
+                surname = data['surname'],
+                email = data['email'],
+                phone = data['phone'],
+                creator = data['creator'],
+                description =data['description'],
+                is_active=True
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu w tabeli ShopsContact"
+            content['detail'] = "Bad request. No add contact"
+            content['code'] = "0164"
+            return ErrorHendling(content,user=data['creator'], err=e)
+    try:
+        shop_contacts=ShopsContact.objects.filter(id_shops=data['shop_id'])
+    except Exception as e:
+            content['text'] = "Błąd pobrania zaktualizowanej listy kontaktów z tabeli ShopsContact"
+            content['detail'] = "Bad request. No get new list of contacts"
+            content['code'] = "0165"
+            return ErrorHendling(content,user=data['creator'], err=e)
+    try:
+        seriaziler = ShopsContactSerializer(shop_contacts, many=True)
+    except Exception as e:
+            content['text'] = "Błąd serializacji zaktualizowanej listy kontaktów z tabeli ShopsContact"
+            content['detail'] = "Bad request. No get new list of contacts"
+            content['code'] = "0166"
+            return ErrorHendling(content,user=data['creator'], err=e)
     return Response(seriaziler.data)
 
 @api_view(['POST'])
@@ -551,15 +610,6 @@ def addAreaContacts(request):
 
     area_contacts=AreaContact.objects.filter(id_area=data['area_id'])    
     seriaziler = AreaContactSerializer(area_contacts, many=True)
-    return Response(seriaziler.data)
-
-
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def getShops(request):
-    shops = Shops.objects.all().order_by('name') 
-    seriaziler = ShopsSerializer(shops, many=True)
-
     return Response(seriaziler.data)
 
 @api_view(['PUT'])
@@ -764,10 +814,33 @@ def getAreaSpots(request, Id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getShops(request):
-    shops = Shops.objects.all().order_by('name') 
-    seriaziler = ShopsSerializer(shops, many=True)
+
+    content = {
+        'function_name' : 'getShops',
+        'code' : "0170",
+        "detail": "Bad request. No shops list",
+        'text' : "Błąd pobrania obiektów z tabeli Shops"
+    }
+    try:
+        shops = Shops.objects.all().order_by('name') 
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = ShopsSerializer(shops, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy sklepów"
+        content['code'] = "0171"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)
+
+# @api_view(['GET'])
+# @permission_classes([IsAdminUser])
+# def getShops(request):
+#     shops = Shops.objects.all().order_by('name') 
+#     seriaziler = ShopsSerializer(shops, many=True)
+
+#     return Response(seriaziler.data)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -886,7 +959,15 @@ def addCiti(request):
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def activeList(request):
+    
     data=request.data
+
+    content = {
+        'function_name' : 'activeList',
+        'code' : "XXXX",
+        "detail": "Bad request. No change active flag",
+        'text' : ""
+    }
 
     if data['objType']=='DISTRICT':
         descrip = Districts.objects.get(id=data['Id'])
@@ -894,46 +975,69 @@ def activeList(request):
         descrip = Citis.objects.get(id=data['Id'])
     elif data['objType']=='SHOP':
         descrip = Shops.objects.get(id=data['Id'])
+    
     elif data['objType']=='SHOP_CONTACT':
-        descrip = ShopsContact.objects.get(id=data['Id'])
-        ShopsContactARC.objects.create(
-            id_shops=int(data['shop_id']),
-            name=descrip.name,
-            surname=descrip.surname,
-            email = descrip.email,
-            phone = descrip.phone,
-            description = descrip.description,
-            date_of_entry = descrip.date_of_entry,
-            creator = descrip.creator,
-            is_active = descrip.is_active,
-            date_of_change = descrip.date_of_change,
-            modifier = descrip.modifier,
-            type_of_change = descrip.type_of_change,
-            id_contact=descrip.id
-        )
+        try:
+            descrip = ShopsContact.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli ShopsContact"
+            content['code'] = "0167"
+            return ErrorHendling(content, user=data['userId'], err=e)
+        try:
+            ShopsContactARC.objects.create(
+                id_shops=int(data['shop_id']),
+                name=descrip.name,
+                surname=descrip.surname,
+                email = descrip.email,
+                phone = descrip.phone,
+                description = descrip.description,
+                date_of_entry = descrip.date_of_entry,
+                creator = descrip.creator,
+                is_active = descrip.is_active,
+                date_of_change = descrip.date_of_change,
+                modifier = descrip.modifier,
+                type_of_change = descrip.type_of_change,
+                id_contact=descrip.id
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli ShopsContactARC"
+            content['code'] = "0168"
+            ErrorHendling(content, user=data['userId'], err=e)
+    
     elif data['objType']=='SHOP_SPOT':
-        descrip = ShopsSpot.objects.get(id=data['Id'])
-        ShopsSpotARC.objects.create(
-            id_shops=int(data['shop_id']),
-            id_spot=descrip.id,
-            name=descrip.name,
-            city = descrip.city,
-            street = descrip.street,
-            no_building = descrip.no_building,
-            post_code = descrip.post_code,
-            post = descrip.post,
-            latitude = descrip.latitude,
-            longitude = descrip.longitude,
-            date_of_entry = descrip.date_of_entry,
-            date_of_change = descrip.date_of_change,
-            creator = descrip.creator,
-            is_active = descrip.is_active,
-            photo = descrip.photo,
-            modifier = descrip.modifier,
-            delivery = descrip.delivery,
-            range = descrip.range,
-            type_of_change = descrip.type_of_change,
-        )
+        try:
+            descrip = ShopsSpot.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli ShopsSpot"
+            content['code'] = "0170"
+            return ErrorHendling(content, user=data['userId'], err=e)
+        try:
+            ShopsSpotARC.objects.create(
+                id_shops=int(data['shop_id']),
+                id_spot=descrip.id,
+                name=descrip.name,
+                city = descrip.city,
+                street = descrip.street,
+                no_building = descrip.no_building,
+                post_code = descrip.post_code,
+                post = descrip.post,
+                latitude = descrip.latitude,
+                longitude = descrip.longitude,
+                date_of_entry = descrip.date_of_entry,
+                date_of_change = descrip.date_of_change,
+                creator = descrip.creator,
+                is_active = descrip.is_active,
+                photo = descrip.photo,
+                modifier = descrip.modifier,
+                delivery = descrip.delivery,
+                range = descrip.range,
+                type_of_change = descrip.type_of_change,
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli ShopsSpotARC"
+            content['code'] = "0171"
+            ErrorHendling(content, user=data['userId'], err=e)
+    
     elif data['objType']=='AREA': 
         descrip = Areas.objects.get(id=data['Id'])
         AreasARC.objects.create(
@@ -967,18 +1071,23 @@ def activeList(request):
     elif data['objType'] == "PRODUCTS":
         descrip = Product.objects.get(id=data["Id"])         
     else:
-        content = {"detail": "Changing the active flag - no object type"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST) 
+        content['text'] = "Błędna lista parametrów funkcji"
+        content['code'] = "0108"
+        content['detail'] = "Changing the active flag - no object type"
+        return ErrorHendling(content) 
     
-    if data['active']:
-        descrip.is_active=True
-    else:
-        descrip.is_active=False
-
-    descrip.type_of_change = data['kind']
-    descrip.modifier=data['userId']
-
-    descrip.save()
+    try:
+        if data['active']:
+            descrip.is_active=True
+        else:
+            descrip.is_active=False
+        descrip.type_of_change = data['kind']
+        descrip.modifier=data['userId']
+        descrip.save()
+    except Exception as e:
+        content['text'] = "Błąd aktualizacji obiektu dla przypadku : " + data['objType']
+        content['code'] = "0169"
+        return ErrorHendling(content, user=data['userId'], err=e)
 
     return Response(data['objType'])
 

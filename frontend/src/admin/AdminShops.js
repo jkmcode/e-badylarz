@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getShops } from "../actions/adminActions";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import InfoWindow from "../component/infoWindow";
 import { unOrActiveList } from "../actions/adminActions";
 import {
@@ -28,6 +29,8 @@ function AdminShops() {
   const [activeShops, setActiveShops] = useState(false);
   const [active, setActive] = useState(false);
 
+  const [showError, setShowError] = useState(false);
+
   // fech data from Redux
   const shopListRedux = useSelector((state) => state.shopList);
   const { loading, shopList, error, success } = shopListRedux;
@@ -46,6 +49,36 @@ function AdminShops() {
 
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact, loading: loadingContact, error: errorContact } = contactListRedux;
+
+  //Handlers
+
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: GET_CONTACT_LIST_DELETE });
+      setShowError(false)
+    }
+    // else if (showActiveError) {
+    //   dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+    //   setShowActiveError(false)
+    // }
+    // else if (showShopListError) {
+    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
+    //   setShowShopListError(false)
+    // }
+  }
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+    // if (activeError) {
+    //   setShowActiveError(true)
+    // }
+    // if (shopListError) {
+    //   setShowShopListError(true)
+    // }
+  }, [error]);
 
   // fetching list of shops from DB
   useEffect(() => {
@@ -274,9 +307,25 @@ function AdminShops() {
               type="shop"
             />
           ) : null}
-          {error ? <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
+          {showError ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
+            // : showActiveError ?
+            //   <ErrorMesageRedux
+            //     confirmYes={closeError}
+            //     error={activeError}
+            //   />
+            //   : showShopListError ?
+            //     <ErrorMesageRedux
+            //       confirmYes={closeError}
+            //       error={shopListError}
+            //     />
+            : null}
+          {/* {error ? <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
           {errorContact ? <ErrorMessage msg={errorContact} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
-          {errorShopDetails ? <ErrorMessage msg={errorShopDetails} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
+          {errorShopDetails ? <ErrorMessage msg={errorShopDetails} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null} */}
           <div style={headerContainer}>
             <div style={formHeader}>
               <Link style={shopAddLink} to="add">
