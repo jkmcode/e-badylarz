@@ -361,11 +361,16 @@
         shops = Shops.objects.all().order_by('name')        
 - 0171 -"Błąd serializacji listy sklepów"
         seriaziler = ShopsSerializer(shops, many=True)
-- 0172 -
-- 0173 -
-- 0174 -
-- 0175 -
-- 0176 -
+- 0172 -"Błąd poboru danych obiekt z tabeli Shops"
+        descrip = Shops.objects.get(id=data['Id'])
+- 0173 -"Błąd poboru danych obiekt z tabeli Areas"
+        descrip = Areas.objects.get(id=data['Id'])
+- 0174 -"Błąd utworzenia obiektu archiwalnego w tabeli AreasARC"
+        AreasARC.objects.create(...)
+- 0175 -"Błąd pobrania listy obiektów z tabeli Areas"
+        areas = Areas.objects.all().order_by('name')
+- 0176 -"Błąd serializacji listy obiektów z tabeli Areas"
+        seriaziler = AreasSerializer(areas, many=True
 - 0177 -
 - 0178 -
 - 0179 -

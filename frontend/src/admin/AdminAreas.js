@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Loader from "../component/Loader";
 import { unOrActiveList } from "../actions/adminActions";
-import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import useBackToLogin from "../component/useBackToLogin";
 import { getAreas } from "../actions/areaAction";
 import { activeBadge, inactiveBadge } from "./AdminCSS";
@@ -12,15 +12,14 @@ import TableComponent from "./TableComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 
 import {
-  TIME_AUT_ERROR,
-} from "../constants/environmentConstans";
-
-import {
-  ADD_AREA_DELETE,
   GET_AREA_LIST_DELETE,
 } from "../constants/areaConstans";
 
-import { UNACTIVE, ACTIVE } from "../constants/adminConstans";
+import {
+  UNACTIVE,
+  ACTIVE,
+  ACTIVE_DESCRIPTION_DELETE
+} from "../constants/adminConstans";
 
 function AdminAreas() {
   useBackToLogin();
@@ -35,6 +34,9 @@ function AdminAreas() {
   const [confirm, setConfirm] = useState(false);
   const [areaId, setAreaId] = useState();
   const [updateStatus, setUpdateStatus] = useState("");
+
+  const [showError, setShowError] = useState(false);
+  const [showErrorActive, setShowErrorActive] = useState(false);
 
   // fech data from Redux
   const areaListRedux = useSelector((state) => state.areaList);
@@ -51,6 +53,17 @@ function AdminAreas() {
   const { userInfo } = userLogin;
 
   //  handle function
+
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: GET_AREA_LIST_DELETE });
+      setShowError(false)
+    }
+    else if (showErrorActive) {
+      dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+      setShowErrorActive(false)
+    }
+  }
 
   const editHandler = (id) => {
     navigate(`/dashboard/areas/edit/${id}`);
@@ -79,6 +92,16 @@ function AdminAreas() {
   };
 
   //USEEFFECT
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+    if (errorActive) {
+      setShowErrorActive(true)
+    }
+  }, [error, errorActive]);
 
   //status changer
   useEffect(() => {
@@ -295,10 +318,17 @@ function AdminAreas() {
         <Loader />
       ) : (
         <>
-          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
-          {errorActive ? (
-            <ErrorMessage msg={errorActive} timeOut={TIME_AUT_ERROR} />
-          ) : null}
+          {showError ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
+            : showErrorActive ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorActive}
+              />
+              : null}
 
           {showAlert && updateStatus === UNACTIVE && (
             <InfoAlertComponent

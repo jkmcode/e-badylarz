@@ -557,7 +557,7 @@ export const addShopSpot = (insertData) => async (dispatch, getState) => {
       timeout: TIMEOUT_addShopSpot
     };
 
-    const { data } = await axios.post(
+    const { data } = await axios.put(
       `/api/add-shop-spot/`,
       insertData,
       config

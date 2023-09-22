@@ -169,6 +169,8 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_active_flag"))
       case "Bad request. No shops list":
         return setErrorMessage(t("No_shop_list"))
+      case "Bad request. No list areas":
+        return setErrorMessage(t("No_areas_list"))
       default:
         return setErrorMessage(error.detail);
     }

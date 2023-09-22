@@ -27,3 +27,4 @@ export const TIMEOUT_addContact = 5000
 export const TIMEOUT_unOrActiveList = 5000
 export const TIMEOUT_getShops = 5000
 export const TIMEOUT_addShopSpot = 5000
+export const TIMEOUT_getAreas = 4999

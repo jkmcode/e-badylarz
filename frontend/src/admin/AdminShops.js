@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getShops } from "../actions/adminActions";
 import Loader from "../component/Loader";
-import ErrorMessage from "../component/ErrorMessage";
 import ErrorMesageRedux from "./ErrorMesageRedux"
 import InfoWindow from "../component/infoWindow";
 import { unOrActiveList } from "../actions/adminActions";
@@ -14,11 +13,11 @@ import {
   GET_SHOP_DELETE,
   SET_FLAG_IMAGE_FALSE,
   GET_CONTACT_LIST_DELETE,
+  ACTIVE_DESCRIPTION_DELETE
 } from "../constants/adminConstans";
 import { Icon } from "@iconify/react";
 import useResponsive from "../component/useResponsive";
 import useBackToLogin from "../component/useBackToLogin";
-import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 
 function AdminShops() {
   useBackToLogin();
@@ -30,6 +29,9 @@ function AdminShops() {
   const [active, setActive] = useState(false);
 
   const [showError, setShowError] = useState(false);
+  const [showErrorShopDetails, setShowErrorShopDetails] = useState(false);
+  const [showErrorContact, setShowErrorContact] = useState(false);
+  const [showErrorActive, setShowErrorActive] = useState(false);
 
   // fech data from Redux
   const shopListRedux = useSelector((state) => state.shopList);
@@ -50,6 +52,12 @@ function AdminShops() {
   const contactListRedux = useSelector((state) => state.contactList);
   const { ListOfContact, loading: loadingContact, error: errorContact } = contactListRedux;
 
+  const contactActivRedux = useSelector((state) => state.unOrActiveDescription);
+  const {
+    loading: activeLoading,
+    error: activeError,
+  } = contactActivRedux;
+
   //Handlers
 
   const closeError = () => {
@@ -57,14 +65,18 @@ function AdminShops() {
       dispatch({ type: GET_CONTACT_LIST_DELETE });
       setShowError(false)
     }
-    // else if (showActiveError) {
-    //   dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
-    //   setShowActiveError(false)
-    // }
-    // else if (showShopListError) {
-    //   dispatch({ type: GET_SHOPS_LIST_DELETE });
-    //   setShowShopListError(false)
-    // }
+    else if (showErrorShopDetails) {
+      dispatch({ type: GET_SHOP_DELETE });
+      setShowErrorShopDetails(false)
+    }
+    else if (showErrorContact) {
+      dispatch({ type: GET_CONTACT_LIST_DELETE });
+      setShowErrorContact(false)
+    }
+    else if (showErrorActive) {
+      dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+      setShowErrorActive(false)
+    }
   }
 
   // ustawienie flagi błędu
@@ -72,13 +84,16 @@ function AdminShops() {
     if (error) {
       setShowError(true)
     }
-    // if (activeError) {
-    //   setShowActiveError(true)
-    // }
-    // if (shopListError) {
-    //   setShowShopListError(true)
-    // }
-  }, [error]);
+    if (errorShopDetails) {
+      setShowErrorShopDetails(true)
+    }
+    if (errorContact) {
+      setShowErrorContact(true)
+    }
+    if (activeError) {
+      setShowErrorActive(true)
+    }
+  }, [error, errorContact, errorShopDetails, activeError]);
 
   // fetching list of shops from DB
   useEffect(() => {
@@ -292,7 +307,7 @@ function AdminShops() {
 
   return (
     <>
-      {loading || loadingContact || loadingShopDetails ? (
+      {loading || loadingContact || loadingShopDetails || activeLoading ? (
         <Loader />
       ) : (
         <>
@@ -312,20 +327,22 @@ function AdminShops() {
               confirmYes={closeError}
               error={error}
             />
-            // : showActiveError ?
-            //   <ErrorMesageRedux
-            //     confirmYes={closeError}
-            //     error={activeError}
-            //   />
-            //   : showShopListError ?
-            //     <ErrorMesageRedux
-            //       confirmYes={closeError}
-            //       error={shopListError}
-            //     />
-            : null}
-          {/* {error ? <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
-          {errorContact ? <ErrorMessage msg={errorContact} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null}
-          {errorShopDetails ? <ErrorMessage msg={errorShopDetails} timeOut={TIME_SET_TIMEOUT} variant="danger" /> : null} */}
+            : showErrorShopDetails ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorShopDetails}
+              />
+              : showErrorContact ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={errorContact}
+                />
+                : showErrorActive ?
+                  <ErrorMesageRedux
+                    confirmYes={closeError}
+                    error={activeError}
+                  />
+                  : null}
           <div style={headerContainer}>
             <div style={formHeader}>
               <Link style={shopAddLink} to="add">

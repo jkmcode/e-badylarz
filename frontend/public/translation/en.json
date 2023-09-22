@@ -679,5 +679,6 @@
   "No_add_contactList_shop": "The contact has not been added",
   "No_new_contactList_shop": "The updated contact list has not been downloaded",
   "No_active_flag": "The activity has not been changed",
-  "No_shop_list": "The shop list has not been downloaded"
+  "No_shop_list": "The shop list has not been downloaded",
+  "No_areas_list": "The sales area list has not been downloaded"
 }

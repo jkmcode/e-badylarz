@@ -162,7 +162,17 @@ def uploadMultiImages2(request):
 @permission_classes([IsAdminUser])
 def getAreas(request):
 
-    areas = Areas.objects.all().order_by('name')
+    content = {
+        'function_name' : 'getAreas',
+        'code' : "0175",
+        "detail": "Bad request. No list areas",
+        'text' : "Błąd pobrania listy obiektów z tabeli Areas"
+    }
+
+    try:
+        areas = Areas.objects.all().order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
 
     for i in areas : 
         i.name = cleanStr(i.name)
@@ -174,8 +184,13 @@ def getAreas(request):
         i.post = cleanStr(i.post)
         i.latitude = cleanStr(i.latitude)
         i.longitude = cleanStr(i.longitude) 
-
-    seriaziler = AreasSerializer(areas, many=True)
+    try:
+        seriaziler = AreasSerializer(areas, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów z tabeli Areas"
+        content['code'] = "0176"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)
 
 @api_view(['GET'])
@@ -973,8 +988,14 @@ def activeList(request):
         descrip = Districts.objects.get(id=data['Id'])
     elif data['objType']=='CITY':
         descrip = Citis.objects.get(id=data['Id'])
+    
     elif data['objType']=='SHOP':
-        descrip = Shops.objects.get(id=data['Id'])
+        try:
+            descrip = Shops.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli Shops"
+            content['code'] = "0172"
+            return ErrorHendling(content, user=data['userId'], err=e)
     
     elif data['objType']=='SHOP_CONTACT':
         try:
@@ -1038,28 +1059,39 @@ def activeList(request):
             content['code'] = "0171"
             ErrorHendling(content, user=data['userId'], err=e)
     
-    elif data['objType']=='AREA': 
-        descrip = Areas.objects.get(id=data['Id'])
-        AreasARC.objects.create(
-            id_areas = int(descrip.id),
-            name = descrip.name,
-            nip =  descrip.nip,
-            city = descrip.city,
-            street = descrip.street,
-            no_building = descrip.no_building,
-            post_code = descrip.post_code,
-            post = descrip.post,
-            latitude = descrip.latitude,
-            longitude = descrip.longitude,
-            date_of_entry = descrip.date_of_entry,
-            date_of_change = descrip.date_of_change,
-            creator = descrip.creator,
-            modifier = descrip.modifier,
-            is_active = descrip.is_active,
-            bank_account = descrip.bank_account,
-            type_of_change = descrip.type_of_change,
-            archiver = data['userId']
-        )
+    elif data['objType']=='AREA':
+        try: 
+            descrip = Areas.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli Areas"
+            content['code'] = "0173"
+            return ErrorHendling(content, user=data['userId'], err=e)
+        try:
+            AreasARC.objects.create(
+                id_areas = int(descrip.id),
+                name = descrip.name,
+                nip =  descrip.nip,
+                city = descrip.city,
+                street = descrip.street,
+                no_building = descrip.no_building,
+                post_code = descrip.post_code,
+                post = descrip.post,
+                latitude = descrip.latitude,
+                longitude = descrip.longitude,
+                date_of_entry = descrip.date_of_entry,
+                date_of_change = descrip.date_of_change,
+                creator = descrip.creator,
+                modifier = descrip.modifier,
+                is_active = descrip.is_active,
+                bank_account = descrip.bank_account,
+                type_of_change = descrip.type_of_change,
+                archiver = data['userId']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli AreasARC"
+            content['code'] = "0174"
+            ErrorHendling(content, user=data['userId'], err=e)
+    
     elif data['objType'] == "AREA_CONTACT":
         descrip = AreaContact.objects.get(id=data['Id'])
     elif data['objType'] == "AREA_SPOT":

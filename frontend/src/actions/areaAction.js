@@ -1,6 +1,13 @@
 import axios from "axios";
 
 import {
+  errorHandling,
+  addToLS,
+  addLogError,
+  addLogErrorFromLS
+} from "./errorHandling";
+
+import {
   ADD_AREA_REQUEST,
   ADD_AREA_SUCCESS,
   ADD_AREA_FAIL,
@@ -26,6 +33,10 @@ import {
   GET_AREA_SOPTS_LIST_SUCCESS,
   GET_AREA_SOPTS_LIST_FAIL,
 } from "../constants/areaConstans";
+
+import {
+  TIMEOUT_getAreas
+} from "../constants/timeoutConstans"
 
 // Areas
 
@@ -63,18 +74,22 @@ export const editArea = (insertData) => async (dispatch, getState) => {
 };
 
 export const getAreas = () => async (dispatch, getState) => {
+
+  dispatch(addLogErrorFromLS())
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_AREA_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getAreas
     };
 
     const { data } = await axios.get(`/api/get-areas/`, config);
@@ -84,14 +99,22 @@ export const getAreas = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_AREA_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy obszarów",
+      "function": "getAreas",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

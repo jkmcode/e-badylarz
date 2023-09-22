@@ -629,7 +629,9 @@ function AddShopsSpot() {
   // is or not pick-up spot
   useEffect(() => {
     if (successGetSpot) {
-      setValuePickUp(spotDetails.pick_up_point);
+      if (SpotParam === "edit") {
+        setValuePickUp(spotDetails.pick_up_point);
+      }
     }
   }, [dispatch, successGetSpot]);
 
@@ -1520,7 +1522,7 @@ function AddShopsSpot() {
               </div>
             </div>
           )}
-          {showPickUP ?
+          {SpotParam === "edit" && showPickUP ?
             <>
               <button
                 style={{
