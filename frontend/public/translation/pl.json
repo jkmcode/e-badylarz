@@ -678,5 +678,10 @@
   "No_new_contactList_shop": "Zaktualizowana lista kontaktów nie została pobrana",
   "No_active_flag": "Aktywność nie została zmieniona",
   "No_shop_list": "Lista sklepów nie została pobrana",
-  "No_areas_list": "Lista obszrów sprzedaży nie została pobrana"
+  "No_areas_list": "Lista obszrów sprzedaży nie została pobrana",
+  "Wrong_latitude": "Błędna wartość - szerokość geograficzna",
+  "Wrong_longitude": "Błędna wartość - długość geograficzna",
+  "Area_not_added": "Obszar sprzedaży nie został dodany",
+  "Area_not_edit": "Obszar sprzedaży nie został zaktualizowany",
+  "Area_not_details": "Informacje o obszarze sprzedazy nie zostały pobrane"
 }

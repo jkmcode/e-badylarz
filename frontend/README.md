@@ -371,21 +371,40 @@
         areas = Areas.objects.all().order_by('name')
 - 0176 -"Błąd serializacji listy obiektów z tabeli Areas"
         seriaziler = AreasSerializer(areas, many=True
-- 0177 -
-- 0178 -
-- 0179 -
-
-- 0180 -        
-- 0181 -
-- 0182 -
-- 0183 -
-- 0184 -
-- 0185 -
-- 0186 -
-- 0187 -
-- 0188 -
+- 0177 -"Błędna wartość latitude"
+        latCorrect = correctLat(float(data['latitude']))
+- 0178 -"Bad request. Wrong longitude"
+        lngCorrect = correctLng(float(data['longitude']))
+- 0179 -"Błąd przy sprawdzeniu niepowtarzalnej nazwy obszaru sprzedaży w tabeli Areas"
+        areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
+- 0180 -"Błąd przy sprawdzeniu niepowtarzalnego NIP dla obszaru sprzedaży w tabeli Areas"
+        NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()       
+- 0181 -"Nazwa obszaru sprzedaż już istnieje"
+- 0182 -"NIP obszaru sprzedaż już istnieje"
+- 0183 -"Błąd utworzenia nowego obiektu w tabeli Areas "
+        createdArea = Areas.objects.create(...)
+- 0184 -"Błąd pobrania obiektu z tabeli Areas"
+        area = Areas.objects.get(id=data['id'])
+- 0185 -"Błąd utworzenia obiektu archiwalnego w tabeli AreasARC"
+        AreasARC.objects.create(...)
+- 0186 -"Błąd aktualizacji obiektu w tabeli Areas"
+        area.save()
+- 0187 -"Błąd pobrania obiektu z tabeli Areas"
+        area = Areas.objects.get(id=Id)
+- 0188 -"Błąd serializacji obiektu z tabeli Area"
+        seriaziler = AreasSerializer(area, many=False)
 - 0189 -
 
+- 0190 -        
+- 0191 -
+- 0192 -
+- 0193 -
+- 0194 -
+- 0195 -
+- 0196 -
+- 0197 -
+- 0198 -
+- 0199 -
 
 NavbarComponent
 

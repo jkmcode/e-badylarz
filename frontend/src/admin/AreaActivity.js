@@ -5,6 +5,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import useResponsive from "../component/useResponsive";
 import Loader from "../component/Loader";
 import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import useBackToLogin from "../component/useBackToLogin";
 import { FormLayout, changeBtn, addBtn, returnBtn } from "./AdminCSS";
 import FormInput from "./FormInput";
@@ -14,7 +15,8 @@ import { addArea, getAreaToEdit } from "../actions/areaAction";
 import {
   GET_AREA_LIST_DELETE,
   TIME_AUT,
-  ADD_AREA_DELETE
+  ADD_AREA_DELETE,
+  GET_AREA_DELETE
 } from "../constants/areaConstans";
 
 import {
@@ -62,6 +64,9 @@ function AddArea() {
     bankAccount: "",
   });
 
+  const [showError, setShowError] = useState(false);
+  const [showErrorAreaToEdit, setShowErrorAreaToEdit] = useState(false);
+
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -78,6 +83,18 @@ function AddArea() {
   } = getArea;
 
   // Handlers
+
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: ADD_AREA_DELETE });
+      setShowError(false)
+    }
+    else if (showErrorAreaToEdit) {
+      dispatch({ type: GET_AREA_DELETE });
+      setShowErrorAreaToEdit(false)
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (activityAreaParam === "add") {
@@ -127,6 +144,18 @@ function AddArea() {
   const onChangeIBANHandler = (name, value) => {
     setValues({ ...values, [name]: value });
   };
+
+  //USEEFFECT
+
+  // ustawienie flagi błędu
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+    if (errorAreaToEdit) {
+      setShowErrorAreaToEdit(true)
+    }
+  }, [error, errorAreaToEdit]);
 
   useEffect(() => {
     if (success) {
@@ -309,10 +338,17 @@ function AddArea() {
         <Loader />
       ) : (
         <div style={mainContainer}>
-          {error ? <ErrorMessage msg={error} timeOut={TIME_AUT_ERROR} /> : null}
-          {errorAreaToEdit ? (
-            <ErrorMessage msg={errorAreaToEdit} timeOut={TIME_AUT_ERROR} />
-          ) : null}
+          {showError ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
+            : showErrorAreaToEdit ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorAreaToEdit}
+              />
+              : null}
 
           {success ? (
             <ErrorMessage

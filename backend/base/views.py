@@ -197,8 +197,17 @@ def getAreas(request):
 @permission_classes([IsAdminUser])
 def getAreaToEdit(request, Id): 
 
-    area = Areas.objects.get(id=Id)
-
+    content = {
+        'function_name' : 'getAreaToEdit',
+        'code' : "0187",
+        "detail": "Bad request. No areas details",
+        'text' : "Błąd pobrania obiektu z tabeli Areas"
+    }
+    try:
+        area = Areas.objects.get(id=Id)
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    
     area.name = cleanStr(area.name)
     area.nip = cleanStr(area.nip)
     area.city = cleanStr(area.city)
@@ -208,95 +217,147 @@ def getAreaToEdit(request, Id):
     area.post = cleanStr(area.post)
     area.latitude = cleanStr(area.latitude)
     area.longitude = cleanStr(area.longitude)
-
-    seriaziler = AreasSerializer(area, many=False)
+    try:
+        seriaziler = AreasSerializer(area, many=False)
+    except Exception as e:
+        content['text'] = "Błąd serializacji obiektu z tabeli Area"
+        content['code'] = "0188"
+        return ErrorHendling(content, err=e)
+    
     return Response(seriaziler.data)
 
 
-@api_view(["POST"])
+@api_view(["PUT"])
 @permission_classes([IsAdminUser])
 def addArea(request):
     
     data = request.data
+    content = {
+        'function_name' : 'getAreas',
+        'code' : "0177",
+        "detail": "Bad request. Wrong latitude",
+        'text' : "Błędna wartość latitude"
+    }
 
     latCorrect = correctLat(float(data['latitude']))
     if latCorrect == False:
-        content = {"detail": "Wrong latitude value"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        return ErrorHendling(content, err=e)
 
     lngCorrect = correctLng(float(data['longitude']))
     if lngCorrect == False:
-        content = {"detail": "Wrong longitude value"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content['text'] = "Błędna wartość longitude"
+        content['code'] = "0178"
+        content['detail'] = "Bad request. Wrong longitude"
+        return ErrorHendling(content, err=e)
 
     if data['add']:
-        areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
+        try:
+            areaAlreadyExists = Areas.objects.filter(name=data['name']).exists()
+        except Exception as e:
+            content['text'] = "Błąd przy sprawdzeniu niepowtarzalnej nazwy obszaru sprzedaży w tabeli Areas"
+            content['code'] = "0179"
+            content['detail'] = "Bad request. Area not added"
+            return ErrorHendling(content, err=e)
     else:
         areaAlreadyExists=False
     
     if data['add']:
-        NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()
+        try:
+            NIPAlreadyExists = Areas.objects.filter(nip=data['nip']).exists()
+        except Exception as e:
+            content['text'] = "Błąd przy sprawdzeniu niepowtarzalnego NIP dla obszaru sprzedaży w tabeli Areas"
+            content['code'] = "0180"
+            content['detail'] = "Bad request. Area not added"
+            return ErrorHendling(content, err=e)
     else:
         NIPAlreadyExists = False
 
     if areaAlreadyExists:
-        content = {"detail": "Sales area with this name already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content['text'] = "Nazwa obszaru sprzedaż już istnieje"
+        content['code'] = "0181"
+        content['detail'] = "Bad request. Area name already exist"
+        return ErrorHendling(content, err=e)
+    
     elif NIPAlreadyExists:
-        content = {"detail": "NIP already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)        
+        content['text'] = "NIP obszaru sprzedaż już istnieje"
+        content['code'] = "0182"
+        content['detail'] = "Bad request. Area NIP already exist"
+        return ErrorHendling(content, err=e)        
+    
     elif data['add']:
-        createdArea = Areas.objects.create(
-            name=data['name'],
-            nip = data['nip'],
-            city = data['city'],
-            street = data['street'],
-            no_building = data['number'],
-            post_code = data['postCode'],
-            post = data['post'],
-            latitude = data['latitude'],
-            longitude = data['longitude'],
-            creator = data['creator'],
-            is_active=True,
-            bank_account = data['bankAccount']
-        )
+        try:
+            createdArea = Areas.objects.create(
+                name=data['name'],
+                nip = data['nip'],
+                city = data['city'],
+                street = data['street'],
+                no_building = data['number'],
+                post_code = data['postCode'],
+                post = data['post'],
+                latitude = data['latitude'],
+                longitude = data['longitude'],
+                creator = data['creator'],
+                is_active=True,
+                bank_account = data['bankAccount']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia nowego obiektu w tabeli Areas "
+            content['code'] = "0183"
+            content['detail'] = "Bad request. Area not added"
+            return ErrorHendling(content, err=e)
+    
     else:
-        area = Areas.objects.get(id=data['id'])
-        areaARC = AreasARC.objects.create(
-            id_areas = int(area.id),
-            name = area.name,
-            nip =  area.nip,
-            city = area.city,
-            street = area.street,
-            no_building = area.no_building,
-            post_code = area.post_code,
-            post = area.post,
-            latitude = area.latitude,
-            longitude = area.longitude,
-            date_of_entry = area.date_of_entry,
-            date_of_change = area.date_of_change,
-            creator = area.creator,
-            modifier = area.modifier,
-            is_active = area.is_active,
-            bank_account = area.bank_account,
-            type_of_change = area.type_of_change,
-            archiver = data['creator']
-        )
-        area.name=data['name'],
-        area.nip = data['nip'],
-        area.city = data['city'],
-        area.street = data['street'],
-        area.no_building = data['number'],
-        area.post_code = data['postCode'],
-        area.post = data['post'],
-        area.latitude = data['latitude'],
-        area.longitude = data['longitude'],
-        area.modifier = data['creator'],
-        area.bank_account = data['bankAccount']
-        area.date_of_change = datetime.now()
-        area.type_of_change = "modifying sales area data"
-
-        area.save()
+        try:
+            area = Areas.objects.get(id=data['id'])
+        except Exception as e:
+            content['text'] = "Błąd pobrania obiektu z tabeli Areas"
+            content['code'] = "0184"
+            content['detail'] = "Bad request. Area not edit"
+            return ErrorHendling(content, err=e)
+        try:
+            areaARC = AreasARC.objects.create(
+                id_areas = int(area.id),
+                name = area.name,
+                nip =  area.nip,
+                city = area.city,
+                street = area.street,
+                no_building = area.no_building,
+                post_code = area.post_code,
+                post = area.post,
+                latitude = area.latitude,
+                longitude = area.longitude,
+                date_of_entry = area.date_of_entry,
+                date_of_change = area.date_of_change,
+                creator = area.creator,
+                modifier = area.modifier,
+                is_active = area.is_active,
+                bank_account = area.bank_account,
+                type_of_change = area.type_of_change,
+                archiver = data['creator']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli AreasARC"
+            content['code'] = "0185"
+            return ErrorHendling(content, err=e)
+        try:
+            area.name=data['name'],
+            area.nip = data['nip'],
+            area.city = data['city'],
+            area.street = data['street'],
+            area.no_building = data['number'],
+            area.post_code = data['postCode'],
+            area.post = data['post'],
+            area.latitude = data['latitude'],
+            area.longitude = data['longitude'],
+            area.modifier = data['creator'],
+            area.bank_account = data['bankAccount']
+            area.date_of_change = datetime.now()
+            area.type_of_change = "modifying sales area data"
+            area.save()
+        except Exception as e:
+            content['text'] = "Błąd aktualizacji obiektu w tabeli Areas"
+            content['code'] = "0186"
+            return ErrorHendling(content, err=e)
 
     return Response("okey")
 

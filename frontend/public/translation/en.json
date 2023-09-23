@@ -680,5 +680,10 @@
   "No_new_contactList_shop": "The updated contact list has not been downloaded",
   "No_active_flag": "The activity has not been changed",
   "No_shop_list": "The shop list has not been downloaded",
-  "No_areas_list": "The sales area list has not been downloaded"
+  "No_areas_list": "The sales area list has not been downloaded",
+  "Wrong_latitude": "Invalid value - latitude",
+  "Wrong_longitude": "Incorrect value - longitude",
+  "Area_not_added": "Sales area has not been added",
+  "Area_not_edit": "The sales area has not been updated",
+  "Area_not_details": "Sales area information has not been retrieved"
 }

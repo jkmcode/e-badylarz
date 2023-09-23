@@ -171,6 +171,16 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("No_shop_list"))
       case "Bad request. No list areas":
         return setErrorMessage(t("No_areas_list"))
+      case "Bad request. Wrong latitude":
+        return setErrorMessage(t("Wrong_latitude"))
+      case "Bad request. Wrong longitude":
+        return setErrorMessage(t("Wrong_longitude"))
+      case "Bad request. Area not added":
+        return setErrorMessage(t("Area_not_added"))
+      case "Bad request. Area not edit":
+        return setErrorMessage(t("Area_not_edit"))
+      case "Bad request. No areas details":
+        return setErrorMessage(t("Area_not_details"))
       default:
         return setErrorMessage(error.detail);
     }

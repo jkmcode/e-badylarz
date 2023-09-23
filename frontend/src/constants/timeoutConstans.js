@@ -28,3 +28,5 @@ export const TIMEOUT_unOrActiveList = 5000
 export const TIMEOUT_getShops = 5000
 export const TIMEOUT_addShopSpot = 5000
 export const TIMEOUT_getAreas = 4999
+export const TIMEOUT_addArea = 4998
+export const TIMEOUT_getAreaToEdit = 4997

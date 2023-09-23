@@ -35,7 +35,9 @@ import {
 } from "../constants/areaConstans";
 
 import {
-  TIMEOUT_getAreas
+  TIMEOUT_getAreas,
+  TIMEOUT_addArea,
+  TIMEOUT_getAreaToEdit
 } from "../constants/timeoutConstans"
 
 // Areas
@@ -119,18 +121,20 @@ export const getAreas = () => async (dispatch, getState) => {
 };
 
 export const getAreaToEdit = (id) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_AREA_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getAreaToEdit
     };
 
     const { data } = await axios.get(`/api/get-area/${id}`, config);
@@ -140,46 +144,65 @@ export const getAreaToEdit = (id) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_AREA_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie obiektu dla konkretnego obszaru sorzedaży",
+      "function": "getAreaToEdit",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
 export const addArea = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_AREA_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addArea
     };
 
-    const { data } = await axios.post(`/api/add-area/`, insertData, config);
+    const { data } = await axios.put(`/api/add-area/`, insertData, config);
 
     dispatch({
       type: ADD_AREA_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_AREA_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodanie lub aktualizacja danych punktu sprzedaży",
+      "function": "addArea",
+      "param": insertData.add ? "add" : "edit"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
