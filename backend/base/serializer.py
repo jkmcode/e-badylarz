@@ -55,6 +55,11 @@ class CitiesSerializer(serializers.ModelSerializer):
         model = Citis
         fields = '__all__'
 
+class AreasDescSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AreasDescriptions
+        fields = ["description","language","id"]
+
 class CitiesDescSerializer(serializers.ModelSerializer):
     class Meta:
         model = CitiesDescriptions

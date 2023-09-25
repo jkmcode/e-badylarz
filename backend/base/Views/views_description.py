@@ -87,8 +87,22 @@ def getFullDescriptionsDesc(request, Id, obj_type):
         except Exception as e:
             content['text'] = "Błąd serializacji listy obiektów z tabeli ProductDescriptions"
             content['code'] = "0101"
+            return ErrorHendling(content, err=e)      
+    
+    elif obj_type=='AREA':
+        try:
+            descrition = AreasDescriptions.objects.filter(id_area = Id).order_by('language')
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli AreasDescriptions"
+            content['code'] = "0195"
             return ErrorHendling(content, err=e)
-        
+        try:
+            seriaziler = AreasDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli AreasDescriptions"
+            content['code'] = "0196"
+            return ErrorHendling(content, err=e)
+    
     elif obj_type=='PROUCT_TYPE':
         try:
             descrition = ProductTypesDescriptions.objects.filter(id_product_type = Id).order_by('language')
@@ -293,6 +307,42 @@ def addDesc(request):
                 content['code'] = "0124"
                 return ErrorHendling(content, user=data['id'],err=e)
     
+    elif data['objType']== "AREA":
+        if data["addDesc"]:
+            try:
+                area_obj= Areas.objects.get(id=data['objId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli Areas"
+                content['code'] = "0191"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                desc = AreasDescriptions.objects.create(
+                    description=data['desc'],
+                    language=data['lng'],
+                    id_area=area_obj,
+                    creator=data['id']
+                )
+            except Exception as e:
+                content['text'] = "Błąd utworzenia obiektu w tabeli AreasDescriptions"
+                content['code'] = "0192"
+                return ErrorHendling(content, user=data['id'],err=e)
+        else:
+            try:
+                descrip = AreasDescriptions.objects.get(id=data['descId'])
+            except Exception as e:
+                content['text'] = "Błąd pobrania obiektu z tabeli AreasDescriptions"
+                content['code'] = "0193"
+                return ErrorHendling(content, user=data['id'],err=e)
+            try:
+                descrip.description=data['desc']
+                descrip.date_of_change=datetime.datetime.now()
+                descrip.modifier=data['id']
+                descrip.save()
+            except Exception as e:
+                content['text'] = "Błąd aktualizacji obiektu w tabeli AreasDescriptions"
+                content['code'] = "0194"
+                return ErrorHendling(content, user=data['id'],err=e)
+
     elif data['objType']== "PROUCT":
         if data["addDesc"]:
             try:
@@ -526,8 +576,18 @@ def getDiscrictDesc(request, Id, lng, obj_type):
             return ErrorHendling(content, err=e)
 
     elif obj_type=='AREA':
-        descrition = ShopsSpotDescriptions.objects.filter(id_shops_spot = Id, language=lng)
-        seriaziler = ShopSpotDescSerializer(descrition, many=True)
+        try:
+            descrition = AreasDescriptions.objects.filter(id_area = Id, language=lng)
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy obiektów z tabeli AreasDescriptions"
+            content['code'] = "0189"
+            return ErrorHendling(content, err=e)
+        try:
+            seriaziler = AreasDescSerializer(descrition, many=True)
+        except Exception as e:
+            content['text'] = "Błąd serializacji listy obiektów z tabeli AreasDescriptions"
+            content['code'] = "0190"
+            return ErrorHendling(content, err=e)
     
     elif obj_type=='PROUCT':
         try:

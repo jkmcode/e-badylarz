@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAreas, getAreaContacts, getAreaSpots } from "../actions/areaAction";
 import { unOrActiveList } from "../actions/adminActions";
 import TableComponent from "./TableComponent";
+import InfoComponent from "../component/infoComponent";
 import InfoAlertComponent from "../component/InfoAlertComponent";
 import Divider from "./Divider";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
 import { addAreaContact } from "../actions/areaAction";
 import AddDescription from "./AddDescription";
+import Loader from "../component/Loader";
 import {
   FormLayout,
   activeBadge,
@@ -32,7 +34,8 @@ import {
   AREA_SPOT_DESCRIPTION,
   SET_FLAG_INFO_TRUE,
   SET_CITY_FLAG_DESC_TRUE,
-  AREA_DESCRIPTION
+  AREA_DESCRIPTION,
+  SET_FLAG_INFO_FALSE
 } from "../constants/adminConstans";
 import {
   GET_AREA_CONTACT_LIST_DELETE,
@@ -65,11 +68,12 @@ function AreaShowMore() {
   const [helper, setHelper] = useState("");
   const [objId, setObjId] = useState("");
   const [objInfo, setObjInfo] = useState({});
+  const [infoKind, setInfoKind] = useState("")
 
   // fech data from Redux
 
   const infoFlagRedux = useSelector((state) => state.flag);
-  const { cityDescFlag } = infoFlagRedux;
+  const { cityDescFlag, infoFlag } = infoFlagRedux;
 
   const areaListRedux = useSelector((state) => state.areaList);
   const { loading, areaList, error, success } = areaListRedux;
@@ -93,18 +97,21 @@ function AreaShowMore() {
 
   //Handlers
 
+  const closeInfoHandler = () => {
+    dispatch({ type: SET_FLAG_INFO_FALSE });
+  };
+
   const infoHandler = (i) => {
-    // setInfoShop(true)
+    //setInfoShop(true)
     dispatch({ type: SET_FLAG_INFO_TRUE });
     setObjInfo(i);
-    console.log('Jestem w info---->>>', i)
+    setInfoKind(AREA_DESCRIPTION)
   }
 
   const descriptionHandler = (i) => {
     dispatch({ type: SET_CITY_FLAG_DESC_TRUE });
     setHelper(i.name);
     setObjId(i.id);
-    console.log('Jestem---->>>', i)
   };
 
   const editHandler = (id) => {
@@ -647,299 +654,315 @@ function AreaShowMore() {
   }));
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${rocket})`,
-        backgroundPosition: "center",
-        backgroundSize: "80%",
-        height: "auto",
-        padding: "1rem",
-      }}
-    >
-      {showAlert && typeTable === TABLE_TYPE_CONTACT && (
-        <InfoAlertComponent
-          confirmYes={confirmYes}
-          confirmNo={confirmNo}
-          context={
-            !activeAreas
-              ? t("activate_staus_InfoWindow_body")
-              : t("inactivate_status_InfoWindow_body")
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div
+          style={{
+            backgroundImage: `url(${rocket})`,
+            backgroundPosition: "center",
+            backgroundSize: "80%",
+            height: "auto",
+            padding: "1rem",
+          }}
+        >
+          {infoFlag ? (
+            <InfoComponent
+              title={t("InfoComponent_title_area")}
+              obj={objInfo}
+              typeObj={infoKind}
+              closeInfoHandler={closeInfoHandler}
+            />
+          ) : null
           }
-        />
-      )}
+          {showAlert && typeTable === TABLE_TYPE_CONTACT && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={
+                !activeAreas
+                  ? t("activate_staus_InfoWindow_body")
+                  : t("inactivate_status_InfoWindow_body")
+              }
+            />
+          )}
 
-      {showAlert && typeTable === TABLE_TYPE_SPOT && (
-        <InfoAlertComponent
-          confirmYes={confirmYes}
-          confirmNo={confirmNo}
-          context={
-            !activeAreas
-              ? t("activate_staus_InfoWindow_body")
-              : t("inactivate_status_InfoWindow_body")
-          }
-        />
-      )}
+          {showAlert && typeTable === TABLE_TYPE_SPOT && (
+            <InfoAlertComponent
+              confirmYes={confirmYes}
+              confirmNo={confirmNo}
+              context={
+                !activeAreas
+                  ? t("activate_staus_InfoWindow_body")
+                  : t("inactivate_status_InfoWindow_body")
+              }
+            />
+          )}
 
-      <FormLayout col={TWO} ratio={ONE_TO_TWO}>
-        {/* Main Data */}
-        <div style={contactContainer}>
-          <Link
-            to="/dashboard/areas/"
-            style={{ color: "black", fontWeight: 500 }}
-          >
-            <Icon icon="ion:arrow-back" />
-            {t("btn-return")}
-          </Link>
-          <div style={{ textAlign: "center", fontSize: `calc(1rem + 1vw)` }}>
-            <div style={{ paddingLeft: "1rem", paddingRigth: "1rem" }}>
-              {t("main_data_title")}
-            </div>
-          </div>
-          {areaList.length !== 0 &&
-            areaList.map((area) => {
-              if (area.id === areaId) {
-                return (
-                  <div key={area.id}>
-                    <div style={subtitle}>
-                      <Divider backgroundColor="grey" />
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-evenly",
-                        }}
-                      >
-                        <button
-                          style={btnDescription}
-                          onClick={() => descriptionHandler(area)}
-                        >
-                          {t("btn_description")}
-                        </button>
-                        <button
-                          style={btnInfo}
-                          onClick={() => infoHandler(area)}
-                        >
-                          {t("btn_info")}
-                        </button>
-                      </div>
-
-                      <Divider backgroundColor="grey" />
-                      {helper === area.name && cityDescFlag && (
+          <FormLayout col={TWO} ratio={ONE_TO_TWO}>
+            {/* Main Data */}
+            <div style={contactContainer}>
+              <Link
+                to="/dashboard/areas/"
+                style={{ color: "black", fontWeight: 500 }}
+              >
+                <Icon icon="ion:arrow-back" />
+                {t("btn-return")}
+              </Link>
+              <div style={{ textAlign: "center", fontSize: `calc(1rem + 1vw)` }}>
+                <div style={{ paddingLeft: "1rem", paddingRigth: "1rem" }}>
+                  {t("main_data_title")}
+                </div>
+              </div>
+              {areaList.length !== 0 &&
+                areaList.map((area) => {
+                  if (area.id === areaId) {
+                    return (
+                      <div key={area.id}>
+                        <div style={subtitle}>
+                          <Divider backgroundColor="grey" />
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
+                          >
+                            <button
+                              style={btnDescription}
+                              onClick={() => descriptionHandler(area)}
+                            >
+                              {t("btn_description")}
+                            </button>
+                            <button
+                              style={btnInfo}
+                              onClick={() => infoHandler(area)}
+                            >
+                              {t("btn_info")}
+                            </button>
+                          </div>
+                          <Divider backgroundColor="grey" />
+                          {helper === area.name && cityDescFlag && (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  backgroundColor: "#4d4d4d",
+                                  padding: "0.4rem",
+                                  width: "80%",
+                                  margin: "0.4rem",
+                                }}
+                              >
+                                <AddDescription
+                                  objId={objId}
+                                  descType={AREA_DESCRIPTION}
+                                  return={true}
+                                />
+                              </div>
+                            </div>
+                          )}
+                          {t("AddContact_name")}:
+                          <div style={mainDataSection}>{area.name}</div>
+                        </div>
+                        <div style={subtitle}>
+                          {t("AddContact_nip")}:
+                          <div style={mainDataSection}>{area.nip}</div>
+                        </div>
+                        <div style={subtitle}>
+                          {t("AddContact_address")}:
+                          <div style={mainDataSection}>
+                            {area.city} {area.no_building}, {area.post_code}{" "}
+                            {area.post}
+                          </div>
+                        </div>
+                        <div style={subtitle}>
+                          {t("AddContact_GPS")}:
+                          <div style={mainDataSection}>
+                            {area.latitude}, {area.longitude}
+                          </div>
+                        </div>
+                        <div style={subtitle}>
+                          {t("AddContact_bank")}:
+                          <div style={mainDataSection}>{area.bank_account}</div>
+                        </div>
                         <div
                           style={{
                             display: "flex",
                             justifyContent: "center",
+                            marginTop: "1rem",
                           }}
                         >
-                          <div
-                            style={{
-                              backgroundColor: "#4d4d4d",
-                              padding: "0.4rem",
-                              width: "80%",
-                              margin: "0.4rem",
-                            }}
+                          <button
+                            style={{ ...changeBtn, width: "80%" }}
+                            onClick={() => editAreaHandler()}
                           >
-                            <AddDescription
-                              objId={objId}
-                              descType={AREA_DESCRIPTION}
-                              return={true}
-                            />
-                          </div>
+                            {t("btn-change")}
+                          </button>
                         </div>
-                      )}
-                      {t("AddContact_name")}:
-                      <div style={mainDataSection}>{area.name}</div>
-                    </div>
-                    <div style={subtitle}>
-                      {t("AddContact_nip")}:
-                      <div style={mainDataSection}>{area.nip}</div>
-                    </div>
-                    <div style={subtitle}>
-                      {t("AddContact_address")}:
-                      <div style={mainDataSection}>
-                        {area.city} {area.no_building}, {area.post_code}{" "}
-                        {area.post}
                       </div>
-                    </div>
-                    <div style={subtitle}>
-                      {t("AddContact_GPS")}:
-                      <div style={mainDataSection}>
-                        {area.latitude}, {area.longitude}
-                      </div>
-                    </div>
-                    <div style={subtitle}>
-                      {t("AddContact_bank")}:
-                      <div style={mainDataSection}>{area.bank_account}</div>
-                    </div>
+                    );
+                  }
+                })}
+            </div>
+
+            <div style={listContainer}>
+              {/* Contact Table */}
+              <>
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontSize: `calc(1rem + 0.7vw)`,
+                  }}
+                >
+                  <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+                    {t("AddContact_contactList")}
+                  </div>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <button style={btnNewContact} onClick={() => newHendler()}>
+                    {!newContact
+                      ? t("AddContact_btn_add")
+                      : editContact
+                        ? t("AddContact_btn_close_edit")
+                        : t("AddContact_btn_close")}
+                  </button>
+
+                  <button
+                    style={btnShowUnactive}
+                    onClick={() => setActiveAreas(!activeAreas)}
+                  >
+                    {activeAreas
+                      ? t("AddContact_show_unactive")
+                      : t("AddContact_show_active")}
+                  </button>
+                </div>
+                <TableComponent
+                  data={dataAreasTable}
+                  columns={tableAreascolumns}
+                  tableStyle={tableAreaStyle}
+                  mainTableContainer={mainTableContainer}
+                />
+              </>
+              {/* Contact form */}
+              {newContact && (
+                <>
+                  <Divider backgroundColor="grey" />
+                  <form onSubmit={handleSubmit}>
                     <div
                       style={{
                         display: "flex",
-                        justifyContent: "center",
+                        justifyContent: "end",
                         marginTop: "1rem",
                       }}
                     >
                       <button
-                        style={{ ...changeBtn, width: "80%" }}
-                        onClick={() => editAreaHandler()}
+                        style={{ border: "none", borderRadius: "0.25rem" }}
+                        onClick={() => setNewContact(!newContact)}
                       >
-                        {t("btn-change")}
+                        <Icon
+                          icon="mdi:close-thick"
+                          width="32"
+                          height="32"
+                          color="red"
+                        />
                       </button>
                     </div>
-                  </div>
-                );
-              }
-            })}
-        </div>
 
-        <div style={listContainer}>
-          {/* Contact Table */}
-          <>
-            <div
-              style={{
-                textAlign: "center",
-                fontSize: `calc(1rem + 0.7vw)`,
-              }}
-            >
-              <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
-                {t("AddContact_contactList")}
-              </div>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button style={btnNewContact} onClick={() => newHendler()}>
-                {!newContact
-                  ? t("AddContact_btn_add")
-                  : editContact
-                    ? t("AddContact_btn_close_edit")
-                    : t("AddContact_btn_close")}
-              </button>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      <div>
+                        {editContact
+                          ? t("AddContact_edit_title")
+                          : t("AddContact_new_title")}
+                      </div>
+                    </div>
+                    <FormLayout col={TWO}>
+                      {inputs.map((input, index) => {
+                        if (index <= 3) {
+                          return (
+                            <FormInput
+                              key={input.id}
+                              {...input}
+                              onChange={onChange}
+                            />
+                          );
+                        }
+                      })}
+                    </FormLayout>
+                    {inputs.map((input, index) => {
+                      if (index === 4) {
+                        return (
+                          <TextareaWithValidation
+                            key={input.id}
+                            {...input}
+                            defaultValue={input.defaultValue}
+                            onChange={onChangeTextArea}
+                          />
+                        );
+                      }
+                    })}
 
-              <button
-                style={btnShowUnactive}
-                onClick={() => setActiveAreas(!activeAreas)}
-              >
-                {activeAreas
-                  ? t("AddContact_show_unactive")
-                  : t("AddContact_show_active")}
-              </button>
-            </div>
-            <TableComponent
-              data={dataAreasTable}
-              columns={tableAreascolumns}
-              tableStyle={tableAreaStyle}
-              mainTableContainer={mainTableContainer}
-            />
-          </>
-          {/* Contact form */}
-          {newContact && (
-            <>
-              <Divider backgroundColor="grey" />
-              <form onSubmit={handleSubmit}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      {editContact ? (
+                        <button style={editBtn} type="submit">
+                          {t("btn-change")}
+                        </button>
+                      ) : (
+                        <button style={submitBtn} type="submit">
+                          {t("btn-add")}
+                        </button>
+                      )}
+                    </div>
+                  </form>
+                </>
+              )}
+
+              {/* Spot Table */}
+              <>
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "end",
+                    textAlign: "center",
+                    fontSize: `calc(1.2rem + 0.7vw)`,
                     marginTop: "1rem",
                   }}
                 >
-                  <button
-                    style={{ border: "none", borderRadius: "0.25rem" }}
-                    onClick={() => setNewContact(!newContact)}
-                  >
-                    <Icon
-                      icon="mdi:close-thick"
-                      width="32"
-                      height="32"
-                      color="red"
-                    />
-                  </button>
-                </div>
+                  <div>{t("spots_table_title")}</div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <button style={btnNewContact} onClick={() => newHendlerSpot()}>
+                      {t("btn_add_spot")}
+                    </button>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                  }}
-                >
-                  <div>
-                    {editContact
-                      ? t("AddContact_edit_title")
-                      : t("AddContact_new_title")}
+                    <button
+                      style={btnShowUnactive}
+                      onClick={() => setActiveSpot(!activeSpot)}
+                    >
+                      {activeSpot ? t("show_unactive_spot") : t("show_active_spot")}
+                    </button>
                   </div>
                 </div>
-                <FormLayout col={TWO}>
-                  {inputs.map((input, index) => {
-                    if (index <= 3) {
-                      return (
-                        <FormInput
-                          key={input.id}
-                          {...input}
-                          onChange={onChange}
-                        />
-                      );
-                    }
-                  })}
-                </FormLayout>
-                {inputs.map((input, index) => {
-                  if (index === 4) {
-                    return (
-                      <TextareaWithValidation
-                        key={input.id}
-                        {...input}
-                        defaultValue={input.defaultValue}
-                        onChange={onChangeTextArea}
-                      />
-                    );
-                  }
-                })}
-
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  {editContact ? (
-                    <button style={editBtn} type="submit">
-                      {t("btn-change")}
-                    </button>
-                  ) : (
-                    <button style={submitBtn} type="submit">
-                      {t("btn-add")}
-                    </button>
-                  )}
-                </div>
-              </form>
-            </>
-          )}
-
-          {/* Spot Table */}
-          <>
-            <div
-              style={{
-                textAlign: "center",
-                fontSize: `calc(1.2rem + 0.7vw)`,
-                marginTop: "1rem",
-              }}
-            >
-              <div>{t("spots_table_title")}</div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <button style={btnNewContact} onClick={() => newHendlerSpot()}>
-                  {t("btn_add_spot")}
-                </button>
-
-                <button
-                  style={btnShowUnactive}
-                  onClick={() => setActiveSpot(!activeSpot)}
-                >
-                  {activeSpot ? t("show_unactive_spot") : t("show_active_spot")}
-                </button>
-              </div>
+                <TableComponent
+                  data={dataSpotsTable}
+                  columns={tableSpotscolumns}
+                  tableStyle={tableAreaStyle}
+                  mainTableContainer={mainTableContainer}
+                />
+              </>
             </div>
-            <TableComponent
-              data={dataSpotsTable}
-              columns={tableSpotscolumns}
-              tableStyle={tableAreaStyle}
-              mainTableContainer={mainTableContainer}
-            />
-          </>
+          </FormLayout>
         </div>
-      </FormLayout>
-    </div>
+      )
+      }
+    </>
+
   );
 }
 

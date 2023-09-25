@@ -683,5 +683,6 @@
   "Wrong_longitude": "Błędna wartość - długość geograficzna",
   "Area_not_added": "Obszar sprzedaży nie został dodany",
   "Area_not_edit": "Obszar sprzedaży nie został zaktualizowany",
-  "Area_not_details": "Informacje o obszarze sprzedazy nie zostały pobrane"
+  "Area_not_details": "Informacje o obszarze sprzedazy nie zostały pobrane",
+  "InfoComponent_title_area": "Opis dla obszaru sprzedaży : "
 }

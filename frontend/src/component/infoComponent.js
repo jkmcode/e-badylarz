@@ -11,7 +11,8 @@ import { getFullDescriptions } from "../actions/adminActions";
 
 import {
   GET_FULL_DESCRIPTION_DELETE,
-  MY_PRODUCT_DESCRIPTION
+  MY_PRODUCT_DESCRIPTION,
+  SET_FLAG_INFO_FALSE
 } from "../constants/adminConstans";
 import { TIME_AUT_ERROR } from "../constants/environmentConstans";
 
@@ -36,6 +37,7 @@ function InfoComponent(props) {
   const closeError = () => {
     if (showError) {
       dispatch({ type: GET_FULL_DESCRIPTION_DELETE });
+      dispatch({ type: SET_FLAG_INFO_FALSE });
       setShowError(false)
     }
   }

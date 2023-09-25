@@ -393,18 +393,37 @@
         area = Areas.objects.get(id=Id)
 - 0188 -"Błąd serializacji obiektu z tabeli Area"
         seriaziler = AreasSerializer(area, many=False)
-- 0189 -
-
-- 0190 -        
-- 0191 -
-- 0192 -
-- 0193 -
-- 0194 -
-- 0195 -
-- 0196 -
+- 0189 - "Błąd pobrania listy obiektów z tabeli AreasDescriptions"
+        descrition = AreasDescriptions.objects.filter(id_area = Id, language=lng)
+- 0190 -"Błąd serializacji listy obiektów z tabeli AreasDescriptions"
+        seriaziler = AreasDescSerializer(descrition, many=True        
+- 0191 -"Błąd pobrania obiektu z tabeli Areas"
+        area_obj= Areas.objects.get(id=data['objId'])
+- 0192 -"Błąd utworzenia obiektu w tabeli AreasDescriptions"
+        AreasDescriptions.objects.create(...)
+- 0193 -"Błąd pobrania obiektu z tabeli AreasDescriptions"
+        descrip = AreasDescriptions.objects.get(id=data['descId'])
+- 0194 -"Błąd aktualizacji obiektu w tabeli AreasDescriptions"
+        descrip.save()
+- 0195 -"Błąd pobrania listy obiektów z tabeli AreasDescriptions"
+        descrition = AreasDescriptions.objects.filter(id_area = Id).order_by('language')
+- 0196 -"Błąd serializacji listy obiektów z tabeli AreasDescriptions"
+        seriaziler = AreasDescSerializer(descrition, many=True)
 - 0197 -
 - 0198 -
 - 0199 -
+
+- 0200 -        
+- 0201 -
+- 0202 -
+- 0203 -
+- 0204 -
+- 0205 -
+- 0206 -
+- 0207 -
+- 0208 -
+- 0209 -
+
 
 NavbarComponent
 

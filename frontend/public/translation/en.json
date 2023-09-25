@@ -685,5 +685,6 @@
   "Wrong_longitude": "Incorrect value - longitude",
   "Area_not_added": "Sales area has not been added",
   "Area_not_edit": "The sales area has not been updated",
-  "Area_not_details": "Sales area information has not been retrieved"
+  "Area_not_details": "Sales area information has not been retrieved",
+  "InfoComponent_title_area": "Description for the sales area:"
 }
