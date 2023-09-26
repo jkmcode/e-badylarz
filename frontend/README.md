@@ -409,11 +409,14 @@
         descrition = AreasDescriptions.objects.filter(id_area = Id).order_by('language')
 - 0196 -"Błąd serializacji listy obiektów z tabeli AreasDescriptions"
         seriaziler = AreasDescSerializer(descrition, many=True)
-- 0197 -
-- 0198 -
-- 0199 -
-
-- 0200 -        
+- 0197 -"Błąd poboru danych obiekt z tabeli AreaContact"
+        descrip = AreaContact.objects.get(id=data['Id'])
+- 0198 -"Błąd poboru danych obiekt z tabeli AreasSpot"
+        descrip = AreasSpot.objects.get(id=data['Id'])
+- 0199 -"Błąd pobrania listy obiektów dla wybranego obszaru sprzedaży z tabeli AreaContact"
+        contacts = AreaContact.objects.filter(id_area=Id).order_by('name')
+- 0200 -"Błąd serializacji listy obiektów dla wybranego obszaru sprzedaży z tabeli AreaContact"
+        seriaziler = ShopsContactSerializer(contacts, many=True)        
 - 0201 -
 - 0202 -
 - 0203 -
@@ -423,6 +426,17 @@
 - 0207 -
 - 0208 -
 - 0209 -
+
+- 0210 -        
+- 0211 -
+- 0212 -
+- 0213 -
+- 0214 -
+- 0215 -
+- 0216 -
+- 0217 -
+- 0218 -
+- 0219 -
 
 
 NavbarComponent

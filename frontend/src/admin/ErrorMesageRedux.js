@@ -181,6 +181,10 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("Area_not_edit"))
       case "Bad request. No areas details":
         return setErrorMessage(t("Area_not_details"))
+      case "Bad request. No objects in the AreaContact  for the selected area":
+        return setErrorMessage(t("Area_not_contacts_list"))
+      case "Bad request. No area spot list":
+        return setErrorMessage(t("Area_not_spot_list"))
       default:
         return setErrorMessage(error.detail);
     }

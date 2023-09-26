@@ -459,8 +459,24 @@ def getContacts(request, Id):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAreaContacts(request, Id):
-    contacts = AreaContact.objects.filter(id_area=Id).order_by('name')
-    seriaziler = ShopsContactSerializer(contacts, many=True)
+
+    content = {
+        'function_name' : 'getAreaContacts',
+        'code' : "0199",
+        "detail": "Bad request. No objects in the AreaContact  for the selected area",
+        'text' : "Błąd pobrania listy obiektów dla wybranego obszaru sprzedaży z tabeli AreaContact"
+    }
+
+    try:
+        contacts = AreaContact.objects.filter(id_area=Id).order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = ShopsContactSerializer(contacts, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów dla wybranego obszaru sprzedaży z tabeli AreaContact"
+        content['code'] = "0200"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)    
 
@@ -882,8 +898,23 @@ def addAreaSpot(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAreaSpots(request, Id):
-    spots = AreasSpot.objects.filter(id_area=Id).order_by('name')
-    seriaziler = AreaSpotsSerializer(spots, many=True)
+
+    content = {
+        'function_name' : 'getAreaSpots',
+        'code' : "0201",
+        "detail": "Bad request. No area spot list",
+        'text' : "Błąd pobrania listy obiektów z tabeli AreasSpot"
+    }
+    try:
+        spots = AreasSpot.objects.filter(id_area=Id).order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try:
+        seriaziler = AreaSpotsSerializer(spots, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów z tabeli AreasSpot"
+        content['code'] = "0202"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)  
 
@@ -1154,9 +1185,21 @@ def activeList(request):
             ErrorHendling(content, user=data['userId'], err=e)
     
     elif data['objType'] == "AREA_CONTACT":
-        descrip = AreaContact.objects.get(id=data['Id'])
+        try:
+            descrip = AreaContact.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli AreaContact"
+            content['code'] = "0197"
+            return ErrorHendling(content, user=data['userId'], err=e)
+    
     elif data['objType'] == "AREA_SPOT":
-        descrip = AreasSpot.objects.get(id=data['Id'])
+        try:
+            descrip = AreasSpot.objects.get(id=data['Id'])
+        except Exception as e:
+            content['text'] = "Błąd poboru danych obiekt z tabeli AreasSpot"
+            content['code'] = "0198"
+            return ErrorHendling(content, user=data['userId'], err=e)
+    
     elif data['objType'] == "PRODUCT_CAT":
         descrip = ProductTypes.objects.get(id=data["Id"])
     elif data['objType'] == "PRODUCT_SUBCAT":

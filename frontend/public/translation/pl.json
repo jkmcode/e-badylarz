@@ -684,5 +684,7 @@
   "Area_not_added": "Obszar sprzedaży nie został dodany",
   "Area_not_edit": "Obszar sprzedaży nie został zaktualizowany",
   "Area_not_details": "Informacje o obszarze sprzedazy nie zostały pobrane",
-  "InfoComponent_title_area": "Opis dla obszaru sprzedaży : "
+  "InfoComponent_title_area": "Opis dla obszaru sprzedaży : ",
+  "Area_not_contacts_list": "Lista kontaktów nie została pobrana",
+  "Area_not_spot_list": "Lista punktów sprzedaży nie została pobrana"
 }

@@ -37,7 +37,9 @@ import {
 import {
   TIMEOUT_getAreas,
   TIMEOUT_addArea,
-  TIMEOUT_getAreaToEdit
+  TIMEOUT_getAreaToEdit,
+  TIMEOUT_getAreaContacts,
+  TIMEOUT_getAreaSpots
 } from "../constants/timeoutConstans"
 
 // Areas
@@ -207,18 +209,20 @@ export const addArea = (insertData) => async (dispatch, getState) => {
 };
 
 export const getAreaContacts = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_AREA_CONTACT_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getAreaContacts
     };
 
     const { data } = await axios.get(
@@ -231,13 +235,22 @@ export const getAreaContacts = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_AREA_CONTACT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy kontaktów dla obszaru sprzedaży",
+      "function": "getAreaContacts",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -313,6 +326,11 @@ export const addAreaSpot = (insertData) => async (dispatch, getState) => {
 };
 
 export const getAreaSpots = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_AREA_SOPTS_LIST_REQUEST });
 
@@ -325,6 +343,7 @@ export const getAreaSpots = (insertData) => async (dispatch, getState) => {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getAreaSpots
     };
 
     const { data } = await axios.get(
@@ -337,13 +356,21 @@ export const getAreaSpots = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_AREA_SOPTS_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux,
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy punktów dla obszaru sprzedaży",
+      "function": "getAreaSpots",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };

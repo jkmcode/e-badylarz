@@ -11,6 +11,7 @@ import InfoAlertComponent from "../component/InfoAlertComponent";
 import Divider from "./Divider";
 import FormInput from "./FormInput";
 import TextareaWithValidation from "./TextareaWithValidation";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import { addAreaContact } from "../actions/areaAction";
 import AddDescription from "./AddDescription";
 import Loader from "../component/Loader";
@@ -35,11 +36,13 @@ import {
   SET_FLAG_INFO_TRUE,
   SET_CITY_FLAG_DESC_TRUE,
   AREA_DESCRIPTION,
-  SET_FLAG_INFO_FALSE
+  SET_FLAG_INFO_FALSE,
+  ACTIVE_DESCRIPTION_DELETE
 } from "../constants/adminConstans";
 import {
   GET_AREA_CONTACT_LIST_DELETE,
   GET_AREA_SOPTS_LIST_DELETE,
+  GET_AREA_LIST_DELETE
 } from "../constants/areaConstans";
 
 function AreaShowMore() {
@@ -70,6 +73,11 @@ function AreaShowMore() {
   const [objInfo, setObjInfo] = useState({});
   const [infoKind, setInfoKind] = useState("")
 
+  const [showactiveError, setShowactiveError] = useState(false);
+  const [showErrorContactAreaList, setwErrorShoContactAreaList] = useState(false);
+  const [showErrorAreaSpotList, setwErrorShoAreaSpotList] = useState(false);
+  const [showErrorSpotList, setwErrorShoSpotList] = useState(false);
+
   // fech data from Redux
 
   const infoFlagRedux = useSelector((state) => state.flag);
@@ -79,10 +87,18 @@ function AreaShowMore() {
   const { loading, areaList, error, success } = areaListRedux;
 
   const areaSpotListRedux = useSelector((state) => state.areaSpot);
-  const { areaSpotList } = areaSpotListRedux;
+  const {
+    areaSpotList,
+    loading: loadingAreaSpotList,
+    error: errorAreaSpotList
+  } = areaSpotListRedux;
 
   const areaListOfContactRedux = useSelector((state) => state.contactAreaList);
-  const { areaListOfContact } = areaListOfContactRedux;
+  const {
+    areaListOfContact,
+    loading: loadingContactAreaLis,
+    error: errorContactAreaList
+  } = areaListOfContactRedux;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -96,6 +112,24 @@ function AreaShowMore() {
   } = contactActivRedux;
 
   //Handlers
+  const closeError = () => {
+    if (showactiveError) {
+      dispatch({ type: ACTIVE_DESCRIPTION_DELETE });
+      setShowactiveError(false)
+    }
+    else if (showErrorContactAreaList) {
+      dispatch({ type: GET_AREA_CONTACT_LIST_DELETE });
+      setwErrorShoContactAreaList(false)
+    }
+    else if (showErrorAreaSpotList) {
+      dispatch({ type: GET_AREA_SOPTS_LIST_DELETE });
+      setwErrorShoAreaSpotList(false)
+    }
+    else if (showErrorSpotList) {
+      dispatch({ type: GET_AREA_LIST_DELETE });
+      setwErrorShoSpotList(false)
+    }
+  };
 
   const closeInfoHandler = () => {
     dispatch({ type: SET_FLAG_INFO_FALSE });
@@ -217,6 +251,25 @@ function AreaShowMore() {
   };
 
   //USEEFFECT
+
+  // set error flags
+  useEffect(() => {
+    if (activeError) {
+      setShowactiveError(true)
+    }
+    else if (errorContactAreaList) {
+      setwErrorShoContactAreaList(true)
+    }
+    else if (errorAreaSpotList) {
+      setwErrorShoAreaSpotList(true)
+    }
+    else if (error) {
+      setwErrorShoSpotList(true)
+    }
+
+  }, [activeError, errorContactAreaList,
+    errorAreaSpotList, error]);
+
   // fetching list of area from DB
   useEffect(() => {
     if (areaList.length === 0) {
@@ -655,7 +708,10 @@ function AreaShowMore() {
 
   return (
     <>
-      {loading ? (
+      {loading ||
+        activeLoading ||
+        loadingContactAreaLis ||
+        loadingAreaSpotList ? (
         <Loader />
       ) : (
         <div
@@ -676,6 +732,27 @@ function AreaShowMore() {
             />
           ) : null
           }
+          {showactiveError ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={activeError}
+            />
+            : showErrorContactAreaList ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorContactAreaList}
+              />
+              : showErrorAreaSpotList ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={errorAreaSpotList}
+                />
+                : showErrorSpotList ?
+                  <ErrorMesageRedux
+                    confirmYes={closeError}
+                    error={error}
+                  />
+                  : null}
           {showAlert && typeTable === TABLE_TYPE_CONTACT && (
             <InfoAlertComponent
               confirmYes={confirmYes}
