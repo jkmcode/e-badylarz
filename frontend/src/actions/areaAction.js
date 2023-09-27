@@ -39,7 +39,8 @@ import {
   TIMEOUT_addArea,
   TIMEOUT_getAreaToEdit,
   TIMEOUT_getAreaContacts,
-  TIMEOUT_getAreaSpots
+  TIMEOUT_getAreaSpots,
+  TIMEOUT_addAreaContact
 } from "../constants/timeoutConstans"
 
 // Areas
@@ -255,18 +256,20 @@ export const getAreaContacts = (insertData) => async (dispatch, getState) => {
 };
 
 export const addAreaContact = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: ADD_AREA_CONTACT_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addAreaContact
     };
     const { data } = await axios.post(
       `/api/add-area-contact/`,
@@ -279,13 +282,22 @@ export const addAreaContact = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: ADD_AREA_CONTACT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodanie lub modyfikacja kontaktu",
+      "function": "getAreaContacts",
+      "param": insertData.editing ? "edit" : "add"
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -333,10 +345,6 @@ export const getAreaSpots = (insertData) => async (dispatch, getState) => {
 
   try {
     dispatch({ type: GET_AREA_SOPTS_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {

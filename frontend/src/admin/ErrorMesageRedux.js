@@ -185,6 +185,12 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("Area_not_contacts_list"))
       case "Bad request. No area spot list":
         return setErrorMessage(t("Area_not_spot_list"))
+      case "Bad request.No udate areas contact":
+        return setErrorMessage(t("Area_not_edit_contact"))
+      case "Bad request.No add areas contact":
+        return setErrorMessage(t("Area_not_add_contact"))
+      case "Bad request. No distrcts list":
+        return setErrorMessage(t("No_distrcts_list"))
       default:
         return setErrorMessage(error.detail);
     }

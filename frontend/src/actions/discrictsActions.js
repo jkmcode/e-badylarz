@@ -1,5 +1,11 @@
 import axios from "axios";
 import {
+  errorHandling,
+  addToLS,
+  addLogError,
+  addLogErrorFromLS
+} from "./errorHandling";
+import {
   DISTRICT_ADD_REQUEST,
   DISTRICT_ADD_SUCCESS,
   DISTRICT_ADD_FAIL,
@@ -8,49 +14,77 @@ import {
   DISTRICT_FAIL,
 } from "../constants/adminConstans";
 
+import {
+  TIMEOUT_getFullDiscricts
+} from "../constants/timeoutConstans"
+
 export const getDiscrict = (inserData) => async (dispatch) => {
-  try {
-    dispatch({ type: DISTRICT_REQUEST });
+  // try {
+  //   dispatch({ type: DISTRICT_REQUEST });
 
-    const { data } = await axios.get(
-      `/api/${inserData.lat}/${inserData.lng}/discrict/`
-    );
+  //   const { data } = await axios.get(
+  //     `/api/${inserData.lat}/${inserData.lng}/discrict/`
+  //   );
 
-    dispatch({
-      type: DISTRICT_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: DISTRICT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
-    });
-    console.log(error);
-  }
+  //   dispatch({
+  //     type: DISTRICT_SUCCESS,
+  //     payload: data,
+  //   });
+  // } catch (error) {
+  //   dispatch({
+  //     type: DISTRICT_FAIL,
+  //     payload:
+  //       error.response && error.response.data.detail
+  //         ? error.response.data.detail
+  //         : error.message,
+  //   });
+  //   console.log(error);
+  // }
+  console.log('ta funkcja nie miała działać')
 };
 
-export const getFullDiscricts = (insertData) => async (dispatch) => {
+export const getFullDiscricts = (insertData) => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: DISTRICT_REQUEST });
 
-    const { data } = await axios.get(`/api/${insertData}/full-discricts/`);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      timeout: TIMEOUT_getFullDiscricts
+    };
+
+    const { data } = await axios.get(
+      `/api/${insertData}/full-discricts/`,
+      config);
 
     dispatch({
       type: DISTRICT_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: DISTRICT_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
-    console.log(error);
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy powiatów",
+      "function": "getFullDiscricts",
+      "param": insertData
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

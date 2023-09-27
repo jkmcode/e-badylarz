@@ -654,55 +654,91 @@ def addShopContacts(request):
 def addAreaContacts(request):
     data = request.data
     area = Areas.objects.get(id=data['area_id'])
+
+    content = {
+        'function_name' : 'addAreaContacts',
+        'code' : "0203",
+        "detail": "Bad request.No udate areas contact",
+        'text' : "Błąd pobrania obiektu z tabeli AreaContact"
+    }
     
     if data['editing']:
-        area_contact_editing = AreaContact.objects.get(id=data['Id'])
-        
+        try:
+            area_contact_editing = AreaContact.objects.get(id=data['Id'])
+        except Exception as e:
+            return ErrorHendling(content, user=data['creator'], err=e)
         # Saving archive data
-        AreaContactARC.objects.create(
-            id_area = data['area_id'],
-            name = data['firstName'],
-            surname = data['surname'],
-            email = data['email'],
-            phone = data['phone'],
-            description = data['description'],
-            date_of_entry = area_contact_editing.date_of_entry,
-            creator = area_contact_editing.creator,
-            is_active = area_contact_editing.is_active,
-            date_of_change = area_contact_editing.date_of_change,
-            type_of_change = area_contact_editing.type_of_change,
-            modifier = area_contact_editing.modifier,
-            id_contact = data['Id'],
-            archiver = data['creator']
-        )    
+        try:
+            AreaContactARC.objects.create(
+                id_area = data['area_id'],
+                name = data['firstName'],
+                surname = data['surname'],
+                email = data['email'],
+                phone = data['phone'],
+                description = data['description'],
+                date_of_entry = area_contact_editing.date_of_entry,
+                creator = area_contact_editing.creator,
+                is_active = area_contact_editing.is_active,
+                date_of_change = area_contact_editing.date_of_change,
+                type_of_change = area_contact_editing.type_of_change,
+                modifier = area_contact_editing.modifier,
+                id_contact = data['Id'],
+                archiver = data['creator']
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu archiwalnego w tabeli AreaContactARC"
+            content['code'] = "0204"
+            ErrorHendling(content,user=data['creator'], err=e)    
 
         # Data change
-        area_contact_editing.name = data['firstName']
-        area_contact_editing.surname = data['surname']
-        area_contact_editing.email = data['email']
-        area_contact_editing.phone = data['phone']
-        area_contact_editing.description = data['description']
-        area_contact_editing.date_of_change = datetime.now()
-        area_contact_editing.modifier = data['creator']
-        area_contact_editing.type_of_change = "Data change"
+        try:
+            area_contact_editing.name = data['firstName']
+            area_contact_editing.surname = data['surname']
+            area_contact_editing.email = data['email']
+            area_contact_editing.phone = data['phone']
+            area_contact_editing.description = data['description']
+            area_contact_editing.date_of_change = datetime.now()
+            area_contact_editing.modifier = data['creator']
+            area_contact_editing.type_of_change = "Data change"
 
-        area_contact_editing.save()            
+            area_contact_editing.save()   
+        except Exception as e:
+            content['text'] = "Błąd modyfilacji obiektu w tabeli AreaContact"
+            content['code'] = "0205"
+            return ErrorHendling(content,user=data['creator'], err=e)         
     else:
         # create arear contact
-        area_contact = AreaContact.objects.create(
-            id_area = area,
-            name=data['firstName'],
-            surname = data['surname'],
-            email = data['email'],
-            phone = data['phone'],
-            creator = data['creator'],
-            description =data['description'],
-            is_active=True            
-        )
-
-    area_contacts=AreaContact.objects.filter(id_area=data['area_id'])    
-    seriaziler = AreaContactSerializer(area_contacts, many=True)
+        try:
+            area_contact = AreaContact.objects.create(
+                id_area = area,
+                name=data['firstName'],
+                surname = data['surname'],
+                email = data['email'],
+                phone = data['phone'],
+                creator = data['creator'],
+                description =data['description'],
+                is_active=True            
+            )
+        except Exception as e:
+            content['text'] = "Błąd utworzenia obiektu w tabeli AreaContact"
+            content['code'] = "0206"
+            content['detail'] = "Bad request.No add areas contact"
+            return ErrorHendling(content,user=data['creator'], err=e)
+    try:
+        area_contacts=AreaContact.objects.filter(id_area=data['area_id']) 
+    except Exception as e:
+        content['text'] = "Błąd pobrania zmodyfikowanej listy kontaktów dla wybranego obszaru sprzedaży"
+        content['code'] = "0207"
+        return ErrorHendling(content,user=data['creator'], err=e)   
+    try:
+        seriaziler = AreaContactSerializer(area_contacts, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji zmodyfikowanej listy kontaktów dla wybranego obszaru sprzedaży"
+        content['code'] = "0208"
+        return ErrorHendling(content,user=data['creator'], err=e)
+   
     return Response(seriaziler.data)
+
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
@@ -1249,14 +1285,33 @@ def getDiscrict(request, lat, lng):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getFullDiscricts(request,param):
-    data = request.data
+
+    content = {
+        'function_name' : 'getFullDiscricts',
+        'code' : "0209",
+        "detail": "Bad request. No distrcts list",
+        'text' : "Błąd pobrania listy wszystkich powiatów z tabeli Districts"
+    }
 
     if param == 'all':
-        discricts = Districts.objects.all().order_by('name')
+        try:
+            discricts = Districts.objects.all().order_by('name')
+        except Exception as e:
+            return ErrorHendling(content ,err=e)
     else:
-        discricts = Districts.objects.filter(is_active=True).order_by('name')
+        try:
+            discricts = Districts.objects.filter(is_active=True).order_by('name')
+        except Exception as e:
+            content['text'] = "Błąd pobrania listy aktywnych powiatów z tabeli Districts"
+            content['code'] = "0210"
+            return ErrorHendling(content, err=e)
+    try:
+        seriaziler = DistrictsSerializer(discricts, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy  powiatów z tabeli Districts"
+        content['code'] = "0211"
+        return ErrorHendling(content, err=e)
     
-    seriaziler = DistrictsSerializer(discricts, many=True)
     return Response(seriaziler.data)
 
 

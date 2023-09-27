@@ -32,3 +32,5 @@ export const TIMEOUT_addArea = 4998
 export const TIMEOUT_getAreaToEdit = 4997
 export const TIMEOUT_getAreaContacts = 4996
 export const TIMEOUT_getAreaSpots = 4995
+export const TIMEOUT_addAreaContact = 4994
+export const TIMEOUT_getFullDiscricts = 4993

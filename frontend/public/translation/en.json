@@ -688,5 +688,8 @@
   "Area_not_details": "Sales area information has not been retrieved",
   "InfoComponent_title_area": "Description for the sales area:",
   "Area_not_contacts_list": "The contact list has not been downloaded",
-  "Area_not_spot_list": "The list of sales points has not been downloaded"
+  "Area_not_spot_list": "The list of sales points has not been downloaded",
+  "Area_not_edit_contact": "The contact has not been updated",
+  "Area_not_add_contact": "The new contact has not been created",
+  "No_distrcts_list": "The list of counties has not been downloaded"
 }

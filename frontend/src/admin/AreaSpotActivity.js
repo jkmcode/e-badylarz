@@ -6,19 +6,25 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { FormLayout, changeBtn, addBtn } from "./AdminCSS";
 import { getFullDiscricts } from "../actions/discrictsActions";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import { getAllCities, getSpot } from "../actions/adminActions";
 import { addAreaSpot } from "../actions/areaAction";
 import RadioButtons from "./RadioButtons";
 import FormInput from "./FormInput";
 import Divider from "./Divider";
 import SelectOption from "./SelectOption";
+import Loader from "../component/Loader";
 import UploadImage from "../component/UploadImage";
 
 import { TWO, THREE } from "../constants/environmentConstans";
 import {
   SET_FLAG_IMAGE_TRUE,
-  GET_SHOPS_LIST_DELETE,
+  DISTRICT_DELETE,
 } from "../constants/adminConstans";
+
+import {
+  GET_AREA_SOPTS_LIST_DELETE
+} from "../constants/areaConstans";
 
 function AreaSpotActivity() {
   const { t } = useTranslation();
@@ -55,6 +61,9 @@ function AreaSpotActivity() {
   const [currentTaxNo, setCurrentTaxNo] = useState("");
   const [imageRender, setImageRender] = useState(false);
   const [areaDetails, setAreaDetails] = useState({});
+
+  const [showErrorSpotList, setShowErrorSpotList] = useState(false);
+  const [showErrorDisctrict, setShowErrorDisctrict] = useState(false);
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -93,6 +102,26 @@ function AreaSpotActivity() {
   } = spotRedux;
 
   //Handlers
+
+  const closeError = () => {
+    if (showErrorSpotList) {
+      dispatch({ type: GET_AREA_SOPTS_LIST_DELETE });
+      setShowErrorSpotList(false)
+    }
+    else if (showErrorDisctrict) {
+      dispatch({ type: DISTRICT_DELETE });
+      setShowErrorDisctrict(false)
+    }
+    // else if (showErrorAreaSpotList) {
+    //   dispatch({ type: GET_AREA_SOPTS_LIST_DELETE });
+    //   setwErrorShoAreaSpotList(false)
+    // }
+    // else if (showErrorSpotList) {
+    //   dispatch({ type: GET_AREA_LIST_DELETE });
+    //   setwErrorShoSpotList(false)
+    // }
+  };
+
   const onChange = (name, value) => {
     setValues({ ...values, [name]: value });
   };
@@ -165,6 +194,23 @@ function AreaSpotActivity() {
   };
 
   ///USEEFFECT
+
+  // set error flags
+  useEffect(() => {
+    if (errorSpotList) {
+      setShowErrorSpotList(true)
+    }
+    else if (errorDisctrict) {
+      setShowErrorDisctrict(true)
+    }
+    // else if (errorAreaSpotList) {
+    //   setwErrorShoAreaSpotList(true)
+    // }
+    // else if (error) {
+    //   setwErrorShoSpotList(true)
+    // }
+
+  }, [errorSpotList, errorDisctrict]);
 
   // uruchamiane na samym początku
   useEffect(() => {
@@ -244,8 +290,8 @@ function AreaSpotActivity() {
         areaParam === "add"
           ? "Select option"
           : successGetSpot &&
-            areaParam === "edit" &&
-            spotDetails.city.id_district.name,
+          areaParam === "edit" &&
+          spotDetails.city.id_district.name,
       disabled: areaParam === "edit" ? true : false,
     },
     {
@@ -347,87 +393,117 @@ function AreaSpotActivity() {
   ];
 
   return (
-    <div style={background}>
-      <Link
-        to={{ pathname: `/dashboard/areas/${areaId}/details` }}
-        style={{ color: "black" }}
-      >
-        <Icon icon="ion:arrow-back" />
-        {t("btn-return")}
-      </Link>
-      <div style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}>
-        {areaParam === "edit"
-          ? t("ShopsSpot_Edit_title")
-          : t("ShopsSpot_Add_title")}
-      </div>
-      <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
-      <form onSubmit={handleSubmit}>
-        <FormLayout col={TWO}>
-          {inputs.map((input, index) => {
-            if (index === 0) {
-              return (
-                <FormInput key={input.id} {...input} onChange={onChange} />
-              );
-            }
-          })}
-          {inputs.map((input, index) => {
-            if (index === 1 && radioValue === "0") {
-              return (
-                <FormInput key={input.id} {...input} onChange={onChange} />
-              );
-            }
-          })}
-        </FormLayout>
-        <Divider backgroundColor="grey" />
-        <div style={{ fontWeight: 500 }}>{t("ShopsSpot_title_address")}</div>
-        <FormLayout col={THREE}>
-          {inputs.map((input, index) => {
-            if (index === 2 || index === 3) {
-              return (
-                <SelectOption
-                  key={input.id}
-                  optionsList={districtList}
-                  label={input.label}
-                  defaultValue={input.defaultValue}
-                  emptyValueError={emptyValueError}
-                  onChange={
-                    index === 2 ? selectDistrictHandler : selectCityHandler
-                  }
-                  {...input}
-                />
-              );
-            }
-            if (index === 4) {
-              return (
-                <FormInput key={input.id} {...input} onChange={onChange} />
-              );
-            }
-          })}
-        </FormLayout>
-        <FormLayout col={THREE}>
-          {inputs.map((input, index) => {
-            if (index === 5 || index === 6 || index === 7) {
-              return (
-                <FormInput key={input.id} {...input} onChange={onChange} />
-              );
-            }
-          })}
-        </FormLayout>
-        <Divider backgroundColor="grey" />
-        <div style={{ fontWeight: 500 }}>
-          {t("ShopsSpot_title_geolocation")}
-        </div>
+    <>
+      {loadingAreaSpot ||
+        loadingDisctrict ||
+        loadingCityAllList ||
+        spotLoading ? (
+        <Loader />
+      ) : (
+        <div style={background}>
+          <Link
+            to={{ pathname: `/dashboard/areas/${areaId}/details` }}
+            style={{ color: "black" }}
+          >
+            <Icon icon="ion:arrow-back" />
+            {t("btn-return")}
+          </Link>
+          <div style={{ textAlign: "center", fontSize: "calc(1.5rem + 0.5vw)" }}>
+            {areaParam === "edit"
+              ? t("ShopsSpot_Edit_title")
+              : t("ShopsSpot_Add_title")}
+          </div>
 
-        <FormLayout col={TWO}>
-          {inputs.map((input, index) => {
-            if (index === 8 || index === 9) {
-              return (
-                <FormInput key={input.id} {...input} onChange={onChange} />
-              );
-            }
-          })}
-        </FormLayout>
-        {/* <div>
+          {showErrorSpotList ?
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={errorSpotList}
+            />
+            : showErrorDisctrict ?
+              <ErrorMesageRedux
+                confirmYes={closeError}
+                error={errorDisctrict}
+              />
+              //   : showErrorAreaSpotList ?
+              //     <ErrorMesageRedux
+              //       confirmYes={closeError}
+              //       error={errorAreaSpotList}
+              //     />
+              //     : showErrorSpotList ?
+              //       <ErrorMesageRedux
+              //         confirmYes={closeError}
+              //         error={error}
+              //       />
+              : null}
+
+          <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
+          <form onSubmit={handleSubmit}>
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 0) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+              {inputs.map((input, index) => {
+                if (index === 1 && radioValue === "0") {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>{t("ShopsSpot_title_address")}</div>
+            <FormLayout col={THREE}>
+              {inputs.map((input, index) => {
+                if (index === 2 || index === 3) {
+                  return (
+                    <SelectOption
+                      key={input.id}
+                      optionsList={districtList}
+                      label={input.label}
+                      defaultValue={input.defaultValue}
+                      emptyValueError={emptyValueError}
+                      onChange={
+                        index === 2 ? selectDistrictHandler : selectCityHandler
+                      }
+                      {...input}
+                    />
+                  );
+                }
+                if (index === 4) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <FormLayout col={THREE}>
+              {inputs.map((input, index) => {
+                if (index === 5 || index === 6 || index === 7) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            <Divider backgroundColor="grey" />
+            <div style={{ fontWeight: 500 }}>
+              {t("ShopsSpot_title_geolocation")}
+            </div>
+
+            <FormLayout col={TWO}>
+              {inputs.map((input, index) => {
+                if (index === 8 || index === 9) {
+                  return (
+                    <FormInput key={input.id} {...input} onChange={onChange} />
+                  );
+                }
+              })}
+            </FormLayout>
+            {/* <div>
           <UploadImage nip={currentTaxNo} />
           {imageRender
             ? editShopParam === "edit" &&
@@ -435,19 +511,21 @@ function AreaSpotActivity() {
             : null}
         </div> */}
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          {areaParam === "edit" ? (
-            <button type="submit" style={changeBtn}>
-              {t("btn-change")}
-            </button>
-          ) : (
-            <button type="submit" style={addBtn}>
-              {t("btn-add")}
-            </button>
-          )}
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {areaParam === "edit" ? (
+                <button type="submit" style={changeBtn}>
+                  {t("btn-change")}
+                </button>
+              ) : (
+                <button type="submit" style={addBtn}>
+                  {t("btn-add")}
+                </button>
+              )}
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      )}
+    </>
   );
 }
 

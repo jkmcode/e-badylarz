@@ -417,18 +417,28 @@
         contacts = AreaContact.objects.filter(id_area=Id).order_by('name')
 - 0200 -"Błąd serializacji listy obiektów dla wybranego obszaru sprzedaży z tabeli AreaContact"
         seriaziler = ShopsContactSerializer(contacts, many=True)        
-- 0201 -
-- 0202 -
-- 0203 -
-- 0204 -
-- 0205 -
-- 0206 -
-- 0207 -
-- 0208 -
-- 0209 -
-
-- 0210 -        
-- 0211 -
+- 0201 -"Błąd pobrania listy obiektów z tabeli AreasSpot"
+        spots = AreasSpot.objects.filter(id_area=Id).order_by('name')
+- 0202 -"Błąd serializacji listy obiektów z tabeli AreasSpot"
+        seriaziler = AreaSpotsSerializer(spots, many=True)
+- 0203 -"Błąd pobrania obiektu z tabeli AreaContact"
+        area_contact_editing = AreaContact.objects.get(id=data['Id'])
+- 0204 -"Błąd utworzenia obiektu archiwalnego w tabeli AreaContactARC"
+        AreaContactARC.objects.create(...)
+- 0205 -"Błąd modyfilacji obiektu w tabeli AreaContact"
+        area_contact_editing.save()
+- 0206 -"Błąd utworzenia obiektu w tabeli AreaContact"
+        area_contact = AreaContact.objects.create(...)
+- 0207 -"Błąd pobrania zmodyfikowanej listy kontaktów dla wybranego obszaru sprzedaży"
+        area_contacts=AreaContact.objects.filter(id_area=data['area_id'])
+- 0208 -"Błąd serializacji zmodyfikowanej listy kontaktów dla wybranego obszaru sprzedaży"
+        seriaziler = AreaContactSerializer(area_contacts, many=True)
+- 0209 -"Błąd pobrania listy wszystkich powiatów z tabeli Districts"
+        discricts = Districts.objects.all().order_by('name')
+- 0210 -"Błąd pobrania listy aktywnych powiatów z tabeli Districts"
+        discricts = Districts.objects.filter(is_active=True).order_by('name')        
+- 0211 -"Błąd serializacji listy  powiatów z tabeli Districts"
+        seriaziler = DistrictsSerializer(discricts, many=True)
 - 0212 -
 - 0213 -
 - 0214 -
@@ -437,6 +447,17 @@
 - 0217 -
 - 0218 -
 - 0219 -
+
+- 0220 -        
+- 0221 -
+- 0222 -
+- 0223 -
+- 0224 -
+- 0225 -
+- 0226 -
+- 0227 -
+- 0228 -
+- 0229 -
 
 
 NavbarComponent
