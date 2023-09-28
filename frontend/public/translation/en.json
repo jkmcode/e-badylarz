@@ -691,5 +691,8 @@
   "Area_not_spot_list": "The list of sales points has not been downloaded",
   "Area_not_edit_contact": "The contact has not been updated",
   "Area_not_add_contact": "The new contact has not been created",
-  "No_distrcts_list": "The list of counties has not been downloaded"
+  "No_distrcts_list": "The list of counties has not been downloaded",
+  "No_cities_list": "The list of cities has not been downloaded",
+  "No_add_productType": "The new product type has not been added",
+  "ProductType_already_exists": "A category with the given name already exists"
 }

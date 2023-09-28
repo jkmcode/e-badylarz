@@ -34,3 +34,5 @@ export const TIMEOUT_getAreaContacts = 4996
 export const TIMEOUT_getAreaSpots = 4995
 export const TIMEOUT_addAreaContact = 4994
 export const TIMEOUT_getFullDiscricts = 4993
+export const TIMEOUT_getAllCities = 4992
+export const TIMEOUT_addProductType = 4991

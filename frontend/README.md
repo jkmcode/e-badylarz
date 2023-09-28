@@ -439,13 +439,19 @@
         discricts = Districts.objects.filter(is_active=True).order_by('name')        
 - 0211 -"Błąd serializacji listy  powiatów z tabeli Districts"
         seriaziler = DistrictsSerializer(discricts, many=True)
-- 0212 -
-- 0213 -
-- 0214 -
-- 0215 -
-- 0216 -
-- 0217 -
-- 0218 -
+- 0212 -"Błąd pobrania listy obiektów z tabeli Citis"
+        cities = Citis.objects.all().order_by('name')
+- 0213 -"Błąd serializacji listy obiektów z tabeli Citis"
+        seriaziler = CitiesSerializer(cities, many=True)
+- 0214 -"Błąd sprawdzenia w tabeli ProductTypes powtarzającej się nazwy"
+        alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
+- 0215 -"Podana nazwa już istnieje"
+- 0216 -"Błąd dodania nowego obiektu do tabeli ProductTypes"
+        product_type = ProductTypes.objects.create(...)
+- 0217 -"Błąd pobrania nowododanego obiektu z tabeli ProductTypes"
+        new_type_product=ProductTypes.objects.get(name=data['name'])
+- 0218 -"Błąd serializacji nowododanego obiektu z tabeli ProductTypes"
+        seriaziler = ProductTypeSerializer(new_type_product, many=False)
 - 0219 -
 
 - 0220 -        

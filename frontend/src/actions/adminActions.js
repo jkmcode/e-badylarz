@@ -96,7 +96,9 @@ import {
   TIMEOUT_addContact,
   TIMEOUT_unOrActiveList,
   TIMEOUT_getShops,
-  TIMEOUT_addShopSpot
+  TIMEOUT_addShopSpot,
+  TIMEOUT_getAllCities,
+  TIMEOUT_addProductType
 } from "../constants/timeoutConstans"
 
 // Save image in redax
@@ -634,18 +636,20 @@ export const updateShopSpot = (insertData) => async (dispatch, getState) => {
 };
 
 export const addProductType = (insertData) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: PRODUCT_TYPE_ADD_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
+  try {
+    dispatch({ type: PRODUCT_TYPE_ADD_REQUEST });;
 
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_addProductType
     };
 
     const { data } = await axios.post(
@@ -659,13 +663,22 @@ export const addProductType = (insertData) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: PRODUCT_TYPE_ADD_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Dodanie typu produktu",
+      "function": "updateShopSpot",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 
@@ -704,16 +717,20 @@ export const getCitiesList = (insertData) => async (dispatch, getState) => {
 };
 
 export const getAllCities = () => async (dispatch, getState) => {
+
+  const {
+    userLogin: { userInfo },
+  } = getState();
+
   try {
     dispatch({ type: GET_ALL_CITIES_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
+      timeout: TIMEOUT_getAllCities
     };
 
     const { data } = await axios.get(`/api/get-cites/all/list`, config);
@@ -723,13 +740,22 @@ export const getAllCities = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
+    const errorRedux = await errorHandling(error)
     dispatch({
       type: GET_ALL_CITIES_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      payload: errorRedux
     });
+    const errorData = {
+      ...errorRedux,
+      "user": userInfo.id,
+      "text": "Pobranie listy miejscowości",
+      "function": "getAllCities",
+      "param": ""
+    }
+    if (!errorRedux.log) {
+      dispatch(addToLS(errorData))
+      dispatch(addLogError(errorData))
+    }
   }
 };
 

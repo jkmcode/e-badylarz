@@ -14,12 +14,13 @@ import FormInput from "./FormInput";
 import Divider from "./Divider";
 import SelectOption from "./SelectOption";
 import Loader from "../component/Loader";
-import UploadImage from "../component/UploadImage";
 
 import { TWO, THREE } from "../constants/environmentConstans";
 import {
   SET_FLAG_IMAGE_TRUE,
   DISTRICT_DELETE,
+  GET_ALL_CITIES_DELETE,
+  GET_SPOT_DELETE
 } from "../constants/adminConstans";
 
 import {
@@ -58,12 +59,11 @@ function AreaSpotActivity() {
     latitude: "",
     longitude: "",
   });
-  const [currentTaxNo, setCurrentTaxNo] = useState("");
-  const [imageRender, setImageRender] = useState(false);
-  const [areaDetails, setAreaDetails] = useState({});
 
   const [showErrorSpotList, setShowErrorSpotList] = useState(false);
   const [showErrorDisctrict, setShowErrorDisctrict] = useState(false);
+  const [showErrorGetAllCities, setShowErrorGetAllCities] = useState(false);
+  const [showErrorSpot, setShowErrorSpot] = useState(false);
 
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
@@ -112,14 +112,14 @@ function AreaSpotActivity() {
       dispatch({ type: DISTRICT_DELETE });
       setShowErrorDisctrict(false)
     }
-    // else if (showErrorAreaSpotList) {
-    //   dispatch({ type: GET_AREA_SOPTS_LIST_DELETE });
-    //   setwErrorShoAreaSpotList(false)
-    // }
-    // else if (showErrorSpotList) {
-    //   dispatch({ type: GET_AREA_LIST_DELETE });
-    //   setwErrorShoSpotList(false)
-    // }
+    else if (showErrorGetAllCities) {
+      dispatch({ type: GET_ALL_CITIES_DELETE });
+      setShowErrorGetAllCities(false)
+    }
+    else if (showErrorSpot) {
+      dispatch({ type: GET_SPOT_DELETE });
+      setShowErrorSpot(false)
+    }
   };
 
   const onChange = (name, value) => {
@@ -203,14 +203,17 @@ function AreaSpotActivity() {
     else if (errorDisctrict) {
       setShowErrorDisctrict(true)
     }
-    // else if (errorAreaSpotList) {
-    //   setwErrorShoAreaSpotList(true)
-    // }
-    // else if (error) {
-    //   setwErrorShoSpotList(true)
-    // }
+    else if (errorGetAllCities) {
+      setShowErrorGetAllCities(true)
+    }
+    else if (spotError) {
+      setShowErrorSpot(true)
+    }
 
-  }, [errorSpotList, errorDisctrict]);
+  }, [spotError,
+    errorSpotList,
+    errorDisctrict,
+    errorGetAllCities]);
 
   // uruchamiane na samym początku
   useEffect(() => {
@@ -230,10 +233,10 @@ function AreaSpotActivity() {
     );
   }, [dispatch, selectedDistrict]);
 
-  // fetch data from DB -- shop & spot to edit
-  // remove old image
+  // fetch data from DB -- spot to edit
+
   useEffect(() => {
-    if (areaId) {
+    if (editShopParam === 'edit') {
       dispatch(getSpot({ Id: areaId, type: "area" }));
     }
   }, []);
@@ -424,17 +427,17 @@ function AreaSpotActivity() {
                 confirmYes={closeError}
                 error={errorDisctrict}
               />
-              //   : showErrorAreaSpotList ?
-              //     <ErrorMesageRedux
-              //       confirmYes={closeError}
-              //       error={errorAreaSpotList}
-              //     />
-              //     : showErrorSpotList ?
-              //       <ErrorMesageRedux
-              //         confirmYes={closeError}
-              //         error={error}
-              //       />
-              : null}
+              : showErrorGetAllCities ?
+                <ErrorMesageRedux
+                  confirmYes={closeError}
+                  error={errorGetAllCities}
+                />
+                : showErrorSpot ?
+                  <ErrorMesageRedux
+                    confirmYes={closeError}
+                    error={spotError}
+                  />
+                  : null}
 
           <RadioButtons handleBtnValue={handleBtnValue} radios={radios} />
           <form onSubmit={handleSubmit}>
@@ -503,13 +506,6 @@ function AreaSpotActivity() {
                 }
               })}
             </FormLayout>
-            {/* <div>
-          <UploadImage nip={currentTaxNo} />
-          {imageRender
-            ? editShopParam === "edit" &&
-              shopDetails.photo !== null && <img src={shopDetails.photo} />
-            : null}
-        </div> */}
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {areaParam === "edit" ? (

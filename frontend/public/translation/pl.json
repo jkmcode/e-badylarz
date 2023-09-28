@@ -689,5 +689,8 @@
   "Area_not_spot_list": "Lista punktów sprzedaży nie została pobrana",
   "Area_not_edit_contact": "Kontakt nie został zaktualizowany",
   "Area_not_add_contact": "Nowy kontakt nie został utworzony",
-  "No_distrcts_list": "Lista powiatów nie została pobrana"
+  "No_distrcts_list": "Lista powiatów nie została pobrana",
+  "No_cities_list": "Lista miejscowości nie została pobrana",
+  "No_add_productType": "Nowy typ produktu nie został dodany",
+  "ProductType_already_exists": "Kategoria o podanej nazwie już istnieje"
 }

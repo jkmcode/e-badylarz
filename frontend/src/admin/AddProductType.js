@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loader from "../component/Loader";
-import ErrorMessage from "../component/ErrorMessage";
+import ErrorMesageRedux from "./ErrorMesageRedux"
 import AddDescription from "./AddDescription";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { addProductType } from "../actions/adminActions";
@@ -12,7 +12,7 @@ import InfoWindow from "../component/infoWindow";
 import { TIME_SET_TIMEOUT } from "../constants/errorsConstants";
 import {
   PRODUCT_TYPE_DESCRIPTION,
-  SET_WINDOW_FLAG_DELETE,
+  PRODUCT_TYPE_ADD_DELETE
 } from "../constants/adminConstans";
 
 function AddProductType() {
@@ -29,6 +29,10 @@ function AddProductType() {
   const params = useParams();
   const navigate = useNavigate();
 
+  const [idNewTypeProduct, setIdNewTypeProduct] = useState("");
+  const [addDescription, setAddDescription] = useState(false);
+  const [showError, setShowError] = useState(false);
+
   // data from redux
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -36,14 +40,36 @@ function AddProductType() {
   const data = useSelector((state) => state.addProductType);
   const { loading, error, success, result } = data;
 
-  // const successDesc = useSelector((state) => state.addDistrictDesc);
-  // const { success: successDescription } = successDesc;
-
   const d2flag = useSelector((state) => state.windowFlag);
   const { windowFlag } = d2flag;
 
-  const [idNewTypeProduct, setIdNewTypeProduct] = useState("");
-  const [addDescription, setAddDescription] = useState(false);
+  //Handlers
+
+  const closeError = () => {
+    if (showError) {
+      dispatch({ type: PRODUCT_TYPE_ADD_DELETE });
+      setShowError(false)
+    }
+  };
+
+  const onSubmit = (data) => {
+    const insertData = {
+      name: data.productTypeName,
+      creator: userInfo.id,
+    };
+    dispatch(addProductType(insertData));
+  };
+
+  ///USEEFFECT
+
+  // set error flags
+  useEffect(() => {
+    if (error) {
+      setShowError(true)
+    }
+
+  }, []);
+
 
   useEffect(() => {
     if (success) {
@@ -54,30 +80,17 @@ function AddProductType() {
     }
   }, [success]);
 
-  const onSubmit = (data) => {
-    const insertData = {
-      name: data.productTypeName,
-      creator: userInfo.id,
-    };
-    dispatch(addProductType(insertData));
-  };
-
-  // useEffect(() => {
-  //   if (successDescription) {
-  //     dispatch({ type: SET_WINDOW_FLAG_DELETE });
-  //   }
-  // }, [successDescription]);
-
-  console.log("success", success);
-
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
         <div className="container bg-container mt-5 p-4 rounded">
-          {error ? (
-            <ErrorMessage msg={error} timeOut={TIME_SET_TIMEOUT} />
+          {showError ? (
+            <ErrorMesageRedux
+              confirmYes={closeError}
+              error={error}
+            />
           ) : null}
           {addDescription ? (
             <InfoWindow

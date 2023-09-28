@@ -547,7 +547,10 @@ def getSpot(request, Id, typeSpot):
             content['code'] = "0042"
             return ErrorHendling(content, err=e)
     else:
-        pass
+        content['text'] = "Błędna lista parametrów funkcji"
+        content['code'] = "0108"
+        content['detail'] = "Changing the active flag - no object type"
+        return ErrorHendling(content)
 
     return Response(seriaziler.data)
 
@@ -1023,22 +1026,49 @@ def addShop(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def addProductType(request):
+   
     data = request.data
-
-    alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
-
+    content = {
+        'function_name' : 'getShops',
+        'code' : "0214",
+        "detail": "Bad request. No add Product Type",
+        'text' : "Błąd sprawdzenia w tabeli ProductTypes powtarzającej się nazwy"
+    }
+    try:
+        alreadyExists = ProductTypes.objects.filter(name=data['name']).exists()
+    except Exception as e:
+        return ErrorHendling(content, user=data['creator'],err=e)
+    
     if alreadyExists:
-        content = {"detail": "Product type already exist"}
-        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        content['text'] = "Podana nazwa już istnieje"
+        content['code'] = "0215"
+        content['detail'] = "Bad request. Product Type name already exists"
+        return ErrorHendling(content,user=data['creator'], err=e)
+    
     else:
-        product_type = ProductTypes.objects.create(
-            name=data['name'],
-            creator = data['creator'],
-            is_active=True
-        )
-
-        new_type_product=ProductTypes.objects.get(name=data['name'])
-        seriaziler = ProductTypeSerializer(new_type_product, many=False)
+        try:
+            product_type = ProductTypes.objects.create(
+                name=data['name'],
+                creator = data['creator'],
+                is_active=True
+            )
+        except Exception as e:
+            content['text'] = "Błąd dodania nowego obiektu do tabeli ProductTypes"
+            content['code'] = "0216"
+            return ErrorHendling(content, user=data['creator'],err=e)
+        try:
+            new_type_product=ProductTypes.objects.get(name=data['name'])
+        except Exception as e:
+            content['text'] = "Błąd pobrania nowododanego obiektu z tabeli ProductTypes"
+            content['code'] = "0217"
+            return ErrorHendling(content, user=data['creator'],err=e)
+        try:
+            seriaziler = ProductTypeSerializer(new_type_product, many=False)
+        except Exception as e:
+            content['text'] = "Błąd serializacji nowododanego obiektu z tabeli ProductTypes"
+            content['code'] = "0218"
+            return ErrorHendling(content, user=data['creator'],err=e)
+        
         return Response(seriaziler.data)
 
 
@@ -1056,8 +1086,23 @@ def getCites(request, Id, param):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllCities(request):
-    cities = Citis.objects.all().order_by('name') 
-    seriaziler = CitiesSerializer(cities, many=True)
+
+    content = {
+        'function_name' : 'getAllCities',
+        'code' : "0212",
+        "detail": "Bad request. No cities  list",
+        'text' : "Błąd pobrania listy obiektów z tabeli Citis"
+    }
+    try:    
+        cities = Citis.objects.all().order_by('name')
+    except Exception as e:
+        return ErrorHendling(content, err=e)
+    try: 
+        seriaziler = CitiesSerializer(cities, many=True)
+    except Exception as e:
+        content['text'] = "Błąd serializacji listy obiektów z tabeli Citis"
+        content['code'] = "0213"
+        return ErrorHendling(content, err=e)
 
     return Response(seriaziler.data)    
 

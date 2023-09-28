@@ -191,6 +191,12 @@ function ErrorMesageRedux({ confirmYes, error }) {
         return setErrorMessage(t("Area_not_add_contact"))
       case "Bad request. No distrcts list":
         return setErrorMessage(t("No_distrcts_list"))
+      case "Bad request. No cities  list":
+        return setErrorMessage(t("No_cities_list"))
+      case "Bad request. No add Product Type":
+        return setErrorMessage(t("No_add_productType"))
+      case "Bad request. Product Type name already exists":
+        return setErrorMessage(t("ProductType_already_exists"))
       default:
         return setErrorMessage(error.detail);
     }
